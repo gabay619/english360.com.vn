@@ -1,0 +1,83 @@
+<audio style="width: 0;height: 0;" id="mainaudio" controls></audio>
+        <div class="main">
+               <div class="p5">
+                   <div class="breadcrumb">
+                       <div class="title_br">{$obj.name}</div>
+                       <div class="face"><img src="{$obj.avatar}" alt=""></div>
+                   </div>
+               </div>
+                <div class="content_cate p5">
+                    <div class="item_cate">
+                       <div class="title_item_small"><i class="icon_small"></i><span class="orange">C</span>ách phát âm</div>
+                        <div class="content_item">
+                            <div class="noidung">
+                                {$obj.contents}
+                            </div>
+                        </div>
+                        <div class="title_item_small"><i class="icon_small"></i><span class="orange">V</span>ideo tham khảo</div>
+                        <div class="video">
+                            <video width="100%" controls src="{$obj.medialink}" type="video/mp4"></video>
+                        </div>
+                        <div class="face">
+                            {$facebooklink=makelink::makelna($obj._id,$obj.name)}
+                            <div class="fb-like" data-href="{$facebooklink}" data-layout="standard" data-action="like" data-show-faces="false" data-share="true"></div></div>
+                        <div class="comment">
+                            <div class="title_item_small"><i class="icon_small"></i><span class="orange">B</span>ình luận</div>
+                            <div>
+                                <textarea placeholder="Bạn phải đăng nhập để sử dụng chức năng này" id="comment-input" name="content"></textarea>
+                                <button type="button" onclick="saveComment('{$obj._id}')">Bình luận</button>
+                            </div>
+                            <div class="list_comment">
+                                <ul class="listcomment">
+                                </ul>
+                            </div>
+                            <div class="page pagination-centered">
+                                <ul>
+                                    <li><a href="javascript:void(0)" onclick="getComment()">Xem thêm</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+<!-- JS -->
+<script>
+    $('.Loa').click(function(e){
+        var src = $(this).attr('alt');
+        $('#mainaudio').attr('src',src);
+        $('#mainaudio')[0].play();
+    })
+    var pagenow = 1;
+    getComment();
+    function savearticle(exid, obj) {
+        $.post('incoming.php', {act: 'saveexam', id: exid}, function (re) {
+            if (re.status == 200) $(obj).parent().remove();
+            alert(re.mss);
+        });
+    }
+    function getComment() {
+        $.post('incoming.php', {act: 'getcomment', id: '{$obj._id}', type: 'lna', p: pagenow}, function (re) {
+            if (re.data.length > 0) {
+                var data = re.data;
+                data.forEach(function (e) {
+                    var htmlx = '<li><span class="user">' + e.userinfo.displayname + '</span><span class="date">' + e.datecreate + '</span><span class="view_content">' + e.content + '</span></li>';
+                    $('.listcomment').append(htmlx);
+                });
+                ++pagenow;
+            } else $('.page').hide();
+        });
+    }
+    function saveComment(objid) {
+        var commentContent = $("#comment-input").val();
+        if (commentContent.length > 2) {
+            $.post('incoming.php', {act: 'savecomment', id: objid, type: 'lna', content: commentContent}, function (re) {
+                if (re.status == 200) {
+                    var htmlx = '<li><span class="user">' + re.data.userinfo.displayname + '</span><span class="date">' + re.data.datecreate + '</span><span class="view_content">' + re.data.content + '</span></li>';
+                    $('.listcomment').prepend(htmlx);
+                    $("#comment-input").val('');
+                } else alert("Bạn cần đăng nhập để thực hiện tính năng này");
+            });
+        } else alert("Nội dung bình luận phải dài ít nhất 2 ký tự");
+    }
+</script>

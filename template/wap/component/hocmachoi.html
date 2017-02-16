@@ -1,0 +1,320 @@
+<div class="item_cate cate_hmc" style="overflow: hidden">
+    <div class="content_item mgt10">
+        <ul>
+            <li class="hmc_li hmc_li_1">
+                <a class="hmc_a1" href="/hmcaudio.php"> <i class="icon_baihat"></i> <span>Bài hát</span> </a>
+                <div class="list_hmc list_hmc_1">
+                    <div class="list_2">
+                        {loop="listsong"}
+                        {$link=makelink::makehmcaudio($value._id,$value.name)}
+                        <div><a title="" href="{$link}">{$value.name}</a></div>
+                        {/loop}
+                    </div>
+                </div>
+                <div class="btn_xemthem btn_xemthem_hmc">
+                    <a class="btn_1" href="/hmcaudio.php" title="">Xem thêm</a>
+                </div>
+            </li>
+            <li class="hmc_li hmc_li_2">
+                <a class="hmc_a2" href="/category.php?catid=1450861603"> <i class="icon_phim"></i> <span>Phim</span> </a>
+                <div class="list_hmc list_hmc_2">
+                    <div class="list_2">
+                    {loop="listfilm"}
+                    {$link=makelink::makethuvien('1450861603',$value._id,$value.name)}
+                    <div><a title="" href="{$link}">{$value.name}</a></div>
+                    {/loop}
+                    </div>
+                </div>
+                <div class="btn_xemthem btn_xemthem_hmc">
+                    <a class="btn_1" href="/category.php?catid=1450861603" title="">Xem thêm</a>
+                </div>
+            </li>
+            <li class="hmc_li hmc_li_3">
+                <a class="hmc_a3" href="/hmcgame.php"> <i class="icon_trochoi"></i> <span>Trò chơi</span> </a>
+                <div class="list_hmc list_hmc_3">
+                    <div class="list_2">
+                    {loop="listgame"}
+                <div><a title="" href="/hmcgame.php?catid={$value._id}&d=e">{$value.name}</a></div>
+                      {/loop}
+                     </div>
+            </div>
+                <div class="btn_xemthem btn_xemthem_hmc">
+                    <a class="btn_1" href="/hmcgame.php" title="">Xem thêm</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<link rel="stylesheet" href="/assets/lib/fancybox2/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+<script type="text/javascript" src="/assets/lib/fancybox2/jquery.fancybox.pack.js?v=2.1.5"></script>
+<script>
+    $(".fancybox").fancybox({
+        autoSize: true,
+        beforeLoad : function() {
+//                this.width = 800;
+//                this.height = 450;
+        }
+    });
+</script>
+{if condition="$popup"}
+<a href="#pop" class="fancybox" style="display:none;">Open</a>
+
+<div id="pop" style="display:none;">
+    {$popup.content}
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+//        var now = Date.now();
+        checkCookieForPopup();
+    });
+
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        var expires = "expires="+d.toUTCString();
+        document.cookie = cname + "=" + cvalue + "; " + expires;
+    }
+
+    function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1);
+            if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+        }
+        return "";
+    }
+
+    function checkCookieForPopup() {
+        var now = Date.now();
+        var popup_count = getCookie("popup_{{$popup->_id}}");
+        var popup_time = getCookie("popup_time_{{$popup->_id}}");
+        popup_time = popup_time == "" ? 0 : popup_time;
+        timeout = {$popup.timeout};
+    if((now - popup_time)/1000 < {$popup.distance_time}){
+        timeout = timeout + {$popup.distance_time} - (now - popup_time)/1000;
+    }
+
+    console.log(timeout);
+    if(popup_count == "")
+        popup_count = 0;
+    if(popup_count < {$popup.count_on_day}){
+        setTimeout(function () {
+            showPopup();
+            setCookie("popup_{$popup._id}", parseInt(popup_count)+1, 1);
+            setCookie("popup_time_{$popup._id}", now , 1);
+//            setCookie("popup_timeout_{$popup.id}", "" , 1);
+        }, timeout * 1000)
+    }
+    console.log((now - popup_time)/1000);
+    console.log(popup_count);
+    }
+
+    function showPopup(){
+        $(".fancybox").trigger('click');
+        if($('#pop video').get(0))
+            $('#pop video').get(0).play();
+    }
+</script>
+{/if}
+
+{if condition="$show"}
+<a href="#event-welcome" class="fancybox" id="showWelcome" style="display:none;">Open</a>
+<div id="event-welcome" style="display: none">
+    {if condition="$show=='welcome'"}
+    <h2 style="text-align: center">CHÚC MỪNG!</h2>
+    <div style="text-align: center">
+        <p>Bạn đã nhận được học bổng của English360, khóa học hoàn toàn miễn phí trong 15 ngày.</p>
+        <p>Chúc bạn có khoảng thời gian học tập thú vị cùng English360.</p>
+    </div>
+    {else}
+    <h2 style="text-align: center">THÔNG BÁO</h2>
+    <div style="text-align: center">
+        <p>Khóa học bổng của English360 đã kết thúc. Bạn hãy tiếp tục đăng ký để nhận được các ưu đãi sau:</p>
+        <p>- Được tham gia tất cả các bài học của English360</p>
+        <p>- Được miễn phí 1 ngày học tiếp theo</p>
+        <p>Soạn tin DK E gửi 9317 để đăng ký.</p>
+    </div>
+    {/if}
+</div>
+<script>
+    $(function(){
+        $('#showWelcome').trigger('click');
+    })
+</script>
+{/if}
+
+{if condition="$banner"}
+<div class="fix-banner" style="width: 100%; position: fixed; bottom: 0; left: 0; z-index: 10 ">
+    {$banner.content}
+</div>
+{/if}
+
+
+{if condition="$showAdsPop"}
+<script>
+    var clickOnCancel = false;
+
+    $(function () {
+//        alert({$timeoutPopAds});
+//        $('#showPopAdsreg')
+        setTimeout(function () {
+            $('#showPopAdsreg').fancybox({
+            {if condition="$activePopAds"}
+                closeClick: true,
+                afterClose: function() {
+                    if(!clickOnCancel){
+                        regPackageAds();
+                    }
+                },
+            {else}
+            afterClose: function() {
+                cancelPackageAds();
+            },
+            {/if}
+            afterShow: function () {
+                setTimeout(function(){
+                    $.fancybox.close()
+                }, {$timeoutPopAds})
+            },
+            closeBtn: false
+            }).trigger('click');
+        },{$waittimePopAds});
+
+//        setTimeout(function(){
+//            $.fancybox.close()
+//        }, {timeoutPopAds})
+    })
+
+
+
+
+    function cancelPackageAds() {
+        clickOnCancel = true;
+        $.post('/incoming.php?act=cancelPackageAds',{
+
+        }, function (re) {
+
+        })
+        $.fancybox.close();
+    }
+</script>
+<a href="#popAdsreg" class="fancybox" id="showPopAdsreg" style="display:none;">Open</a>
+<div id="popAdsreg" style="display: none">
+    <div style="text-align: center">
+        <p>{$contentPopAds}</p>
+        <p style="margin-top: 10px">
+            <a class="ht_1" href="javascript:cancelPackageAds()">Từ chối</a>
+            <a class="ht_1" href="javascript:regPackageAds()" >Đồng ý</a>
+        </p>
+        {if condition="$pricePopAds"}
+        <p>{$pricePopAds}</p>
+        {/if}
+    </div>
+</div>
+{/if}
+{if condition="$adsPopContinue"}
+<script>
+    regPackageAds();
+</script>
+{/if}
+<script>
+    function regPackageAds(){
+        $.fancybox.close();
+        $.post('/incoming.php?act=regPackageAds',{
+
+        }, function (re) {
+
+        })
+    }
+</script>
+{if condition="$showEvent"}
+<a href="#popEvent" class="fancybox" id="showPopEvent" style="display:none;">Open</a>
+{if condition="$hasPhone"}
+<div id="popEvent" style="display: none">
+    <div style="text-align: center; position: relative">
+        <p><img src="{$event.bgWap}" alt=""></p>
+        <p style="position: absolute; margin: 0 auto; top: 60%; left: 0; right: 0">
+            <a class="ht_1" href="javascript:regEvent('{$event._id}')">Đồng ý</a>
+        </p>
+    </div>
+</div>
+{else}
+<div id="popEvent" style="display: none">
+    <div style="text-align: center; position: relative">
+        <p><img src="{$event.bgWap}" alt=""></p>
+        <p style="position: absolute; margin: 0 auto; top: 68%; left: 0; right: 0">
+            <input type="text" width="50%" placeholder="Nhập email" class="input1" id="emailEvent" style="margin-bottom: 5px"><br>
+            <a class="ht_1" href="javascript:regEvent('{$event._id}')">Đồng ý</a>
+        </p>
+    </div>
+</div>
+{/if}
+<a href="#successEvent" class="fancybox" id="showSuccessEvent" style="display:none;">Open</a>
+<div id="successEvent" style="display: none">
+    <div style="text-align: center;">
+        <p>Bạn đang được English360 miễn phí {$event.free_day} ngày không giới hạn các khoá học tiếng Anh giao tiếp.</p>
+        <!--<p>Tài khoản miễn phí đã được gửi về số điện thoại của bạn.</p>-->
+    </div>
+</div>
+<script>
+    {if condition="$registedEvent"}
+    $('#showSuccessEvent').trigger('click');
+    setTimeout(function () {
+        $.post('/incoming.php?act=removeEvent', {
+            
+        }, function (re) {
+            
+        })
+        $.fancybox.close();
+    }, 3000)
+    {else}
+    setTimeout(function () {
+        $('#showPopEvent').trigger('click');
+
+    }, {$event.timeout_popup*1000})
+    {/if}
+
+
+    function regEvent(id) {
+        {if condition="$hasPhone"}
+        email = '';
+        {else}
+        email = $('#emailEvent').val();
+        if(email == ''){
+            alert('Địa chỉ email không được bỏ trống.');
+            return false;
+        }
+        {/if}
+        $.post('/incoming.php?act=regEvent', {
+            id:id, email: email
+        }, function (re) {
+            if(re.success){
+                $.fancybox.close();
+                $('#successEvent div').html(re.mss);
+                $('#showSuccessEvent').trigger('click');
+            }else{
+                alert(re.mss);
+                return false;
+            }
+        })
+    }
+</script>
+{/if}
+{if condition="$showExpiredEvent"}
+<a href="#expiredEvent" class="fancybox" id="showExpiredEvent" style="display:none;">Open</a>
+<div id="expiredEvent" style="display: none">
+    <div style="text-align: center;">
+        <p>Thời gian sử dụng miễn phí đã kết thúc.</p>
+        {if condition="$SESSION.uinfo.phone"}
+        <p>Bấm vào <a style="color: blue; text-decoration: underline; font-weight: bold" href="/regispack.php">ĐÂY</a> để đăng ký và sử dụng dịch vụ.</p>
+       {else}
+        <p>Soạn DK E gửi 9317 để tiếp tục sử dụng (Chỉ áp dụng cho thuê bao MobiFone)</p>
+        {/if}
+    </div>
+</div>
+<script>
+    $('#showExpiredEvent').trigger('click');
+</script>
+{/if}

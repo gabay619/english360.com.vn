@@ -1,0 +1,25 @@
+<div class="main">
+    <div class="content_cate p5">
+        <div class="item_cate">
+            <div class="title_cate"><a href=""><i class="icon_giaotiep"></i>Tìm kiếm</a></div>
+            <p class="title_search"> Nội dung liên quan tới từ khóa "{$keyword}" </p>
+            <div class="content_item">
+                {if="$data"}
+                <ul>
+                    {loop="$data['gtcb']"}
+                    <li>
+                        <a href="">
+                            <span class="thumb_img"><img src="{$value.avatar}" alt="{$value.name}"></span>
+                            <span class="title_list">{$value.name}</span>
+                            <span class="caption_view">{$value.captions}</span>
+                        </a>
+                    </li>
+                </ul>
+                {else}
+                <p style="text-align: center">{$error_msg}</p>
+                {/if}
+            </div>
+            {$paging}
+        </div>
+    </div>
+</div>

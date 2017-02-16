@@ -1,0 +1,22 @@
+<div class="main">
+    {include="hmc/audio/tabbar"}
+    <div class="content_cate p5">
+        <div class="item_cate fleft w100">
+            <div class="content_item ib">
+                <ul>
+                    {loop="listarticle"}
+                    {$link=makelink::makehmcaudio($value._id,$value.name)}
+                    <li>
+                        <a href="{$link}">
+                            <span class="thumb_img"><img src="{$value.avatar}" alt=""></span>
+                            <span class="title_list">{$value.name}</span>
+                        </a>
+                        <!--<button class="btn_blue"><i class="icon_luyennghe_big"></i></button>-->
+                    </li>
+                    {/loop}
+                </ul>
+            </div>
+            {include="component/paging"}
+        </div>
+    </div>
+</div>

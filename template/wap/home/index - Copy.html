@@ -1,0 +1,280 @@
+<div class="main">
+{if condition="!isset($SESSION.uinfo)"}
+<div class="tk_box">
+    <a class="tk_box_link" href="/register.php" title="">Đăng ký</a>
+    <a class="tk_box_link" href="login.php" title="">Đăng nhập</a>
+</div>
+{else}
+<div class="tk_box">
+    <a class="tk_box_link" href="/userprofile.php" title="">Xinchào, {$SESSION.uinfo.displayname} <span class="count_notification">5</span></a>
+</div>
+
+{/if}
+<div class="swiper-container slide">
+    <div class="swiper-wrapper">
+        {loop="dataSlide"}
+        <!--{$link=makelink::makenews($value._id,$value.name)}-->
+        <div class="swiper-slide">
+            <a href="{$value.url}">
+                <img src="{$value.avatar}#" alt="{$value.name}"/>
+                    <span class="caption">
+                        <span class="title_s">{$value.name}</span>
+                    </span>
+            </a>
+        </div>
+        {/loop}
+    </div>
+    <div class="pagination"></div>
+</div>
+<div class="content_cate p5">
+    <div class="item_cate">
+        <div class="title_cate">
+            <a href="/category.php?catid=1450844989"><i class="icon-noitieng"></i>Người nổi tiếng</a>
+            <span class="btn_more_cate"><label></label><label></label><label></label></span>
+            <div class="content_more_cate" style="display: none">
+                <div class="content_more_cate_box">
+                    <span class="square_dot"></span>
+                    <div class="list_more_cate">
+                        {loop="listcatfamous"}
+                        {$link=makelink::maketypethuvien($value._id,$value.namenoneutf)}
+                        <a class="active" href="{$link}">{$value.name}</a>
+                        {/loop}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content_item">
+            <div class="item_full">
+                <span class="thumb_img"><img src="{$objfamous.avatar}" alt=""></span>
+                <span class="caption"> <span class="title_s">{$objfamous.name}</span> </span>
+            </div>
+        </div>
+        <div class="content_items">
+            {loop="listfamous"}
+            {$link=makelink::makethuvien(1450844989,$value._id,$value.name)}
+            <ul class="list_1">
+                <li> <a href="{$link}"> <span class="thumb_img"><img src="{$value.avatar}" alt=""></span> <span class="title_list">{$value.name}</span> <span class="caption_view">{$value.datecreate}</span> </a> </li>
+            </ul>
+            {/loop}
+        </div>
+        <div class="content_item">
+            <div class="btn_xemthem">
+                <a class="btn_1" href="/category.php?catid=1450844989" title="">Xem thêm</a>
+            </div>
+        </div>
+    </div>
+    <div class="item_cate">
+        <div class="title_cate">
+            <a href="/gtcb.php"><i class="icon-giaotiep"></i>Giao tiếp cơ bản</a>
+            <span class="btn_more_cate"><label></label><label></label><label></label></span>
+            <div class="content_more_cate" style="display: none">
+                <div class="content_more_cate_box">
+                    <span class="square_dot"></span>
+                    <div class="list_more_cate">
+                        {loop="listcatgtcb"}
+                        {$link=makelink::maketypegtcb($value._id,$value.namenoneutf)}
+                        <a class="active" href="{$link}">{$value.name}</a>
+                        {/loop}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content_item">
+            <div class="item_full">
+                <span class="thumb_img"><img src="{$objgtcb.avatar}" alt=""></span>
+                <span class="caption"> <span class="title_s">{$objgtcb.name}</span> </span>
+            </div>
+        </div>
+        <div class="content_items">
+            {loop="listgtcb"}
+            {$link=makelink::makegtcb($value._id,$value.name)}
+            <ul class="list_1">
+                <li> <a href="{$link}"> <span class="thumb_img"><label class="ic_playing"></label><img src="{$value.avatar}" alt=""></span> <span class="title_list">{$value.name}</span> <span class="caption_view"> {$value.datecreate}</span> </a> </li>
+            </ul>
+            {/loop}
+        </div>
+        <div class="content_item">
+            <div class="btn_xemthem">
+                <a class="btn_1" href="/gtcb.php" title="">Xem thêm</a>
+            </div>
+        </div>
+    </div>
+    <div class="item_cate">
+        <div class="title_cate">
+            <a href="/category.php?catid=1427183162"><i class="icon-hocvideo"></i>Video</a>
+            <span class="btn_more_cate"><label></label><label></label><label></label></span>
+            <div class="content_more_cate" style="display: none">
+                <div class="content_more_cate_box">
+                    <span class="square_dot"></span>
+                    <div class="list_more_cate">
+                        {loop="listcatvideo"}
+                        {$link=makelink::maketypethuvien($value._id,$value.namenoneutf)}
+                        <a class="active" href="{$link}">{$value.name}</a>
+                        {/loop}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content_item">
+            <div class="item_full with_player">
+                <span class="thumb_img"><label class="ic_playing"></label><img src="{$objvideo.avatar}" alt=""></span>
+                <span class="caption"> <span class="title_s">{$objvideo.name}</span> </span>
+            </div>
+        </div>
+        <div class="content_items">
+            {loop="listvideo"}
+            {$link=makelink::makethuvien(1427183162,$value._id,$value.name)}
+            <ul class="list_1">
+                <li> <a href="{$link}"> <span class="thumb_img"><label class="ic_playing"></label><img src="{$value.avatar}" alt=""></span> <span class="title_list">{$value.name}</span> <span class="caption_view"> {$value.datecreate}</span> </a> </li>
+            </ul>
+            {/loop}
+        </div>
+        <div class="content_item">
+            <div class="btn_xemthem">
+                <a class="btn_1" href="/category.php?catid=1427183162" title="">Xem thêm</a>
+            </div>
+        </div>
+    </div>
+    <div class="item_cate">
+        <div class="title_cate"><a href="/category.php?catid=1427344702"><i class="icon-hocaudio"></i>Radio</a>
+            <span class="btn_more_cate"><label></label><label></label><label></label></span>
+            <div class="content_more_cate" style="display: none">
+                <div class="content_more_cate_box">
+                    <span class="square_dot"></span>
+                    <div class="list_more_cate">
+                        {loop="listcatradio"}
+                        {$link=makelink::maketypethuvien($value._id,$value.namenoneutf)}
+                        <a class="active" href="{$link}">{$value.name}</a>
+                        {/loop}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content_item">
+            <div class="item_full">
+                <span class="thumb_img"><img src="{$objaudio.avatar}" alt=""></span>
+                <span class="caption"> <span class="title_s">{$objaudio.name}</span> </span>
+            </div>
+        </div>
+        <div class="content_items">
+            {loop="listaudio"}
+            {$link=makelink::makethuvien(1427344702,$value._id,$value.name)}
+            <ul class="list_1">
+                <li> <a href="{$link}"> <span class="thumb_img"><img src="{$value.avatar}" alt=""></span> <span class="title_list">{$value.name}</span> <span class="caption_view">{$value.datecreate}</span> </a> </li>
+            </ul>
+            {/loop}
+        </div>
+        <div class="content_item">
+            <div class="btn_xemthem">
+                <a class="btn_1" href="/category.php?catid=1427344702" title="">Xem thêm</a>
+            </div>
+        </div>
+    </div>
+    <div class="item_cate">
+        <div class="title_cate"><a href="/category.php?catid=1427183137"><i class="icon-hocthanhngu"></i>Thành ngữ</a>
+            <span class="btn_more_cate"><label></label><label></label><label></label></span>
+            <div class="content_more_cate" style="display: none">
+                <div class="content_more_cate_box">
+                    <span class="square_dot"></span>
+                    <div class="list_more_cate">
+                        {loop="listcatthanhngu"}
+                        {$link=makelink::maketypethuvien($value._id,$value.namenoneutf)}
+                        <a class="active" href="{$link}">{$value.name}</a>
+                        {/loop}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content_item">
+            <div class="item_full">
+                <span class="thumb_img"><img src="{$objthanhngu.avatar}" alt=""></span>
+                <span class="caption"> <span class="title_s">{$objthanhngu.name}</span> </span>
+            </div>
+        </div>
+        <div class="content_items">
+            {loop="listtn"}
+            {$link=makelink::makethuvien(1427183137,$value._id,$value.name)}
+            <ul class="list_1">
+                <li> <a href="{$link}"> <span class="thumb_img"><img src="{$value.avatar}" alt=""></span> <span class="title_list">{$value.name}</span> <span class="caption_view">{$value.datecreate}</span> </a> </li>
+            </ul>
+            {/loop}
+        </div>
+        <div class="content_item">
+            <div class="btn_xemthem">
+                <a class="btn_1" href="/category.php?catid=1427183137" title="">Xem thêm</a>
+            </div>
+        </div>
+    </div>
+    <div class="item_cate">
+        <div class="title_cate"><a href="/category.php?catid=1427183137"><i class="icon-hangngay"></i>Tiếng anh hàng ngày</a>
+            <span class="btn_more_cate"><label></label><label></label><label></label></span>
+            <div class="content_more_cate" style="display: none">
+                <div class="content_more_cate_box">
+                    <span class="square_dot"></span>
+                    <div class="list_more_cate">
+                        {loop="listcathangngay"}
+                        {$link=makelink::maketypethuvien($value._id,$value.namenoneutf)}
+                        <a class="active" href="{$link}">{$value.name}</a>
+                        {/loop}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content_item">
+            <a class="item_full" href="{$link=makelink::maketypethuvien($objhangngay._id,$objhangngay.namenoneutf)}">
+                <span class="thumb_img"><img src="{$objhangngay.avatar}" alt=""></span>
+                <span class="caption"> <span class="title_s">{$objhangngay.name}</span> </span>
+            </a>
+        </div>
+        <div class="content_items">
+            {loop="listhangngay"}
+            {$link=makelink::makethuvien(1428995217,$value._id,$value.name)}
+            <ul class="list_1">
+                <li> <a href="{$link}"> <span class="thumb_img"><img src="{$value.avatar}" alt=""></span> <span class="title_list">{$value.name}</span> <span class="caption_view">{$value.datecreate}</span> </a> </li>
+            </ul>
+            {/loop}
+        </div>
+        <div class="content_item">
+            <div class="btn_xemthem">
+                <a class="btn_1" href="/category.php?catid=1427183137" title="">Xem thêm</a>
+            </div>
+        </div>
+    </div>
+    <div class="item_cate">
+        <div class="title_cate"><a href="/category.php?catid=1427183137"><i class="icon-kinhnghiem"></i>Kinh nghiệm</a>
+            <span class="btn_more_cate"><label></label><label></label><label></label></span>
+            <div class="content_more_cate" style="display: none">
+                <div class="content_more_cate_box">
+                    <span class="square_dot"></span>
+                    <div class="list_more_cate">
+                        {loop="listcatkinhnghiem"}
+                        {$link=makelink::maketypethuvien($value._id,$value.namenoneutf)}
+                        <a class="active" href="{$link}">{$value.name}</a>
+                        {/loop}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content_item">
+            <div class="item_full">
+                <span class="thumb_img"><img src="{$objthanhngu.avatar}" alt=""></span>
+                <span class="caption"> <span class="title_s">{$objkinhnghiem.name}</span> </span>
+            </div>
+        </div>
+        <div class="content_items">
+            {loop="listkinhnghiem"}
+            {$link=makelink::makethuvien(1427344743,$value._id,$value.name)}
+            <ul class="list_1">
+                <li> <a href="{$link}"> <span class="thumb_img"><img src="{$value.avatar}" alt=""></span> <span class="title_list">{$value.name}</span> <span class="caption_view">{$value.datecreate}</span> </a> </li>
+            </ul>
+            {/loop}
+        </div>
+        <div class="content_item">
+            <div class="btn_xemthem">
+                <a class="btn_1" href="/category.php?catid=1427183137" title="">Xem thêm</a>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,86 @@
+<div class="main">
+    {if condition="$confirm && !$linkVms"}
+    <div class="p5">
+        <div class="breadcrumb">
+            <div class="title_br">Nhập mã xác thực</div>
+        </div>
+    </div>
+    <div class="content_cate h5">
+        <div class="account_page block">
+            <p class="message2"></p>
+            <p class="p_input center"><input class="input1" id="txtToken" placeholder="Nhập mã xác thực" autofocus /></p>
+            <p class="p_input center message_customer"></p>
+            <p class="p_button center"><a class="ht_1" href="javascript:void(0)" onclick="regispack()">Đồng ý</a></p>
+            <p class="p_link center resend-key"><a href="javascript:void(0)" onclick="sendAuthKey()">Lấy lại mã xác thực</a></p>
+            <p class="center">(Cước dịch vụ 2.000đ/ngày, gia hạn hàng ngày)</p>
+        </div>
+    </div>
+    <script>
+        $(function(){
+            sendAuthKey();
+        })
+
+        function sendAuthKey(){
+            $('.resend-key').hide();
+            $.post('incoming.php?act=sent_auth_key', {
+
+            }, function(res){
+                if(res.status != 200){
+                    $('.message2').html('<font style="color: red">' + res.mss + '</font>');
+                }else{
+                    $('.message2').html('<font style="color: green">' + res.mss + '</font>');
+                }
+                $('.resend-key').show();
+            })
+        }
+
+
+        function regispack() {
+            var txtToken = $("#txtToken").val();
+            $.post('/incoming.php?act=check_auth_key',{
+                token: txtToken
+            }, function(res){
+                if(res.status == 200){
+                    window.location.href = res.return_url;
+                }
+                else{}
+                $('.message_customer').html('<font style="color: red">' + res.mss + '</font>');
+            });
+        }
+    </script>
+    {else}
+    <div class="p5">
+        <div class="breadcrumb">
+            <div class="title_br">Đăng ký sử dụng</div>
+        </div>
+    </div>
+    <div class="content_cate h5">
+        <div class="account_page block">
+            {if condition="$flash_mss"}
+            <!--<p class="text_center red">{$flash_mss}</p>-->
+            {/if}
+            <!--<p><strong>Hãy đăng ký dịch vụ để học tiếng anh mỗi ngày với English360</strong></p>-->
+            <!--<p>- Dịch vụ MIỄN PHÍ 3G/GPRS</p>-->
+            <!--<p>- MIỄN PHÍ 1 ngày sử dụng cho thuê bao đăng ký lần đầu</p>-->
+            <!--<p>- Để đăng ký gói, soạn tin DK E gửi 9317. (Cước phí: 2.000đ/ngày, tự động gia hạn)</p>-->
+            <!--<p><strong>Hãy đăng ký dịch vụ để được hưởng ƯU ĐÃI:</strong></p>-->
+            <!--<p>- Sử dụng không giới hạn các tính năng của English360</p>-->
+            <!--<p>- Miễn phí 3G/GPRS</p>-->
+            <!--<p>- Miễn phí 1 ngày sử dụng cho thuê bao đăng ký lần đầu</p>-->
+            {if condition="$SESSION.uinfo.phone"}
+                <p>English360 được miễn phí 3G/GPRS. Sau đăng ký, bạn được học tiếng Anh giao tiếp không giới hạn</p>
+                {if condition="$linkVms"}
+                <p class="p_button center"><a class="ht_1" href="{$linkVms}">Đăng ký</a></p>
+                <!--<p class="center">(Cước dịch vụ 2.000đ/ngày, gia hạn hàng ngày)</p>-->
+                {else}
+                <p class="p_button center"><a class="ht_1" href="/regispack.php?act=confirm">Đăng ký</a></p>
+                {/if}
+            {else}
+            <p>English360 được miễn phí 3G/GPRS. Sau đăng ký, bạn được học tiếng Anh giao tiếp không giới hạn</p>
+            <p>Để đăng ký dịch vụ, soạn tin DK E gửi 9317. (MobiFone, Cước phí: 2.000đ/ngày, tự động gia hạn)</p>
+            {/if}
+            <p class="border center"> Bạn hãy tham khảo <a href="/page.php?slug=dieu-khoan" style="color: #146eb4">Điều khoản</a> trước khi sử dụng </p>
+        </div>
+    </div>
+    {/if}
+</div>

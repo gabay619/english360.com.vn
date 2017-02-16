@@ -1,0 +1,22 @@
+<div class="main">
+    <div class="content_cate p5">
+        <div class="item_cate">
+            <div class="title_cate"><a href=""><i class="icon_luyennguam"></i>Luyện ngữ âm</a></div>
+            <div class="content_item">
+                <ul>
+                    {loop="listlna"}
+        {$link=makelink::makelna($value._id,$value.name)}
+                    <li>
+                        <a href="{$link}">
+                            <span class="thumb_img"><img src="{$value.avatar}" alt=""></span>
+                            <span class="title_list">{$value.name}</span>
+                            <span class="caption_view">{$value.moretitle}</span>
+                        </a>
+                    </li>
+                    {/loop}
+                </ul>
+            </div>
+            {include="component/paging"}
+        </div>
+    </div>
+</div>

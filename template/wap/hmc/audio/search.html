@@ -1,0 +1,55 @@
+<div class="main">
+    <div class="title_cate">
+        <a href="/hmcaudio.php"><i class="icon-hangngay"></i>Bài hát</a>
+    </div>
+
+    <div class="content_cate h5">
+        <div class="item_cate block">
+            <div class="form_search_song block">
+                <div class="search_input">
+                    Tìm theo chữ cái
+                </div>
+                <div class="search_alphabet">
+                    <button class="btn_search_alphabet"><i class="fa fa-fw"></i></button>
+                </div>
+                <div class="categories_search_alphabet">
+                    <a href="/hmcaudio.php?letter=">...</a>
+                    {loop="$rangeChar"}
+                    <a href="/hmcaudio.php?letter={$value}">{$value}</a>
+                    {/loop}
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="content_cate h5">
+        <div class="list_bhta item_cate" style="overflow: hidden">
+            {loop="listarticle"}
+            {$link=makelink::makehmcaudio($value._id,$value.name)}
+            <div class="item_1 liquid_layout liquid_layout_90 block">
+                <div class="liquid_2">
+                    <div class="liquid_2_content">
+                        <h2 class="item_1_title"><a href="{$link}">{$value.name}</a></h2>
+                        <h3 class="item_1_author"><b>{$value.singer}</b></h3>
+                        <div class="item_1_date"><span class="date">{$value.datecreate}</span></div>
+
+                    </div>
+                </div>
+                <div class="liquid_1">
+                    <a class="mask_img" href="{$link}"><img src="{$value.avatar}"></a>
+                </div>
+            </div>
+            {/loop}
+        </div>
+    </div>
+
+</div>
+<script>
+    $(function(){
+        $(".btn_search_alphabet").click(function(){
+            $(".categories_search_alphabet").toggle();
+            $( ".btn_search_alphabet" ).toggleClass( "active" );
+        });
+    })
+</script>
+

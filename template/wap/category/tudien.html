@@ -1,0 +1,83 @@
+<div class="main">
+    <div class="content_cate p5">
+        <div class="item_cate">
+            <div class="title_cate">
+                <a href=""><i class="icon-tudien"></i>{$obj.name}</a>
+                <span class="btn_more_cate"><label></label><label></label><label></label></span>
+                <div class="content_more_cate" style="display: none">
+                    <div class="content_more_cate_box">
+                        <span class="square_dot"></span>
+                        <div class="list_more_cate">
+                            {loop="$listcat"}
+                            {$link=makelink::makecat($value._id,'')}
+                            <a class="active" href="{$link}&keyword={$keyword}">{$value.name}</a>
+                            {/loop}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m_tsl_top">
+                <div class="content_tratu no-shadow">
+                    <input type="text" placeholder="Tra từ nhanh" id="searchTuDien" name="searchTuDien" value="{$keyword}">
+                    <button type="button" onclick="searchDataTD()">OK</button>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="pr">
+                {if condition="$listalpha==1"}
+                <div id="divAdLeft" class="select_abc">
+                    {$listalpha=range('A','Z')}
+                    {loop="listalpha"}
+                    <a href="#{$value}">{$value}</a>
+                    {/loop}
+                </div>
+                {/if}
+                {loop="listarticle"}
+                <div class="list_abc">
+                    {if="$key"}
+                    <span><b class="stt" id="{$key}">{$key}</b></span>
+                    {/if}
+                    <div class="list_tu">
+                        {loop="$value"}
+                        <a href="javascript:void(0)" onclick="$(this).next().toggle()">{$value.value}</a>
+                        <div class="show_goiy" style="display:none;">
+                            {$value.content}
+                        </div>
+                        {/loop}
+                    </div>
+                </div>
+                {/loop}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        $(function(){
+            $('#searchTuDien').keyup(function(e){
+                if(e.keyCode == 13){
+                    var keyword = $('#searchTuDien').val();
+//                    ?console.log(keyword);
+                    searchDataTD();
+                }
+            });
+        });
+
+        function searchDataTD(){
+
+            var keyword = $('#searchTuDien').val();
+            console.log(keyword);
+        if(keyword != ''){
+            window.location = 'category.php?catid={$catid}&keyword='+keyword;
+            }
+        }
+        $(document).ready(function () {
+            $("#show1").click(function () {
+                $('.show_goiy').toggle();
+            });
+        });
+
+</script>
+

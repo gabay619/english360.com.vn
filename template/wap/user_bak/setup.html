@@ -1,0 +1,118 @@
+<div class="main">
+    <div class="p5">
+        <div class="breadcrumb">
+            <div class="title_br">Cài đặt riêng tư</div>
+        </div>
+    </div>
+    <div class="content_cate h5">
+        <form action="" method="post" enctype="multipart/form-data">
+        <div class="account_page block">
+            <span class="red alert {$alert.class} center">{$alert.mss}</span>
+            <h2 class="title_1">Thông tin cá nhân</h2>
+            <div class="avatar_manage block mgb10 liquid_layout liquid_layout_90">
+                <div class="change_avatar liquid_2">
+                    <div class="liquid_2_content">
+                        <a class="btn_change_avatar block mgb5">Thay đổi Avatar</a>
+                        <div class="form_change_avatar block">
+                            <input type="file" id="file_upload" name="file_upload" class="mgb5" >
+                            <button onclick="selectFile()" class="p_link">Cập nhật</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="avatar_present liquid_1">
+                    <div class="avatar_mask">
+                        <img src="{$uinfo.priavatar}" id="cover_avatar_preview"/>
+                    </div>
+                </div>
+            </div>
+            <div class="ttcn_info block">
+                <p>
+                    <span>Họ tên</span>
+                    <input type="text" class="input1" name="fullname" value="{$uinfo.fullname}">
+                </p>
+                <p>
+                    <span>Ngày sinh</span>
+                    <input type="date" class="input1" name="dob" id ="datepicker" value="{$uinfo.dob}">
+                </p>
+                <p>
+                    <span>Email</span>
+                    <input type="text" class="input1" name="email" value="{$uinfo.email}">
+                </p>
+                <p>
+                    <span>Số điện thoại</span>
+                    <input type="text" class="input1" name="phone" value="{$uinfo.phone}">
+                </p>
+                <p>
+                    <span>Số CMND</span>
+                    <input type="text" class="input1" name="cmtnd" value="{$uinfo.cmtnd}">
+                </p>
+                <p>
+                    <span>Ngày cấp</span>
+                    <label class="sl_date">
+                        <select>
+                            <option>Ngày</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>...</option>
+                        </select>
+                        <select>
+                            <option>Tháng</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>...</option>
+                        </select>
+                        <select>
+                            <option>Năm</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>...</option>
+                        </select>
+                    </label>
+                </p>
+                <p>
+                    <span>Nơi cấp</span>
+                    <input type="text" class="input1" name="cmtnd_noicap" value="{$uinfo.cmtnd_noicap}">
+                </p>
+                <p>
+                    <span>Tên hiển thị</span>
+                    <input type="text" class="input1" name="displayname" value="{$uinfo.displayname}">
+                </p>
+            </div>
+            <h2 class="title_1 mgt15">Đổi mật khẩu</h2>
+            <div class="change_password block">
+                <p><input type="password" placeholder="Mật khẩu cũ" name="oldpassword" class="input1" value="{$uinfo.password}"></p>
+                <p><input type="password" placeholder="Mật khẩu mới" name="password" class="input1"></p>
+                <p><input type="password" placeholder="Nhập lại mật khẩu mới" name="repassword" class="input1"></p>
+            </div>
+            <h2 class="title_1 mgt15">Cài đặt thông báo</h2>
+            <div class="notification_setting block">
+                <p><input type="checkbox">Nhận thông báo từ English360</p>
+                <p><input type="checkbox">Nhận SMS hàng ngày</p>
+                <p><input type="checkbox">Nhận thông báo qua E-mail</p>
+            </div>
+            <p class="p_button center"><button type="submit"  class="btn_df btn_a">Lưu thay đổi</button></p>
+        </div>
+            </form>
+    </div>
+</div>
+<script type="text/javascript">
+    function selectFile(){
+        document.getElementById("file_upload").click();
+    }
+    $("#file_upload").change(function () {
+        var oFReader = new FileReader();
+        var image = new Image();
+        var isAllowSize = false;
+        oFReader.readAsDataURL(this.files[0]);
+        oFReader.onload = function (oFREvent) {
+            image.src = oFREvent.target.result;
+            image.onload = function () {
+                $("#cover_avatar_preview").attr('src', oFREvent.target.result).fadeIn();
+            }
+        }
+    });
+
+</script>

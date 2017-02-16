@@ -1,0 +1,80 @@
+<div class="main">
+    <div class="content_cate h5">
+        <div class="filter_cate item_cate center mgb0 block">
+            <select class="" id="selectCat">
+                {loop="listcat"}
+                <option data-href="/hmcgame.php?catid={$value._id}&d=e" {if condition="$value._id==$catid"} selected{/if} >{$value.name}</option>
+                {/loop}
+            </select>
+        </div>
+    </div>
+<div class="content_cate h5">
+<div class="item_cate mgb0 item_game item_game_view block">
+    <div class="game_page block">
+        <div class="header_game_page font_game center block">
+        </div>
+        <div class="footer_game_page block">
+            <div class="game_page_notifi p20 center font_game">
+                <p>Xin chúc mừng !</p>
+                <p>Bạn đã trả lời đúng {$trueAns}/10 câu hỏi của level {$level} </p>
+            </div>
+        </div>
+    </div>
+{loop="$game.question"}
+<div class="game_page block">
+    <div class="header_game_page font_game center block">
+        <div class="level_game_item">
+            <span>Câu {$key+1}</span>
+        </div>
+    </div>
+    <div class="footer_game_page block">
+        <table class="table_question_game" cellpadding="0" cellspacing="0">
+            <tr>
+                <td>
+                </td>
+                <td>
+                    <div class="game_question center">
+                        <div class="game_question_img">
+                            <img src="{$value.avatar}" />
+                        </div>
+                    </div>
+                </td>
+                <td>
+                </td>
+            </tr>
+        </table>
+        <table class="table_answer_game" cellpadding="0" cellspacing="0">
+            {$trueaw=$value.aw}
+            {$selected=getValueByKey($key, $select)}
+            {loop="$value.select"}
+            <tr>
+                <td>
+                    {if="$value==$trueaw"}
+                    <a href="" class="item_answer_game btn_game btn_game_4">{$value}</a>
+                    {elseif="$value==$selected"}
+                    <a href="" class="item_answer_game btn_game btn_game_3 select">{$value}</a>
+                    {else}
+                    <a href="" class="item_answer_game btn_game btn_game_3 ">{$value}</a>
+                    {/if}
+                </td>
+            </tr>
+            {/loop}
+
+        </table>
+    </div>
+</div>
+{/loop}
+
+<div class="btn_game_area center block mgb15 btn_game_area_f">
+    <a class="btn_game btn_game_2 font_game" href="">Tiếp tục</a>
+</div>
+</div>
+</div>
+</div>
+<script>
+    $(function(){
+        $('#selectCat').change(function(){
+            window.location.href = $('#selectCat option:selected').attr('data-href');
+        })
+    })
+</script>

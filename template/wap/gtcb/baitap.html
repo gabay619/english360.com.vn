@@ -1,0 +1,360 @@
+<div class="main">
+    <div class="p5">
+        <div class="breadcrumb">
+            <div class="title_br">{$obj.name}</div>
+
+        </div>
+    </div>
+    <div class="content_cate p5">
+            {if="$tracnghiem"}
+            <div class="baitap" id="bt-tracnghiem">
+                <div class="title_bt">Chọn câu trả lời đúng cho mỗi tình huống:</div>
+                <div class="view_bt">
+                    {loop="$tracnghiem"}
+                    <div class="c item-tracnghiem" data-true="{$value.trueaw}" data-id="{$value._id}">
+                        <span><b class="stt">{$key+1}</b>{$value.name}</span>
+                        {$kq=$value._id}
+                        <div class="radio">
+                            {loop="$value.aw"}
+                            <div>
+                                <input type="radio" name="kq_{$kq}" class="kq_{$kq}">
+                                <span>{function="numtoalpha($key)"}: {$value} </span>
+                            </div>
+                            {/loop}
+                        </div>
+                    </div>
+                    {/loop}
+                </div>
+                <div class="center">
+                    <button class="ht hoanthanh" onclick="completeTracnghiem()" type="button">Hoàn thành</button>
+                    <button class="ht baitiep" onclick="toNext()" type="button" style="display: none">Bài tiếp</button>
+                </div>
+            </div>
+            {/if}
+            {if="$sapxep"}
+            <div class="baitap" id="bt-sapxep">
+                <div class="title_bt">{$sapxep.name} </div>
+                <div class="view_bt">
+                    <div class="c item-sapxep">
+                        <div class="bt_list_view">
+                            {$count=0}
+                            {loop="$listaw"}
+                            <div>
+                                <span data-id="{$value.sort}" data-ans="{function="numtoalpha($key)"}">{function="numtoalpha($key)"}: {$value.aw} </span>
+                            </div>
+                            {/loop}
+                        </div>
+                        <div class="bt_show">
+                            <div class="your-ans">
+                                <span class="title-show"> Câu trả lời của bạn! </span>
+                                <div class="kq_show mg10">
+                                    {loop="$listaw"}
+                                    <span>{$key+1}. <input type="text" maxlength="1" data-id="{$key+1}" style="text-transform: uppercase"></span>
+                                    {/loop}
+                                </div>
+                            </div>
+                            <div class="right-ans" style="display: none">
+                                <span class="title-show"> Câu trả lời đúng! </span>
+                                <div class="kq_show mg10">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="center">
+                    <button class="ht hoanthanh" onclick="completeSapxep()" type="button">Hoàn thành</button>
+                    <button class="ht baitiep" onclick="toNext()" type="button" style="display: none">Bài tiếp</button>
+                </div>
+            </div>
+            {/if}
+            {if condition="$dientu"}
+            <div class="baitap" id="bt-dientu">
+                <div class="title_bt">{$dientu.name}</div>
+                <div class="audio center">
+                    <audio src="{$dientu.medialink}" controls></audio>
+                </div>
+                <div class="clearfix"></div>
+                <div class="show_ketqua center">
+
+                </div>
+                <div class="clearfix"></div>
+                <div class="content_dientu">
+                    {$dientu.contents}
+                </div>
+
+                <div class="center">
+                    <button class="ht hoanthanh" onclick="completeDientu()" type="button">Hoàn thành</button>
+                    <button class="ht baitiep" onclick="toNext()" type="button" style="display: none">Bài tiếp</button>
+                    <!--<button class="ht baitiep" onclick="toBegin()" type="button" style="display: none">Quay lại từ đầu</button>-->
+                </div>
+            </div>
+            {/if}
+        {if="$ghepcau"}
+        <div class="baitap" id="bt-ghepcau">
+            <div class="title_bt">{$ghepcau.name}</div>
+            <div class="view_bt bt_list">
+                <div class="c">
+                    <div class="bt_list_view">
+                        {loop="$ghepcau.aw"}
+                        <div class="posaw" data-key="{$value.sort}" data-index="{$key+1}">
+                            <span>{$key+1}. {$value}</span>
+                        </div>
+                        {/loop}
+                    </div>
+                    <div class="bt_list_view hr">
+                        {loop="$ghepcau.ax"}
+                        <div class="posaw" data-key="{$value.sort}" data-index="{$key+1}">
+                            <span>{function="numtoalpha($key)"}.{$value}</span>
+                        </div>
+                        {/loop}
+                    </div>
+                    <div class="bt_show ">
+                        <span class="title-show"> Câu trả lời của bạn! </span>
+                        <div class="kq_show mg10">
+                            {loop="$ghepcau.true"}
+                            <span>{$key+1}. <input type="text" data-ans="{$value}" style="text-transform: uppercase" maxlength="1"></span>
+                            {/loop}
+                        </div>
+                        <div class="right-ans" style="display: none">
+                            <span class="title-show"> Câu trả lời đúng! </span>
+                            <div class="kq_show mg10 awform">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="center">
+                <button class="ht hoanthanh" onclick="completeGhepcau()" type="button">Hoàn thành</button>
+                <button class="ht baitiep" onclick="toNext()" type="button" style="display: none">Bài tiếp</button>
+            </div>
+        </div>
+        {/if}
+        {if="$luyennghe"}
+        <div class="baitap" id="bt-luyennghe">
+            <div class="title_bt">{$luyennghe.name} </div>
+            <div class="content_luyennghe">
+                <div class="audio center">
+                    <audio src="{$luyennghe.medialink}" controls></audio>
+                </div>
+                <div class="content_dientu">
+                    {$luyennghe.contents}
+                </div>
+            </div>
+            <div class="center">
+                <button class="ht hoanthanh" onclick="completeLuyennghe()" type="button">Hoàn thành</button>
+                <button class="ht baitiep" onclick="toBegin()" type="button" style="display: none">Làm lại</button>
+            </div>
+        </div>
+        {/if}
+    </div>
+</div>
+
+<script>
+    $(function(){
+        var a = $('#bt-dientu img.InputQuestion');
+        $.each(a, function (i) {
+            var kq = $(this).attr('alt');
+            $(this).before('<span class="stt">' + (i + 1) + '</span>');
+            $(this).after('<input class="dt tocheck" data-aw="' + kq.toLowerCase() + '" data-full="' + kq + '" type="text" placeholder="Từ cần điền"></span>');
+            $(this).hide();
+        })
+        var b = $('#bt-luyennghe img.InputQuestion');
+        $.each(b, function (i) {
+            var kq = $(this).attr('alt');
+            $(this).before('<span class="stt">' + (i + 1) + '</span>');
+            $(this).after('<input class="dt tocheck" data-aw="' + kq.toLowerCase() + '" data-full="' + kq + '" type="text" placeholder="Từ cần điền"></span>');
+            $(this).hide();
+        })
+
+        $('.baitap').hide();
+        $('.baitap:first-child').show();
+    })
+
+    var baitapIndex = 0;
+
+    function toNext(){
+        baitapIndex++;
+        $('.baitap').hide();
+        $('.baitap').eq(baitapIndex).show();
+        if(!$('.baitap').eq(parseInt(baitapIndex)+1).length){
+            $('.baitap').eq(baitapIndex).find('.baitiep').attr('onclick','toBegin()').html('Làm lại');
+        }
+        $('html,body').scrollTop(0);
+    }
+
+    function toBegin(){
+        location.reload();
+    }
+
+    function completeTracnghiem(){
+//        if(!validateTracnghiem()){
+//            alert('Bạn chưa hoàn thành các lựa chọn.'); return false;
+//        }
+
+        $('.item-tracnghiem').each(function(e){
+            trueaw = $(this).attr('data-true');
+            qid = $(this).attr('data-id');
+            $(this).find('.kq_'+qid).each(function(eq){
+                index = parseInt(eq)+1;
+                if(trueaw == index){
+                    htmlx = '<span class="kq_t"></span>';
+                    $(this).parent().append(htmlx);
+                }else if($(this).is(':checked') && index != trueaw){
+                    htmlx = '<span class="kq_f"></span>';
+                    $(this).parent().append(htmlx);
+                }
+                $(this).prop('disabled', true);
+            });
+        });
+
+        $('#bt-tracnghiem .hoanthanh').hide();
+        $('#bt-tracnghiem .baitiep').show();
+    }
+
+    function validateTracnghiem(){
+        result = false;
+        $('.item-tracnghiem').each(function(e){
+            $(this).find('input').each(function(eq){
+                if($(this).is(':checked'))
+                    result = true;
+            });
+        });
+        return result;
+    }
+
+    function completeSapxep(){
+        for(i=1; i <= {function="count($sapxep.aw)"}; i++){
+            ans = $('#bt-sapxep .bt_list_view span[data-id='+i+']').attr('data-ans');
+            console.log(i+'-'+ans);
+            html = '<span>'+i+'. <input type="text" disabled style="text-transform: uppercase" value="'+ans+'"></span>';
+            $('#bt-sapxep .right-ans .kq_show').append(html);
+        }
+        $('#bt-sapxep .right-ans').show();
+
+        $('#bt-sapxep .your-ans input').each(function(){
+            id = $(this).attr('data-id');
+            trueans = $('#bt-sapxep .bt_list_view span[data-id='+id+']').attr('data-ans').toLowerCase();
+            yourans = $(this).val().toLowerCase();
+            if(trueans == yourans){
+                htmlx = '<i class="kq_t"></i>';
+            }else{
+                htmlx = '<i class="kq_f"></i>';
+            }
+            $(this).after(htmlx);
+            $(this).prop('disabled', true);
+        });
+
+        $('#bt-sapxep .hoanthanh').hide();
+        $('#bt-sapxep .baitiep').show();
+    }
+
+
+
+    function validateSapxep(){
+        result = true;
+        $('.item-sapxep .your-ans input').each(function(){
+            if($(this).val() == '')
+                result = false;
+        })
+
+        return result;
+    }
+
+    function completeDientu(){
+//        if(!validateDientu()){
+//            alert('Bạn phải điền đầy đủ vào các chỗ trống.'); return false;
+//        }
+
+        $('#bt-dientu input.tocheck').each(function () {
+            ans = $(this).val().toLowerCase();
+            trueans = $(this).attr('data-aw');
+            if(ans == trueans){
+                htmlx = '<span class="t">' + trueans + '</span><span class="kq_t"></span>';
+            }else{
+                htmlx = '<span class="f">' + ans + '</span><span class="kq_f"></span><span class="t">' + trueans + '</span>';
+            }
+            $(this).after(htmlx);
+            $(this).remove()
+        })
+        $('#bt-dientu .hoanthanh').hide();
+        $('#bt-dientu .baitiep').show();
+    }
+
+    function validateDientu(){
+        result = true;
+        $('#bt-dientu .content_dientu input').each(function(){
+            if($(this).val() == '')
+                result = false;
+        })
+
+        return result;
+    }
+
+    function completeGhepcau(){
+//        if(!validateGhepcau()){
+//            alert('Bạn phải điền đầy đủ vào các ô trống.'); return false;
+//        }
+
+        $('#bt-ghepcau .bt_show input').each(function(e){
+            ans = $(this).val().toLowerCase();
+            trueans = $(this).attr('data-ans').toLowerCase();
+            index = parseInt(e)+1;
+            htmlx = '<span>'+index+'. <input type="text" value="'+trueans+'" disabled style="text-transform: uppercase"></span>';
+            $('#bt-ghepcau .right-ans .kq_show').append(htmlx);
+            if(ans == trueans){
+                $(this).after('<i class="kq_t"></i>');
+            }else{
+                $(this).after('<i class="kq_f"></i>');
+            }
+            $(this).prop('disabled',true);
+        })
+
+        $('#bt-ghepcau .right-ans').show();
+
+        $('#bt-ghepcau .hoanthanh').hide();
+        $('#bt-ghepcau .baitiep').show();
+    }
+
+    function validateGhepcau(){
+        result = true;
+        $('#bt-ghepcau .bt_show input').each(function(){
+            if($(this).val() == '')
+                result = false;
+        })
+
+        return result;
+
+    }
+
+    function completeLuyennghe(){
+//        if(!validateLuyennghe()){
+//            alert('Bạn phải điền đầy đủ vào các ô trống.'); return false;
+//        }
+
+        $('#bt-luyennghe input.tocheck').each(function () {
+            ans = $(this).val().toLowerCase();
+            trueans = $(this).attr('data-aw');
+            if(ans == trueans){
+                htmlx = '<span class="t">' + trueans + '</span><span class="kq_t"></span>';
+            }else{
+                htmlx = '<span class="f">' + ans + '</span><span class="kq_f"></span><span class="t">' + trueans + '</span>';
+            }
+            $(this).after(htmlx);
+            $(this).remove()
+        })
+        $('#bt-luyennghe .hoanthanh').hide();
+        $('#bt-luyennghe .baitiep').show();
+    }
+
+    function validateLuyennghe(){
+        result = true;
+        $('#bt-luyennghe .content_dientu input').each(function(){
+            if($(this).val() == '')
+                result = false;
+        })
+
+        return result;
+    }
+</script>

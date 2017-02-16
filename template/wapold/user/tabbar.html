@@ -1,0 +1,24 @@
+<div class="tab">
+    <ul>
+        <li>
+            <a href="userprofile.php" class="{$T=='home'?'active':''}">
+                Cá nhân
+            </a>
+        </li>
+        <li>
+            <a href="userprofile.php?t=notify" class="{$T=='notify'?'active':''}">
+                Thông báo {if condition="$tabbarinfo.notifycount>0"}<i class="note">{$tabbarinfo.notifycount}</i>{/if}</span>
+            </a>
+        </li>
+        <li>
+            <a href="userprofile.php?t=mail" class="{$T=='mail' || $T=='maildetail' ?'active':''}">
+                Hòm thư {if condition="$tabbarinfo.mailcount>0"}<i class="note">{$tabbarinfo.mailcount}</i>{/if}</span>
+            </a>
+        </li>
+        <li>
+            <a href="userprofile.php?t=setup" class="{$T=='setup'?'active':''}">
+                Cài đặt
+            </a>
+        </li>
+    </ul>
+</div>

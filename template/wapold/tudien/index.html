@@ -1,0 +1,20 @@
+<div class="main">
+    <div class="content_cate">
+        <div class="item_cate">
+            <div class="title_cate"><a href=""><i class="icon_tudien"></i>Từ điển chuyên ngành</a></div>
+            <div class="content_item content_tudien">
+                <ul>
+                    {loop="listcat"}
+                    {$link=makelink::makecat($value._id,$value.name)}
+                    <li>
+                        <a href="{$link}">
+                            <span class="thumb_tudien"><img src="{$value.avatar}" alt=""></span>
+                            <span>{$value.name}</span>
+                        </a>
+                    </li>
+                    {/loop}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

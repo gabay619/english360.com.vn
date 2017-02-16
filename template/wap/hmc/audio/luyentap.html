@@ -1,0 +1,121 @@
+<div class="main">
+
+    <div class="content_cate p5">
+        <div class="item_cate">
+            <div class="title_cate">
+                {$link=makelink::makehmcaudio($obj._id,$obj.namenoneutf)}
+                <a href="/hmcaudio.php"><i class="icon-noitieng"></i>Bài hát</a>
+            </div>
+            <div class="baitap" id="bt-dientu">
+                <div class="title_bt">{$obj.name}</div>
+                <div class="audio center">
+                <audio src="{$obj.medialink}" controls></audio>
+                </div>
+                <div class="clearfix"></div>
+                <div class="show_ketqua center">
+
+                </div>
+                <div class="clearfix"></div>
+                <div class="content_dientu">
+                    {$obj.exam}
+                </div>
+
+                <div class="center">
+                    <button class="ht hoanthanh" onclick="completeDientu()" type="button">Hoàn thành</button>
+                    <button class="ht baitiep" onclick="toBegin()" type="button" style="display: none">Làm lại</button>
+                    <!--<button class="ht baitiep" onclick="toBegin()" type="button" style="display: none">Quay lại từ đầu</button>-->
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+<script>
+    $(function(){
+        var a = $('#bt-dientu img.InputQuestion');
+        $.each(a, function (i) {
+            var kq = $(this).attr('alt');
+            $(this).before('<span class="stt">' + (i + 1) + '</span>');
+            $(this).after('<input class="dt tocheck" data-aw="' + kq.toLowerCase() + '" data-full="' + kq + '" type="text" placeholder="Từ cần điền"></span>');
+            $(this).hide();
+        })
+        var b = $('#bt-luyennghe img.InputQuestion');
+        $.each(b, function (i) {
+            var kq = $(this).attr('alt');
+            $(this).before('<span class="stt">' + (i + 1) + '</span>');
+            $(this).after('<input class="dt tocheck" data-aw="' + kq.toLowerCase() + '" data-full="' + kq + '" type="text" placeholder="Từ cần điền"></span>');
+            $(this).hide();
+        })
+
+//        $('.baitap').hide();
+//        $('.baitap').eq(baitapIndex).show();
+    })
+    function completeDientu(){
+//        if(!validateDientu()){
+//            alert('Bạn phải điền đầy đủ vào các chỗ trống.'); return false;
+//        }
+
+        $('#bt-dientu input.tocheck').each(function () {
+            ans = $(this).val().toLowerCase();
+            trueans = $(this).attr('data-aw');
+            if(ans == trueans){
+                htmlx = '<span class="t">' + trueans + '</span><span class="kq_t"></span>';
+            }else{
+                htmlx = '<span class="f">' + ans + '</span><span class="kq_f"></span><span class="t">' + trueans + '</span>';
+            }
+            $(this).after(htmlx);
+            $(this).remove()
+        })
+        $('#bt-dientu .hoanthanh').hide();
+        $('#bt-dientu .baitiep').show();
+    }
+
+    function validateDientu(){
+        result = true;
+        $('#bt-dientu .content_dientu input').each(function(){
+            if($(this).val() == '')
+                result = false;
+        })
+
+        return result;
+    }
+    function toBegin(){
+        location.reload();
+    }
+
+    $('.Loa').click(function(e){
+        var src = $(this).attr('alt');
+        $('#mainaudio').attr('src',src);
+        $('#mainaudio')[0].play();
+    })
+    // Load comment
+    var pagenow = 1;
+    //    getComment();
+    function savearticle(exid) {
+        $.post('incoming.php', {
+            act: 'saveexam', id: exid, type: 'song', return_url: window.location.href
+        }, function (re) {
+            if (re.status == 200)
+                alert('Lưu bài học thành công.');
+            else if(re.status == 505)
+                window.location.href = '/login.php';
+            else if(re.status == 400)
+                window.location.href = '/regispack.php';
+        });
+    }
+    $(document).ready(function() {
+        $( "#show" ).click(function() {
+            $('.show_goiy').toggle();
+        });
+        $( "#show1" ).click(function() {
+            $('.show_goiy1').toggle();
+        });
+        $( "#show2" ).click(function() {
+            $('.show_goiy2').toggle();
+        });
+    });
+
+</script>

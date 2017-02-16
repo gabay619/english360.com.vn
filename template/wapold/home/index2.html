@@ -1,0 +1,137 @@
+<div class="main">
+    <div class="swiper-container slide">
+        <div class="swiper-wrapper">
+            {loop="dataSlide"}
+            {$link=makelink::makenews($value._id,$value.name)}
+            <div class="swiper-slide">
+                <a href="{$link}">
+                    <img src="{$value.avatar}#" alt="{$value.name}"/>
+                    <span class="caption">
+                        <span class="title_s">{$value.name}</span>
+                    </span>
+                </a>
+            </div>
+            {/loop}
+        </div>
+        <div class="pagination"></div>
+    </div>
+    <div class="content_cate p5">
+        <div class="item_cate">
+            <div class="title_cate"><a href="category.php?id=1427183162"><i class="icon_giaotiep"></i>Học tiếng Anh qua video</a></div>
+            <div class="content_item">
+                <ul>
+                    {loop="listtv"}
+                    {$link=makelink::makethuvien($value._id,$value.name)}
+                    <li>
+                        <a href="{$link}">
+                            <span class="thumb_img"><img src="{$value.avatar}" alt=""></span>
+                            <span class="title_list">{$value.name}</span>
+                            <span class="caption_view">{$value.moretitle}</span>
+                        </a>
+                    </li>
+                    {/loop}
+                </ul>
+            </div>
+        </div>
+        <div class="item_cate">
+            <div class="title_cate"><a href="category.php?id=1427344702"><i class="icon_thuvien"></i>Học tiếng Anh qua Radio</a></div>
+            <div class="content_item">
+                <ul>
+                    {loop="listaudio"}
+                    {$link=makelink::makethuvien($value._id,$value.name)}
+                    <li>
+                        <a href="{$link}">
+                            <span class="thumb_img"><img src="{$value.avatar}" alt=""></span>
+                            <span class="title_list">{$value.name}</span>
+                            <span class="caption_view">{$value.moretitle}</span>
+                        </a>
+                    </li>
+                    {/loop}
+                </ul>
+            </div>
+        </div>
+        <div class="item_cate">
+        <div class="title_cate"><a href="category.php?id=1428995217"><i class="icon_thuvien"></i>Tiếng Anh thông dụng</a></div>
+        <div class="content_item">
+            <ul>
+                {loop="listthongdung"}
+                {$link=makelink::makethuvien($value._id,$value.name)}
+                <li>
+                    <a href="{$link}">
+                        <span class="thumb_img"><img src="{$value.avatar}" alt=""></span>
+                        <span class="title_list">{$value.name}</span>
+                        <span class="caption_view">{$value.moretitle}</span>
+                    </a>
+                </li>
+                {/loop}
+            </ul>
+        </div>
+    </div>
+
+        <div class="item_cate thuvien">
+            <div class="title_cate"><a href="category.php?id=1427183137"><i class="icon_thuvien"></i>Học tiếng Anh qua thành ngữ</a></div>
+            <div class="content_item">
+                <ul>
+                    {loop="listtn"}
+                    {$link=makelink::makethuvien($value._id,$value.name)}
+                    <li>
+                        <a href="{$link}">
+                            <span class="thumb_img"><img src="{$value.avatar}" alt="">
+                                <span class="thumb_caption">
+                                    <span class="title_list">{$value.name}</span>
+                                    <i class="icon_video"></i>
+                                </span>
+                            </span>
+                        </a>
+                    </li>
+                    {/loop}
+                </ul>
+            </div>
+        </div>
+        <div class="item_cate cate_hmc">
+            <div class="title_cate"><a href="hmcaudio.php"><i class="icon_hmc"></i>Giải trí tiếng Anh</a></div>
+            <div class="content_item">
+                <ul>
+                    <li>
+                        <a href="hmcaudio.php">
+                            <i class="icon_baihat"></i>
+                            <span>Tiếng Anh qua bài hát</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="hmcvideo.php">
+                            <i class="icon_phim"></i>
+                            <span>Tiếng Anh qua phim</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="hmcgame.php">
+                            <i class="icon_trochoi"></i>
+                            <span>Trò chơi tiếng Anh</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="item_cate thuvien">
+            <div class="title_cate"><a href="category.php?id=1427344743"><i class="icon_thuvien"></i>Kinh nghiệm học tiếng Anh</a></div>
+            <div class="content_item">
+                <ul>
+                    {loop="listkinhnghiem"}
+                    {$link=makelink::makethuvien($value._id,$value.name)}
+                    <li>
+                        <a href="{$link}">
+                            <span class="thumb_img"><img src="{$value.avatar}" alt="">
+                                <span class="thumb_caption">
+                                    <span class="title_list">{$value.name}</span>
+                                    <i class="icon_video"></i>
+                                </span>
+                            </span>
+                        </a>
+                    </li>
+                    {/loop}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

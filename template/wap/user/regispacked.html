@@ -1,0 +1,28 @@
+<div class="main">
+    <div class="p5">
+        <div class="breadcrumb">
+            <div class="title_br">Thông tin gói cước</div>
+        </div>
+    </div>
+    <div class="content_cate h5">
+        <div class="account_page block">
+            {if condition="$event"}
+            <p><strong>Bạn đã đăng ký chương trình "{$event.name}"</strong></p>
+            <p><strong>Tài khoản miễn phí có hiệu lực từ {$startEvent} đến {$endEvent}</strong></p>
+            {elseif condition="$isFreeUser"}
+            <p>Bạn đã nhận được học bổng của English360, khóa học hoàn toàn miễn phí trong 15 ngày.</p>
+            <p>Chúc bạn có khoảng thời gian học tập thú vị cùng English360.</p>
+            {elseif condition="$isHssvUser"}
+            <p><strong>Chúc mừng Quý khách đã đăng ký tham gia chương trình English360 đồng hành cùng học sinh – sinh viên.</strong></p>
+            <p><strong>MIỄN PHÍ 30 ngày trải nghiệm. Hết thời gian khuyến mãi, dịch vụ sẽ tự động huỷ.</strong></p>
+            {else}
+            <p>Bạn đã đăng ký gói E (2.000đ/ngày) từ dịch vụ English360 </p>
+            <p>Bạn được xem không giới hạn các nội dung bài học</p>
+            <p>Dịch vụ miễn phí 3G/GPRS</p>
+            <p class="p_button center"><a class="ht_1" href="cancelpacked.php">Hủy gói cước</a></p>
+            {/if}
+        </div>
+    </div>
+
+
+</div>

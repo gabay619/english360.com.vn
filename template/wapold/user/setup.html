@@ -1,0 +1,96 @@
+<div class="main user_page">
+    {include="user/tabbar"}
+    <div class="content_cate p5">
+        <form action="" method="post" enctype="multipart/form-data">
+        <div class="item_cate fleft w100">
+            {if condition="isset($messageinfo)"}
+            {$messageinfo.mss}
+            {/if}
+            <div class="content_dangky box_form">
+                <div class="title_us">Thông tin tài khoản</div>
+                <div class="avatar">
+                    <span>Avatar</span>
+                    <div>
+                        <span class="thumb_avt"><img src="{$uinfo.priavatar}" alt="" id="cover_avatar_preview" ></span>
+                        <div><input type="checkbox">Xóa Avatar</div>
+                        <div class="upload_avtar">
+                        <input type="file" id="file_upload" name="file_upload" >
+                        <button class="button_red" onclick="selectFile()">Upload Avatar</button>
+                    </div>
+                    </div>
+                </div>
+                <div>
+                    <span>Tên hiển thị</span>
+                    <input type="text" class="input1" name="displayname" value="{$uinfo.displayname}">
+                </div>
+                <div>
+                    <span>Password</span>
+                    <input type="password" class="input1" name="password" value="{$uinfo.password}">
+                </div>
+                <div>
+                    <span>Email</span>
+                    <input type="text" class="input1" name="email" value="{$uinfo.email}">
+                </div>
+                <div>
+                    <span>Họ Tên</span>
+                    <input type="text" class="input1" name="fullname" value="{$uinfo.fullname}">
+                </div>
+                <div>
+                    <span>Ngày sinh</span>
+                    <input type="date" class="input1" name="dob" id ="datepicker" value="{$uinfo.dob}">
+                </div>
+                <div>
+                    <span>Số CMND</span>
+                    <input type="text" class="input1" name="cmtnd" value="{$uinfo.cmtnd}">
+                </div>
+                <div>
+                    <span>Ngày cấp:</span>
+                    <input type="text" class="input1" name="cmtnd_ngaycap" value="{$uinfo.cmtnd_ngaycap}">
+                </div>
+                <div>
+                    <span>Nơi cấp:</span>
+                    <input type="text" class="input1" name="cmtnd_noicap" value="{$uinfo.cmtnd_noicap}">
+                </div>
+                <div>
+                    <span>Giới tính</span>
+                    <input type="radio" name="gender" value="1" {$uinfo.gender=='1'?'checked':''}> Nam
+                    <input type="radio" name="gender" value="0" {$uinfo.gender=='0'?'checked':''}> Nữ
+                </div>
+                <div>
+                    <span>Địa chỉ</span>
+                    <input type="text" class="input1" name="address" value="{$uinfo.address}">
+                </div>
+                <div class="dieukhoan">
+                    <p>Chúng tôi cam kết không tiết lộ cũng như sử dụng thông tin cá nhân của bạn vào những mục đích trái pháp luật</p>
+                    <div>
+                        <input type="checkbox" name="" required="">
+                        <span>Tôi đồng ý ĐIỀU KHOẢN sử dụng dịch vụ</span>
+                    </div>
+                </div>
+                <div class="center mgt10">
+                    <button class="ht" type="submit">Cập nhật</button>
+                    <button class="ht">Hủy bỏ</button>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    function selectFile(){
+        document.getElementById("file_upload").click();
+    }
+    $("#file_upload").change(function () {
+        var oFReader = new FileReader();
+        var image = new Image();
+        var isAllowSize = false;
+        oFReader.readAsDataURL(this.files[0]);
+        oFReader.onload = function (oFREvent) {
+            image.src = oFREvent.target.result;
+            image.onload = function () {
+                $("#cover_avatar_preview").attr('src', oFREvent.target.result).fadeIn();
+            }
+        }
+    });
+
+</script>

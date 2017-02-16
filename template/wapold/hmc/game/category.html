@@ -1,0 +1,22 @@
+<div class="main">
+    {include="hmc/game/tabbar"}
+    <div class="content_cate p5">
+        <div class="item_cate fleft w100">
+            <div class="content_item hmc_trochoi">
+                <ul>
+                    {loop="listcat"}
+                    <li>
+                        <a href="?catid={$value._id}">
+                            <span class="thumb_game">
+                                <img src="{$value.avatar}">
+                            </span>
+                            <span class="name_game">{$value.name}</span>
+                        </a>
+                    </li>
+                    {/loop}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+

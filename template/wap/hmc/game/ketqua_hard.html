@@ -1,0 +1,92 @@
+<div class="main">
+    <div class="content_cate h5">
+        <div class="filter_cate item_cate center mgb0 block">
+            <select class="" id="selectCat">
+                {loop="listcat"}
+                <option data-href="/hmcgame.php?catid={$value._id}&d=h" {if condition="$value._id==$catid"} selected{/if} >{$value.name}</option>
+                {/loop}
+            </select>
+        </div>
+    </div>
+    <div class="content_cate h5">
+        <div class="item_cate mgb0 item_game block">
+            <div class="game_page block">
+                <div class="header_game_page font_game center block">
+                </div>
+                <div class="footer_game_page block">
+                    <div class="game_page_notifi p20 center font_game">
+                        <p>Xin chúc mừng !</p>
+                        <p>Bạn đã trả lời đúng {$trueAns}/10 câu hỏi của level {$level} </p>
+                    </div>
+                </div>
+            </div>
+            {loop="$game.question"}
+            <div class="game_page block">
+                <div class="header_game_page font_game center block">
+                    <div class="level_game_item">
+                        <span>Câu {$key+1}</span>
+                    </div>
+                </div>
+                <div class="footer_game_page block">
+                    <table class="table_question_game" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td>
+                                <div class="game_question center">
+                                    <div class="game_question_img">
+                                        <img src="{$value.avatar}" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="table_answer_game table_answer_game_kho" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td>
+                                {$myselect=getValueByKey($key,$select)}
+                                {if condition="$myselect==$value.aw"}
+                                <div class="answer_game_kho block" data-aw="{$myselect}">
+                                </div>
+                                <h2 class="answer_game_kho true center block">
+                                    <span>{$value.aw}</span>
+                                    <span><img src="/template/wap/asset/images/true_board.png" /></span>
+                                </h2>
+                                {else}
+                                <div class="answer_game_kho block false" data-aw="{$myselect}">
+                                </div>
+                                <h2 class="answer_game_kho true center block">
+                                    <span>{$value.aw}</span>
+                                </h2>
+                                {/if}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+            {/loop}
+            <div class="btn_game_area center block mgb15 btn_game_area_f">
+                <a href="" class="btn_game btn_game_2 font_game">Tiếp tục</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        $('div.answer_game_kho').each(function(e){
+            var l = $(this).attr('data-aw');
+            l_arr = l.split('');
+            console.log($(this))
+            for(i=0;i< l.length;i++){
+                if($(this).hasClass('false'))
+                    $(this).append('<input type="text" id="game_kho" class="btn_game btn_game_3 item_answer_game_kho false" maxlength="1" value="'+l_arr[i]+'" disabled />');
+                else
+                    $(this).append('<input type="text" id="game_kho" class="btn_game btn_game_3 item_answer_game_kho" maxlength="1" value="'+l_arr[i]+'" disabled />');
+            }
+        })
+
+        $('#selectCat').change(function(){
+            window.location.href = $('#selectCat option:selected').attr('data-href');
+        })
+    })
+
+</script>

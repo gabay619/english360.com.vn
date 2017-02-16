@@ -1,0 +1,76 @@
+<div class="main">
+    <div class="content_cate p5">
+        <div class="item_cate">
+            <div class="title_cate">
+                <a href=""><i class="icon-noitieng"></i>Luyện ngữ âm</a>
+                <span class="btn_more_cate"><label></label><label></label><label></label></span>
+
+            </div>
+            <div class="content_item">
+                <div class="dentail_channel">
+                    <h3 class="title_style_1"><a href="">{$obj.name}</a></h3>
+                    <div class="date_view"><label> 22/11/2015 11:10</label></div>
+                    <div class="clearfix"></div>
+                    <div class="baitap">
+                        <div class="title_bt">{$btobj.name}</div>
+                        <div class="view_bt goiy_dientu dientu">
+                            {loop="btobj.question"}
+                            <div class="c" data-aw="{$value.word}">
+                                <span><b class="stt">{$key+1}</b>{$value.spelling}<input class="dt"  type="text" placeholder="" >  <i class="icon_audio_orange"></i></span>
+                            </div>
+                            {/loop}
+                        </div>
+                        <div class="center"><button class="ht" onclick="phatamResult()">Hoàn thành</button></div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="item_cate">
+            <!-- Tabs -->
+            <div id="tabsholder">
+                <ul class="tabs tabs-style">
+                    <li id="tab1">Bài học liên quan</li>
+                    <li id="tab2">Bài học mới nhất</li>
+                </ul>
+                <div class="contents marginbot">
+                    <div id="content1" class="tabscontent">
+                        <ul class="list_1">
+                            <li> <a href=""> <span class="thumb_img"><img alt="" src="images/data_thumb1.png"></span> <span class="title_list">1 ngày học tiếng anh miễn phí với Mr Tom</span> <span class="caption_view"> 22/11/2015 11:10</span> </a> </li>
+                            <li> <a href=""> <span class="thumb_img"><img alt="" src="images/data_thumb2.png"></span> <span class="title_list">2 ngày học tiếng anh miễn phí với Mr Tom</span> <span class="caption_view"> 22/11/2015 11:10</span> </a> </li>
+                            <li> <a href=""> <span class="thumb_img"><img alt="" src="images/data_thumb3.png"></span> <span class="title_list">3 ngày học tiếng anh miễn phí với Mr Tom</span> <span class="caption_view"> 22/11/2015 11:10</span> </a> </li>
+                            <li> <a href=""> <span class="thumb_img"><img alt="" src="images/data_thumb4.png"></span> <span class="title_list">4 ngày học tiếng anh miễn phí với Mr Tom</span> <span class="caption_view"> 22/11/2015 11:10</span> </a> </li>
+                            <li> <a href=""> <span class="thumb_img"><img alt="" src="images/data_thumb1.png"></span> <span class="title_list">1 ngày học tiếng anh miễn phí với Mr Tom</span> <span class="caption_view"> 22/11/2015 11:10</span> </a> </li>
+                        </ul>
+                    </div>
+                    <div id="content2" class="tabscontent">
+                        <ul class="list_1">
+                            <li> <a href=""> <span class="thumb_img"><img alt="" src="images/data_thumb1.png"></span> <span class="title_list">1 ngày học tiếng anh miễn phí với Mr Tom</span> <span class="caption_view"> 22/11/2015 11:10</span> </a> </li>
+                            <li> <a href=""> <span class="thumb_img"><img alt="" src="images/data_thumb2.png"></span> <span class="title_list">2 ngày học tiếng anh miễn phí với Mr Tom</span> <span class="caption_view"> 22/11/2015 11:10</span> </a> </li>
+                            <li> <a href=""> <span class="thumb_img"><img alt="" src="images/data_thumb3.png"></span> <span class="title_list">3 ngày học tiếng anh miễn phí với Mr Tom</span> <span class="caption_view"> 22/11/2015 11:10</span> </a> </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /Tabs -->
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<script>
+    function phatamResult(){
+        $('.baitap .c').each(function(){
+            var kq = $(this).attr("data-aw");
+            var ans = $(this).find('input').val();
+            if(kq == ans){
+
+                htmlx = '<span class="kq_t"></span>';
+            }else{
+               htmlx = '<span class="kq_f"></span><span class="t">'+kq+'</span>';
+            }
+            $(this).append(htmlx);
+        });
+    }
+</script>

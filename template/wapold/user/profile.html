@@ -1,0 +1,41 @@
+<div class="main user_page">
+    {include="user/tabbar"}
+    <div class="content_cate p5">
+        <div class="item_cate fleft w100">
+            <div class="content_dangky">
+                <div class="info_u">
+                    <div class="avt"><i class="icon_logo"></i></div>
+                    <div class="info_right">
+                        <span class="name">{$obj.username}</span>
+                        <a href="">Các bài đã lưu: ({$countsave})</a>
+                    </div>
+                </div>
+                <div class="cate_view view_canhan">
+                    <div class="title_us">Bài học đã lưu:</div>
+                    <div class="content_item">
+                        <ul>
+                            {loop="listarticle"}
+                            {$link=makelink::makegtcb($value._id,$value.name)}
+                            <li>
+                                <a href="{$link}">
+                                    <span class="title_list">{$value.name}</span>
+                                </a>
+                                <a href="javascript:void(0)" onclick="deleteexam('{$value._id}',this)" class="delet"> Xóa </a>
+                            </li>
+                            {/loop}
+                        </ul>
+                    </div>
+                    {include="component/paging"}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        <script>
+            function deleteexam(id,obj){
+                $.post('incoming.php',{act:'deleteexam',id:id},function(re){
+                    if(re.status==200) $(obj).parent().remove();
+                    else alert(re.mss);
+                });
+            }
+        </script>

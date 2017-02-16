@@ -1,0 +1,13 @@
+.starter-template {
+    padding: 0 15px;
+    text-align: center;
+}
+.right{float: right}
+.none{display: none}
+ul {list-style: none;}
+.nopadding{padding: 0}
+.breadcrumb > li + li:before {
+    color: #CCCCCC;
+    content: "/ ";
+    padding: 0 5px;
+}

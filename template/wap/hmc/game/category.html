@@ -1,0 +1,39 @@
+<div class="main">
+    <div class="content_cate h5">
+        <div class="item_cate mgb0 item_game item_game_view block">
+            <div class="game_page block">
+                <div class="header_game_page font_game center block">
+                    <div class="level_game_item">
+                        <span>Chọn chủ đề</span>
+                    </div>
+                    <div class="panel_bar_game">
+                        <!--<span class="panel_bar_game_control"><i class="fa fa-fw"></i></span>-->
+                        <div class="list_control_game_right font_game">
+                            <a href="">Bảng xếp hạng</a>
+                            <a href="">Hướng dẫn chơi</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer_game_page block">
+                    <table class="table_list_cate_game mgt10" cellpadding="0" cellspacing="0">
+                        {loop="listcat"}
+                        <tr>
+                            <td>{$value.name}</td>
+                            <td>
+                                <div class="level_game">
+                                    <a href="hmcgame.php?catid={$value._id}&d=e">Dễ</a>
+                                    <a href="hmcgame.php?catid={$value._id}&d=h">Khó</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {/loop}
+                    </table>
+                </div>
+                <div class="btn_game_area center block mgb15 btn_game_area_f">
+                    <a href="/hmcgame.php?act=guide" class="btn_game btn_game_2 font_game">Hướng dẫn chơi</a>
+                    <a href="/hmcgame.php?act=rank" class="btn_game btn_game_4 font_game">Bảng xếp hạng</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

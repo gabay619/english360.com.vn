@@ -1,0 +1,159 @@
+<div class="main">
+    <div class="content_cate p5">
+        <div class="item_cate">
+            <div class="title_cate">
+                <a href="hoidap.php"><i class="icon-hoidap"></i>Hỏi đáp</a>
+            </div>
+            <div class="content_item content_item_fix">
+            </div>
+            <div class="content_items">
+
+                <div class="content_item hoidap_post">
+                    <h3 class="title_style_1">{$obj.content}</h3>
+                    <div class="date_view"><label>Đăng bởi {function="getDisplayName($obj.userinfo)"} | {$obj.datecreate}</label></div>
+                    <div class="social_view">
+                    </div>
+                    <form action="" method="post">
+                        <div class="post">
+                            <div>
+                                <textarea name="content" id="name" required></textarea>
+                            </div>
+                        </div>
+                        <div class="info_search">
+                            <input type="submit" name="submit" class="ht" value="Gửi trả lời" />
+                        </div>
+                    </form>
+                    <div class="dieukhoan">
+                        <!--<span>. Trước khi đăng câu hỏi, vui lòng sử dụng thanh tìm kiếm để tránh trùng lặp</span>-->
+                        <!--<span>. Câu hỏi của bạn sẽ được kiểm duyệt trước khi đăng lên Góc Hỏi/Đáp</span>-->
+                        <!--<span> Bằng việc đăng câu hỏi, bạn đã chấp nhận các Điều khoản và Điều kiện của TAGT</span>-->
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="item_cate">
+            <div class="comment_block">
+                <div class="lists_comment_item">
+                    {loop="comment"}
+                    <div class="comment_item comment_father" id="cm-{$value._id}">
+                        <div class="top_comment_item">
+                            {if="$value.userinfo.priavatar"}
+                            <div class="avatar_comment"><img src="{$value.userinfo.priavatar}" alt=""></div>
+                            {else}
+                            <div class="avatar_comment"><img src="/template/wap/asset/images/avt.png" alt=""></div>
+                            {/if}
+                            <div class="user_post_comment">{function="getDisplayName($value.userinfo)"}</div>
+                            <div class="date_post_comment">{$value.datecreate}</div>
+                        </div>
+                        <div class="middle_comment_item">
+                            <div class="text_comment_item">
+                                <p>{$value.content}</p>
+                            </div>
+                        </div>
+                        <div class="bottom_comment_item">
+                            <div class="three_select_comment_item">
+                                <div class="selects_comment_item">
+                                    {if condition="$value.islike"}
+                                    <a href="javascript:void(0)" class="btn-unlike" data-id="{$value._id}"><i class="icon- icon-like-cm"></i>Bỏ thích <span>({$value.countlike})</span></a>
+                                    {else}
+                                    <a href="javascript:void(0)" class="btn-like" data-id="{$value._id}"><i class="icon- icon-like-cm"></i>Thích <span>({$value.countlike})</span></a>
+                                    {/if}
+                                </div>
+                                <div class="selects_comment_item">
+                                    <a href="javascript:void(0)" class="btn-report" data-id="{$value._id}"><i class="icon- icon-report-cm"></i>Vi phạm</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/loop}
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<script>
+    function datcauhoi() {
+        var formData = {
+            act: 'hoidap',
+            content: $("#name").val(),
+        }
+        $.post("incoming.php", formData, function (re) {
+            if (re.status == 200) {
+                window.location.href = "hoidap.php";
+            } else
+                alert(re.mss);
+        });
+    }
+    function addlike(exid, obj) {
+        $.post('incoming.php', {act: 'addlike', id: exid}, function (re) {
+            if (re.status == 200) $(obj).parent().remove();
+            alert(re.mss);
+        });
+    }
+
+    function like(id){
+        $.post('/incoming.php?act=likefaq', {
+            id:id
+        }, function (result) {
+            if(result.success){
+                htmlx = '<i class="icon- icon-like-cm"></i>Bỏ thích <span>('+result.countlike+')</span>';
+                $('.btn-like[data-id='+id+']').html(htmlx);
+                $('.btn-like[data-id='+id+']').attr('class', 'btn-unlike');
+            }else{
+                alert(result.mss);
+            }
+        }, 'json')
+    }
+
+    function unlike(id){
+        $.post('/incoming.php?act=unlikefaq', {
+            id:id
+        }, function (result) {
+            if(result.success){
+                htmlx = '<i class="icon- icon-like-cm"></i>Thích <span>('+result.countlike+')</span>';
+                $('.btn-unlike[data-id='+id+']').html(htmlx);
+                $('.btn-unlike[data-id='+id+']').attr('class', 'btn-like');
+            }else{
+                alert(result.mss);
+            }
+        }, 'json')
+    }
+
+    function report(){
+        $.post('/incoming.php?act=report',{
+            id:id, type: 'hoidap'
+        }, function(result){
+            alert(result.mss);
+        });
+    }
+
+    $(document).ready(function() {
+        $( "#show" ).click(function() {
+            $('.show_goiy').toggle();
+        });
+
+        $('.lists_comment_item').on('click', '.btn-like', function(){
+            id = $(this).attr('data-id');
+            console.log(id);
+            like(id);
+        });
+
+        $('.lists_comment_item').on('click', '.btn-unlike', function(){
+            id = $(this).attr('data-id');
+            console.log(id);
+            unlike(id);
+        });
+
+        $('.lists_comment_item').on('click', '.btn-report', function(){
+            id = $(this).attr('data-id');
+            if(confirm('Bạn muốn báo cáo bình luận này là Vi phạm?')){
+                report(id);
+            }
+        });
+    });
+
+</script>
+

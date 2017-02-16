@@ -1,0 +1,54 @@
+<div class="main">
+    <div class="title_cate">
+        <a href=""><i class="icon-hangngay"></i>{$obj.name}</a>
+        <span class="btn_more_cate"><label></label><label></label><label></label></span>
+        <div class="content_more_cate" style="display: none">
+            <div class="content_more_cate_box">
+                <span class="square_dot"></span>
+                <div class="list_more_cate">
+                    {loop="listcat"}
+                    {$link=makelink::makecat($value.parentid,$value._id,$value.namenoneutf)}
+                    <a class="active" href="{$link}">{$value.name}</a>
+                    {/loop}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="swiper-container slide">
+        <div class="swiper-wrapper">
+            {loop="dataSlide"}
+            {$link=makelink::makenews($value._id,$value.name)}
+            <div class="swiper-slide">
+                <a href="{$value.url}">
+                    <img src="{$value.avatar}#" alt="{$value.name}"/>
+                            <span class="caption">
+                                <span class="title_s">{$value.name}</span>
+                            </span>
+                </a>
+            </div>
+            {/loop}
+        </div>
+        <div class="pagination"></div>
+    </div>
+
+    <div class="content_cate h5">
+        <div class="list_movie item_cate">
+            <!--http://hdonline.vn/-->
+            <ul class="list_3">
+                {loop="listfilm"}
+                {$link=makelink::makehmcvideo($value._id,$value.name)}
+                <li>
+                    <div class="item_3">
+                        <a href="{$link}">
+                            <span><img alt="" src="{$value.avatar}"><label class="lb_time">2:35</label></span>
+                            <b>{$value.name}</b>
+                        </a>
+                    </div>
+                </li>
+                {/loop}
+            </ul>
+        </div>
+        {include="component/paging"}
+    </div>
+</div>
+

@@ -1,0 +1,37 @@
+<div class="main">
+    <div class="p5">
+        <div class="breadcrumb">
+            <div class="title_br">Hủy dịch vụ</div>
+        </div>
+    </div>
+    <div class="content_cate h5">
+        <div class="account_page block">
+            {if condition="$isRegispack"}
+            <p class="message2">Bạn có chắc chắn muốn hủy dịch vụ English360?</p>
+            <p class="p_button center">
+                <a class="ht_1" href="javascript:cancelpack()">Đồng ý</a>
+                <a class="ht_1" href="/">Bỏ qua</a>
+            </p>
+            {else}
+            <p>Bạn đã huỷ thành công dịch vụ English360. Để đăng ký lại dịch vụ, vui lòng chọn Đăng ký hoặc soạn DK E gửi 9317. Chi tiết liên hệ 0432474175</p>
+            <p class="p_button center">
+                <a class="ht_1" href="regispack.php">Đăng ký</a>
+            </p>
+            {/if}
+        </div>
+    </div>
+</div>
+
+<script>
+    function cancelpack(){
+        $.post('/incoming.php?act=cancelpack', {
+            {$csrf_name}: '{$csrf_value}'
+        }, function(re){
+            if(re.status == 200){
+                window.location.href = '/';
+            }else{
+                $('.message2').html('<font style="color: red">Có lỗi xảy ra, vui lòng thử lại sau.</font>');
+            }
+        })
+    }
+</script>

@@ -1,0 +1,42 @@
+<div class="main">
+    <div class="content_cate p5">
+        <div class="item_cate">
+            <div class="title_cate">
+                <a href=""><i class="icon-kinhnghiem"></i>Giao tiếp cơ bản</a>
+            </div>
+            <div class="content_item content_item_fix">
+                <div class="swiper-container slide">
+                    <div class="swiper-wrapper">
+                        {loop="dataSlide"}
+                        {$link=makelink::makegtcb($value._id,$value.name)}
+                        <div class="swiper-slide">
+                            <a href="{$value.url}">
+                                <img src="{$value.avatar}#" alt="{$value.name}"/>
+                                <span class="caption">
+                                    <span class="title_s">{$value.name}</span>
+                                </span>
+                            </a>
+                        </div>
+                        {/loop}
+                    </div>
+                    <div class="pagination"></div>
+                </div>
+            </div>
+            <div class="content_items">
+                <ul class="list_1">
+                    {loop="listgtcb"}
+                    {$link=makelink::makegtcb($value._id,$value.name)}
+                    <li>
+                        <a href="{$link}">
+                            <span class="thumb_img"><img src="{$value.avatar}" alt=""></span> <span class="title_list">{$value.name}</span>
+                            <span class="caption_view">{$value.datecreate}</span>
+                        </a>
+                    </li>
+                    {/loop}
+                </ul>
+            </div>
+            {include="component/paging"}
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,95 @@
+<div class="main">
+    <div class="content_cate p5">
+        <div class="item_cate">
+            <div class="title_cate">
+                <a href=""><i class="icon-noitieng"></i>Luyen ngu am</a>
+                <span class="btn_more_cate"><label></label><label></label><label></label></span>
+
+            </div>
+            <div class="content_item">
+                <div class="dentail_channel">
+                    <h3 class="title_style_1"><a href="">{$obj.name}</a></h3>
+                    <div class="date_view"><label> 22/11/2015 11:10</label></div>
+                    <div class="clearfix"></div>
+                    <div class="baitap" id="bt-xemtranh">
+                        <div class="title_bt">{$btobj.name}</div>
+                        <div class="clearfix"></div>
+                        <div class="view_bt dientu mgb10">
+                            <div class="content_item hmc_trochoi hmc_c">
+                                <ul>
+                                    <li>
+                                        <span class="game_pic" >
+                                            <img src="{$btobj.avatar}">
+                                        </span>
+                                        <span class="view_tranh">
+                                            <span>{$key+1}</span><input class="dt" type="text" placeholder="" data-aw="{$btobj.aw}">
+                                        </span>
+                                        <i class="icon_audio_orange"></i>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="center"><button class="ht hoanthanh" onclick="xemtranhResult()">Hoàn thành</button></div>
+                        <div class="center"><button class="ht baitiep" onclick="toNext()" type="button" style="display: none">Bài tiếp</button></div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="item_cate">
+            <!-- Tabs -->
+            <div id="tabsholder">
+                <ul class="tabs tabs-style">
+                    <li id="tab1">Bài học liên quan</li>
+                    <li id="tab2">Bài học mới nhất</li>
+                </ul>
+                <div class="contents marginbot">
+                    <div id="content1" class="tabscontent">
+                        <ul class="list_1">
+                            <li> <a href=""> <span class="thumb_img"><img alt="" src="images/data_thumb1.png"></span> <span class="title_list">1 ngày học tiếng anh miễn phí với Mr Tom</span> <span class="caption_view"> 22/11/2015 11:10</span> </a> </li>
+                            <li> <a href=""> <span class="thumb_img"><img alt="" src="images/data_thumb2.png"></span> <span class="title_list">2 ngày học tiếng anh miễn phí với Mr Tom</span> <span class="caption_view"> 22/11/2015 11:10</span> </a> </li>
+                            <li> <a href=""> <span class="thumb_img"><img alt="" src="images/data_thumb3.png"></span> <span class="title_list">3 ngày học tiếng anh miễn phí với Mr Tom</span> <span class="caption_view"> 22/11/2015 11:10</span> </a> </li>
+                            <li> <a href=""> <span class="thumb_img"><img alt="" src="images/data_thumb4.png"></span> <span class="title_list">4 ngày học tiếng anh miễn phí với Mr Tom</span> <span class="caption_view"> 22/11/2015 11:10</span> </a> </li>
+                            <li> <a href=""> <span class="thumb_img"><img alt="" src="images/data_thumb1.png"></span> <span class="title_list">1 ngày học tiếng anh miễn phí với Mr Tom</span> <span class="caption_view"> 22/11/2015 11:10</span> </a> </li>
+                        </ul>
+                    </div>
+                    <div id="content2" class="tabscontent">
+                        <ul class="list_1">
+                            <li> <a href=""> <span class="thumb_img"><img alt="" src="images/data_thumb1.png"></span> <span class="title_list">1 ngày học tiếng anh miễn phí với Mr Tom</span> <span class="caption_view"> 22/11/2015 11:10</span> </a> </li>
+                            <li> <a href=""> <span class="thumb_img"><img alt="" src="images/data_thumb2.png"></span> <span class="title_list">2 ngày học tiếng anh miễn phí với Mr Tom</span> <span class="caption_view"> 22/11/2015 11:10</span> </a> </li>
+                            <li> <a href=""> <span class="thumb_img"><img alt="" src="images/data_thumb3.png"></span> <span class="title_list">3 ngày học tiếng anh miễn phí với Mr Tom</span> <span class="caption_view"> 22/11/2015 11:10</span> </a> </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /Tabs -->
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<script>
+    function xemtranhResult(){
+        $('.view_tranh').each(function(){
+            var kq = $(this).find('input').attr('data-aw');
+
+            var ans = $(this).find('input').val();
+
+            $(this).find('input').prop('disabled', true);
+            if(kq.toLowerCase() == ans.toLowerCase()){
+                htmlx = '<span class="kq_t"></span>';
+            }else {
+                htmlx = '<span class="kq_f"></span><span class="t">'+kq+'</span>';
+            }
+            $(this).append(htmlx);
+        });
+        $('#bt-xemtranh .hoanthanh').hide();
+        $('#bt-xemtranh .baitiep').show();
+
+
+    }
+    function toNext(){
+        window.location.href="lna_bt3.php?id={$obj._id}&type=lna_xemtranh";
+    }
+</script>

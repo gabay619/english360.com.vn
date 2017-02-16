@@ -1,0 +1,112 @@
+<div class="main">
+    <div class="p5">
+        <div class="breadcrumb">
+            <div class="title_br">Đăng ký</div>
+        </div>
+    </div>
+    <div class="content_cate h5">
+        <div class="account_page block" id="inputPhone">
+            <p><strong>Hãy đăng ký dịch vụ để được hưởng ƯU ĐÃI:</strong></p>
+            <p>- Sử dụng không giới hạn các tính năng của English360</p>
+            <p>- Miễn phí 3G/GPRS</p>
+            <p>- Miễn phí 1 ngày sử dụng cho thuê bao đăng ký lần đầu</p>
+            <p class="p_input center">
+                <input class="input1" id="txtPhone" placeholder="Số điện thoại MobiFone" autofocus />
+            </p>
+            <p class="center" id="">Nếu đã có tài khoản, vui lòng <a href="login.php" style="color: #146eb4">đăng nhập</a> tại đây</p>
+            <p class="p_button center">
+                <a class="ht_1 ht_2" href="/index.php">Bỏ qua</a>
+                <button class="ht_1" type="button" onclick="submitPhone()">Đồng ý</button>
+            </p>
+            <p class="border"> Bằng việc đăng ký sử dụng dịch vụ, bạn đã chấp nhận các <a href="/page.php?slug=dieu-khoan" style="color: #146eb4">Điều khoản</a> của English360 </p>
+        </div>
+        <div class="account_page block" id="inputToken" style="display: none">
+            <p class="message2"></p>
+            <p class="p_input center">
+                <input class="input1" id="txtKey" placeholder="Nhập mã xác thực" />
+            </p>
+            <p class="center" id="resendBtn"><a href="javascript:resendToken()" style="color: blue; text-decoration: underline">Lấy lại mã xác thực</a></p>
+            <p class="center red" id="tokenMss"></p>
+            <p class="p_button center">
+                <a class="ht_1 ht_2" href="/index.php">Bỏ qua</a>
+                <button class="ht_1" type="button" onclick="submitToken()">Đồng ý</button>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function(){
+        $('#txtPhone').keyup(function(){
+            $('#phoneMss').html('');
+        })
+
+        $('#txtKey').keyup(function(){
+            $('#tokenMss').html('');
+        })
+    })
+
+    var phone = '';
+    submitPhone = function(){
+        phone = $('#txtPhone').val();
+        if(phone == ''){
+            $('#phoneMss').html('Vui lòng nhập số điện thoại.');
+            return false;
+        }
+        $.post('/incoming.php?act=sent_auth_key', {
+            phone:phone
+        }, function(result){
+            if(result.status == 200){
+                $('#inputPhone').hide();
+                $('#inputToken').show();
+                $('.message2').html('<font style="color: green">'+result.mss+'</font>');
+//                $('.title_br').html('Nhập mã xác thực từ tin nhắn đã nhận. Dịch vụ miễn cước 3G.')
+                if(!result.first){
+                    $('#inputToken').append('<p class="center">(Cước dịch vụ 2.000đ/ngày, gia hạn hàng ngày)</p>')
+                }
+            }else{
+                $('.message2').html('<font style="color: red">'+result.mss+'</font>');
+            }
+        })
+    }
+
+    resendToken = function () {
+        $('#resendBtn').hide();
+        $.post('/incoming.php?act=sent_auth_key', {
+            phone:phone
+        }, function(result){
+            $('#resendBtn').show();
+            if(result.status == 200){
+
+            }else{
+                $('#tokenMss').html(result.mss);
+            }
+        })
+    }
+    
+    submitToken = function () {
+        token = $('#txtKey').val();
+        if(token == ''){
+            $('#tokenMss').html('Vui lòng nhập mã xác thực.');
+            return false;
+        }
+        $.post('/incoming.php?act=check_auth_key', {
+            phone:phone, token: token, login:1
+        }, function(result){
+            if(result.status == 200){
+                $.blockUI({
+                    message: '<h1>Đang chuyển trang, xin đợi một lát...</h1>' ,
+                    css: {
+                        width: '80%',
+                        left: '10%',
+                    }
+                });
+                setTimeout(function () {
+                    window.location.href = '{$link}'
+                },5000)
+            }else{
+                $('#tokenMss').html(result.mss);
+            }
+        })
+    }
+</script>

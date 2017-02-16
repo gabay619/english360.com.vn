@@ -1,0 +1,33 @@
+<div class="main user_page">
+    {include="user/tabbar"}
+    <div class="content_cate p5">
+        <div class="item_cate fleft w100">
+            <div class="content_dangky">
+                <div class="cate_view">
+                    <div class="content_thongbao">
+                        <ul>
+                            {loop="listnotify"}
+                            <li>
+                                <a href="?t=maildetail&id={$value._id}"><span>{$value.title}</span>
+                                    <span class="name_mail">Người gửi: <strong>{$value.usersender.username}</strong></span>
+                                </a>
+                                <a href="javascript:void(0)" onclick="deleteNotify('{$value._id}',this)" class="delet"> Xóa </a>
+                            </li>
+                            {/loop}
+                        </ul>
+                        {include="component/paging"}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function deleteNotify(ntid,obj){
+    $.post('incoming.php',{act:'deletenotify',id:ntid},function(re){
+        if(re.status==200) $(obj).parent().remove();
+        else alert(re.mss);
+    });
+}
+</script>

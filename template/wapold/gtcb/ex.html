@@ -1,0 +1,57 @@
+<div class="main">
+    <div class="p5">
+        <div class="breadcrumb">
+            {$link=makelink::makegtcb($obj._id,$obj.name)}
+            <a href="{$link}"><div class="title_br">{$obj.name}</div></a>
+            <div class="face"><img src="asset/images/data_like_share.png" alt=""></div>
+        </div>
+    </div>
+    <div class="content_cate p5">
+        <form action="" method="post">
+            <div class="item_cate">
+                <div class="baitap">
+                    <div class="title_bt">Chọn câu trả lời đúng cho mỗi tình huống:</div>
+                    <div class="view_bt">
+                        {loop="question"}
+                        {$qid=$value._id}
+                        {$questionitem=$value}
+                        <div class="c">
+                            <span><b class="stt">{$key+1}</b>{$value.name}</span>
+                            <div class="radio">
+                                {loop="$value.aw"}
+                                <div>
+                                    <input type="radio" name="kq_{$qid}" {function="returnchecked('kq_'.$qid,$key+1)"} value="{$key+1}">
+                                    <span>{function="numtoalpha($key)"}: {$value} </span>
+                                     {$kq=returnaw($questionitem,'kq_'.$qid,$key+1)}
+                                     {if condition="$kq==1"}
+                                    <div class="show_kq_tf" onclick="$(this).next().toggle()">
+                                        <span class="kq_t"></span>
+                                    </div>
+                                    <div class="show_goiy" style="display:none;">
+                                        {$questionitem.captions}
+                                    </div>
+                                     {elseif condition="$kq==2"}
+                                    <span class="kq_f"></span>
+                                     {/if}
+                                </div>
+                                {/loop}
+                            </div>
+                        </div>
+                        {/loop}
+                    </div>
+                    {if condition="!empty($POST)"}
+                    <div class="kq_show mg10"><span class="kq1">Kết quả</span> <span class="kq2">Số câu hỏi: <strong class="orange">{function="count($question)"}</strong></span> <span class="kq3">Đúng: <strong class="orange">{$truechoosen}/{function="count($question)"}</strong></span></div>
+                    <div class="center">
+                        <a class="ht" href="">Làm lại</a>
+                        <!--<a class="ht" href="{function="cpagerparm("next")"}next=1">Bài tiếp</a>-->
+                        <!--<a class="ht" href="?id={$obj._id}&nextid={$nextquestion._id}">Bài tiếp</a>-->
+                        <a class="ht" href="gtcbsapxep.php?id={$obj._id}">Bài tiếp</a>
+                    </div>
+                    {else}
+                    <div class="center"><button class="ht">Hoàn thành</button></div>
+                    {/if}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

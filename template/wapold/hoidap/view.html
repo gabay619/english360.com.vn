@@ -1,0 +1,26 @@
+<div class="main hoidap">
+    {include="hoidap/tabbar"}
+    <div class="content_cate p5">
+        <div class="item_cate fleft w100">
+            <div class="content_item hoidap_list">
+                <div class="question">
+                    <span class="name">{$obj.userinfo.username}</span>
+                    <span>Q: {$obj.name}</span>
+                </div>
+                <div class="answer">
+                    <div class="title_item_small"><i class="icon_small"></i><span class="orange">T</span>rả lời</div>
+                    <ul>
+                        {loop="$obj.listanswer"}
+                        <li>
+                            <a href="">
+                                <span class="name">{$value.uinfo.username}</span>
+                                <span class="cauhoi">{$value.content}</span>
+                            </a>
+                        </li>
+                        {/loop}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

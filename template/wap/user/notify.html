@@ -1,0 +1,39 @@
+<div class="main">
+    <div class="p5">
+        <div class="breadcrumb">
+            <div class="title_br">Thông báo của bạn</div>
+        </div>
+    </div>
+    <div class="content_cate h5">
+        <div class="account_page block">
+            <div class="hoidap_list">
+                <ul>
+                    {loop="item"}
+                    <li>
+                        <a href="{$value.url}">
+                            <span class="cauhoi">{$value.mss}</span>
+                            <span class=""><label class="date">{$value.datecreate}</label><label class=""><a href="javascript:void(0)" onclick="deleteNotify('{$value.id}')"  class="btn_trash"><i class="fa fa-trash"></i>
+                            </a></label></span>
+                        </a>
+                    </li>
+                    {/loop}
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function deleteNotify(id){
+        var type = $('.type').val();
+
+        $.post('incoming.php',{act:'deletenotify',id:id, type:type},function(re){
+            if(re.status==200) {
+                $('div').remove('.liquid_layout');
+                alert("Xóa thành công");
+                window.location.reload();
+            }
+            else alert(re.mss);
+        });
+    }
+</script>

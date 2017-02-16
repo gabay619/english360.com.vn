@@ -1,0 +1,79 @@
+<div class="main">
+    <div class="p5">
+        <div class="breadcrumb">
+            <div class="title_br">Đăng ký bài học</div>
+        </div>
+    </div>
+
+    <div class="content_cate h5">
+        {if condition="$showEmail"}
+        <div class="account_page block emailbox">
+            <input type="text" id="txtEmailLession" placeholder="Nhập email của bạn" style="padding: 5px; width: 70%; float: left" value="{$email}">
+            <button type="button" style="padding: 5px; margin-left: 5px; width: calc(30% - 5px)" onclick="regEmailLession()">Đăng ký email</button>
+        </div>
+        {/if}
+        <div class="account_page block">
+            {if condition="count($checked) > 0"}
+            <p><b>Các chuyên mục bạn đã đăng ký</b></p>
+            {else}
+            <p><b>Chọn chuyên mục bạn quan tâm:</b></p>
+            {/if}
+            <div id="chkLession">
+                {loop="allType"}
+                <label style="width: 50%; display: inline-block; float: left;"><input type="checkbox" value="{$key}" {if condition="in_array($key,$checked)"} checked {/if}/> {$value}</label>
+                {/loop}
+                <label style="width: 50%; display: inline-block; float: left;"><input type="checkbox" value="all" onclick="$('#chkLession input').not(this).prop('checked', this.checked);" /> Tất cả</label>
+            </div>
+            <p class="p_button center"><button type="button" class="btn_df btn_a" onclick="regLession()">Lưu thay đổi</button></p>
+            {if condition="count($checked) > 0"}
+            <p class="center"><i>Để dừng nhận bài học mới qua email, vui lòng bấm vào <a href="javascript:removeRegLession()" style="text-decoration: underline; color: blue">đây</a></i></p>
+            {/if}
+        </div>
+    </div>
+</div>
+<script>
+    function regLession() {
+        select = [];
+        $('#chkLession input').each(function(){
+            if($(this).is(':checked')){
+                if($(this).val() != 'all')
+                    select[select.length] = $(this).val();
+            }
+        });
+        $.post('incoming.php?act=reg-lession', {
+            select:select
+        }, function(result){
+            alert(result.mss);
+        })
+    }
+
+    {if condition="$showEmail"}
+        function regEmailLession() {
+            email = $('#txtEmailLession').val();
+            $.post('incoming.php?act=reg-email-lession', {
+                email: email
+            }, function (re) {
+                if(re.success){
+                    alert('Cập nhật email thành công');
+                }else  if(typeof re.verify !== 'undefined'){
+                    alert(re.mss);
+                    $('.emailbox').hide();
+                }
+            },'json');
+        }
+    {/if}
+
+    function removeRegLession() {
+        $.post('incoming.php?act=reg-lession', {
+            select:[]
+        }, function(result){
+            if(result.success){
+                alert('Bạn đã hủy nhận bài học mới.');
+                location.reload();
+            }else{
+                alert(result.mss);
+            }
+            console.log(select);
+        })
+    }
+</script>

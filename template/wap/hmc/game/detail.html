@@ -1,0 +1,62 @@
+<div class="main">
+    {include="hmc/game/tabbar"}
+    <div class="content_cate p5">
+        <div class="item_cate fleft w100">
+            <div class="content_item hmc_trochoi hmc_c">
+                <ul>
+                    {loop="listarticle"}
+                    <li>
+                        <span class="game_pic" data-aw="{$value.aw}">
+                            <img src="{$value.avatar}">
+                        </span>
+                        <span class="input_check">
+                        </span>
+                    </li>
+                    {/loop}
+                </ul>
+                <div class="dapan">
+                    <span class="blue_bg" style="display:none !important;">Tổng số câu đúng: 2/2</span>
+                    <br />
+                    <button class="ht finish" type="button" onclick="checkaw()">Hoàn thành</button>
+                    <br />
+                    <a class="ht nextgame" style="display: none" href="?id=1&p={$paging+1}" onclick="checkaw()">Chơi tiếp</a>
+                    <a class="ht nextgame" style="display: none" href="?id=1&p={$paging}" onclick="checkaw()">Chơi lại</a>
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        var a = $('.game_pic');
+        $.each(a,function(i,v){
+            var l = $(this).attr('data-aw');
+            var i = 0;
+            for(i=0;i< l.length;i++){
+                $(this).next().append('<input type="text" />');
+            }
+        })
+    });
+    function checkaw(){
+        var a = $('.input_check');
+        $.each(a,function(i,v){
+            var b = $(this).children("input");
+            var answer = $(this).prev().attr('data-aw');
+            var useranswer = '';
+            $.each(b,function(i,v){
+                useranswer += $(this).val();
+            });
+            if(answer.toLowerCase()==useranswer.toLowerCase()){// Neeus tra loi dung
+                var htmlx ='<span class="kq"><span class="kq_t"></span>'+answer.toUpperCase()+'</span>';
+                $(this).append(htmlx);
+            }
+            else{
+                var htmlx ='<span class="kq"><span class="kq_f"></span>'+answer.toUpperCase()+'</span>';
+                $(this).append(htmlx);
+            }
+            $('.finish').hide();
+            $('.nextgame').show();
+        })
+    }
+</script>

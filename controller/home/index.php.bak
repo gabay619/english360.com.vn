@@ -1,0 +1,118 @@
+<?php
+##List News For Slideshow
+
+$gtcbcl = $dbmg->gtcb;
+
+//$songCl = $dbmg->song;
+$showCl = $dbmg->showcl;
+$slideshowCl = $dbmg->slideshow;
+$categorycl = $dbmg->category;
+$listmedia = $showCl->findOne(array('type'=>'slideshow'));
+$dataSlide = array();
+foreach($listmedia['lession'] as $aLession){
+    $postCl = Common::getClFromType($aLession['type']);
+    $postCl = $dbmg->$postCl;
+    $post = $postCl->findOne(['_id'=>$aLession['id']]);
+    $dataSlide[] = array(
+        'id' => $post['_id'],
+        'name' => $post['name'],
+        'avatar' => $post['avatar'],
+        'url' => '/'.Common::getUrlFromType($aLession['type']).'?id='.$post['_id']
+    );
+}
+
+
+$tpl->assign("dataSlide",$dataSlide );
+
+#List Giao tiếp cơ bản
+
+$listgtcb = iterator_to_array($gtcbcl->find(array("status"=>"1"),array("_id","name","avatar","captions","datecreate"))->sort(array("_id"=>-1))->limit(4),false);
+foreach($listgtcb as $key=>$val){
+    $listgtcb[$key]['datecreate'] = date('d/m/Y h:s',$val['datecreate']);
+    $listgtcb[$key]['avatar'] = returnImage($val['avatar']);
+}
+
+$ogtcb = (array)$gtcbcl->findOne( array("_id" => $listgtcb[0]['_id']));
+$tpl->assign("objgtcb",$ogtcb);
+
+$listcatgtcb = iterator_to_array($categorycl->find(array("type"=>"giaotiepcoban"),array("_id","name","namenoneutf"))->sort(array("key"=>-1)));
+$tpl->assign("listcatgtcb", $listcatgtcb);
+$tpl->assign("listgtcb",$listgtcb);
+
+#List Luyện ngữ âm
+$lnacl = $dbmg->luyennguam;
+$listlna = iterator_to_array($lnacl->find(array("status"=>"1"),array("_id","name","avatar","captions"))->sort(array("_id"=>-1))->limit(4),false);
+$tpl->assign("listlna",$listlna);
+#List thư viện
+
+$tvcl = $dbmg->thuvien;
+$refcond['status'] = "1";
+$refcond['_id'] = array('$ne'=>$id);
+$listtv = iterator_to_array($tvcl->find(array("category"=>array("1427183162")),array("_id","name","avatar","captions","category","datecreate"))->sort(array("_id"=>-1))->limit(4),false);
+foreach($listtv as $key=>$val){
+    $listtv[$key]['datecreate'] = date('d/m/Y h:s',$val['datecreate']);
+}
+$tpl->assign("listtv",$listtv);
+
+$listaudio = iterator_to_array($tvcl->find(array("category"=>array("1427344702")),array("_id","name","datecreate","avatar","category","datecreate"))->sort(array("_id"=>-1))->limit(4),false);
+foreach($listaudio as $key=>$val){
+    $listaudio[$key]['datecreate'] = date('d/m/Y h:s',$val['datecreate']);
+}
+$oaudio = (array)$tvcl->findOne( array("_id" => $listaudio[0]['_id']));
+$tpl->assign("objaudio",$oaudio);
+
+$listcatradio = iterator_to_array($categorycl->find(array("type"=>"radio"),array("_id","name","namenoneutf"))->sort(array("key"=>-1)));
+$tpl->assign("listcatradio", $listcatradio);
+$tpl->assign("listaudio",$listaudio);
+
+$listvideo = iterator_to_array($tvcl->find(array("category"=>array("1427183162")),array("_id","name","avatar","category","datecreate"))->sort(array("_id"=>-1))->limit(4),false);
+foreach($listvideo as $key=>$val){
+    $listvideo[$key]['datecreate'] = date('d/m/Y h:s',$val['datecreate']);
+}
+$ovideo = (array)$tvcl->findOne( array("_id" => $listvideo[0]['_id']));
+$tpl->assign("objvideo",$ovideo);
+
+$listcatvideo = iterator_to_array($categorycl->find(array("type"=>"video"),array("_id","name","namenoneutf"))->sort(array("key"=>-1)));
+$tpl->assign("listcatvideo", $listcatvideo);
+$tpl->assign("listvideo",$listvideo);
+
+$listthongdung = iterator_to_array($tvcl->find(array("category"=>array("1428995217")),array("_id","name","avatar","category","datecreate"))->sort(array("_id"=>-1))->limit(4),false);
+foreach($listthongdung as $key=>$val){
+    $listthongdung[$key]['datecreate'] = date('d/m/Y h:s',$val['datecreate']);
+}
+$tpl->assign("listthongdung",$listthongdung);
+
+$listtn = iterator_to_array($tvcl->find(array("category"=>array("1427183137")),array("_id","name","avatar","category","datecreate"))->sort(array("_id"=>-1))->limit(4),false);
+foreach($listtn as $key=>$val){
+    $listtn[$key]['datecreate'] = date('d/m/Y h:s',$val['datecreate']);
+}
+$othanhngu = (array)$tvcl->findOne( array("_id" => $listtn[0]['_id']));
+$tpl->assign("objthanhngu",$othanhngu);
+$listcatthanhngu = iterator_to_array($categorycl->find(array("type"=>"idiom"),array("_id","name","namenoneutf"))->sort(array("key"=>-1)));
+$tpl->assign("listcatthanhngu", $listcatthanhngu);
+$tpl->assign("listtn",$listtn);
+
+$listkinhnghiem = iterator_to_array($tvcl->find(array("category"=>array("1427344743")),array("_id","name","avatar","category","datecreate"))->sort(array("_id"=>-1))->limit(4),false);
+foreach($listkinhnghiem as $key=>$val){
+    $listkinhnghiem[$key]['datecreate'] = date('d/m/Y h:s',$val['datecreate']);
+}
+$tpl->assign("listkinhnghiem",$listkinhnghiem);
+
+$listfamous = iterator_to_array($tvcl->find(array("category"=>"1450844989"),array("_id","name","avatar","category","datecreate"))->sort(array("_id"=>-1))->limit(4),false);
+foreach($listfamous as $key=>$val){
+    $listfamous[$key]['datecreate'] = date('d/m/Y h:s',$val['datecreate']);
+}
+//print_r($listfamous);die;
+$ofamous = (array)$tvcl->findOne( array("_id" => $listfamous[0]['_id']));
+$tpl->assign("objfamous",$ofamous);
+
+$listcatfamous = iterator_to_array($categorycl->find(array("type"=>"famous"),array("_id","name","namenoneutf"))->sort(array("key"=>-1)));
+$tpl->assign("listcatfamous", $listcatfamous);
+$tpl->assign("listfamous",$listfamous);
+$tpl->assign("pagefile","home/index");
+
+//Hoc ma choi
+
+include "controller/hmc/index.php";//end Hoc ma choi
+
+?>

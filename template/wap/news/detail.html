@@ -1,0 +1,25 @@
+<div class="main">
+    <div class="p5">
+        <div class="breadcrumb">
+            <div class="title_br">{$obj.name}</div>
+            <div class="face">
+                {$facebooklink=makelink::makenews($obj._id,$obj.name)}
+                <div class="fb-like" data-href="{$facebooklink}" data-layout="standard" data-action="like" data-show-faces="false" data-share="true"></div></div>
+            </div>
+        </div>
+    </div>
+    <div class="content_cate p5">
+        <div class="item_cate">
+            <div class="content_luyennghe">
+                <div class="content_dientu">
+                    {$obj.contents}
+                    <div style="clear: both"></div>
+                    <div class="face inline">
+                        {$facebooklink=makelink::makenews($obj._id,$obj.name)}
+                        <div class="fb-like" data-href="{$facebooklink}" data-layout="standard" data-action="like" data-show-faces="false" data-share="true"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

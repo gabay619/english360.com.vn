@@ -1,0 +1,96 @@
+/*
+	==============================
+	Hieuht - 27.01.2016 - help.css
+	1 Margin
+	2 Button
+	3 Input
+	4 Block
+	5 Title
+	6 Heading
+	7 Textarea
+	==============================
+*/
+
+/* 1 Margin */
+.mgt5 {
+	margin-top: 5px;
+}
+.mgt10 {
+	margin-top: 10px;
+}
+.mgt15 {
+	margin-top: 15px;
+}
+.mgb0 {
+	margin-bottom:0;	
+}
+.mgb5 {
+	margin-bottom: 5px;
+}
+.mgb10 {
+	margin-bottom: 10px;
+}
+.mgb15 {
+	margin-bottom: 15px;
+}
+/* 2 Button */
+.btn_df {
+	background-color: #333;
+	border: medium none;
+	border-radius: 20px;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	color: #fff;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 14px;
+	padding: 8px 16px;
+	display: inline-block;
+	text-align: center;
+	margin: 0 2px;
+	font-weight: bold;
+}
+.btn_a {
+	background-color: #146eb4;
+}
+.btn_b {
+	background-color: #f90;
+}
+/* 3 Input */
+.input1 {
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+	display: inline-block;
+	padding: 5px;
+	border-radius:4px;
+}
+.input1:focus {
+	border-color: #66afe9;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
+	outline: 0 none;
+}
+/* 4 Block */
+.block {
+	display: inline-block;
+	width: 100%;
+	float: left;
+}
+/* 5 Title */
+.title_1 {
+	border-bottom: 1px solid #146eb4;
+	color: #146eb4;
+	display: inline-block;
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 24px;
+	margin-bottom: 10px;
+	width: 100%;
+}
+/* 6 Heading */
+.heading_1 {
+}
+/* 7 Textarea */
+.textarea_1 {
+	box-sizing: border-box;
+	padding: 5px;
+	resize: none;
+}

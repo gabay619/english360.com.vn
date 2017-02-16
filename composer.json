@@ -1,0 +1,7 @@
+{
+  "require": {
+    "mobiledetect/mobiledetectlib": "^2.8",
+    "captioning/captioning" : "2.*",
+    "phpmailer/phpmailer": "~5.2"
+  }
+}

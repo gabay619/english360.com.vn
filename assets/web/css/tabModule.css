@@ -1,0 +1,110 @@
+.unselectable, .tab .tab-legend > li {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.tab {
+	width: 100%;
+	margin: 10px 0;
+	overflow: hidden;
+	font-size:14px;
+	font-family: 'Roboto', sans-serif;
+	position:relative;
+}
+.tab > .tab-legend, .tab > .tab-content, .tab-legend > li, .tab-content > li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.tab .tab-legend {
+	overflow: hidden;
+}
+
+.tab .tab-legend a{
+    color: #222;
+    display: block;
+    padding: 15px;
+}
+.tab .tab-legend > li {
+  color: #222;
+  cursor: pointer;
+  float: left;
+  /*padding: 15px;*/
+}
+.tab .tab-legend > li {
+	background-color: #dedede;
+}
+.tab .tab-legend > li.active a{
+	color: #db2727;
+}
+.tab .tab-legend .active {
+  background-color: #fff;
+  color: #db2727;
+  /*padding: 13px 15px 15px;*/
+}
+.tab .tab-content {
+	width: 100%;
+	min-height: 500px;
+	position: relative;
+	overflow: hidden;
+}
+.tab .tab-content > li {
+	position: relative;
+	overflow: hidden;
+}
+/*Horizontal specific*/
+.tab-horiz .tab-legend {
+	width: 100%;
+}
+.tab-horiz .tab-legend > li {
+	border-top: solid 1px #CCC;
+	border-right: solid 1px #CCC;
+	border-bottom: solid 1px #CCC;
+}
+.tab.tab-horiz .tab-legend .active {
+	border-top: solid 4px #dc5147;
+	border-bottom: 0;
+}
+.tab-horiz .tab-legend > li:first-child {
+	border-left: solid 1px #CCC;
+}
+.tab-horiz .tab-content {
+	width: 100%;
+}
+/*Vertical specific*/
+.tab-vert .tab-legend {
+	width: 194px;
+	float: left;
+	position:absolute;
+	z-index:1;
+	top:194px;
+}
+.tab.tab-vert .tab-legend .active {
+  border-left: 1px solid #ccc;
+}
+.tab-vert .tab-legend > li {
+	width: 100%;
+	border-top: solid 1px #CCC;
+	border-right: solid 1px #CCC;
+}
+.tab-vert .tab-legend > li.active {
+	border-right: 0;
+}
+.tab-vert .tab-content {
+	width: 74.5%;
+	display: block;
+	float: right;
+}
+.tab-vert .tab-content > li {
+	min-height: 100%;
+	display: block;
+}
+.tab .tab-content {
+	background-color: #FFF;
+	border: 1px solid #ccc;
+}
+.tab-horiz .tab-legend > li:last-child.active {
+	padding-right: 16px;
+	border-right: 0;
+}

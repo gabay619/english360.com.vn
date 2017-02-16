@@ -1,0 +1,416 @@
+<script type="text/javascript" src="/plugin/uploadify/jquery.uploadify.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/plugin/uploadify/uploadify.css" />
+<div class="main">
+    <input  id="medialink"  type="hidden" value="{$obj.medialink}">
+    <div class="p5">
+        <div class="breadcrumb">
+            <div class="title_br">{$obj.name}</div>
+            <div>
+                <span class="date">{$obj.datecreate}</span>
+            </div>
+            <div class="face"><img alt="" src="images/data_like_share.png"></div>
+        </div>
+    </div>
+    <div class="content_cate h5">
+        <div class="item_cate" style="overflow: hidden">
+            <div id="myElement">Loading the player...</div>
+            <div class="four_function">
+                <div class="item_four_function">
+                    <a id="show" class="">Tiếng anh</a>
+                    <a id="show1" class="">Tiếng việt</a>
+                    <a id="show2" class="">Từ vựng</a>
+                    <a class="" href="javascript:void(0)" onclick="savearticle('{$obj._id}',this)">Lưu bài</a>
+                    <div class="all_ct_display">
+                        <div class="show_goiy" style="display: none;">{$obj.contents.eng}</div>
+                        <div class="show_goiy1" style="display: none;">{$obj.contents.vie}</div>
+                        <div class="show_goiy2" style="display: none;">{$obj.tuvung}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="content_luyennghe block">
+
+
+
+                <div class="content_dientu block">
+                    {$obj.exam}
+                    <div class="view_ct">
+                        <span><b class="stt">1</b>  </span>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="user_upload_song block">
+                <h2 class="title_2 mgt15 mgb10 block"><label class="stt stt_music"><i class="fa fa-fw"></i></label><span>Bài hát của thành viên</span></h2>
+                <div class="ct_uploaded block">
+                    <p>Hiện tại chưa có bài hát nào</p>
+
+                    <div class="list_song_upload">
+                        <table cellpadding="0" cellspacing="0">
+                            {loop="$upload"}
+                            <tr>
+                                <td>{$key+1}</td>
+                                <td>
+                                    <h2 class="name_song">{$value.uinfo.displayname}</h2>
+                                </td>
+                                <td><button class="btn_listen_song"><i class="fa fa-fw"></i></button></td>
+                            </tr>
+                            {/loop}
+                        </table>
+                    </div>
+
+                </div>
+                <h2 class="title_2 mgt15 mgb10 block">
+                    <input id="file_upload" name="file_upload" type="file" multiple="true"/>
+                    <!--<label class="stt stt_music"><i class="fa fa-fw"></i></label>-->
+                    <span>Upload bài hát của bạn</span>
+                </h2>
+                <div>
+                </div>
+            </div>
+            <div class="comment mgt15 block">
+                <div class="title_item_small"><i class="icon_small"></i><span class="orange">B</span>ình luận</div>
+                <div class="center">
+                    <textarea>Bạn phải đăng nhập để sử dụng chức năng này</textarea>
+                    <button class="btn_df btn_a">Bình luận</button>
+                </div>
+                <div class="list_comment">
+                    <ul>
+                        <li>
+                            <span class="user">0948747812</span>
+                            <span class="date">27-11-2014</span>
+                            <span class="view_content">
+                                Cô ơi cho em hỏi : I enjoy reading novels =&gt; I am .................
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="item_cate">
+            <div class="title_cate"><a href="">Bài hát liên quan</a></div>
+            <div class="list_bhta block list_bhta_only">
+                <div class="item_1 liquid_layout liquid_layout_90 block">
+                    <div class="liquid_2">
+                        <div class="liquid_2_content">
+                            <h2 class="item_1_title"><a href="">Your Weekly Address</a></h2>
+                            <h3 class="item_1_author"><b>Rihanna</b></h3>
+                            <div class="item_1_date"><span class="date">20:06 | 10.01.2016</span></div>
+
+                        </div>
+                    </div>
+                    <div class="liquid_1">
+                        <a class="mask_img" href=""><img src="images/data_thumb1.png"></a>
+                    </div>
+                </div>
+                <div class="item_1 liquid_layout liquid_layout_90 block">
+                    <div class="liquid_2">
+                        <div class="liquid_2_content">
+                            <h2 class="item_1_title"><a href="">Your Weekly Address</a></h2>
+                            <h3 class="item_1_author"><b>Rihanna</b></h3>
+                            <div class="item_1_date"><span class="date">20:06 | 10.01.2016</span></div>
+
+                        </div>
+                    </div>
+                    <div class="liquid_1">
+                        <a class="mask_img" href=""><img src="images/data_thumb1.png"></a>
+                    </div>
+                </div>
+                <div class="item_1 liquid_layout liquid_layout_90 block">
+                    <div class="liquid_2">
+                        <div class="liquid_2_content">
+                            <h2 class="item_1_title"><a href="">Your Weekly Address</a></h2>
+                            <h3 class="item_1_author"><b>Rihanna</b></h3>
+                            <div class="item_1_date"><span class="date">20:06 | 10.01.2016</span></div>
+
+                        </div>
+                    </div>
+                    <div class="liquid_1">
+                        <a class="mask_img" href=""><img src="images/data_thumb1.png"></a>
+                    </div>
+                </div>
+                <div class="item_1 liquid_layout liquid_layout_90 block">
+                    <div class="liquid_2">
+                        <div class="liquid_2_content">
+                            <h2 class="item_1_title"><a href="">Your Weekly Address</a></h2>
+                            <h3 class="item_1_author"><b>Rihanna</b></h3>
+                            <div class="item_1_date"><span class="date">20:06 | 10.01.2016</span></div>
+
+                        </div>
+                    </div>
+                    <div class="liquid_1">
+                        <a class="mask_img" href=""><img src="images/data_thumb1.png"></a>
+                    </div>
+                </div>
+                <div class="item_1 liquid_layout liquid_layout_90 block">
+                    <div class="liquid_2">
+                        <div class="liquid_2_content">
+                            <h2 class="item_1_title"><a href="">Your Weekly Address</a></h2>
+                            <h3 class="item_1_author"><b>Rihanna</b></h3>
+                            <div class="item_1_date"><span class="date">20:06 | 10.01.2016</span></div>
+
+                        </div>
+                    </div>
+                    <div class="liquid_1">
+                        <a class="mask_img" href=""><img src="images/data_thumb1.png"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    $(function () {
+        $('#file_upload').uploadify({
+            'swf': '/plugin/uploadify/uploadify.swf',
+            'uploader': '/songupload.php?itemid={$obj._id}',
+            'fileTypeExts': '*.mp3;',
+            'buttonText': 'CHỌN FILE',
+            'onUploadSuccess': function (file, data, response) {
+                var obj = JSON.parse(data);
+                console.log(obj);
+                if (obj.status == 200) {
+                    //                 var link=  $('.name_song').val(obj.file.path);
+                    var htmlx = '<tr>'
+                            +'<td>'+01+'</td>'
+                            +'<td>'
+                            +'<h2 class="name_song">'+'{$uid.displayname}'+'</h2>'
+                            +'</td>'
+                            +'<td><button class="btn_listen_song"><i class="fa fa-fw"></i></button></td>'+
+                            +'</tr>';
+
+                    $('.list_song_upload').after(htmlx);
+                } else {
+                    alert(obj.mss);
+                }
+            }
+        });
+    });
+
+    function playSong(link){
+        $('#useraudio').show();
+        $('#useraudio').attr('src',link);
+        $('#useraudio')[0].play();
+    }
+
+</script>
+<script type="text/javascript">
+    jwplayer("myElement").setup({
+        file: "{$obj.medialink}",
+        image: "{$value.avatar}",
+        width: "100%",
+        aspectratio: "16:9",
+        //        skin: 'bekle',
+        captions: {
+            color: '#fff',
+            //                fontSize: 20,
+            backgroundOpacity: 50
+        }
+    });
+
+</script>
+
+<script>
+    $(document).ready(function () {
+        var a = $('.content_dientu img.InputQuestion');
+        $.each(a, function (i) {
+            var kq = $(this).attr('alt');
+            $(this).before('<span class="stt">' + (i + 1) + '</span>');
+            $(this).after('<input class="dt tocheck" data-aw="' + kq.toLowerCase() + '" data-full="' + kq + '" type="text" placeholder="Từ cần điền"></span>');
+            $(this).hide();
+        })
+    });
+    $('.Loa').click(function(e){
+        var src = $(this).attr('alt');
+        $('#mainaudio').attr('src',src);
+        $('#mainaudio')[0].play();
+    })
+    // Load comment
+    var pagenow = 1;
+    //    getComment();
+    function savearticle(exid, obj) {
+        $.post('incoming.php', {act: 'saveexam', id: exid, type: 'song'}, function (re) {
+            if (re.status == 200)
+                $(obj).parent().remove();
+            alert(re.mss);
+        });
+    }
+    function addlike(exid, obj) {
+        $.post('incoming.php', {act: 'addlike', id: exid}, function (re) {
+            if (re.status == 200) $(obj).parent().remove();
+            alert(re.mss);
+        });
+    }
+    function getComment() {
+        $.post('incoming.php', {act: 'getcomment', id: '{$obj._id}', type: 'gtcb', p: pagenow}, function (re) {
+            if (re.data.length > 0) {
+                var data = re.data;
+                data.forEach(function (e) {
+                    // var htmlx = '<li><span class="user_post_comment">' + e.userinfo.displayname + '</span><span class="date_post_comment">' + e.datecreate + '</span><span class="text_comment_item">' + e.content + '</span></li>';
+                    var htmlx = '<div class="comment_item" id="cm-'+ e._id+'">'+
+
+                            '<div class="top_comment_item">'+
+                            '<div class="user_post_comment">'+e.userinfo.displayname+'</div>'+
+                            '<div class="date_post_comment">'+e.datecreate+'</div>'+
+                            '<ul class="listcomment"></ul>'+
+                            '</div>'+
+                            '<div class="middle_comment_item">'+
+                            '<div class="text_comment_item">'+
+                            '<p>'+e.content+'</p>'+
+                            '</div>'+
+                            '</div>'+
+                            '<div class="bottom_comment_item">'+
+                            '<div class="three_select_comment_item">'+
+                            '<div class="selects_comment_item">'+
+                            '<a href=""><i class="icon- icon-like-cm" ></i>Thích</a>'+
+                            '</div>'+
+                            '<div class="selects_comment_item">'+
+                            '<a href=""><i class="icon- icon-report-cm"></i>Vi phạm</a>'+
+                            '</div>'+
+                            '<div class="selects_comment_item">'+
+                            '<a href="javascript:void(0)" class="btn-reply" data-id="'+ e._id+'"><i class="icon- icon-reply-cm"></i>Trả lời</a>'+
+                            '</div>'+
+                            '</div>'+
+                            '</div>'+
+                            '</div>';
+
+                    $('.lists_comment_item').append(htmlx);
+                });
+                ++pagenow;
+            } else $('.page').hide();
+        });
+    }
+    function saveComment(parentid) {
+        var objid = '{$obj._id}';
+        var commentContent = parentid == '' ? $("#comment-input").val() : $("#comment-input-"+parentid).val();
+        if (commentContent.length > 2) {
+            $.post('incoming.php', {act: 'savecomment', id: objid, type: 'gtcb', content: commentContent, parentid: parentid}, function (re) {
+                if (re.status == 200) {
+                    //                    var htmlx = '<li><span class="user_post_comment">' + re.data.userinfo.displayname + '</span><span class="date_post_comment">' + re.data.datecreate + '</span><span class="text_comment_item">' + re.data.content + '</span></li>';
+                    var htmlx = parentid == '' ? '<div class="comment_item comment_father">'+
+                            '<div class="top_comment_item">'+
+                            '<div class="user_post_comment">'+re.data.userinfo.displayname+'</div>'+
+                            '<div class="date_post_comment">'+re.data.datecreate+'</div>'+
+                            '<ul class="listcomment"></ul>'+
+                            '</div>'+
+                            '<div class="middle_comment_item">'+
+                            '<div class="text_comment_item">'+
+                            '<p>'+re.data.content+'</p>'+
+                            '</div>'+
+                            '</div>'+
+                            '<div class="bottom_comment_item">'+
+                            '<div class="three_select_comment_item">'+
+                            '<div class="selects_comment_item">'+
+                            '<a href=""><i class="icon- icon-like-cm"></i>Thích</a>'+
+                            '</div>'+
+                            '<div class="selects_comment_item">'+
+                            '<a href=""><i class="icon- icon-report-cm"></i>Vi phạm</a>'+
+                            '</div>'+
+                            '<div class="selects_comment_item">'+
+                            '<a href="javascript:vod(0)" class="addCommentBtn"><i class="icon- icon-reply-cm"></i>Trả lời</a>'+
+                            '</div>'+
+                            '</div>'+
+                            '</div>'+
+                            '</div>'
+                                    :
+                            '<div class="comment_item comment_son">'+
+                            '<div class="top_comment_item">'+
+                            '<div class="user_post_comment">'+re.data.userinfo.displayname+'</div>'+
+                            '<div class="date_post_comment">'+re.data.datecreate+'</div>'+
+                            '<ul class="listcomment"></ul>'+
+                            '</div>'+
+                            '<div class="middle_comment_item">'+
+                            '<div class="text_comment_item">'+
+                            '<p>'+re.data.content+'</p>'+
+                            '</div>'+
+                            '</div>'+
+                            '<div class="bottom_comment_item">'+
+                            '<div class="three_select_comment_item">'+
+                            '<div class="selects_comment_item">'+
+                            '<a href=""><i class="icon- icon-like-cm"></i>Thích</a>'+
+                            '</div>'+
+                            '<div class="selects_comment_item">'+
+                            '<a href=""><i class="icon- icon-report-cm"></i>Vi phạm</a>'+
+                            '</div>'+
+                            '<div class="selects_comment_item">'+
+                            '</div>'+
+                            '</div>'+
+                            '</div>'+
+                            '</div>'
+                            ;
+
+                    if(parentid == ''){
+                        $('.lists_comment_item').prepend(htmlx);
+                        $("#comment-input").val('');
+                    }else{
+                        $last = $('.son-of-'+parentid).last();
+                        if($last.length){
+                            $last.after(htmlx);
+                        }else
+                            $('#cm-'+parentid).after(htmlx);
+                        $('.reply-box').remove();
+                    }
+
+                } else alert("Bạn cần đăng nhập để thực hiện tính năng này");
+            });
+        }
+        else alert("Nội dung bình luận phải dài ít nhất 2 ký tự");
+    }
+    function reply(){
+        var htmlx= '<div class="comment_item comment_son">'
+                +'<div class="top_comment_item">'
+                +'<div class="user_post_comment">'+'Le Phuong Nam'+'</div>'+
+                +'<div class="date_post_comment">'+'</div>'
+                +'</div>'
+                +'<div class="middle_comment_item">'
+                +'<div class="text_comment_item">'
+                +'<p>Bài học này quá hữu ích, phải lưu lại để sau học mới được. Hihi</p>'
+                +'</div>'
+                +'</div>'
+                +'<div class="bottom_comment_item">'
+                +'<div class="three_select_comment_item">'
+                +'<div class="selects_comment_item">'
+                +'<a href=""><i class="icon- icon-like-cm"></i>Thích</a>'
+                +'</div>'
+                +'<div class="selects_comment_item">'
+                +'<a href=""><i class="icon- icon-report-cm"></i>Vi phạm</a>'
+                +'</div>'
+
+                +'</div>'
+                +'</div>'
+                +'</div>'
+        $('.comment_son').append(htmlx);
+    }
+    $(document).ready(function() {
+        $( "#show" ).click(function() {
+            $('.show_goiy').toggle();
+        });
+        $( "#show1" ).click(function() {
+            $('.show_goiy1').toggle();
+        });
+        $( "#show2" ).click(function() {
+            $('.show_goiy2').toggle();
+        });
+
+
+        $('.lists_comment_item').on('click', '.btn-reply', function(){
+            id = $(this).attr('data-id');
+            var htmlx = '<div class="comment_type_box reply-box">'+
+                    '<textarea class="type_1" id="comment-input-'+id+'" type="text" placeholder="Thêm bình luận"></textarea>'+
+                    '<div class="btn_gui_comment center"><a href="javascript:saveComment('+id+')" class="btn_1">Gửi</a></div>'+
+                    '</div>';
+
+            $('.reply-box').remove();
+            $last = $('.son-of-'+id).last();
+            //            $parent = $(this).parent().parent().parent().parent();
+            if($last.length)
+                $last.after(htmlx);
+            else
+                $('#cm-'+id).after(htmlx);
+            //            $('.comment_son').append(htmlx);
+            //            alert(1);
+        });
+    });
+
+</script>

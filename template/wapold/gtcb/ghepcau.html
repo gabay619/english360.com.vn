@@ -1,0 +1,55 @@
+<div class="main">
+    <div class="p5">
+        <div class="breadcrumb">
+            {$link=makelink::makegtcb($obj._id,$obj.name)}
+            <a href="{$link}"><div class="title_br">{$obj.name}</div></a>
+            <div class="face"><img src="images/data_like_share.png" alt=""></div>
+        </div>
+    </div>
+    <div class="content_cate p5">
+        <div class="item_cate">
+            <div class="baitap">
+                <div class="title_bt">Ghép kết quả ở đoạn 1 với kết quả đoạn 2 sao cho phù hợp</div>
+                <div class="view_bt bt_list">
+                    <div class="c">
+                        <div class="bt_list_view">
+                            {loop="gc"}
+                            <div class="posaw" data-key="{$value.sort}" data-index="{$key+1}">
+                                <span>{$key+1}. {$value.aw}</span>
+                            </div>
+                            {/loop}
+                        </div>
+                        <div class="bt_list_view hr">
+                            {loop="tl"}
+                            <div class="posaw" data-key="{$value.sort}" data-index="{$key+1}">
+                                <span>{function="numtoalpha($key)"}. {$value.ax}</span>
+                            </div>
+                            {/loop}
+                        </div>
+                        <div class="bt_show ">
+                            <span class="title-show"> Câu trả lời của bạn! </span>
+                            <div class="kq_show mg10">
+                                {loop="gc"}
+                                <span>{$key+1}<input type="text"><i class="<!--kq_t-->"></i></span>
+                                {/loop}
+                            </div>
+                            <span class="title-show"> Câu trả lời đúng! </span>
+                            <div class="kq_show mg10 awform" style="display: none">
+                                {loop="true"}
+                                <span>{$key+1}<input type="text" value="{$value.true}" ></span>
+                                {/loop}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="center"><button class="ht" onclick="checkquestion(this)">Hoàn thành</button></div>
+            </div>
+        </div>
+    </div>
+</div>
+        <script>
+            function checkquestion(){
+                $('.awform').show();
+                return;
+            }
+        </script>

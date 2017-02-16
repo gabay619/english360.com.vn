@@ -1,0 +1,37 @@
+<div class="my_sidebar" id="scrollbar_sidebar">
+    <div class="list_sb sidebar">
+        <ul>
+            {if condition="!isset($SESSION.uinfo)"}
+            <li>
+                <a href="login.php" class="btn btnlogin_sb"><i class="icon_logo"></i>
+                    <div class="clearfix"></div>
+                    <span>Tài khoản</span></a>
+            </li>
+            {else}
+            <li>
+                <a href="#/login" class="btn btnlogin_sb"><i class="icon_logo"></i></a>
+                <div class="clearfix"></div>
+                <span>Xinchào, {$SESSION.uinfo.displayname} </span>
+                <div class="info_user">
+                    <div><a href="userprofile.php">Cá nhân</a></div>
+                    <div><a href="userprofile.php?t=notify"><span>Thông báo {if condition="$tabbarinfo.notifycount>0"}<i class="note">{$tabbarinfo.notifycount}</i>{/if}</span></a></div>
+                    <div><a href="userprofile.php?t=mail"><span>Hòm thư {if condition="$tabbarinfo.mailcount>0"}<i class="note">{$tabbarinfo.mailcount}</i>{/if}</span></a></div>
+                    <div><a href="userprofile.php?t=setup">Cài đặt</a></div>
+                </div>
+            </li>
+            {/if}
+            <li><a href="index.php"><i class="icon-home"></i>Trang chủ</a></li>
+            <li><a href="luyennguam.php"><i class="icon-nguam"></i>Luyện ngữ âm</a></li>
+            <li><a href="gtcb.php"><i class="icon-giaotiep"></i>Giao tiếp cơ bản</a></li>
+            <li><a href="tudien.php"><i class="icon-tudien"></i>Từ điển</a></li>
+            <li><a href="thuvien.php"><i class="icon-thuvien"></i>Tiếng Anh hàng ngày</a></li>
+            <li><a href="hmcaudio.php"><i class="icon-hmc"></i>Giải trí tiếng Anh</a></li>
+            <li><a href="hoidap.php"><i class="icon-hoidap"></i>Góc Hỏi/Đáp</a></li>
+            <li><a href=""><i class="icon-gioithieu"></i>Giới thiệu dịch vụ</a></li>
+            <li><a href=""><i class="icon-dieukhoan"></i>Điều khoản sử dụng </a></li>
+            {if condition="isset($SESSION.uinfo)"}
+            <li><a href="logout.php"><i class="icon-thoat"></i> Thoát </a></li>
+            {/if}
+        </ul>
+    </div>
+</div>

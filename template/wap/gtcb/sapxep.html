@@ -1,0 +1,98 @@
+<div class="main">
+    <div class="content_cate p5">
+        <div class="item_cate">
+            <div class="title_cate">
+                <a href=""><i class="icon-noitieng"></i>Giao tiếp cơ bản</a>
+                <span class="btn_more_cate"><label></label><label></label><label></label></span>
+            </div>
+            <div class="content_item">
+
+                <div class="dentail_channel">
+                    <h3 class="title_style_1"><a href="">{$obj.name}</a></h3>
+                    <div class="date_view"><label> 22/11/2015 11:10</label></div>
+                    <div class="clearfix"></div>
+                    <div class="baitap">
+                        <div class="title_bt">Sắp xếp lại đoạn hội thoại theo đúng thứ tự:</div>
+                        <div class="view_bt bt_list">
+                            <div class="c">
+                                <div class="bt_list_view">
+                                    {loop="sx"}
+                                    <div class="posaw" data-answer="{$value.sort}" data-id="{$key+1}">
+                                        <span>{function="numtoalpha($key)"}. {$value.aw}</span>
+                                    </div>
+                                    {/loop}
+
+
+                                </div>
+                                <div class="bt_show">
+                                    <span class="title-show"> Câu trả lời của bạn! </span>
+                                    <div class="kq_show mg10">
+                                        {loop="sx"}
+                                        <span>{$key+1}. <input class="traloi" type="text" maxlength="1" id="traloi" ><i class=""></i></span>
+                                        {/loop}
+                                    </div>
+                                    <span class="title-show"> Câu trả lời đúng! </span>
+                                    <div class="kq_show mg10">
+                                        {loop="sx_new"}
+                                        <span>{$key+1}. <input class="dapan" type="text" id="dapan" data-anser="{$value.aw}"></span>
+                                        {/loop}
+                                    </div>
+                                </div>
+                                {if condition="!empty($POST)"}
+                                <div class="center">
+                                    <button class="ht">Làm lại</button>
+                                    <input type="button" class="ht" onclick="location.href='gtcbghepcau.php?id={$obj._id}'" value="Bài tiếp">
+                                </div>
+                                {else}
+                                <div class="center"><button  class="ht" >Hoàn thành</button></div>
+                                {/if}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="item_cate">
+            <!-- Tabs -->
+            <div id="tabsholder">
+                <ul class="tabs tabs-style">
+                    <li id="tab1">Bài học liên quan</li>
+                    <li id="tab2">Bài học mới nhất</li>
+                </ul>
+                <div class="contents marginbot">
+                    <div id="content1" class="tabscontent">
+                        <ul class="list_1">
+                            {loop="ref"}
+                            {$link=makelink::makegtcb($value._id,$value.namenoneutf)}
+                            <li> <a href="{$link}"> <span class="thumb_img"><img alt="" src="{$value.avatar}"></span> <span class="title_list">{$value.name}</span> <span class="caption_view"> 22/11/2015 11:10</span> </a> </li>
+                            {/loop}
+                        </ul>
+                    </div>
+                    <div id="content2" class="tabscontent">
+                        <ul class="list_1">
+                            {loop="new"}
+                            {$link=makelink::makegtcb($value._id,$value.namenoneutf)}
+                            <li> <a href="{$link}"> <span class="thumb_img"><img alt="" src="{$value.avatar}"></span> <span class="title_list">{$value.name}</span> <span class="caption_view"> 22/11/2015 11:10</span> </a> </li>
+                            {/loop}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /Tabs -->
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+        <script>
+            $(".inputs").keyup(function () {
+                if (this.value.length == this.maxLength) {
+                    $(this).next('.inputs').focus();
+                }
+            });
+
+        </script>

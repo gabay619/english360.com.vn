@@ -1,0 +1,150 @@
+<div class="main">
+    <div class="content_cate h5">
+        <div class="filter_cate item_cate center mgb0 block">
+            <select class="" id="selectCat">
+                {loop="listcat"}
+                <option data-href="/hmcgame.php?catid={$value._id}&d=h" {if condition="$value._id==$catid"} selected{/if} >{$value.name}</option>
+                {/loop}
+            </select>
+        </div>
+    </div>
+    {if condition="$game"}
+    <div class="content_cate h5">
+        <div class="item_cate mgb0 item_game block">
+            <div class="game_page block">
+                <div class="header_game_page font_game center block">
+                    <div class="level_game_item">
+                        <span>Level {$level}</span>
+                    </div>
+                    <div class="here_game_item">
+                        <span class="btn_game btn_game_1 text_shadow_game" id="numberGame">1/10</span>
+                    </div>
+                    <div class="list_cate_game_item">
+                        <span>Khó</span>
+                    </div>
+                </div>
+                {loop="$game.question"}
+                <div class="footer_game_page block">
+                    <table class="table_question_game" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td>
+                                <button class="btn_game btn_game_2 btn_game_circle" onclick="toItem({$key-1})"><i class="fa fa-fw"></i></button>
+                            </td>
+                            <td>
+                                <div class="game_question center">
+                                    <div class="game_question_img">
+                                        <img src="{$value.avatar}" />
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn_game btn_game_2 btn_game_circle" onclick="toItem({$key+1})"><i class="fa fa-fw"></i></button>
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="table_answer_game table_answer_game_kho" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td>
+                                <div class="answer_game_kho block" data-aw="{$value.aw}" >
+                                    {loop="$value.range"}
+                                    <input type="text" class="btn_game btn_game_3 item_answer_game_kho" maxlength="1" />
+                                    {/loop}
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                {/loop}
+                <div class="btn_game_area center block mgb15 btn_game_area_f">
+                    <a href="javascript:complete()" class="btn_game btn_game_2 font_game">Hoàn thành</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {else}
+    <div class="content_cate h5">
+        <div class="item_cate mgb0 item_game item_game_view block">
+            <div class="game_page block">
+                <div class="header_game_page font_game center block">
+                </div>
+                <div class="footer_game_page block">
+                    <div class="game_page_notifi p20 center font_game">
+                        <p>Chúc mừng bạn đã hoàn thành tất cả các LEVEL trong chủ đề này!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/if}
+    <form action="" method="post" id="form-result">
+    </form>
+</div>
+        <script>
+            $(function(){
+                $('.footer_game_page').each(function(e){
+                    if(e > 0)
+                        $(this).hide();
+                });
+//                $('.answer_game_kho').each(function(e){
+//                    var l = $(this).attr('data-aw');
+//                    console.log($(this))
+//                    for(i=0;i< l.length;i++){
+//                        $(this).append('<input type="text" class="btn_game btn_game_3 item_answer_game_kho" maxlength="1" />');
+//                    }
+//                })
+                $(".item_answer_game_kho" ).keyup(function(e) {
+                    if($(this).val().length > 0){
+//                        var index = $('input').index(this) + 1;
+//                        $('input').eq(index).focus();
+                        if($(this).val().length > 1){
+                            $(this).val($(this).val().substr(1, 2));
+                        }
+//                        alert(this.value);
+                        $(this).next().focus();
+//                        return false;
+                    }
+
+                });
+
+                $('#selectCat').change(function(){
+                    window.location.href = $('#selectCat option:selected').attr('data-href');
+                })
+            })
+
+            function complete(){
+                var select = [];
+                var complete = true;
+                $('.answer_game_kho').each(function(e){
+                    choose = '';
+                    $(this).find('input').each(function(el){
+                        if($(this).val() == '')
+                            complete = false;
+                        choose += $(this).val();
+                    });
+                    if(choose.length != 0)
+                        select[e] = choose;
+                });
+                console.log(select);
+                if(!complete){
+                    alert('Bạn phải điền vào tất cả các ô trống.');
+                    return false;
+                }
+                for (index = 0; index < select.length; ++index) {
+                    html = '<input type="hidden" name="select['+index+']" value="'+select[index]+'"/>';
+                    //                console.log(html);
+                    $('#form-result').append(html);
+                }
+
+                $('#form-result').submit();
+            }
+
+            function toItem(equa){
+                if(equa < 0 || equa >=10 ){
+                    alert('Chỉ có 10 câu hỏi.'); return false;
+                }
+                $('.footer_game_page').hide();
+                $('.footer_game_page').eq(equa).show();
+                numberGame = parseInt(equa)+1;
+                $('#numberGame').html(numberGame+'/10');
+            }
+        </script>

@@ -1,0 +1,25 @@
+<div class="main">
+    <div class="content_cate p5">
+                   {include="hmc/video/tabbar"}
+               		<div class="item_cate fleft w100">
+                    	<div class="content_item ib">
+                            <ul>
+                                {loop="listarticle"}
+                                {$link=makelink::makehmcvideo($value._id,$value.name)}
+                                <li>
+                                    <a href="{$link}">
+                                        <span class="thumb_img"><img src="{$value.avatar}" alt="">
+                                            <span class="thumb_caption">
+                                                <span class="title_list">{$value.name}</span>
+                                                <i class="icon_video"></i>
+                                            </span>
+                                        </span>
+                                    </a>
+                                </li>
+                                {/loop}
+                            </ul>
+                        </div>
+                        {include="component/paging"}
+                    </div>
+   </div>
+</div>

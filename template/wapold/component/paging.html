@@ -1,0 +1,11 @@
+<div class="page pagination-centered">
+    <ul>
+        <li><a href="{$paging.link}p=1">«</a></li>
+        {loop="$paging.listpage"}
+        {if condition="$paging.pagenow >= ($value-$paging.maxpage) && $paging.pagenow <= ($value+$paging.maxpage)"}
+        <li class="{$value==$paging.pagenow?'active':''}"><a href="{$paging.link}p={$value}">{$value}</a></li>
+        {/if}
+        {/loop}
+        <li><a href="{$paging.link}p={$paging.totalpage}">»</a></li>
+    </ul>
+</div>

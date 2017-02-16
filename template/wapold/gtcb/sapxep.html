@@ -1,0 +1,112 @@
+<div class="main">
+    <div class="p5">
+        <div class="breadcrumb">
+            {$link=makelink::makegtcb($obj._id,$obj.name)}
+            <a href="{$link}"><div class="title_br">{$obj.name}</div></a>
+            <div class="face"><img src="images/data_like_share.png" alt=""></div>
+        </div>
+    </div>
+    <div class="content_cate p5">
+        <div class="item_cate">
+            <div class="baitap">
+                <div class="title_bt">Sắp xếp lại đoạn hội thoại theo đúng thứ tự:</div>
+                <div class="view_bt bt_list">
+                    <div class="c">
+                        <div class="bt_list_view">
+                            {loop="sx"}
+                            <div class="posaw" data-key="{$value.sort}" data-index="{$key+1}">
+                                <span>{function="numtoalpha($key)"}. {$value.aw}</span>
+                            </div>
+                            {/loop}
+                            <div class="bt_show">
+                                <span class="title-show"> Câu trả lời của bạn! </span>
+                                <div class="kq_show">
+                                    {loop="sx"}
+                                    <p><span>{$key+1}. <input type="text" class="awp" id="traloi" maxlength="1"></span></p>
+                                    {/loop}
+                                </div>
+                            </div>
+                            <div class="bt_show awform" style="display: none">
+                                <span class="title-show"> Câu trả lời đúng! </span>
+                                <div class="kq_show mg10">
+                                    {loop="sx_new"}
+                                    <span>{$key+1}. <input type="text" class="da" value="{$value.aw}" id="dapan"></span>
+                                    {/loop}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="center">
+                        <button class="ht" hre onclick="kiemtra()">Hoàn thành</button>
+                        <a href="javascript:void(0)" onclick="kiemtra()">
+                            <button id="dch"  class="ht">Hoangf</button>
+                        </a>
+                        <a class="ht" href="gtcbdientu.php?id={$obj._id}">Bài tiếp</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        var traloi = $("#traloi").val();
+        var dapan = $("#dapan").val();
+        if (traloi == dapan){
+            alert("123");
+        }
+        else alert("false");
+//
+        $('input').keyup(function(){
+            if($(this).val().length==$(this).attr("maxlength")){
+                $(this).next().focus();
+            }
+        });
+    });
+    function checkquestion() {
+       $('.awform').show();
+      return;
+       $(document).ready(function(){
+           $.each(a, function(i) {
+              var traloi = $(this).val();
+          var dapan = $(".da").attr("value");
+               if (traloi == dapan){
+          $(this).after("<span class="+"kq_t"+"></span>");
+               }
+              else {
+                  $(this).after("<span class="+"kq_f"+"></span>");
+               }
+            });
+            });
+          var a = $('.content_cate .awp');
+         $.each(a, function(i) {
+           var tralois = $('#traloi');
+               $.each(tralois, function () {
+                 var traloi = $(this).val();
+              });
+               var dapans = $('#dapan');
+            $.each(dapans, function () {
+                    console.log('dap an: ' + dapan);
+                });
+             if (tralois = dapans){
+                $(this).after("<span class="+"kq_t"+"></span>");
+              }
+                else{
+               $(this).after("<span class="+"kq_f"+"></span>");
+              }
+            });
+        var tralois = $('#traloi');
+                        $.each(tralois, function () {
+                            var traloi = $(this).val();
+                           console.log('tra loi: ' + traloi);
+                        });
+        $.post('incoming.php',{act: 'checkquestion', id: id, traloi: tralois},function(re){
+
+        });
+    }
+    function checkquestion(){
+        $.post("incoming.php", {act:})
+    }
+</script>
+
+

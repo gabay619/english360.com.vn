@@ -1,0 +1,207 @@
+<audio style="width: 0;height: 0;" id="mainaudio" controls></audio>
+<div class="main">
+<div class="p5">
+    <div class="breadcrumb">
+        <div class="title_br">{$obj.name}</div>
+        <div>
+            <span class="date">{$obj.datecreate}</span>
+        </div>
+        <div class="face"><img alt="" src="template/wap/asset/images/data_like_share.png"></div>
+    </div>
+</div>
+<div class="content_cate h5">
+<div class="item_cate">
+    <div class="content_luyennghe block">
+        <div id="myElement">Loading the player...</div>
+        <div class="four_function">
+            <div class="item_four_function">
+                <a id="show" class="">Tiếng Anh</a>
+                <a id="show1" class="">Tiếng Việt</a>
+                <a id="show2" class="">Từ vựng</a>
+                <a class="" href="javascript:void(0)" onclick="savearticle('{$obj._id}')">Lưu bài</a>
+                <div class="all_ct_display">
+                    <div class="show_goiy" style="display: none;">{$obj.content.eng}</div>
+                    <div class="show_goiy1" style="display: none;">{$obj.content.vie}</div>
+                    <div class="show_goiy2" style="display: none;">{$obj.tuvung}</div>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="content_dientu block">
+            {$obj.lession}
+        </div>
+    </div>
+    <div class="comment_block">
+        <div class="lists_comment_item">
+            {loop="comment"}
+            <div class="comment_item comment_father" id="cm-{$value._id}">
+                <div class="top_comment_item">
+                    <div class="user_post_comment">{$value.userinfo.phone}</div>
+                    <div class="date_post_comment">{$value.datecreate}</div>
+                </div>
+                <div class="middle_comment_item">
+                    <div class="text_comment_item">
+                        <p>{$value.content}</p>
+                    </div>
+                </div>
+                <div class="bottom_comment_item">
+                    <div class="three_select_comment_item">
+                        <div class="selects_comment_item">
+                            <a href=""><i class="icon- icon-like-cm"></i>Thích</a>
+                        </div>
+                        <div class="selects_comment_item">
+                            <a href=""><i class="icon- icon-report-cm"></i>Vi phạm</a>
+                        </div>
+                        <div class="selects_comment_item">
+                            <a href="javascript:void(0)" class="btn-reply" data-id="{$value._id}"><i class="icon- icon-reply-cm"></i>Trả lời</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {loop="$value.childs"}
+            <div class="comment_item comment_son son-of-{$value.parentid}">
+                <div class="top_comment_item">
+                    <div class="user_post_comment">{$value.userinfo.phone}</div>
+                    <div class="date_post_comment">{$value.datecreate}</div>
+                </div>
+                <div class="middle_comment_item">
+                    <div class="text_comment_item">
+                        <p>{$value.content}</p>
+                    </div>
+                </div>
+                <div class="bottom_comment_item">
+                    <div class="three_select_comment_item">
+                        <div class="selects_comment_item">
+                            <a href=""><i class="icon- icon-like-cm"></i>Thích</a>
+                        </div>
+                        <div class="selects_comment_item">
+                            <a href=""><i class="icon- icon-report-cm"></i>Vi phạm</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            {/loop}
+            {/loop}
+        </div>
+        <div class="comment_type_box">
+            <textarea class="type_1" id="comment-input" type="text" placeholder="Thêm bình luận"></textarea>
+            <div class="btn_gui_comment center"><a href="javascript:void(0)" onclick="saveComment('')"  class="btn_1">Gửi</a></div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+    <div class="item_cate">
+        <!-- Tabs -->
+        <div id="tabsholder">
+            <ul class="tabs tabs-style">
+                <li id="tab1">Phim liên quan</li>
+                <li id="tab2">Phim mới</li>
+            </ul>
+            <div class="contents marginbot">
+                <div id="content1" class="tabscontent">
+                    <ul class="list_1">
+                        {loop="ref"}
+                        {$link=makelink::makehmcvideo($value._id,$value.namenoneutf)}
+                        <li> <a href="{$link}"> <span class="thumb_img"><img alt="" src="{$value.avatar}"></span> <span class="title_list">{$value.name}</span> <span class="caption_view">{$value.datecreate}</span> </a> </li>
+                        {/loop}
+                    </ul>
+                </div>
+                <div id="content2" class="tabscontent">
+                    <ul class="list_1">
+                        {loop="new"}
+                        {$link=makelink::makehmcvideo($value._id,$value.namenoneutf)}
+                        <li> <a href="{$link}"> <span class="thumb_img"><img alt="" src="{$value.avatar}"></span> <span class="title_list">{$value.name}</span> <span class="caption_view">{$value.datecreate}</span> </a> </li>
+                        {/loop}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /Tabs -->
+        <div class="clearfix"></div>
+    </div>
+
+
+
+</div>
+</div>
+<script type="text/javascript">
+    jwplayer("myElement").setup({
+        file: "{$obj.medialink}",
+        image: "{$value.avatar}",
+        width: "100%",
+        aspectratio: "16:9",
+        //        skin: 'bekle',
+        tracks: [{
+            file: "{$obj.sub.eng}",
+            label: "English",
+            kind: "captions",
+            "default": true
+        },{
+            file: "{$obj.sub.vie}",
+            kind: "captions",
+            label: "Tiếng Việt"
+        }],
+        captions: {
+            color: '#fff',
+            //                fontSize: 20,
+            backgroundOpacity: 50
+        }
+    });
+</script>
+
+<script>
+    $('.Loa').click(function(e){
+        var src = $(this).attr('alt');
+        $('#mainaudio').attr('src',src);
+        $('#mainaudio')[0].play();
+    })
+    // Load comment
+    var pagenow = 1;
+    //    getComment();
+    function savearticle(exid) {
+        $.post('incoming.php', {
+            act: 'saveexam', id: exid, type: 'giaotiepcoban', return_url: window.location.href
+        }, function (re) {
+            if (re.status == 200)
+                alert('Lưu bài học thành công.');
+            else if(re.status == 505)
+                window.location.href = '/login.php';
+            else if(re.status == 400)
+                window.location.href = '/regispack.php';
+        });
+    }
+
+    $(document).ready(function() {
+        $( "#show" ).click(function() {
+            $('.show_goiy').toggle();
+        });
+        $( "#show1" ).click(function() {
+            $('.show_goiy1').toggle();
+        });
+        $( "#show2" ).click(function() {
+            $('.show_goiy2').toggle();
+        });
+
+
+        $('.lists_comment_item').on('click', '.btn-reply', function(){
+            id = $(this).attr('data-id');
+            var htmlx = '<div class="comment_type_box reply-box">'+
+                    '<textarea class="type_1" id="comment-input-'+id+'" type="text" placeholder="Thêm bình luận"></textarea>'+
+                    '<div class="btn_gui_comment center"><a href="javascript:saveComment('+id+')" class="btn_1">Gửi</a></div>'+
+                    '</div>';
+
+            $('.reply-box').remove();
+            $last = $('.son-of-'+id).last();
+            //            $parent = $(this).parent().parent().parent().parent();
+            if($last.length)
+                $last.after(htmlx);
+            else
+                $('#cm-'+id).after(htmlx);
+            //            $('.comment_son').append(htmlx);
+            //            alert(1);
+        });
+    });
+
+</script>

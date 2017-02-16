@@ -1,0 +1,39 @@
+<div class="main">
+    <div class="p5">
+        <div class="breadcrumb">
+            <div class="title_br">Câu hỏi của bạn</div>
+        </div>
+    </div>
+    <div class="content_cate h5">
+        <div class="account_page block">
+            <div class="hoidap_list">
+                <ul>
+                    {if="$faq"}
+                    {loop="faq"}
+                    <li>
+                        <a href="/hoidap.php?id={$value._id}">
+                            <span class="name">{$SESSION.uinfo.displayname}</span>
+                            <span class="cauhoi">{$value.content}</span>
+                            <span class="comment_counter">{$value.answercount}</span>
+                            <span class=""><label class="date">{$value.datecreate}</label><label class=""><a href="javascript:void(0)" onclick="deleteFaq('{$value._id}')"  class="btn_trash"><i class="fa fa-trash"></i>
+                            </a></label></span>
+                        </a>
+                    </li>
+                    {/loop}
+                    {else}
+                    <p style="text-align: center">{$error_msg}</p>
+                    {/if}
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    function deleteFaq(ntid, obj){
+        $.post('incoming.php',{act:'deletefaq',id:ntid},function(re){
+            if(re.status==200) $(obj).parent().remove();
+            else alert(re.mss);
+        });
+    }
+</script>

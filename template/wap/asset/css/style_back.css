@@ -1,0 +1,333 @@
+@charset "UTF-8";
+/* CSS Document */
+html {
+    -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape while allowing user zoom */
+    -webkit-appearance: none;
+}
+*{margin: 0; padding:0}
+@font-face {
+    font-family: 'open_sans';
+    src: url('font/opensans-semibold-webfont.eot');
+    src: url('font/opensans-semibold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('font/opensans-semibold-webfont.woff2') format('woff2'),
+         url('font/opensans-semibold-webfont.woff') format('woff'),
+         url('font/opensans-semibold-webfont.ttf') format('truetype'),
+         url('font/opensans-semibold-webfont.svg#open_sanssemibold') format('svg');
+    font-weight: 600;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'open_sans';
+    src: url('font/opensans-light-webfont.eot');
+    src: url('opensans-light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('font/opensans-light-webfont.woff2') format('woff2'),
+         url('font/opensans-light-webfont.woff') format('woff'),
+         url('vopensans-light-webfont.ttf') format('truetype'),
+         url('font/opensans-light-webfont.svg#open_sanslight') format('svg');
+    font-weight: 400;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'open_sans';
+    src: url('font/opensans-semibolditalic-webfont.eot');
+    src: url('font/opensans-semibolditalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('font/opensans-semibolditalic-webfont.woff2') format('woff2'),
+         url('font/opensans-semibolditalic-webfont.woff') format('woff'),
+         url('font/opensans-semibolditalic-webfont.ttf') format('truetype'),
+         url('font/opensans-semibolditalic-webfont.svg#open_sanssemibold_italic') format('svg');
+    font-weight: 600;
+    font-style: italic;
+
+}
+
+@font-face {
+    font-family: 'open_sans';
+    src: url('font/opensans-lightitalic-webfont.eot');
+    src: url('font/opensans-lightitalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('font/opensans-lightitalic-webfont.woff2') format('woff2'),
+         url('font/opensans-lightitalic-webfont.woff') format('woff'),
+         url('font/opensans-lightitalic-webfont.ttf') format('truetype'),
+         url('font/opensans-lightitalic-webfont.svg#open_sanslight_italic') format('svg');
+    font-weight: 400;
+    font-style: italic;
+
+}
+
+
+body {
+    font-family: 'open_sans', Arial;
+    font-size: 14px;
+    font-weight: 400;
+    background-color: #EDEDED;
+}
+
+ul li {list-style:none}
+a {text-decoration: none;}
+
+/*Sidebar*/
+.my_sidebar {width: 250px;background-color: #32394a;position: absolute;left: -260px; box-shadow: 0 1px 5px #000000 inset; z-index: 9999; overflow-y:hidden;}
+.carea {
+    width: 100%;
+    height: 100%;
+    float: left;
+    left: 0;
+    position: relative;
+}
+.main {
+    text-align: left;
+    overflow: hidden;
+    clear: both;
+}
+.left0{left: 0;}.left250{left: 250px;}
+.my_sidebar ul {
+    background-color: #fff;
+    color: #fff;
+    height: 100%;
+    float: left;
+    margin-left: 0;
+    height: 10px;
+    overflow: hidden;
+    background-color: #FFF;
+    -moz-box-shadow: 5px -1px 10px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 5px -1px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 5px -1px 10px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar ul {
+    width: 100%;
+    float: left;
+}
+
+.sidebar ul li {
+    padding: 10px 0;
+    border-bottom: solid 1px #e6e6e6;
+    text-indent: 5px;
+    clear: both;
+    float: left;
+    width: 100%;
+}
+
+.sidebar ul li.title {
+    line-height: 33px;
+    padding-bottom: 5px;
+    background-color: #303030;
+}
+
+.sidebar ul li.htitle {
+    background-color: #464646;
+    text-indent: 8px;
+}
+
+.sidebar .logo {
+    float: left;
+    margin: -2px 0 4px 5px;
+    width: 38px;
+}
+
+.sidebar .logo {
+    float: left;
+}
+
+.sidebar ul li a {
+    color: #676767;
+    display: inline-block;
+    width: 100%;
+    font-weight: 600;
+}
+
+.sidebar ul li a span {
+    position: relative;
+}
+
+.sidebar ul li a i {
+    text-indent: 0px;
+    margin-right: 3px;
+    font-size: 16px;
+}
+
+.sidebar ul li a i.muted {
+    color: #676767 !important;
+}
+
+.btnlogin_sb {
+    padding: 5px 8px;
+    color: #fff;
+    border-radius: 5px;
+    border: solid 1px #000;
+    margin-right: 10px;
+    display: inline !important;
+    background-color: #232323;
+}
+
+.icon_logo {
+    background: url(../images/sidebar_logo.png) no-repeat center center;
+    width: 100%;
+    height: 44px;
+    background-size: 44px;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+/*End slidebar*/
+
+/*header*/
+
+.header {
+    background-color: #F90;
+    height: 50px;
+    float: left;
+    width: 100%;
+    position: relative;
+}
+.header ul {
+    text-align: center
+}
+
+.header ul li {
+    display: inline-block;
+    margin-top: 10px
+}
+
+.header ul li:first-child {
+    position: absolute;
+    left: 0;
+    margin-left: 10px
+}
+
+.header ul li:last-child {
+    position: absolute;
+    right: 0px;
+    margin-right: 5px
+}
+.header ul li:nth-child(3) {
+    position: absolute;
+    right: 0px;
+    margin-right: 45px;
+}
+
+.header ul li a.logo {
+    display: inline-block;
+}
+
+
+.left_header {
+    float: left;
+    padding-top: 15px;
+    padding-left: 15px;
+}
+
+.right_header {
+    float: right;
+}
+
+#sib_btn {
+    background: url(../images/btn_menu.png) no-repeat;
+    height: 18px;
+    float: left;
+    margin-top: 5px;
+    width: 24px;
+    display: block;
+}
+.logo_mbf {
+    background: url(../images/header_logo_mbf.png) no-repeat;
+    width: 139px;
+    height: 31px;
+    text-indent: -9999px;
+    background-size: 139px !important;
+    display: block;
+    margin-left: -15px;
+}
+
+.btn_search {background: url(../images/header_icon_search.png) no-repeat; width: 20px; height: 20px; margin-top:8px; margin-right:10px; background-size: 20px!important; display: block;}
+.btn_tratu {
+    background: url(../images/header_icon_dic.png) no-repeat;
+    width: 17px;
+    height: 22px;
+    display: block;
+    background-size: 18px;
+    margin-top: 7px;
+}
+
+/* Icon Font-Face */
+.sidebar i {
+    float: left;
+    display: inline-block;
+}
+
+.icon-home {
+    background: url(../images/sidebar_icon_home.png) no-repeat;
+    width: 25px;
+    height: 25px;
+    background-size: 25px;
+    margin-top: 3px;
+}
+
+.icon-nguam {
+    background: url(../images/sidebar_icon_nguam.png) no-repeat;
+    width: 25px;
+    height: 25px;
+    background-size: 25px;
+    margin-top: 0px;
+}
+.icon-giaotiep {
+    background: url(../images/sidebar_icon_giaotiep.png) no-repeat;
+    width: 20px;
+    height: 20px;
+    background-size: 20px;
+    margin-top: 0px;
+}
+.icon-tudien {
+    background: url(../images/sidebar_icon_tudien.png) no-repeat;
+    width: 25px;
+    height: 25px;
+    background-size: 25px;
+    margin-top: 0px;
+}
+.icon-thuvien {
+    background: url(../images/sidebar_icon_thuvien.png) no-repeat;
+    width: 25px;
+    height: 25px;
+    background-size: 25px;
+    margin-top: 0px;
+}
+.icon-hmc {
+    background: url(../images/sidebar_icon_hmc.png) no-repeat;
+    width: 25px;
+    height: 25px;
+    background-size: 25px;
+    margin-top: 0px;
+}
+.icon-hoidap {
+    background: url(../images/sidebar_icon_hoidap.png) no-repeat;
+    width: 25px;
+    height: 25px;
+    background-size: 25px;
+    margin-top: 0px;
+}
+.icon-gioithieu {
+    background: url(../images/sidebar_icon_gioithieu.png) no-repeat;
+    width: 25px;
+    height: 25px;
+    background-size: 25px;
+    margin-top: 0px;
+}
+.icon-dieukhoan {
+    background: url(../images/sidebar_icon_dieukhoan.png) no-repeat;
+    width: 25px;
+    height: 25px;
+    background-size: 25px;
+    margin-top: 0px;
+}
+.list_sb {
+    float:left; width:100%; height:auto;
+}

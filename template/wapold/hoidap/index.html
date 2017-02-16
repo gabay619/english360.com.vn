@@ -1,0 +1,37 @@
+<div class="main hoidap">
+    {include="hoidap/tabbar"}
+    <div class="content_cate p5">
+        <div class="item_cate fleft w100">
+            <div class="content_item hoidap_list">
+                <ul>
+                    {loop="$faq"}
+                    {$link=makelink::makefaq($value._id,$value.name)}
+                    <li>
+                        <a href="{$link}">
+                            <span class="name">{$value.userinfo.displayname}</span>
+                            <span class="cauhoi">{$value.name}</span>
+                            <span class="comment_counter">{$value.answercount}</span>
+                        </a>
+                    </li>
+                    {/loop}
+                </ul>
+                <div class="info_search">
+                    <span>Không có câu hỏi bạn đang tìm kiếm?</span>
+                    <a href="javascript:void(0)" onclick="datcauhoi()">
+                        <button id="dch"  class="ht">Đặt câu hỏi</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function datcauhoi() {
+        $.post("incoming.php", {act: 'hoidap'}, function (re) {
+            if (re.status == 200) {
+                window.location.href = "datcauhoi.php";
+            } else
+                alert(re.mss);
+        });
+    }
+</script>

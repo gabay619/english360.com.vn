@@ -1,0 +1,313 @@
+<script type="text/javascript" src="/plugin/uploadify/jquery.uploadify.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/plugin/uploadify/uploadify.css" />
+<div class="main">
+
+<div class="content_cate h5">
+    <div class="title_cate">
+        <a href="/hmcaudio.php"><i class="icon-noitieng"></i>Bài hát</a>
+        <span class="btn_more_cate"><label></label><label></label><label></label></span>
+        <div class="content_more_cate" style="display:none" >
+            <div class="content_more_cate_box">
+                <span class="square_dot"></span>
+                <div class="list_more_cate">
+                    {loop="listcatsong"}
+                    {$link=makelink::makecathmcaudio($value._id)}
+                    <a class="active" href="{$link}">{$value.name}</a>
+                    {/loop}
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="item_cate" style="overflow: hidden">
+    <div class="p5">
+        <div class="breadcrumb">
+            <div class="title_br">{$obj.name}</div>
+            <div>
+                <span class="date">{$obj.datecreate}</span>
+            </div>
+        </div>
+    </div>
+    <div id="myElement">Loading the player...</div>
+    {include="$emailbox"}
+    <div class="four_function">
+        <div class="item_four_function">
+            <a class="showTab" data-target="#eng">Tiếng Anh</a>
+            <a class="showTab" data-target="#vie">Tiếng Việt</a>
+            <a class="showTab" data-target="#tuvung">Từ vựng</a>
+            <a class="" href="javascript:void(0)" onclick="savearticle('{$obj._id}')">Lưu bài</a>
+            <div class="all_ct_display">
+                <div class="tabItem" id="eng">{$obj.contents.eng}</div>
+                <div class="tabItem" id="vie" style="display: none;">{$obj.contents.vie}</div>
+                <div class="tabItem" id="tuvung" style="display: none;">{$obj.tuvung}</div>
+            </div>
+        </div>
+    </div>
+    <div class="content_luyennghe block">
+        {if condition="$obj.lession"}
+        <div class="content_dientu block">
+            <h2 class="title_2 mgt15 mgb10 block"><span>Cấu trúc</span></h2>
+            {$obj.lession}
+        </div>
+        {/if}
+        <div class="btn_gui_comment center"><a href="hmcaudio_luyentap.php?id={$obj._id}" class="btn_1">Luyện tập</a></div>
+    </div>
+
+    <div class="user_upload_song block">
+        <h2 class="title_2 mgt15 mgb10 block"><label class="stt stt_music"><i class="fa fa-fw"></i></label><span>Bài hát của thành viên</span></h2>
+        <div class="ct_uploaded block">
+            <p class="center">
+                <audio id="useraudio" style="display: none" controls></audio>
+            </p>
+            {if condition="$showUpload"}
+            <div class="list_song_upload">
+                <table cellpadding="0" cellspacing="0">
+                    {loop="upload"}
+                    <tr id="upload_{$value._id}">
+                        <td>
+                            <h2 class="name_song">{function="getDisplayname($value.userinfo)"}</h2>
+                            <span class="date">{$value.datecreate}</span>
+                        </td>
+                        <td>
+                            {if condition="$value.delete"}
+                            <button class="btn_listen_song" onclick="deleteSong('{$value._id}')"><i class="fa fa-times"></i></button>
+                            {/if}
+                            <button class="btn_listen_song" onclick="playSong('{$value.path}')"><i class="fa fa-fw"></i></button>
+                        </td>
+                    </tr>
+                    {/loop}
+                </table>
+            </div>
+            {else}
+            <p>Hiện tại chưa có bài hát nào</p>
+            {/if}
+        </div>
+        {if condition="isset($SESSION.uinfo)"}
+        <h2 class="title_2 mgt15 mgb10 block">
+            <label class="stt stt_music"><i class="fa fa-fw"></i></label><span>Upload bài hát của bạn</span>
+        </h2>
+        <div class="form_upload_song block">
+            <form action="" method="post" enctype="multipart/form-data" id="upload_form">
+                <input type="file" id="file_upload" name="file_upload" class="mgb5" >
+                <p class="p_button center">
+                    <button type="submit"  class="btn_df btn_a">Tải lên</button>
+                </p>
+            </form>
+        </div>
+        {/if}
+    </div>
+
+    <div class="item_cate">
+        <div class="title_cate">
+            <a href=""><i class="icon-noitieng"></i>Bình luận</a>
+        </div>
+        {include="$commentFile"}
+        <div class="clearfix"></div>
+    </div>
+    <!-- Tabs -->
+    <div id="tabsholder">
+        <ul class="tabs tabs-style">
+            <li id="tab1">Bài hát liên quan</li>
+            <li id="tab2">Bài hát mới nhất</li>
+        </ul>
+        <div class="contents marginbot">
+            <div id="content1" class="tabscontent">
+                <ul class="list_1">
+                    {loop="ref"}
+                    {$link=makelink::makehmcaudio($value._id,$value.namenoneutf)}
+                    <li> <a href="{$link}"> <span class="thumb_img"><img alt="" src="{$value.avatar}"></span>
+                        <span class="title_list">{$value.name}</span>
+                        <span class="caption_view"> {$value.datecreate}</span> </a> </li>
+                    {/loop}
+                </ul>
+            </div>
+            <div id="content2" class="tabscontent">
+                <ul class="list_1">
+                    {loop="new"}
+                    {$link=makelink::makehmcaudio($value._id,$value.namenoneutf)}
+                    <li> <a href="{$link}"> <span class="thumb_img"><img alt="" src="{$value.avatar}"></span>
+                        <span class="title_list">{$value.name}</span>
+                        <span class="caption_view"> {$value.datecreate}</span> </a> </li>
+                    {/loop}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /Tabs -->
+</div>
+
+</div>
+<div style="clear: both"></div>
+</div>
+<script>
+    $(function () {
+        $("#upload_form").submit( function(submitEvent) {
+
+            // get the file name, possibly with path (depends on browser)
+            var filename = $("#file_upload").val();
+            if(filename == ''){
+                alert("Bạn chưa chọn tệp.");
+                submitEvent.preventDefault();
+                return false;
+            }
+
+            // Use a regular expression to trim everything before final dot
+            var extension = filename.replace(/^.*\./, '');
+
+            // Iff there is no dot anywhere in filename, we would have extension == filename,
+            // so we account for this possibility now
+            if (extension == filename) {
+                extension = '';
+            } else {
+                // if there is an extension, we convert to lower case
+                // (N.B. this conversion will not effect the value of the extension
+                // on the file upload.)
+                extension = extension.toLowerCase();
+            }
+
+            switch (extension) {
+                case 'mp3':
+                case 'wmv':
+                case 'ogg':
+                // uncomment the next line to allow the form to submitted in this case:
+                break;
+
+                default:
+                    // Cancel the form submission
+                    alert("Bạn chỉ được phép upload tệp âm thanh (mp3, wmv, ogg).");
+                    submitEvent.preventDefault();
+                    return false;
+            }
+
+        });
+        $("#file_upload").change(function () {
+            var oFReader = new FileReader();
+            var image = new Image();
+            var isAllowSize = false;
+            oFReader.readAsDataURL(this.files[0]);
+            oFReader.onload = function (oFREvent) {
+                image.src = oFREvent.target.result;
+                image.onload = function () {
+                    $("#cover_avatar_preview").attr('src', oFREvent.target.result).fadeIn();
+                }
+            }
+        });
+    });
+
+    function playSong(link){
+        $('#useraudio').show();
+        $('#useraudio').attr('src',link);
+        $('#useraudio')[0].play();
+    }
+
+    function deleteSong(id){
+        if(!confirm('Bạn chắc chắn muốn xóa bản thu này?')){
+            return false;
+        }
+        $.post('/incoming.php?act=deleteSong', {
+            id:id
+        }, function(result){
+            if(result.success){
+                $('#upload_'+id).remove();
+            }else{
+                alert(result.mss)
+            }
+        }, 'json');
+    }
+
+</script>
+<script type="text/javascript">
+    jwplayer("myElement").setup({
+        file: "{$obj.medialink}",
+        image: "{$obj.avatar}",
+        tracks: [{
+            file: "{$obj.sub.eng}",
+            label: "Anh",
+            kind: "captions",
+            "default": true
+        },{
+            file: "{$obj.sub.vie}",
+            kind: "captions",
+            label: "Việt"
+        },{
+            file: "{$obj.sub.engvie}",
+            kind: "captions",
+            label: "Anh-Việt"
+        }],
+        captions: {
+            color: "#FFF",
+            backgroundOpacity: 75
+        },
+        width: "100%",
+        aspectratio: "16:9",
+        autostart: true,
+
+
+    });
+
+</script>
+
+<script>
+    $(document).ready(function () {
+        var a = $('.content_dientu img.InputQuestion');
+        $.each(a, function (i) {
+            var kq = $(this).attr('alt');
+            $(this).before('<span class="stt">' + (i + 1) + '</span>');
+            $(this).after('<input class="dt tocheck" data-aw="' + kq.toLowerCase() + '" data-full="' + kq + '" type="text" placeholder="Từ cần điền"></span>');
+            $(this).hide();
+        })
+    });
+    function checkquestion(obj) {
+        var scorenow = 0;
+        var a = $('.content_cate .tocheck'); // Lấy danh sách những input ng dùng nhập
+        $('.content_cate .stt').hide();// Ẩn index câu hỏi
+        $.each(a, function (i) {
+            var useraw = $(this).val(); // Lấy câu trả lời của  ng dùng
+            var systemaw = $(this).attr("data-aw"); // Câu trả lời hệ thống (lower case)
+            var systemawfull = $(this).attr("data-full"); // Câu trả lời hệ thống Fullcase
+            // So sánh kết quả
+            if (useraw.toLowerCase() == systemaw) { // Nếu câu trả lời = câu trả lời hệ thống
+                $(this).after('<span class="t">' + systemawfull + '</span>');
+                $(this).hide();
+                ++scorenow;// Cộng điểm
+            } else { // Nếu user trả lời sai, hiển thị từ mà user nhập
+                $(this).after('<span class="f">' + useraw + '</span>');
+                $(this).hide();
+            }
+            // Show kết quả đúng
+            $('.content_cate .show_kq_input').append('<span><b class="stt">' + (i + 1) + '</b>' + systemawfull + '</span>');
+        });
+        $('.content_cate .show_kq_input').show(); // Show form kết quả cho user đối sánh
+        $(obj).parent().hide();// Ẩn nút hoàn thành
+        $(obj).parent().next().show();// Show nút tiếp
+        // Tính điểm
+        $('.totalinput').html(a.length);
+        $('.usertrue').html(scorenow+"/"+ a.length);
+        $('.kq_show').show();
+    }
+    $('.Loa').click(function(e){
+        var src = $(this).attr('alt');
+        $('#mainaudio').attr('src',src);
+        $('#mainaudio')[0].play();
+    })
+    // Load comment
+    var pagenow = 1;
+    //    getComment();
+    function savearticle(exid) {
+        $.post('/incoming.php', {
+            act: 'saveexam', id: exid, type: 'song', return_url: window.location.href
+        }, function (re) {
+            if (re.status == 200)
+                alert('Lưu bài học thành công.');
+            else if(re.status == 505){
+                alert('Bạn cần đăng nhập để sử dụng chức năng này.');
+                window.location.href = '/login.php';
+            }
+            else if(re.status == 400){
+                alert('Bạn cần đăng ký gói cước để sử dụng chức năng này.');
+                window.location.href = '/regispack.php';
+            }
+        });
+    }
+</script>
+{include="component/popreg"}
+

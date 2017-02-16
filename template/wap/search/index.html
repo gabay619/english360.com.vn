@@ -1,0 +1,41 @@
+<div class="main">
+    <div class="content_cate p5">
+        <div class="item_cate">
+            <div class="title_cate">
+                <a href=""><i class="icon-kinhnghiem"></i>Kết quả tìm kiếm</a>
+            </div>
+            <div class="content_items">
+                {if="$data"}
+                <ul class="list_1">
+                    {loop="$data['song']"}
+                    {$link=makelink::makehmcaudio($value._id,$value.name)}
+                    <li> <a href="{$link}"> <span class="thumb_img"><img src="{$value.avatar}" alt=""></span> <span class="title_list">{$value.name}</span> <span class="caption_view">{$value.datecreate}</span> </a> </li>
+                    {/loop}
+                    {loop="$data['thuvien']"}
+                    {$link=makelink::makethuvien('',$value._id)}
+                    <li> <a href="{$link}"> <span class="thumb_img"><img src="{$value.avatar}" alt=""></span> <span class="title_list">{$value.name}</span> <span class="caption_view">{$value.datecreate}</span> </a> </li>
+                    {/loop}
+                    {loop="$data['gtcb']"}
+                    {$link=makelink::makegtcb($value._id,$value.name)}
+                    <li>
+                        <a href="{$link}">
+                        <span class="thumb_img"><img src="{$value.avatar}" alt=""></span>
+                        <span class="title_list">{$value.name}</span>
+                        <span class="caption_view">{$value.datecreate}</span>
+                    </a>
+                    </li>
+                    {/loop}
+                    {loop="$data['lna']"}
+                    {$link=makelink::makelna($value._id,$value.name)}
+                    <li> <a href="{$link}"> <span class="thumb_img"><img src="{$value.avatar}" alt=""></span> <span class="title_list">{$value.name}</span> <span class="caption_view">{$value.datecreate}</span> </a> </li>
+                    {/loop}
+                </ul>
+                {else}
+                <p style="text-align: center">{$error_msg}</p>
+                {/if}
+            </div>
+            <!--{include="component/paging"}-->
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>

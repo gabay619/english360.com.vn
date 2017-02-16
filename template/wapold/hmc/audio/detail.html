@@ -1,0 +1,68 @@
+<div class="main">
+    {include="hmc/audio/tabbar"}
+    <div class="content_cate p5">
+        <div class="item_cate fleft w100">
+            <div class="content_item ib">
+                <!--<div class="video mgt0">
+                    <audio src="{$obj.medialink}" controls></audio>
+                </div>-->
+                <div class="audio center">
+                    <audio controls src="{$obj.medialink}" controls></audio>
+                </div>
+                <div class="content_dientu">
+                    {$obj.exam}
+                </div>
+                <div class="center btn_view">
+                    <button class="blue" onclick="checkquestion(this)">Hoàn thành</button>
+                    <button class="blue" id="show">Hiện lời BH</button>
+                    <div class="show_goiy" style="display:none;">
+                        {$obj.contents}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var a = $('.content_dientu img.InputQuestion');
+        $.each(a, function (i) {
+            var kq = $(this).attr('alt');
+            $(this).before('<span class="stt">' + (i + 1) + '</span>');
+            $(this).after('<input class="dt tocheck" data-aw="' + kq.toLowerCase() + '" data-full="' + kq + '" type="text" placeholder="Từ cần điền"></span>');
+            $(this).hide();
+        })
+    });
+    function checkquestion(obj) {
+        var scorenow = 0;
+        var a = $('.content_cate .tocheck'); // Lấy danh sách những input ng dùng nhập
+        $('.content_cate .stt').hide();// Ẩn index câu hỏi
+        $.each(a, function (i) {
+            var useraw = $(this).val(); // Lấy câu trả lời của  ng dùng
+            var systemaw = $(this).attr("data-aw"); // Câu trả lời hệ thống (lower case)
+            var systemawfull = $(this).attr("data-full"); // Câu trả lời hệ thống Fullcase
+            // So sánh kết quả
+            if (useraw.toLowerCase() == systemaw) { // Nếu câu trả lời = câu trả lời hệ thống
+                $(this).after('<span class="t">' + systemawfull + '</span>');
+                $(this).hide();
+                ++scorenow;// Cộng điểm
+            } else { // Nếu user trả lời sai, hiển thị từ mà user nhập
+                $(this).after('<span class="f">' + useraw + '</span>');
+                $(this).hide();
+            }
+            // Show kết quả đúng
+            $('.content_cate .show_kq_input').append('<span><b class="stt">' + (i + 1) + '</b>' + systemawfull + '</span>');
+        });
+        $('.content_cate .show_kq_input').show(); // Show form kết quả cho user đối sánh
+        // Tính điểm
+        $('.totalinput').html(a.length);
+        $('.usertrue').html(scorenow+"/"+ a.length);
+        $('.kq_show').show();
+    }
+
+    $( "#show" ).click(function() {
+        $('.show_goiy').toggle();
+    });
+
+</script>

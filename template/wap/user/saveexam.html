@@ -1,0 +1,51 @@
+<div class="main">
+    <div class="p5">
+        <div class="breadcrumb">
+            <div class="title_br">Bài học đã lưu</div>
+        </div>
+    </div>
+
+    <div class="content_cate h5">
+        <div class="account_page block">
+            {loop="exam"}
+
+            <div class="list_bhdl">
+                <div class="item_1 liquid_layout liquid_layout_90 block">
+                    <div class="liquid_2">
+                        <div class="liquid_2_content">
+                            <div class="item_1_header">
+                                <span class="item_1_date date">{$value.datecreate}</span>
+                                <span class="trash"><button class="btn_trash" onclick="deleteexam('{$value.id}','{$value.type}',this)"><i class="fa fa-fw"></i></button></span>
+                            </div>
+                            <div class="item_1_title">
+                                <h2><a href="{$value.url}">{$value.name}</a></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="liquid_1">
+                        <a href="{$value.url}" class="mask_img"><img src="{$value.avatar}"></a>
+                    </div>
+                </div>
+            </div>
+           <input type="hidden" value="{$value.type}" class="type">
+            {/loop}
+            <div class="page pagination-centered">
+                {include="component/paging"}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function deleteexam(id,type,obj){
+        var type = $('.type').val();
+
+        $.post('incoming.php',{act:'deleteexam',id:id, type:type},function(re){
+            if(re.status==200) {
+                $('div').remove('.liquid_layout');
+                alert("Xóa thành công");
+                window.location.href="saveexam.php";
+            }
+            else alert(re.mss);
+        });
+    }
+</script>

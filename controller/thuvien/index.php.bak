@@ -1,0 +1,59 @@
+<?php
+$thuviencl = $dbmg->thuvien;
+$categorycl = $dbmg->category;
+$id = $_GET['id'];
+$cat = $_GET['cat'];
+$catname = (array)$categorycl->findOne(array("_id"=>$cat));
+$tpl->assign("catname", $catname);
+if(isset($id)){
+    ##Lấy chi tiết bài viết thư viện
+    $obj = (array)$thuviencl->findOne(array("_id"=>$id));
+    $tpl->assign("obj", $obj);
+    $c=strlen($obj['medialink']);
+    $tpl->assign("c", $c);
+    ##reference
+    $refcond['status'] = "1";
+    $refcond['_id'] = array('$ne'=>$id);
+    if(count($obj['category'])>0) $refcond['category'] = $obj['category'][0];
+    $listref =iterator_to_array($thuviencl->find($refcond,array("_id","name","avatar","category"))->limit(10),false);
+    $listnew = iterator_to_array($thuviencl->find(array("status"=>"1"),array("_id","name","avatar","category"))->limit(5)->sort(array("_id"=>-1)),false);
+    //comment
+    $commentcl = $dbmg->comment;
+    $usercl = $dbmg->user;
+    $cond['status'] = "1";
+    $cond['parentid'] = "0";
+    $cond['objid'] = $id;
+    $comment = iterator_to_array($commentcl->find($cond,array("_id","objid","uid","content","parentid","type","datecreate"))->sort(array("_id"=>-1))->limit(20),false);
+    foreach($comment as $key=>$item){
+        $comment[$key]['datecreate'] = date("d-m-Y H:i",$item['datecreate']);
+        $comment[$key]["userinfo"] = (array)$usercl->findOne(array("_id"=>$item["uid"]), array("_id","phone"));
+        $comment[$key]['childs'] = iterator_to_array($commentcl->find(array('parentid'=>array('$in'=>array(strval($item['_id']), intval($item['_id'])))))->sort(array('datecreate'=>1)), false);
+        foreach($comment[$key]['childs'] as $k=>$v){
+            $comment[$key]['childs'][$k]["datecreate"] = date("d-m-Y H:i",$v['datecreate']);
+            $comment[$key]['childs'][$k]["userinfo"] = (array)$usercl->findOne(array("_id"=>$v["uid"]), array("_id","phone"));
+        }
+    }
+    $refcond['objid'] = $id;
+    $refcond['status'] = "1";
+    $refcond['parentid'] = array('$ne'=>'0');
+    $commentson = iterator_to_array($commentcl->find($refcond,array("_id","objid","uid","content","parentid","type"))->sort(array("_id"=>-1))->limit(20),false);
+    foreach($commentson as $key=>$item){
+        $commentson[$key]["userinfoson"] = (array)$usercl->findOne(array("_id"=>$item["uid"]), array("_id","phone"));
+    }
+    $tpl->assign("comment",$comment);
+    $tpl->assign("commentson",$commentson);
+//end Comment
+    $tpl->assign("pagefile", "thuvien/detail");
+   //}
+    $tpl->assign("ref", $listref);
+    $tpl->assign("new", $listnew);
+}
+else{
+    $cond['status'] = "1";
+    $cond['type'] = "thuvien";
+    $listcat = iterator_to_array($categorycl->find($cond,array("_id","name","avatar"))->sort(array("_id"=>-1)),false);
+    $tpl->assign("listcat", $listcat);
+    $tpl->assign("pagefile", "thuvien/index");
+}
+include "controller/hmc/index.php";
+?>

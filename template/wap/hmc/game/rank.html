@@ -1,0 +1,28 @@
+<div class="main">
+    <div class="content_cate h5">
+        <div class="item_cate mgb0 item_game block">
+            <div class="game_page block">
+                <div class="header_game_page font_game center block">
+                    <div class="title_game">
+                        <h2>Bảng xếp hạng</h2>
+                    </div>
+                </div>
+                <div class="footer_game_page block">
+                    <table class="table_highscore_game" cellpadding="0" cellspacing="0">
+                        {loop="$allRank"}
+                        <tr class="gamer_item">
+                            <td class="stt_list_gamer">{$key+1}</td>
+                            <td class="name_gamer">{$value.name}</td>
+                            <td class="score_gamer">{$value.point}</td>
+                        </tr>
+                        {/loop}
+                    </table>
+                </div>
+                <div class="btn_game_area center block mgb15 btn_game_area_f">
+                    <a href="javascript:void(0)" class="btn_game btn_game_2 font_game">Điểm số của bạn là {$myPoint}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,97 @@
+<div class="main">
+    <div class="content_cate p5">
+        <div class="item_cate">
+            <div class="title_cate"><a href=""><i class="icon_giaotiep"></i>Tìm kiếm</a></div>
+            <p class="title_search"> Nội dung liên quan tới từ khóa "{$keyword}" </p>
+            <div class="content_item">
+                {if="$data"}
+                <ul>
+                    {loop="$data['gtcb']"}
+                    {$link=makelink::makegtcb($value._id,$value.name)}
+                    <li>
+                        <a href="{$link}">
+                            <span class="thumb_img"><img src="{$value.avatar}" alt="{$value.name}"></span>
+                            <span class="title_list">{$value.name}</span>
+                            <span class="caption_view">{$value.captions}</span>
+                        </a>
+                    </li>
+                    {/loop}
+                    {loop="$data['lna']"}
+                    {$link=makelink::makelna($value._id,$value.name)}
+                    <li>
+                        <a href="{$link}">
+                            <span class="thumb_img"><img src="{$value.avatar}" alt="{$value.name}"></span>
+                            <span class="title_list">{$value.name}</span>
+                            <span class="caption_view">{$value.captions}</span>
+                        </a>
+                    </li>
+                    {/loop}
+
+                    {loop="$data['thuvien']"}
+                    {$link=makelink::makethuvien($value._id,$value.name)}
+                    <li>
+                        <a href="{$link}">
+                            <span class="thumb_img"><img src="{$value.avatar}" alt="{$value.name}"></span>
+                            <span class="title_list">{$value.name}</span>
+                            <span class="caption_view">{$value.captions}</span>
+                        </a>
+                    </li>
+                    {/loop}
+                    {loop="$data['hmcaudio']"}
+                    {$link=makelink::makehmcaudio($value._id,$value.name)}
+                    <li>
+                        <a href="{$link}">
+                            <span class="thumb_img"><img src="{$value.avatar}" alt="{$value.name}"></span>
+                            <span class="title_list">{$value.name}</span>
+                            <span class="caption_view">{$value.captions}</span>
+                        </a>
+                    </li>
+                    {/loop}
+                    {loop="$data['hmcvideo']"}
+                    {$link=makelink::makehmcvideo($value._id,$value.name)}
+                    <li>
+                        <a href="{$link}">
+                            <span class="thumb_img"><img src="{$value.avatar}" alt="{$value.name}"></span>
+                            <span class="title_list">{$value.name}</span>
+                            <span class="caption_view">{$value.captions}</span>
+                        </a>
+                    </li>
+                    {/loop}
+                    {loop="$data['hmcgame']"}
+                    <li>
+                        <a href="">
+                            <span class="thumb_img"><img src="{$value.avatar}" alt="{$value.name}"></span>
+                            <span class="title_list">{$value.name}</span>
+                            <span class="caption_view">{$value.captions}</span>
+                        </a>
+                    </li>
+                    {/loop}
+                    {loop="$data['faq']"}
+                    {$link=makelink::makehoidap($value._id,$value.name)}
+                    <li>
+                        <a href="{$link}">
+                            <!--<span class="thumb_img"><img src="{$value.avatar}" alt="{$value.name}"></span>-->
+                            <span class="title_list">{$value.name}</span>
+                            <!--<span class="caption_view">{$value.captions}</span>-->
+                        </a>
+                    </li>
+                    {/loop}
+                    {loop="$data['tudien']"}
+                    {$link=makelink::maketudien($value._id,$value.name)}
+                    <li>
+                        <a href="{$link}">
+                            <!--<span class="thumb_img"><img src="{$value.avatar}" alt="{$value.name}"></span>-->
+                            <span class="title_list">{$value.value}</span>
+                            <!--<span class="caption_view">{$value.captions}</span>-->
+                        </a>
+                    </li>
+                    {/loop}
+                </ul>
+                {else}
+                <p style="text-align: center">{$error_msg}</p>
+                {/if}
+            </div>
+            {$paging}
+        </div>
+    </div>
+</div>

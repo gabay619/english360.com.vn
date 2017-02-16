@@ -1,0 +1,27 @@
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+<div id="khung">
+
+</div>
+<input id="txtChat" /><button onclick="sendChat();">Gui</button>
+<script>
+    var socket = io('ws://localhost:3000', { transports: ['websocket'] });
+    socket.on('connect', function() {
+        console.log("Ok");
+    });
+    function sendChat(){
+        var text = document.getElementById('txtChat').value;
+        socket.emit('chat',{mss:text});
+    }
+    //socket.emit('adduser',{name:"viet"});
+//    socket.emit('msfromclient',{mss:'test'});
+
+//    socket.emit('chat',{mss:'send'});
+    /*socket.on("add",function(us){
+        console.log(us);
+    })*/
+
+    socket.on('chat_response',function(data){
+        var khung = document.getElementById('khung');
+        khung.innerHTML = khung.innerHTML + data.mss;
+    })
+</script>

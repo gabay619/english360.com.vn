@@ -1,0 +1,200 @@
+<!doctype html>
+<html>
+<head>
+<meta name="MobileOptimized" content="100" />
+<meta http-equiv="x-ua-compatible" content="IE=edge" />
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<meta name="MobileOptimized" content="320">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="<apple-to></apple-to>uch-fullscreen" content="yes">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Tiếng anh giao tiếp</title>
+<link href="css/style.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="css/idangerous.swiper.css">
+ <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+</head>
+
+<body>
+<div class="wrapper">
+  <div class="my_sidebar" id="scrollbar_sidebar">
+    <div class="list_sb sidebar">
+       <ul>
+                <li>
+                    <a href="#/login" class="btn btnlogin_sb"><i class="icon_logo"></i> 
+                    <div class="clearfix"></div>
+                    <span>Tài khoản</span></a>
+                </li>
+                <li><a href="#"><i class="icon-home"></i>Trang chủ</a></li>
+                <li><a href=""><i class="icon-nguam"></i>Luyện ngữ âm</a></li>
+                <li><a href=""><i class="icon-giaotiep"></i>Giao tiếp cơ bản</a></li>
+                <li><a href=""><i class="icon-tudien"></i>Từ điển chuyên ngành</a></li>
+                <li><a href=""><i class="icon-thuvien"></i>Thư viện</a></li>
+                <li><a href=""><i class="icon-hmc"></i>Học mà chơi</a></li>
+                <li><a href=""><i class="icon-hoidap"></i>Góc Hỏi/Đáp</a></li>
+                <li><a href=""><i class="icon-gioithieu"></i>Giới thiệu dịch vụ</a></li>
+                <li><a href=""><i class="icon-dieukhoan"></i>Điều khoản sử dụng </a></li>
+            </ul>
+    </div>
+  </div>
+  <div class="carea">
+  	<div class="header">
+        	<ul>
+        		<li class="left sidebar"><a id="sib_btn" href="javascript:void(0)" title=""></a></li>
+        		<li><a href="/" class="logo_mbf">MobiFone</a></li>
+        		<li>
+                   <div class="m_tsl">
+                        <a href="javascript:;"><div class="m_tsl_bt btn_tratu" show="true" onclick="funcs.dich.show(this)"></div></a>
+                    </div>
+                </li>
+                <li>
+                   <a href="/" class="btn_search"></a>
+                </li>
+        	</ul>
+        </div>
+        <div class="m_tsl_box" style="display: none;">
+                            <div class="m_tsl_content">
+                                <div class="m_tsl_top">
+                                    <div class="content_tratu">
+                                        <input type="text" placeholder="Tra từ nhanh">
+                                        <button>OK</button>
+                                    </div>
+                                </div>
+                                <div id="m_tsl_info"></div>
+                            </div>
+                        </div>
+        <div class="main user_page">
+               <div class="tab">
+               		<ul>
+                    	<li>
+                        	<a href="">
+                            	Trang cá nhân
+                            </a>
+                        </li>
+                        <li>
+                        	<a href="">
+                            	<span>Thông báo<i class="note">1</i></span>
+                            </a>
+                        </li>
+                        <li>
+                        	<a href="">
+                            	<span>Hòm thư<i class="note">1</i></span>
+                            </a>
+                        </li>
+                        <li class="active">
+                        	<a href="">Cài đặt</a>
+                        </li>
+                    </ul>
+               </div>
+               <div class="content_cate p5">
+               		<div class="item_cate fleft w100">
+                    	<div class="content_dangky box_form">
+                       	    <div class="title_us">Thông tin tài khoản</div>
+                            <div class="avatar">
+                       	    <span>Avatar</span>
+                            	<div>
+                            	<span class="thumb_avt"><img src="images/data_thumb2.png" alt=""></span>
+                                <div><input type="checkbox">Xóa Avatar</div>
+                                <div class="upload_avtar">
+                                <input type="file" id="file">
+                                <button class="button_red" onclick="selectFile()">Upload Avatar</button>
+                             </div>
+                             </div>
+                            </div>
+                       	    <div>
+                       	    <span>Tên hiển thị</span>
+                        	    <input type="text" class="input1" placeholder="ANH">
+                            </div>
+                            <div>
+                               <span>Email</span>
+                                <input type="password" class="input1" placeholder="abc@gmail.com">
+                            </div>
+                             <div class="title_us">Thông tin tài khoản</div>
+                            <div>
+                               <span>Họ Tên</span>
+                                <input type="text" class="input1" placeholder="Lê Minh Ngọc">
+                            </div>
+                            <div>
+                               <span>Ngày sinh</span>
+                                <input type="text" class="input1" id ="datepicker" placeholder="01/01/1989">
+                            </div>
+                            <div>
+                               <span>Số CMND</span>
+                                <input type="text" class="input1" placeholder="012793456">
+                            </div>
+                            <div>
+                               <span>Ngày cấp:</span>
+                                <input type="text" class="input1" placeholder="01/01/1989">
+                            </div>
+                            <div>
+                               <span>Nơi cấp:</span>
+                                <input type="text" class="input1" placeholder="CA TP/HN">
+                            </div>
+                            <div>
+                               <span>Giới tính</span>
+                                <input type="checkbox" checked> Nam
+                                <input type="checkbox"> Nữ
+                            </div>
+                            <div>
+                               <span>Địa chỉ</span>
+                                <input type="text" class="input1" placeholder="123-C3-Tô Hiệu">
+                            </div>
+                            <div class="dieukhoan">
+                                <p>Chúng tôi cam kết không tiết lộ cũng như sử dụng thông tin cá nhân của bạn vào những mục đích trái pháp luật</p>
+                                <div>
+                                    <input type="checkbox">
+                                    <span>Tôi đồng ý ĐIỀU KHOẢN sử dụng dịch vụ</span>
+                                </div>
+                            </div>
+                            <div class="center mgt10">
+                            	<button class="ht">Cập nhật</button>
+                            	<button class="ht">Hủy bỏ</button>
+                            </div>
+                        </div>
+                    </div>
+               </div>
+        </div>
+        <div class="footer">
+            <div class="footer_info">
+                <div class="logo"></div>
+                <p>Copyright © 2014 by VMS Mobifone </p>
+                <p>All rights reserved</p>
+            </div>
+        </div>
+  </div>
+</div>
+<!-- JS -->
+<script src="js/jquery-1.10.1.min.js"></script>
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script src="js/idangerous.swiper-2.1.min.js"></script>
+<script src="js/funcs.js"></script>
+<script src="js/giaitri.ui.js"></script>
+<script>
+  $(function() {
+    $( "#datepicker" ).datepicker();
+  });
+  </script>
+<script>
+  
+ var mySwiper = new Swiper('.swiper-container',{
+    pagination: '.pagination',
+    loop:true,
+    calculateHeight: true,
+    autoplay: 5000,
+    grabCursor: true,
+    paginationClickable: true
+})
+  </script>
+   <script>
+  	$( document ).ready(function() {
+    	$( "#bd" ).click(function() {
+		  $('.baidich').toggle();
+		});
+	});
+  </script>
+  <script type="text/javascript">
+function selectFile(){
+	document.getElementById("file").click();
+}
+</script>
+</body>
+</html>

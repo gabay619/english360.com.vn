@@ -1,0 +1,58 @@
+{if condition="$showEmailbox"}
+<div style="clear: both"></div>
+<div class="emailbox" style="margin: 10px auto;text-align: center;border: 1px solid #ccc;padding: 15px;">
+    <p style="margin-bottom: 5px">Đăng ký nhận bài học qua email</p>
+    <input type="text" id="txtEmailLession" placeholder="Nhập email của bạn" style="padding: 5px; width: 70%; float: left" value="{$regemail}">
+    <button type="button" style="padding: 5px; margin-left: 5px; width: calc(30% - 5px)" onclick="regEmailLession()">Đăng ký</button>
+</div>
+
+<a href="#regLession" class="fancybox" id="showPopregLession" style="display:none;">Open</a>
+<div id="regLession" style="display: none">
+    <div style="text-align: center" id="chkLession">
+        <p>CHỌN CHUYÊN MỤC BẠN QUAN TÂM</p>
+        {loop="allType"}
+        <label style="width: 50%;display: inline-block;float: left; text-align: left"><input type="checkbox" value="{$key}" /> {$value}</label>
+        {/loop}
+        <label style="width: 50%;display: inline-block;float: left; text-align: left"><input type="checkbox" value="all" id="checkAllType" onclick="$('#chkLession input').not(this).prop('checked', this.checked);" /> Tất cả</label>
+        <p style="margin-top: 10px; clear: both; text-align: center"><button class="ht_1" onclick="regLession()">Đăng ký</button></p>
+    </div>
+</div>
+<script>
+    function regEmailLession() {
+        email = $('#txtEmailLession').val();
+        $.post('/incoming.php?act=reg-email-lession', {
+            email: email
+        }, function (re) {
+            if(re.success){
+                $('#showPopregLession').trigger('click');
+//                alert('Bạn đã đăng ký nhận bài học thành công!');
+                $('.emailbox').hide();
+            }else if(typeof re.login !== 'undefined'){
+                window.location.href = '/register.php';
+            }else  if(typeof re.verify !== 'undefined'){
+                alert(re.mss);
+                $('.emailbox').hide();
+            }else{
+                htmlx = '<p style="color: red">'+re.mss+'</p>';
+                $('.emailbox').append(htmlx);
+            }
+        },'json');
+    }
+
+    function regLession() {
+        select = [];
+        $('#chkLession input').each(function(){
+            if($(this).is(':checked')){
+                if($(this).val() != 'all')
+                    select[select.length] = $(this).val();
+            }
+        });
+        $.post('incoming.php?act=reg-lession', {
+            select:select
+        }, function(result){
+            alert(result.mss);
+            $.fancybox.close();
+        })
+    }
+</script>
+{/if}

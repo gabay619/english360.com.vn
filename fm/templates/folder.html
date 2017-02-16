@@ -1,0 +1,19 @@
+﻿<div class="clearfix item" ng-repeat="f in listfolder">
+    <a ng-click="loadfolder(f)" href="javascript:void(0)">
+        <span class="left right-buffer">
+            <img class="removecircle folderimage" src="asset/images/appicns_folder.png" data-toggle="tooltip" title="{{f.foldername}}">
+        </span>
+        <span class="left">
+            {{f.foldername}}
+        </span>
+    </a>
+    <a ng-click="delFolder(f)" href="javascript:void(0)">
+        <span class="right closebtn" ><i class="fa fa-times"></i></span>
+
+    </a>
+        
+    
+</div>
+<div ng-show="isEmptyfolder" class="text-center text-muted">
+    Không có thư mục nào
+</div>

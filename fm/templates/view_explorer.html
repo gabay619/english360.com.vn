@@ -1,0 +1,285 @@
+﻿<div ng-controller="ExplorerCtrl4">
+    <div class="jumbotron" ng-init="loadfolder()">
+        <input type="hidden" id="realpath" value="{{realpath}}" />
+        <div class="row">
+            <ol class="breadcrumb">
+                <li class="text-muted">Path:</li>
+                <li ng-repeat="breadcrum in breadcrums"><a href="javascript:void(0)" ng-click="loadfolder(breadcrum)">{{breadcrum.name}}</a></li>
+            </ol>
+        </div>
+        <div class="clearfix">
+            <div class="clearfix">
+
+                <div class="clearfix top-buffer">
+                    <div class="col-sm-2 treecontain">
+                        <nav class="navbar" role="navigation">
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#category-sidebar">
+                                    <span class="sr-only">Toggle navigation</span>
+                                    Xem chuyên mục
+                                </button>
+                            </div>
+                            <div class="collapse navbar-collapse" id="category-sidebar">
+                                <div class="clearfix text-muted">Folder</div>
+                                <div class="tree" id="folder_1">
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                    <div class="col-sm-10 mylistfile">
+                        <div class="clearfix text-muted">File</div>
+                        <div class="clearfix">
+                            <a data-toggle="modal" onclick="return false;" href="#foldermodal" class="right-buffer"><span class="glyphicon glyphicon-folder-open"></span>&nbsp;Tạo thư mục</a>
+                            <a data-toggle="modal" onclick="return false;" href="javascript:void(0);" class="right-buffer" ng-click="delfile();"><i class="fa fa-times"></i>&nbsp;Xóa file</a>
+                            <a data-toggle="modal" onclick="return false;" href="#uploadmodal" class="right-buffer" ng-click="uploadinpage();"><span class="glyphicon glyphicon-upload"></span>&nbsp;Uploads</a>
+                            <!--<a data-toggle="modal" onclick="return false;" href="#foldermodal" class="right-buffer"><span class="glyphicon glyphicon-download"></span>&nbsp;Tải về</a>-->
+                            <a data-toggle="modal" onclick="return false;" href="javascript:void(0);" class="right-buffer" ng-click="zipfile();"><i class="fa fa-file-zip-o"></i>&nbsp;Zip</a>
+                            <!--<a data-toggle="modal" onclick="return false;" href="#foldermodal" class="right-buffer"><i class="fa fa-file-text"></i>&nbsp;UnZip</a>-->
+                            <a data-toggle="modal" onclick="return false;" href="#previewmodal" class="right-buffer"><i class="fa fa-file-text"></i>&nbsp;Preview List</a>
+                            <span class="right-buffer">
+                                <label><input type="checkbox" ng-model="checkall" ng-click="checkAllFile()" />Chọn tất cả</label>
+                            </span>
+
+                            <form class="form-horizontal right">
+                                <div class="form-group">
+                                    <label for="inputEmail" class="control-label col-md-5">Tìm kiếm</label>
+                                    <div class="col-md-7 nopadding">
+                                        <input type="text" class="form-control input-sm" id="keyword" ng-keyup="searchFile()" ng-model="keyword" placeholder="Gõ tên file" />
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div>
+
+                            <div class="clearfix"></div>
+                            <div class="col-md-2 myfileitem" ng-repeat="file in listfile">
+                                <div class="thumbnail">
+                                    <a data-toggle="modal" onclick="return false;" ng-right-click="showcontext(file)" ng-click="fileinfo(file)" href="#fileModal">
+                                        <img src="{{file.image}}" class="holderimg" data-toggle="tooltip" title="{{file.filename}}" id="img-{{file.index}}" />
+                                        <small class="text-overflow">{{file.filename}}</small>
+                                    </a>
+                                    <input type="checkbox" ng-model="file.chose" value="{{file.src}}" ng-change="chosing();" />
+                                </div>
+                            </div>
+                            <div ng-show="isEmptyfile" class="text-center text-muted">
+                                Không có file nào
+                            </div>
+                            <div class="clearfix img-center ">
+                                <button class="btn btn-primary" ng-click="loadMoreFile()" id="btnLoadMore">Xem thêm File</button>
+                                <div class="text-muted" ng-show="isLoadMore">
+                                    <img id="loadingImage" src="asset/images/loading.gif" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="context-menu2">
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a tabindex="-1" data-value="View"><i class="fa fa-eye"></i>&nbsp;Xem thử</a></li>
+                            <li><a tabindex="-1" data-value="Rename"><i class="fa fa-pencil"></i>&nbsp;Sửa tên</a></li>
+                            <li><a tabindex="-1" target="_blank" href="{{item.src}}"><i class="fa fa-download"></i>&nbsp;Tải về</a></li>
+                            <li><a tabindex="-1" data-value="Delete"><i class="fa fa-times"></i>&nbsp;Xóa</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="fileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-controller="FileCtrl">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close closefilemodal" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Thông tin file</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="col-sm-3 row" ng-repeat="(key, value) in fileInfor" style="margin-bottom: 8px">{{key}} : {{value}}</p>
+
+                    <div class="input-group col-md-10" style="margin-bottom: 8px">
+                        <p id="uripathfileinfo" class="form-control text-overflow-noelip" style="max-width: 650px !important" onclick="selectText('uripathfileinfo')">{{path}}</p>
+                    </div>
+                    <div class="input-group col-md-10" style="margin-bottom: 8px">
+                        <p id="webpathfileinfo" class="form-control text-overflow-noelip" style="max-width: 650px !important" onclick="selectText('webpathfileinfo')">{{webpath}}</p>
+                    </div>
+                    <div style="margin-bottom: 8px">
+                        <textarea class="form-control {{text.visible}}" ng-model="text.content"></textarea>
+                        <div id="mediaPlayer_wrapper" class="{{media.visible}}" style="position: relative; width: 640px; height: {{media.height}}">
+                            <object width="100%" height="100%" type="application/x-shockwave-flash" data="plugin/jwplayer/player.swf" bgcolor="#000000" id="Object1" name="mediaPlayer" tabindex="0">
+                                <param name="allowfullscreen" value="true">
+                                <param name="allowscriptaccess" value="always">
+                                <param name="seamlesstabbing" value="true">
+                                <param name="wmode" value="opaque">
+                                <param name="flashvars" value=";id=mediaPlayer&amp;file={{webpath}}&amp;screencolor=ffffff&amp;stretching=fill&amp;skin=plugin%2Fjwplayer%2Fskin%2FViet.zip&amp;abouttext=Flash%20Player&amp;aboutlink=http%3A%2F%2Fgoogle.com%2F&amp;controlbar.idlehide=false">
+                                <embed id="mediaPlayer" src="{{media.source}}">
+                            </object>
+                        </div>
+                        <img src="{{image.source}}" class="{{image.visible}}" />
+                    </div>
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" ng-model="newFileName" id="renamefile">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" ng-click="reName()">Rename File</button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary {{text.visible}}" ng-click="saveFile()" style="float: left">Save File</button>
+                    <button type="button" class="btn btn-danger" ng-click="deleteFile()" style="margin-left: auto; margin-right: auto;">Delete File</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal fade" id="previewmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close closefilemodal" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Thông tin file</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group input-group-sm" style="margin-bottom: 8px">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" id="demoCopyBtn" onclick="selectText('selectedarea')">Chọn</button>
+                        </span>
+                    </div>
+                    <div class="prlistimage" id="selectedarea">
+                        <p ng-repeat="srcfile in previewList" align="center">
+                            <img src="{{srcfile}}" style="max-width: 640px; display: inline-block" align="middle" />
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </div>
+
+    <div class="modal fade" id="foldermodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <form role="form">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="btn_close">&times;</button>
+                        <h4 class="modal-title">Thông tin folder</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group clearfix">
+                            <label class="col-sm-3 control-label row">Folder Name</label>
+                            <div class="col-sm-13">
+                                <input type="text" ng-model="foldername" class="form-control col-sm-5" ng-keyup="saveFolder($event)" />
+                            </div>
+
+                        </div>
+                        <div class="form-group clearfix">
+                            <label class="col-sm-3 control-label row">Permissions</label>
+                            <div class="col-sm-13">
+                                <input type="text" ng-model="permissions" class="form-control col-sm-5" value="{{permissions}}" ng-change="getPermissions();" />
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="name">Owner</label>
+                            <div>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="owner-read" ng-model="oread" ng-true-value="4" ng-false-value="0" ng-change="setPermissions();">
+                                    Read
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="owner-write" ng-model="owrite" ng-true-value="2" ng-false-value="0" ng-change="setPermissions();">
+                                    Write
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="owner-execute" ng-model="oexecute" ng-true-value="1" ng-false-value="0" ng-change="setPermissions();">
+                                    Execute
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="name">Group</label>
+                            <div>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="group-read" ng-model="gread" ng-true-value="4" ng-false-value="0" ng-change="setPermissions();">
+                                    Read
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="group-write" ng-model="gwrite" ng-true-value="2" ng-false-value="0" ng-change="setPermissions();">
+                                    Write
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="group-execute" ng-model="gexecute" ng-true-value="1" ng-false-value="0" ng-change="setPermissions();">
+                                    Execute
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="name">Public</label>
+                            <div>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="public-read" ng-model="pread" ng-true-value="4" ng-false-value="0" ng-change="setPermissions();">
+                                    Read
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="public-write" ng-model="pwrite" ng-true-value="2" ng-false-value="0" ng-change="setPermissions();">
+                                    Write
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="public-execute" ng-model="pexecute" ng-true-value="1" ng-false-value="0" ng-change="setPermissions();">
+                                    Execute
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="createfolder()">Lưu</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+        <!-- /.modal-content -->
+    </div>
+    <div class="modal fade" id="uploadmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <link rel="stylesheet" href="plugin/uploadify/uploadify.css" />
+        <script src="plugin/uploadify/jquery.uploadify.min.js"></script>
+        <form role="form">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Upload File</h4>
+                    </div>
+                    <div class="modal-body row">
+                        <div class="right">
+                            <label>
+                                <input type="checkbox" id="allowoverwrite" ng-click="uploadinpage()" value="true">
+                                Ghi đè file
+                            </label>
+                        </div>
+                        <div class="left row col-md-10">
+                            <input id="file_upload" name="file_upload" type="file" multiple="true">
+                            <a id="uploadifybtn_start" class="hide" href="javascript:$('#file_upload').uploadify('upload','*')">Upload Files</a>
+                            <div id="notify_upload"></div>
+                            <div id="queuex010"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
