@@ -8,6 +8,7 @@
  */
 class Network
 {
+
     const MOBIFONE = 1;
     const IP_SERVICE = '10.54.128.164';
     const USER = "wap";
