@@ -39,29 +39,34 @@ class UsersController extends \BaseController {
 	}
 
 	public function postRegister(){
-		if(!Session::has('new_user') || !Session::get('new_user')['validate'])
-			return Response::json(array('success'=>false, 'message' => 'Thao tác không hợp lệ.'));
+//		if(!Session::has('new_user') || !Session::get('new_user')['validate'])
+//			return Response::json(array('success'=>false, 'message' => 'Thao tác không hợp lệ.'));
 		$input = Input::all();
-		$input['phone'] = Session::get('new_user')['phone'];
-		$validator = Validator::make($input, User::$rules);
+//		$input['phone'] = Session::get('new_user')['phone'];
+        $rules = User::$rules;
+        unset($rules['email']);
+		$validator = Validator::make($input, $rules);
 		if($validator->fails()){
 			return Response::json(array('success'=>false, 'message'=>$validator->errors()->first()));
 		}
+//        if($input['password'] != $input['password_confirmation']){
+//            return Redirect::back()->with('error', 'Mật khẩu xác nhận không khớp')->withInput();
+//        }
 
-        if(!Network::mobifoneNumber($input['phone'])){
-            return Response::json(array('success'=>false, 'message'=>'Yêu cầu nhập số điện thoại MobiFone.'));
-        }
+//        if(!Network::mobifoneNumber($input['phone'])){
+//            return Response::json(array('success'=>false, 'message'=>'Yêu cầu nhập số điện thoại MobiFone.'));
+//        }
 
         //kiểm tra có đăng ký nhận SMS không
-        $checkSMSNoti = Network::checkTCSMS($input['phone']) == 0;
+//        $checkSMSNoti = Network::checkTCSMS($input['phone']) == 0;
 
 		$user = new User();
 		$user->_id = strval(time());
         $user->datecreate = time();
-		$user->phone = $input['phone'];
-		$user->email = $input['email'];
+//		$user->phone = $input['phone'];
+//		$user->email = $input['email'];
 		$user->un_password = $input['password'];
-		$user->displayname = $input['displayname'];
+		$user->username = $input['username'];
 		$user->password = Common::encryptpassword($user->un_password);
         $user->cmnd = '';
         $user->cmnd_ngaycap = '';
@@ -70,7 +75,7 @@ class UsersController extends \BaseController {
         $user->priavatar = '';
         $user->thong_bao = array(
             'noti' => '1',
-            'sms' => $checkSMSNoti ? '1' : '0',
+//            'sms' => $checkSMSNoti ? '1' : '0',
             'email' => '1',
         );
 		$user->save();

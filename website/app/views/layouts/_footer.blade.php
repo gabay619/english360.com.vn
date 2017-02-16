@@ -112,17 +112,19 @@
             parent = $(this).parents('.content_dangkyTK');
             parent.find('.registerAjaxMsg').html('');
         });
-        //Kiểm tra mã xác thực
-        $('.btn_check_Auth').click(function(){
+        //Đăng ký tài khoản
+        $('.btn_register').click(function(){
             parent = $(this).parents('.content_dangkyTK');
-            authKey = parent.find('.txtAuthKey').val();
-            $.post('/user/login', {
-                password: authKey, _token: '{{csrf_token()}}'
+            username = parent.find('.txtUsername').val();
+            password = parent.find('.txtPassword').val();
+            password_confirmation = parent.find('.txtUsername').val();
+            $.post('/user/register', {
+                username:username, password: password, password_confirmation:password_confirmation, _token: '{{csrf_token()}}'
             }, function(result){
                 if(result.success){
                     location.reload();
                 }else{
-                    parent.find('.authkeyAjaxMsg').html(result.message);
+                    parent.find('.registerAjaxMsg').html(result.message);
                     parent.find('.txtAuthKey').focus();
                 }
             }, 'json')
@@ -177,16 +179,19 @@
         <div class="content_dangkyTK">
             <p class="p_avatar center"><label class="icon_ava"><i class="fa fa-fw"></i></label></p>
             <p><span class="registerAjaxMsg" style="color:red;"></span></p>
-            <p><input class="input_1 txtPhone2" type="text" placeholder="Số điện thoại" /></p>
-            <p class="send-authKey-mss">Để xác thực số điện thoại trên là của bạn, vui lòng <strong><a href="javascript:void(0);" class="text-link-3 send-authKey-btn">Click vào đây</a></strong> để nhận mật khẩu mà chúng tôi gửi qua SMS.</p>
-            <div class="authkeyInfo" style="display: none">
-                <p><span style="color: green">Vui lòng nhập mật khẩu vào ô bên dưới</span></p>
-                <p><span class="authkeyAjaxMsg" style="color:red;"></span></p>
-                <p><input type="password" class="input_1 input_uf txtAuthKey"  placeholder="Nhập mật khẩu"/></p>
-                <p class="center"><a href="javascript:void(0);" class="btn_x btn_blue btn_check_Auth">Đăng nhập</a></p>
-                <p><a href="">Lấy lại mật khẩu
-                    </a></p>
-            </div>
+            <p><input class="input_1 txtUsername" type="text" placeholder="Tên đăng nhập" /></p>
+            <p><input type="password" class="input_1 input_uf txtPassword"  placeholder="Nhập mật khẩu"/></p>
+            <p><input type="password" class="input_1 input_uf txtPasswordConfirmation"  placeholder="Xác nhận mật khẩu"/></p>
+            <p class="center"><a href="javascript:void(0);" class="btn_x btn_blue btn_register">Đăng ký</a></p>
+            {{--<p class="send-authKey-mss">Để xác thực số điện thoại trên là của bạn, vui lòng <strong><a href="javascript:void(0);" class="text-link-3 send-authKey-btn">Click vào đây</a></strong> để nhận mật khẩu mà chúng tôi gửi qua SMS.</p>--}}
+            {{--<div class="authkeyInfo" style="display: none">--}}
+                {{--<p><span style="color: green">Vui lòng nhập mật khẩu vào ô bên dưới</span></p>--}}
+                {{--<p><span class="authkeyAjaxMsg" style="color:red;"></span></p>--}}
+                {{--<p><input type="password" class="input_1 input_uf txtAuthKey"  placeholder="Nhập mật khẩu"/></p>--}}
+                {{--<p class="center"><a href="javascript:void(0);" class="btn_x btn_blue btn_check_Auth">Đăng nhập</a></p>--}}
+                {{--<p><a href="">Lấy lại mật khẩu--}}
+                    {{--</a></p>--}}
+            {{--</div>--}}
         </div>
     </div>
 </div>
