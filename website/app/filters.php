@@ -87,8 +87,8 @@ Route::filter('count_view', function(){
         Session::put('return_url', Request::url());
         if(!Auth::user()){
 //            Session::put('popreg_require_login',1);
-            return Redirect::to('/user/quick-package?return_url='.Request::url())->with('error', 'Hãy đăng ký gói cước để tiếp tục sử dụng dịch vụ.');
-//            return Redirect::to('/user/login')->with('error', 'Bạn đã sử dụng hết 10 nội dung miễn phí. Hãy đăng nhập để tiếp tục sử dụng dịch vụ.');
+//            return Redirect::to('/user/quick-package?return_url='.Request::url())->with('error', 'Hãy đăng ký gói cước để tiếp tục sử dụng dịch vụ.');
+            return Redirect::to('/user/login')->with('error', 'Bạn đã sử dụng hết 10 nội dung miễn phí. Hãy đăng nhập để tiếp tục sử dụng dịch vụ.');
         }else{
             if(!Auth::user()->registedPackage()){
                 return Redirect::to('/user/package')->with('error', 'Bạn đã sử dụng hết 10 nội dung miễn phí.');
