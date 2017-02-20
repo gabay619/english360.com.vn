@@ -273,7 +273,21 @@ class UsersController extends \BaseController {
 
 	public function getLogin()
 	{
-		return View::make('users.login');
+        $fb = new Facebook\Facebook([
+            'app_id' => Constant::FACEBOOK_APP_ID, // Replace {app-id} with your app id
+            'app_secret' => Constant::FACEBOOK_APP_KEY,
+            'default_graph_version' => 'v2.2',
+        ]);
+
+        $helper = $fb->getRedirectLoginHelper();
+        $permissions = ['email']; // Optional permissions
+        $fb_login = $helper->getLoginUrl('http://english360.com.vn/fb-callback.html', $permissions);
+        if(Input::get('redirect',0) == 1){
+            return Redirect::to($fb_login);
+        }
+		return View::make('users.login', array(
+            'fb_login' => $fb_login
+        ));
 	}
 
 	public function postLogin(){
@@ -991,5 +1005,87 @@ class UsersController extends \BaseController {
 
     public function postQuickPackage(){
 
+    }
+
+    public function facebookCallback(){
+        $fb = new Facebook\Facebook([
+            'app_id' => Constant::FACEBOOK_APP_ID, // Replace {app-id} with your app id
+            'app_secret' => Constant::FACEBOOK_APP_KEY,
+            'default_graph_version' => 'v2.2',
+        ]);
+
+        $helper = $fb->getRedirectLoginHelper();
+
+        try {
+            $accessToken = $helper->getAccessToken();
+        } catch(Facebook\Exceptions\FacebookResponseException $e) {
+            // When Graph returns an error
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch(Facebook\Exceptions\FacebookSDKException $e) {
+            // When validation fails or other local issues
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
+
+        if (! isset($accessToken)) {
+            if ($helper->getError()) {
+                header('HTTP/1.0 401 Unauthorized');
+                echo "Error: " . $helper->getError() . "\n";
+                echo "Error Code: " . $helper->getErrorCode() . "\n";
+                echo "Error Reason: " . $helper->getErrorReason() . "\n";
+                echo "Error Description: " . $helper->getErrorDescription() . "\n";
+            } else {
+                header('HTTP/1.0 400 Bad Request');
+                echo 'Bad request';
+            }
+            exit;
+        }
+
+// Logged in
+        $oAuth2Client = $fb->getOAuth2Client();
+
+// Get the access token metadata from /debug_token
+        $tokenMetadata = $oAuth2Client->debugToken($accessToken);
+// Lấy thông tin
+        $fb_uid = $tokenMetadata->getUserId();
+        $_SESSION['fb_access_token'] = (string) $accessToken;
+        $fb->setDefaultAccessToken($_SESSION['fb_access_token']);
+        $response = $fb->get('/me?locale=en_US&fields=name,email,picture');
+        $userNode = $response->getGraphUser();
+//echo $userNode->getField('id');
+//var_dump(
+//    $userNode->getField('email'), $userNode['email']
+//);
+        $fb_email = $userNode->getField('email');
+        $fb_name = $userNode->getField('name');
+        $checkUser = User::where('fbid',$fb_uid)->first();
+        if(!$checkUser){
+            $user = new User();
+            $user->_id = strval(time());
+            $user->datecreate = time();
+		    $user->email = User::where('email', $fb_email)->first() ? '' : $fb_email;
+            $user->cmnd = '';
+            $user->cmnd_ngaycap = '';
+            $user->cmnd_noicap = '';
+            $user->fullname = $fb_name;
+            $user->displayname = $fb_name;
+            $user->fbid = $fb_uid;
+            $user->priavatar = '';
+            $user->thong_bao = array(
+                'noti' => '1',
+                'email' => '1',
+            );
+            $user->save();
+
+            Auth::login($user);
+        }else{
+            Auth::login($checkUser);
+        }
+
+        if(Session::has('return_url'))
+            return Redirect::to(Session::get('return_url'));
+        else
+            return Redirect::intended('/');
     }
 }

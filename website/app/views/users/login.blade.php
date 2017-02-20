@@ -15,10 +15,14 @@
                         <h4 class="title_1">Đăng nhập</h4>
                         @include('layouts._messages')
                         {{Form::open(array('url' => '/user/login', 'style'=>'width: 500px'))}}
-                            <p>{{Form::text('phone', Input::get('phone'), array('class'=>'input_3', 'placeholder'=>'Số điện thoại/Tên đăng nhập', 'autofocus', 'required','value'=>Input::get('phone')))}}</p>
+                            <p>{{Form::text('phone', Input::get('phone'), array('class'=>'input_3', 'placeholder'=>'Tên đăng nhập', 'autofocus', 'required','value'=>Input::get('phone')))}}</p>
                             <p>{{Form::password('password', array('class'=>'input_3', 'placeholder'=>'Mật khẩu', 'required'))}}</p>
                             <p><input type="checkbox" checked> Ghi nhớ đăng nhập</p>
-                            <p>{{Form::submit('Đăng nhập', array('class' => 'btn_x btn_blue btn_padding bold'))}}</p>
+                            <p>
+                                {{Form::submit('Đăng nhập', array('class' => 'btn_x btn_blue btn_padding bold'))}}
+                                 hoặc
+                                <a href="{{$fb_login}}" class="btn_x btn_padding bold btn_blue" style="background-color: rgb(64,93,155) !important;">Đăng nhập bằng Facebook</a>
+                            </p>
                         {{Form::close()}}
                         <p><a style="text-decoration: underline" href="/user/forget-pass">Quên mật khẩu?</a> - <a style="text-decoration: underline" data-featherlight="#fl1" href="/user/register">Tạo tài khoản mới</a></p>
                     </div>

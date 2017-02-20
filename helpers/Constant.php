@@ -52,4 +52,6 @@ class Constant
     const BANNER_WEB_FOOTER = 'webfooter';
     const BANNER_WAP_FIXED = 'wapfixed';
     const BANNER_WEB_HEADER = 'webheader';
+    const FACEBOOK_APP_ID = '1539737363001576';
+    const FACEBOOK_APP_KEY = '4e2fd0ebbaacbaca83e713c966d1969d';
 }

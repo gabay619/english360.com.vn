@@ -127,11 +127,13 @@
                             @else
                             <h3 class="heading3">Đăng nhập</h3>
                             <span id="userAjaxMsg" style="color: red"></span>
-                            <span><input type="text" class="input_1 input_uf"  placeholder="Số điện thoại/Tên đăng nhập" id="txtPhone1"/></span>
+                            <span><input type="text" class="input_1 input_uf"  placeholder="Tên đăng nhập" id="txtPhone1"/></span>
                             <span><input type="password" class="input_1 input_uf"  placeholder="Mật khẩu" id="txtPassword1"/></span>
                             <span><input type="checkbox" checked />Ghi nhớ đăng nhập</span>
                             <span><a class="text-link" href="/user/forget-pass">Quên mật khẩu</a></span>
                             <span><a class="btn_x btn_blue btn_dangnhap" href="javascript:login();">Đăng nhập</a></span>
+                            <span style="text-align: center">hoặc</span>
+                            <span><a class="btn_x btn_blue btn_dangnhap" href="/user/login?redirect=1" style="background-color: rgb(64,93,155) !important;">Đăng nhập qua Facebook</a></span>
                             <span><a class="text-link-2" data-featherlight="#fl1" href="/user/register">Tạo tài khoản mới</a></span>
                             @endif
                         </div>

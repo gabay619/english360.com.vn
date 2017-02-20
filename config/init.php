@@ -8,6 +8,7 @@ foreach (glob(__DIR__.'/../helpers/*.php') as $filename)
     include $filename;
 }
 require __DIR__.'/../vendor/autoload.php';
+require __DIR__.'/../sdk/Facebook/autoload.php';
 //$_SESSION['templogin'] = 1;
 //print_r($_SESSION);die;
 session_start();

@@ -320,7 +320,7 @@ class Network
 
     public static function checkTCSMS($msisdn)
     {
-//        return 1;
+        return 1;
 //        if(Common::isTestUser($msisdn)) return 1;
         try {
             $client = new SoapClient(static::getLinkService(),array('cache_wsdl'=>WSDL_CACHE_NONE));

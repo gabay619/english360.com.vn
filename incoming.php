@@ -304,43 +304,60 @@ function register(){
     $usercl = $dbmg->user;
     $historycl = $dbmg->history_log;
 //    $authcl = $dbmg->auth_key;
-    if(!isset($_POST['phone'])){
-        $dtr['mss'] = 'Vui lòng nhập số điện thoại.';
+    if(!isset($_POST['username'])){
+        $dtr['mss'] = 'Vui lòng nhập tên đăng nhập';
         $dtr['status'] = 202;
         echo json_encode($dtr);exit;
     }
-    if(!Network::mobifoneNumber($_POST['phone'])){
-        $dtr['status'] = 250;
-        $dtr['mss'] = 'Vui lòng nhập số điện thoại MobiFone';
+    if(!isset($_POST['password'])){
+        $dtr['mss'] = 'Vui lòng nhập mật khẩu';
+        $dtr['status'] = 202;
         echo json_encode($dtr);exit;
     }
+    if(!isset($_POST['password_confirmation'])){
+        $dtr['mss'] = 'Vui lòng nhập mật khẩu xác nhận';
+        $dtr['status'] = 202;
+        echo json_encode($dtr);exit;
+    }
+    if($_POST['password'] != $_POST['password_confirmation']){
+        $dtr['mss'] = 'Mật khẩu xác nhận không khớp';
+        $dtr['status'] = 202;
+        echo json_encode($dtr);exit;
+    }
+//    if(!Network::mobifoneNumber($_POST['phone'])){
+//        $dtr['status'] = 250;
+//        $dtr['mss'] = 'Vui lòng nhập số điện thoại MobiFone';
+//        echo json_encode($dtr);exit;
+//    }
+    $username = $_POST['username'];
     $phone = $_POST['phone'];
-    $checkUser = $usercl->findOne(array('phone' => $phone));
+    $unpassword = $_POST['password'];
+    $checkUser = $usercl->findOne(array('username' => $username));
     if($checkUser){
-        $sendPassCount = isset($checkUser['send_pass']['count']) ? $checkUser['send_pass']['count'] : 0;
-        $sendPassTime = isset($checkUser['send_pass']['time']) ? $checkUser['send_pass']['time'] : time();
-        if(time() - $sendPassTime > 60*60){
-            $sendPassCount = 0;
-        }
-        if($sendPassCount >= 5){
-            $dtr['mss'] = 'Quý khách đã lấy mật khẩu 5 lần. Vui lòng chờ sau 60 phút để lấy lại mật khẩu.';
-            echo json_encode($dtr);exit;
-        }
-        $info = 'Mật khẩu để sử dụng dịch vụ English360 của Quý khách là: '.$checkUser['un_password'];
-        Network::sentMT($phone, 'MK', $info);
-        $usercl->update(array('phone' => $phone), array('$set'=>array('send_pass'=>array('count'=>$sendPassCount + 1, 'time'=>time()))));
+//        $sendPassCount = isset($checkUser['send_pass']['count']) ? $checkUser['send_pass']['count'] : 0;
+//        $sendPassTime = isset($checkUser['send_pass']['time']) ? $checkUser['send_pass']['time'] : time();
+//        if(time() - $sendPassTime > 60*60){
+//            $sendPassCount = 0;
+//        }
+//        if($sendPassCount >= 5){
+//            $dtr['mss'] = 'Quý khách đã lấy mật khẩu 5 lần. Vui lòng chờ sau 60 phút để lấy lại mật khẩu.';
+//            echo json_encode($dtr);exit;
+//        }
+//        $info = 'Mật khẩu để sử dụng dịch vụ English360 của Quý khách là: '.$checkUser['un_password'];
+//        Network::sentMT($phone, 'MK', $info);
+//        $usercl->update(array('phone' => $phone), array('$set'=>array('send_pass'=>array('count'=>$sendPassCount + 1, 'time'=>time()))));
         $dtr['status'] = 201;
-        $dtr['mss'] = 'Tài khoản đã tồn tại. Mật khẩu đã được gửi về số điện thoại của quý khách. Vui lòng đăng nhập để sử dụng dịch vụ.';
+        $dtr['mss'] = 'Tài khoản đã tồn tại. Vui lòng đăng nhập để sử dụng dịch vụ.';
         echo json_encode($dtr);exit;
     }
     $timeNow = time();
-
-    $unpassword = Common::generateRandomPassword();
+//    $unpassword = Common::generateRandomPassword();
     $password = encryptpassword($unpassword);
 
     $newAccount = array(
         '_id' => strval($timeNow),
-        'phone' => $phone,
+        'username'=>$username,
+//        'phone' => $phone,
         'un_password'=>$unpassword,
         'password' => $password,
         'datecreate' => $timeNow,
@@ -353,16 +370,16 @@ function register(){
         'birthday'=>'',
         'thong_bao' => array(
             'noti' => "1",
-            'sms' => "1",
+//            'sms' => "1",
             'email' => "1",
         )
     );
-    $info = 'Mật khẩu để sử dụng dịch vụ English360 của Quý khách là: '.$unpassword;
+//    $info = 'Mật khẩu để sử dụng dịch vụ English360 của Quý khách là: '.$unpassword;
     $usercl->insert($newAccount);
-    $result = Network::sentMT($phone, 'MK', $info);
+//    $result = Network::sentMT($phone, 'MK', $info);
     $dtr['status'] = 200;
-    $dtr['mss'] = 'Đăng ký thành công. Mật khẩu đã được gửi về số điện thoại của bạn.';
-    $_SESSION['flash_mss'] = 'Mật khẩu đã được gửi về số điện thoại của bạn. Mời bạn đăng nhập.';
+    $dtr['mss'] = 'Đăng ký thành công.';
+    $_SESSION['flash_mss'] = 'Vui lòng đăng nhập.';
     $newHistoryLog = array(
             '_id' => strval(time().rand(10,99)),
             'datecreate' => time(),
@@ -372,7 +389,8 @@ function register(){
             'uid' => '',
             'url' => Constant::BASE_URL.'/register.php',
             'status' => Constant::STATUS_ENABLE,
-            'phone' => $phone,
+            'phone' => '',
+            'username'=>$username,
             'price' => 0
     );
     if(!isset($_SESSION['notsave_log']))

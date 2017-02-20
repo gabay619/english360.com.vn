@@ -18,7 +18,11 @@
                         <p>{{Form::text('username', Input::get('username'), array('class'=>'input_3', 'placeholder'=>'Tên đăng nhập','id'=>'txtRegUsername','autofocus', 'required'))}}</p>
                         <p>{{Form::password('password', array('class'=>'input_3', 'placeholder'=>'Mật khẩu','id'=>'txtRegPassword'))}}</p>
                         <p>{{Form::password('password_confirmation', array('class'=>'input_3', 'placeholder'=>'Xác nhận mật khẩu','id'=>'txtRegPasswordConfirmation'))}}</p>
-                        <p><button type="button" onclick="register()" class="btn_x btn_blue btn_padding bold">Đăng ký</button></p>
+                        <p>
+                            <button type="button" onclick="register()" class="btn_x btn_blue btn_padding bold">Đăng ký</button>
+                            hoặc
+                            <a href="/user/login?redirect=1" class="btn_x btn_padding bold btn_blue" style="background-color: rgb(64,93,155) !important;">Đăng ký bằng Facebook</a>
+                        </p>
 {{--                        <p>{{Form::submit('Đăng ký', array('class' => 'btn_x btn_blue btn_padding bold'))}}</p>--}}
                         {{Form::close()}}
                         <p>Bạn đã có tài khoản? <a style="text-decoration: underline" href="/user/login">Đăng nhập</a></p>

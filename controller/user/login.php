@@ -15,7 +15,7 @@ unset($_SESSION['flash_mss']);
 //$token_name = $token->get_token_name();
 if(!empty($_POST)){
     if(!isset($_POST['phone'])){
-        $mes1 = array('mss'=>"Số điện thoại/Tên đăng nhập không được để trống.","class"=>"none");
+        $mes1 = array('mss'=>"Tên đăng nhập không được để trống.","class"=>"none");
     }
     $phone = $_POST['phone'];
     $phone = strtolower($phone);
@@ -67,7 +67,7 @@ if(!empty($_POST)){
                 $mes2 = array('mss'=>"Sai mật khẩu","class"=>"none");
             }
         }else{
-            $mes1 = array('mss'=>"Số điện thoại này chưa đăng ký tài khoản.","class"=>"none");
+            $mes1 = array('mss'=>"Tên đăng nhập không tồn tại.","class"=>"none");
         }
 //    }else{
 //        $mes1 = array('mss'=>"Vui lòng nhập số điện thoại mạng Mobifone","class"=>"none");
