@@ -85,6 +85,7 @@ if(!$checkUser){
         '_id' => $uid,
 //        'username'=> $username,
         'displayname' => $fb_name,
+        'fullname' => $fb_name,
         'fbid' => $fb_uid,
 //        'un_password'=>$password,
 //        'password' => Common::encryptpassword($password),

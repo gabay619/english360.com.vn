@@ -16,7 +16,7 @@
                         <strong>Mời bạn đăng nhập để truy cập hệ thống.</strong>
                     </p>
                     <form action="" method="post">
-                    <input type="text" class="input1" name="phone" placeholder="Số điện thoại/Tên đăng nhập" value="{$_GET.phone}">
+                    <input type="text" class="input1" name="email" placeholder="Email" value="{$_GET.email}">
                     <span class="red alert1 {$alert1.class} center" >{$alert1.mss}</span>
                     <input type="password" class="input1" name="password"  placeholder="Mật khẩu của bạn">
                     <span class="red alert2 {$alert2.class} center">{$alert2.mss}</span>
@@ -27,6 +27,8 @@
                     <div class="clearfix"></div>
                         <div class="center mgt15">
                             <button class="ht">Đăng nhập</button>
+                            <p style="text-align: center">hoặc</p>
+                            <p><a href="{$fb_login}" class="ht" style="background-color: #4267b2;">Đăng nhập bằng Facebook</a></p>
                         </div>
                     <p>Nếu chưa có tài khoản, bạn vui lòng <a href="register.php" style="color: #146eb4"> Đăng ký tại đây</a></p>
                     </form>

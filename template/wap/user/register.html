@@ -12,11 +12,15 @@
                         <p class="text_center">
                             <strong>Hãy đăng ký miễn phí tài khoản English360, dịch vụ miễn phí 3G/GPRS</strong>
                         </p>
-                        <input type="text" class="input1" name="phone" placeholder="Nhập số điện thoại Mobifone" id="Phone">
+                        <input type="text" class="input1" name="phone" placeholder="Nhập địa chỉ Email" id="Email">
+                        <input type="password" class="input1" name="password" placeholder="Nhập mật khẩu" id="Password">
+                        <input type="password" class="input1" name="password_confirmation" placeholder="Xác nhận mật khẩu" id="PasswordConfirmation">
                         <span class="error-notify red center"></span>
 
                         <div class="info_search">
-                            <a class="ht" href="javascript:void(0)" onclick="register()">Đăng ký</a>
+                            <p><a class="ht" href="javascript:void(0)" onclick="register()">Đăng ký</a></p>
+                            <p style="text-align: center">hoặc</p>
+                            <p><a href="/login.php?redirect=1" class="ht" style="background-color: #4267b2;">Đăng ký bằng Facebook</a></p>
                         </div>
                     </form>
                     <p>Nếu bạn đã có tài khoản, vui lòng <a href="login.php" style="color: #146eb4"> Đăng nhập </a> tại đây</p>
@@ -33,12 +37,14 @@
     function register() {
         var formData = {
             act: 'register',
-            phone: $("#Phone").val(),
+            email: $("#Email").val(),
+            password: $("#Password").val(),
+            password_confirmation: $("#PasswordConfirmation").val(),
             {$csrf_name}: '{$csrf_value}'
         }
         $.post("incoming.php",formData , function(res) {
             if (res.status == 200) {
-                window.location.href = "/login.php?phone="+phone;
+                window.location.href = "/thong-bao.php";
             } else {
                 $(".error-notify").show();
                 $(".error-notify").html(res.mss);

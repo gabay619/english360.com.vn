@@ -36,10 +36,10 @@
                         <span>Ngày sinh</span>
                         <input type="date" class="input1" name="birthday" value="{$uinfo.birthday}">
                     </p>
-                    <p>
-                        <span>Email</span>
-                        <input type="text" class="input1" name="email" value="{$uinfo.email}">
-                    </p>
+                    <!--<p>-->
+                        <!--<span>Email</span>-->
+                        <!--<input type="text" class="input1" name="email" value="{$uinfo.email}">-->
+                    <!--</p>-->
                     <p>
                         <span>Số CMND</span>
                         <input type="text" class="input1" name="cmnd" value="{$uinfo.cmnd}">
@@ -57,7 +57,9 @@
                         <input type="text" class="input1" name="displayname" value="{$uinfo.displayname}">
                     </p>
                 </div>
+                {if condition="$uinfo.fbid==null"}
                 <a href="changepassword.php"><h2 class="title_1 mgt15">Đổi mật khẩu</h2></a>
+                {/if}
 
                 <!--<div class="change_password block">-->
                 <!--<p><input type="password" placeholder="Mật khẩu cũ" name="oldpassword" class="input1" value="{$uinfo.password}"></p>-->

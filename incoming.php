@@ -304,8 +304,13 @@ function register(){
     $usercl = $dbmg->user;
     $historycl = $dbmg->history_log;
 //    $authcl = $dbmg->auth_key;
-    if(!isset($_POST['username'])){
-        $dtr['mss'] = 'Vui lòng nhập tên đăng nhập';
+    if(!isset($_POST['email'])){
+        $dtr['mss'] = 'Vui lòng nhập Email';
+        $dtr['status'] = 202;
+        echo json_encode($dtr);exit;
+    }
+    if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
+        $dtr['mss'] = 'Email không hợp lệ.';
         $dtr['status'] = 202;
         echo json_encode($dtr);exit;
     }
@@ -329,11 +334,18 @@ function register(){
 //        $dtr['mss'] = 'Vui lòng nhập số điện thoại MobiFone';
 //        echo json_encode($dtr);exit;
 //    }
-    $username = $_POST['username'];
-    $phone = $_POST['phone'];
+    $email = $_POST['email'];
+//    $phone = $_POST['phone'];
     $unpassword = $_POST['password'];
-    $checkUser = $usercl->findOne(array('username' => $username));
+    $checkUser = $usercl->findOne(array('email' => $email));
     if($checkUser){
+        if($checkUser['status'] == Constant::STATUS_ENABLE){
+            $dtr['status'] = 201;
+            $dtr['mss'] = 'Địa chỉ email đã được sử dụng.';
+            echo json_encode($dtr);exit;
+        }
+        $usercl->update(array('_id'=>$checkUser['_id']),array('$set'=>array('un_password'=>$unpassword, 'password'=>Common::encryptpassword($unpassword))));
+        $newAccount = $checkUser;
 //        $sendPassCount = isset($checkUser['send_pass']['count']) ? $checkUser['send_pass']['count'] : 0;
 //        $sendPassTime = isset($checkUser['send_pass']['time']) ? $checkUser['send_pass']['time'] : time();
 //        if(time() - $sendPassTime > 60*60){
@@ -346,23 +358,19 @@ function register(){
 //        $info = 'Mật khẩu để sử dụng dịch vụ English360 của Quý khách là: '.$checkUser['un_password'];
 //        Network::sentMT($phone, 'MK', $info);
 //        $usercl->update(array('phone' => $phone), array('$set'=>array('send_pass'=>array('count'=>$sendPassCount + 1, 'time'=>time()))));
-        $dtr['status'] = 201;
-        $dtr['mss'] = 'Tài khoản đã tồn tại. Vui lòng đăng nhập để sử dụng dịch vụ.';
-        echo json_encode($dtr);exit;
     }
     $timeNow = time();
 //    $unpassword = Common::generateRandomPassword();
-    $password = encryptpassword($unpassword);
+    $password = Common::encryptpassword($unpassword);
 
     $newAccount = array(
         '_id' => strval($timeNow),
-        'username'=>$username,
+        'email'=>$email,
 //        'phone' => $phone,
         'un_password'=>$unpassword,
         'password' => $password,
         'datecreate' => $timeNow,
-        'status'=>Constant::STATUS_ENABLE,
-        'email'=>'',
+        'status'=>Constant::STATUS_DISABLE,
         'priavatar'=>'',
         'cmd'=>'',
         'cmnd_noicap'=>'',
@@ -370,27 +378,39 @@ function register(){
         'birthday'=>'',
         'thong_bao' => array(
             'noti' => "1",
-//            'sms' => "1",
             'email' => "1",
         )
     );
 //    $info = 'Mật khẩu để sử dụng dịch vụ English360 của Quý khách là: '.$unpassword;
     $usercl->insert($newAccount);
+
+    //Gửi email xác nhận
+    $content = '<p>Xin chào,</p>'.
+        '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào đường link bên dưới:</p>'.
+        '<p><a href="'.Common::getVerifyEmailUrl($newAccount['_id'],$email).'">'.Common::getVerifyEmailUrl($newAccount['_id'],$email).'</a></p>'.
+        '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
+    $mail = new \helpers\Mail($email,'Xác nhận tài khoản English360.com.vn',$content);
+    if(!$mail->send()){
+        $dtr['status'] = 201;
+        $dtr['mss'] = 'Không thể gửi thư xác nhận đến địa chỉ email của bạn, vui lòng thử lại sau.';
+        echo json_encode($dtr);exit;
+    }
 //    $result = Network::sentMT($phone, 'MK', $info);
     $dtr['status'] = 200;
-    $dtr['mss'] = 'Đăng ký thành công.';
-    $_SESSION['flash_mss'] = 'Vui lòng đăng nhập.';
+//    $dtr['mss'] = 'Vui lòng kiểm tra email để xác thực tài khoản của bạn.';
+    $_SESSION['flash_mss'] = 'Vui lòng kiểm tra email để xác thực tài khoản của bạn.';
+//    $_SESSION['flash_mss'] = 'Vui lòng đăng nhập.';
     $newHistoryLog = array(
             '_id' => strval(time().rand(10,99)),
             'datecreate' => time(),
             'action' => HistoryLog::LOG_DANG_KY,
             'chanel' => HistoryLog::CHANEL_WAP,
             'ip' => Network::ip(),
-            'uid' => '',
+            'uid' => $checkUser['_id'],
             'url' => Constant::BASE_URL.'/register.php',
             'status' => Constant::STATUS_ENABLE,
-            'phone' => '',
-            'username'=>$username,
+//            'phone' => '',
+//            'username'=>$username,
             'price' => 0
     );
     if(!isset($_SESSION['notsave_log']))

@@ -62,26 +62,27 @@ $tpl->assign("banner",$banner);
 
 //Event welcome
 $show = false;
-if(isset($_SESSION['uinfo'])){
-    $checkFreeUser = $freecl->findOne(array('phone'=>$_SESSION['uinfo']['phone']));
-    if($checkFreeUser){
-        if($checkFreeUser['show'] == 0){
-            $show = 'welcome';
-            $freecl->update(array('phone'=>$_SESSION['uinfo']['phone']), array('$set'=>array('show'=>1)));
-        }
-        $dateDiff = (time() - $checkFreeUser['_id'])/86400;
-        if($dateDiff > 15){
-            $show = 'expired';
-            $freecl->remove(array('phone'=>$_SESSION['uinfo']['phone']));
-        }
-
-    }
-}
+//if(isset($_SESSION['uinfo'])){
+//    $checkFreeUser = $freecl->findOne(array('phone'=>$_SESSION['uinfo']['phone']));
+//    if($checkFreeUser){
+//        if($checkFreeUser['show'] == 0){
+//            $show = 'welcome';
+//            $freecl->update(array('phone'=>$_SESSION['uinfo']['phone']), array('$set'=>array('show'=>1)));
+//        }
+//        $dateDiff = (time() - $checkFreeUser['_id'])/86400;
+//        if($dateDiff > 15){
+//            $show = 'expired';
+//            $freecl->remove(array('phone'=>$_SESSION['uinfo']['phone']));
+//        }
+//
+//    }
+//}
 $tpl->assign("show",$show);
 
 //end Hoc ma choi
 //ads popup
-$showAdsPop = isset($_SESSION['package_ads']);
+//$showAdsPop = isset($_SESSION['package_ads']);
+$showAdsPop = false;
 $adsPopContinue = isset($_SESSION['package_ads_continue']);
 $timeoutPopAds = 0;
 $waittimePopAds = 0;
@@ -89,17 +90,17 @@ $activePopAds = false;
 $contentPopAds = '';
 $pricePopAds = '';
 $linkCancelPopAds = '';
-if($showAdsPop){
-    $adsPopConf = $configcl->findOne(array('name'=>Constant::CONFIG_1_5TOUCH));
-    if($adsPopConf){
-        $timeoutPopAds = isset($adsPopConf['value']['timeout']) ? $adsPopConf['value']['timeout']*1000 : 0;
-        $waittimePopAds = isset($adsPopConf['value']['waittime']) ? $adsPopConf['value']['waittime']*1000 : 0;
-        $contentPopAds = isset($adsPopConf['value']['content']) ? $adsPopConf['value']['content'] : '';
-        $pricePopAds = isset($adsPopConf['value']['price']) ? $adsPopConf['value']['price'] : '';
-        $activePopAds = isset($adsPopConf['value']['active']) &&  $adsPopConf['value']['active']==Constant::STATUS_ENABLE;
-    }
-    $linkCancelPopAds = '/incoming.php?act=toPortal';
-}
+//if($showAdsPop){
+//    $adsPopConf = $configcl->findOne(array('name'=>Constant::CONFIG_1_5TOUCH));
+//    if($adsPopConf){
+//        $timeoutPopAds = isset($adsPopConf['value']['timeout']) ? $adsPopConf['value']['timeout']*1000 : 0;
+//        $waittimePopAds = isset($adsPopConf['value']['waittime']) ? $adsPopConf['value']['waittime']*1000 : 0;
+//        $contentPopAds = isset($adsPopConf['value']['content']) ? $adsPopConf['value']['content'] : '';
+//        $pricePopAds = isset($adsPopConf['value']['price']) ? $adsPopConf['value']['price'] : '';
+//        $activePopAds = isset($adsPopConf['value']['active']) &&  $adsPopConf['value']['active']==Constant::STATUS_ENABLE;
+//    }
+//    $linkCancelPopAds = '/incoming.php?act=toPortal';
+//}
 
 //var_dump($timeoutPopAds);die;
 $tpl->assign("showAdsPop",$showAdsPop);
@@ -114,33 +115,33 @@ $tpl->assign("activePopAds",$activePopAds);
 //Event
 $showEvent = false;
 $registedEvent = false;
-if(isset($_SESSION['event_id'])){
-    $event = $eventcl->findOne(array('_id'=>$_SESSION['event_id']));
-    if($event){
-        if(isset($_SESSION['uinfo']['_id'])){
-            $checkEventUser = $eucl->findOne(array('uid'=> $_SESSION['uinfo']['_id'], 'eid'=>$_SESSION['event_id']));
-            if($checkEventUser) $registedEvent = true;
-        }
-        $showEvent = true;
-        $hasPhone = isset($_SESSION['uinfo']['phone']);
-        $tpl->assign("event",$event);
-        $tpl->assign("hasPhone",$hasPhone);
-        $tpl->assign("registedEvent",$registedEvent);
-    }
-}
+//if(isset($_SESSION['event_id'])){
+//    $event = $eventcl->findOne(array('_id'=>$_SESSION['event_id']));
+//    if($event){
+//        if(isset($_SESSION['uinfo']['_id'])){
+//            $checkEventUser = $eucl->findOne(array('uid'=> $_SESSION['uinfo']['_id'], 'eid'=>$_SESSION['event_id']));
+//            if($checkEventUser) $registedEvent = true;
+//        }
+//        $showEvent = true;
+//        $hasPhone = isset($_SESSION['uinfo']['phone']);
+//        $tpl->assign("event",$event);
+//        $tpl->assign("hasPhone",$hasPhone);
+//        $tpl->assign("registedEvent",$registedEvent);
+//    }
+//}
 $tpl->assign("showEvent",$showEvent);
 $showExpiredEvent = false;
-if(isset($_SESSION['uinfo'])){
-    $checkEventUser = $eucl->findOne(array('uid'=>$_SESSION['uinfo']['_id']));
-    if($checkEventUser){
-        $event = $eventcl->findOne(array('_id'=>$checkEventUser['eid']));
-        if($event){
-            if((time() - $checkEventUser['datecreate'])/86400 > $event['free_day']){
-                $showExpiredEvent = true;
-                $eucl->remove(array('_id'=>$checkEventUser['_id']));
-            }
-        }
-    }
-}
+//if(isset($_SESSION['uinfo'])){
+//    $checkEventUser = $eucl->findOne(array('uid'=>$_SESSION['uinfo']['_id']));
+//    if($checkEventUser){
+//        $event = $eventcl->findOne(array('_id'=>$checkEventUser['eid']));
+//        if($event){
+//            if((time() - $checkEventUser['datecreate'])/86400 > $event['free_day']){
+//                $showExpiredEvent = true;
+//                $eucl->remove(array('_id'=>$checkEventUser['_id']));
+//            }
+//        }
+//    }
+//}
 $tpl->assign("showExpiredEvent",$showExpiredEvent);
 ?>

@@ -464,18 +464,18 @@ function subString($str, $len){
 }
 
 function getDisplayName($uinfo){
-    return isset($uinfo['displayname']) && !empty($uinfo['displayname']) && $uinfo['displayname']!=$uinfo['phone'] ? $uinfo['displayname'] : Common::maskPhone($uinfo['phone']);
+    return isset($uinfo['displayname']) && !empty($uinfo['displayname']) && $uinfo['displayname']!=$uinfo['email'] ? $uinfo['displayname'] : $uinfo['email'];
 }
 
 function getFullDisplayName($uinfo){
-    return isset($uinfo['displayname']) && !empty($uinfo['displayname'])  ? $uinfo['displayname'] : (isset($uinfo['phone']) ? $uinfo['phone'] : $uinfo['username']);
+    return isset($uinfo['displayname']) && !empty($uinfo['displayname'])  ? $uinfo['displayname'] : (isset($uinfo['email']) ? $uinfo['email'] : $uinfo['username']);
 }
 
 function isLikeByUser(array $like, $uinfo){
     if(!isset($uinfo))
         return false;
 
-    return isset($like) ? in_array($userId, $like) : false;
+    return isset($like) ? in_array($uinfo['_id'], $like) : false;
 }
 function shuffle_assoc($list) {
     if (!is_array($list)) return $list;

@@ -66,6 +66,7 @@ class UsersController extends \BaseController {
             $user = $checkEmail;
             $user->un_password = $input['password'];
             $user->password = Common::encryptpassword($user->un_password);
+            $user->save();
         }else{
             $user = new User();
             $user->_id = strval(time());
