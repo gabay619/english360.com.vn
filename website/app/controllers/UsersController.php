@@ -44,7 +44,7 @@ class UsersController extends \BaseController {
 		$input = Input::all();
 //		$input['phone'] = Session::get('new_user')['phone'];
         $rules = User::$rules;
-        unset($rules['email']);
+//        unset($rules['email']);
 		$validator = Validator::make($input, $rules);
 		if($validator->fails()){
 			return Response::json(array('success'=>false, 'message'=>$validator->errors()->first()));
@@ -58,29 +58,49 @@ class UsersController extends \BaseController {
 //        }
 
         //kiểm tra có đăng ký nhận SMS không
-//        $checkSMSNoti = Network::checkTCSMS($input['phone']) == 0;
-
-		$user = new User();
-		$user->_id = strval(time());
-        $user->datecreate = time();
+        $checkEmail = User::where('email',$input['email'])->first();
+        if($checkEmail){
+            if($checkEmail->status == Constant::STATUS_ENABLE){
+                return Response::json(array('success'=>false, 'message'=>'Địa chỉ Email đã được sử dụng'));
+            }
+            $user = $checkEmail;
+            $user->un_password = $input['password'];
+            $user->password = Common::encryptpassword($user->un_password);
+        }else{
+            $user = new User();
+            $user->_id = strval(time());
+            $user->datecreate = time();
+            $user->status = Constant::STATUS_DISABLE;
 //		$user->phone = $input['phone'];
 //		$user->email = $input['email'];
-		$user->un_password = $input['password'];
-		$user->username = $input['username'];
-		$user->password = Common::encryptpassword($user->un_password);
-        $user->cmnd = '';
-        $user->cmnd_ngaycap = '';
-        $user->cmnd_noicap = '';
-        $user->fullname = '';
-        $user->priavatar = '';
-        $user->thong_bao = array(
-            'noti' => '1',
-//            'sms' => $checkSMSNoti ? '1' : '0',
-            'email' => '1',
-        );
-		$user->save();
+            $user->un_password = $input['password'];
+            $user->email = $input['email'];
+            $user->password = Common::encryptpassword($user->un_password);
+            $user->cmnd = '';
+            $user->cmnd_ngaycap = '';
+            $user->cmnd_noicap = '';
+            $user->fullname = '';
+            $user->priavatar = '';
+            $user->thong_bao = array(
+                'noti' => '1',
+                'email' => '1',
+            );
+            $user->save();
+        }
 
-		Auth::login($user);
+
+
+        //Gửi email xác nhận
+        $content = '<p>Xin chào,</p>'.
+            '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào đường link bên dưới:</p>'.
+            '<p><a href="'.Common::getVerifyEmailUrl($user->_id,$user->email).'">'.Common::getVerifyEmailUrl($user->_id,$user->email).'</a></p>'.
+            '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
+        $mail = new \helpers\Mail($user->email,'Xác nhận tài khoản English360.com.vn',$content);
+        if(!$mail->send()){
+            return Response::json(array('success'=>false, 'message'=>'Không thể gửi thư xác nhận đến địa chỉ email của bạn, vui lòng thử lại sau.'));
+        }
+
+//		Auth::login($user);
         //Log
         $newHistoryLog = array(
                 '_id' => strval(time().rand(10,99)),
@@ -91,11 +111,11 @@ class UsersController extends \BaseController {
                 'uid' => Auth::user() ? Auth::user()->_id : '',
                 'url' => Request::url(),
                 'status' => Constant::STATUS_ENABLE,
-                'phone' => Auth::user() ? Auth::user()->phone : '',
+//                'phone' => Auth::user() ? Auth::user()->phone : '',
                 'price' => 0
         );
         HisLog::insert($newHistoryLog);
-		return Response::json(array('success'=> true, 'message'=>'Thanh cong'));
+		return Response::json(array('success'=> true, 'message'=>'Vui lòng kiểm tra email để xác thực tài khoản của bạn.'));
 	}
 
 	public function postSendAuthKey(){
@@ -291,14 +311,14 @@ class UsersController extends \BaseController {
 	}
 
 	public function postLogin(){
-		$phone = Input::get('phone', Session::get('popreg_phone'));
-        $phone = strtolower($phone);
+        $email = Input::get('email', Session::get('popreg_phone'));
+        $email = strtolower($email);
 		$password = Input::get('password');
-        if(empty($phone) || empty($password)){
+        if(empty($email) || empty($password)){
             if(Request::ajax())
-                return Response::json(array('success' => false, 'message' => 'Vui lòng nhập đầy đủ Số điện thoại và Mật khẩu.'));
+                return Response::json(array('success' => false, 'message' => 'Vui lòng nhập đầy đủ Email và Mật khẩu.'));
             else
-                return Redirect::back()->with('error', 'Vui lòng nhập đầy đủ Số điện thoại và Mật khẩu.')->withInput();
+                return Redirect::back()->with('error', 'Vui lòng nhập đầy đủ Email và Mật khẩu.')->withInput();
         }
 //        if(!Network::mobifoneNumber($phone)){
 //            if(Request::ajax())
@@ -308,19 +328,33 @@ class UsersController extends \BaseController {
 //        }
 		$user = User::where(array(
             '$or'=> array(
-                array('phone'=> $phone),
-                array('username' => $phone)
+                array('email'=> $email),
+//                array('username' => $phone)
             )
         ))->first();
 		if($user){
 			if($user->password == Common::encryptpassword($password)){
+                //Nếu user chưa xác thực
+                if($user->status != Constant::STATUS_ENABLE){
+                    //Gửi email xác nhận
+                    $content = '<p>Xin chào,</p>'.
+                        '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào đường link bên dưới:</p>'.
+                        '<p><a href="'.Common::getVerifyEmailUrl($user->_id,$user->email).'">'.Common::getVerifyEmailUrl($user->_id,$user->email).'</a></p>'.
+                        '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
+                    $mail = new \helpers\Mail($user->email,'Xác nhận tài khoản English360.com.vn',$content);
+                    $mail->send();
+                    if(Request::ajax())
+                        return Response::json(array('success' => false, 'message' => 'Vui lòng xác thực email.'));
+                    else
+                        return Redirect::back()->with('error', 'Vui lòng xác thực email.')->withInput();
+                }
 				Auth::login($user);
                 ##Gui tin hang ngay
-                if(Session::has('popreg_phone') && !empty(Session::get('popreg_phone'))){
-//                    print_r(Session::get('popreg_phone'));
-                    Network::sendToDaily(Session::get('popreg_phone'));
-                    Session::forget('popreg_phone');
-                }
+//                if(Session::has('popreg_phone') && !empty(Session::get('popreg_phone'))){
+////                    print_r(Session::get('popreg_phone'));
+//                    Network::sendToDaily(Session::get('popreg_phone'));
+//                    Session::forget('popreg_phone');
+//                }
                 //Log
                 $newHistoryLog = array(
                         '_id' => strval(time().rand(10,99)),
@@ -331,7 +365,7 @@ class UsersController extends \BaseController {
                         'uid' => Auth::user()->_id,
                         'url' => Request::ajax() ? Constant::BASE_URL : Request::url(),
                         'status' => Constant::STATUS_ENABLE,
-                        'phone' => Auth::user()->phone,
+//                        'phone' => Auth::user()->phone,
                         'price' => 0
                 );
                 HisLog::insert($newHistoryLog);
@@ -363,9 +397,9 @@ class UsersController extends \BaseController {
 			}
 		}else{
 			if(Request::ajax())
-				return Response::json(array('success' => false, 'message' => 'Số điện thoại này chưa được đăng ký tài khoản.'));
+				return Response::json(array('success' => false, 'message' => 'Email này chưa được đăng ký tài khoản.'));
 			else
-				return Redirect::back()->with('error', 'Số điện thoại này chưa được đăng ký tài khoản.')->withInput();
+				return Redirect::back()->with('error', 'Email này chưa được đăng ký tài khoản.')->withInput();
         }
 	}
 
@@ -542,7 +576,7 @@ class UsersController extends \BaseController {
 
 	public function postSetting(){
 		$displayname = Input::get('displayname', '');
-		$email = Input::get('email', '');
+//		$email = Input::get('email', '');
 		$fullname = Input::get('fullname', '');
 		$birthday = Input::get('birthday', '');
 		$cmnd = Input::get('cmnd','');
@@ -565,7 +599,7 @@ class UsersController extends \BaseController {
 
 		$rules1 = array(
 			'displayname'=>'min:2',
-			'email'=>'email',
+//			'email'=>'email',
 			'fullname' => 'min:2',
 			'cmnd' => 'numeric|min:8',
 		);
@@ -590,12 +624,12 @@ class UsersController extends \BaseController {
 			}else
 				return Redirect::back()->withInput()->with('error', 'Mật khẩu cũ không đúng.');
 		}
-		if(!empty($email)){
-			$checkUniqueEmail = User::where('email', $email)->where('_id', '!=', $user->_id)->first();
-			if($checkUniqueEmail)
-				return Redirect::back()->with('error', 'Email đã được sử dụng.')->withInput();
-			$user->email = $email;
-		}
+//		if(!empty($email)){
+//			$checkUniqueEmail = User::where('email', $email)->where('_id', '!=', $user->_id)->first();
+//			if($checkUniqueEmail)
+//				return Redirect::back()->with('error', 'Email đã được sử dụng.')->withInput();
+//			$user->email = $email;
+//		}
 		if(!empty($displayname))
 			$user->displayname = $displayname;
 		$user->fullname = $fullname;
@@ -605,13 +639,13 @@ class UsersController extends \BaseController {
 		$user->cmnd_noicap = $cmnd_noicap;
 		$user->thong_bao = array(
 			'noti' => strval(Input::get('chkNoti', 0)),
-			'sms' => strval(Input::get('chkSms', 0)),
+//			'sms' => strval(Input::get('chkSms', 0)),
 			'email' => strval(Input::get('chkEmail', 0)),
 		);
-        if(Input::get('chkSms', 0) == 1)
-            Network::DKSMS($user->phone);
-        else
-            Network::TCSMS($user->phone);
+//        if(Input::get('chkSms', 0) == 1)
+//            Network::DKSMS($user->phone);
+//        else
+//            Network::TCSMS($user->phone);
 
         if($user->save()){
             //Log
@@ -624,7 +658,7 @@ class UsersController extends \BaseController {
                     'uid' => Auth::user()->_id,
                     'url' => Constant::BASE_URL.'/user/profile',
                     'status' => Constant::STATUS_ENABLE,
-                    'phone' => Auth::user()->phone,
+//                    'phone' => Auth::user()->phone,
                     'price' => 0
             );
             HisLog::insert($newHistoryLog);
@@ -971,21 +1005,28 @@ class UsersController extends \BaseController {
             $uid = $dataArr[0];
             $emailC = $dataArr[1];
             $time = $dataArr[2];
-            if($emailC != $email || time() - $time > 30*60)
+            if($emailC != $email || time() - $time > 30*60){
                 throw new Exception('Thao tác không hợp lệ.');
+            }
         }catch (Exception $e){
             return Redirect::to('/thong-bao.html')->with('error',$e->getMessage());
         }
         User::where('email', $email)->update(array('email'=> ''));
-        User::where('_id', strval($uid))->update(array('email'=> $email));
+        $user = User::where('_id', strval($uid))->first();
+        $user->email = $email;
+        $user->status = Constant::STATUS_ENABLE;
+        $user->save();
+//        User::where('_id', strval($uid))->update(array('status'=> Constant::STATUS_ENABLE));
+        Auth::login($user);
+        return Redirect::to('/thong-bao.html')->with('success','Xác thực email thành công. Mời bạn tiếp tục sử dụng dịch vụ.');
 //        print_r($dataArr);die;
-        Session::set('reg_lession_popup', true);
-        if(Auth::user() && Auth::user()->_id==$uid){
-            return Redirect::to('/user/reg-lession');
-        }else{
-            Session::set('email_reg_lession',$email);
-            return Redirect::to('/');
-        }
+//        Session::set('reg_lession_popup', true);
+//        if(Auth::user() && Auth::user()->_id==$uid){
+//            return Redirect::to('/user/reg-lession');
+//        }else{
+//            Session::set('email_reg_lession',$email);
+//            return Redirect::to('/');
+//        }
     }
 
     public function getRegLession(){
@@ -1064,7 +1105,7 @@ class UsersController extends \BaseController {
             $user = new User();
             $user->_id = strval(time());
             $user->datecreate = time();
-		    $user->email = User::where('email', $fb_email)->first() ? '' : $fb_email;
+		    $user->email = $fb_email;
             $user->cmnd = '';
             $user->cmnd_ngaycap = '';
             $user->cmnd_noicap = '';

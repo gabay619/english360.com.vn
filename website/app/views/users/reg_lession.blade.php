@@ -3,15 +3,15 @@
     <!--TAB CONTENT-->
     <div class="content_tab_text">
     <p><strong class="notice_1 uppercase color_red mgb10">Đăng ký nhận bài học qua email</strong></p>
-    @if($showEmail)
-            <div style="clear: both"></div>
-            <div class="emailbox form-inline" style="padding: 0 0 10px 0;">
-                <div class="form-group">
-                    <input type="text" class="form-control" value="{{Auth::user()->email}}" placeholder="Nhập email của bạn" id="txtEmailLession">
-                </div>
-                <button class="btn btn-primary" type="button" onclick="regEmailLession()">Đăng ký email</button>
-            </div>
-        @endif
+    {{--@if($showEmail)--}}
+            {{--<div style="clear: both"></div>--}}
+            {{--<div class="emailbox form-inline" style="padding: 0 0 10px 0;">--}}
+                {{--<div class="form-group">--}}
+                    {{--<input type="text" class="form-control" value="{{Auth::user()->email}}" placeholder="Nhập email của bạn" id="txtEmailLession">--}}
+                {{--</div>--}}
+                {{--<button class="btn btn-primary" type="button" onclick="regEmailLession()">Đăng ký email</button>--}}
+            {{--</div>--}}
+        {{--@endif--}}
         <div style="clear: both"></div>
         <div style="overflow: hidden" id="chkLession">
             @if(count($checked) > 0)

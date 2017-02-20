@@ -104,8 +104,8 @@ class SongController extends BaseController
 
             if (!Auth::user()) {
 //				Session::put('popreg_require_login', 1);
-//                return Redirect::to('/user/register')->with('error', 'Hãy đăng ký để tiếp tục sử dụng dịch vụ.');
-                return Redirect::to('/user/quick-package?return_url='.Request::url())->with('error', 'Hãy đăng ký gói cước để tiếp tục sử dụng dịch vụ.');
+                return Redirect::to('/user/register')->with('error', 'Hãy đăng ký để tiếp tục sử dụng dịch vụ.');
+//                return Redirect::to('/user/quick-package?return_url='.Request::url())->with('error', 'Hãy đăng ký gói cước để tiếp tục sử dụng dịch vụ.');
 
             } else {
                 if (!Auth::user()->registedPackage()) {

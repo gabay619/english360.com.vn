@@ -15,7 +15,7 @@
                         <h4 class="title_1">Đăng nhập</h4>
                         @include('layouts._messages')
                         {{Form::open(array('url' => '/user/login', 'style'=>'width: 500px'))}}
-                            <p>{{Form::text('phone', Input::get('phone'), array('class'=>'input_3', 'placeholder'=>'Tên đăng nhập', 'autofocus', 'required','value'=>Input::get('phone')))}}</p>
+                            <p>{{Form::text('email', Input::get('email'), array('class'=>'input_3', 'placeholder'=>'Email', 'autofocus', 'required','value'=>Input::get('phone')))}}</p>
                             <p>{{Form::password('password', array('class'=>'input_3', 'placeholder'=>'Mật khẩu', 'required'))}}</p>
                             <p><input type="checkbox" checked> Ghi nhớ đăng nhập</p>
                             <p>

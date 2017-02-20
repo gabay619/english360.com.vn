@@ -15,10 +15,10 @@
                 <p>
                     {{Form::text('birthday', Auth::user()->birthday, array('class'=>'input_3 datepicker', 'placeholder'=>'dd-mm-yyyy'))}}
                 </p>
-                <label>Email:</label>
-                <p>
-                    {{Form::text('email', Auth::user()->email, array('class'=>'input_3', 'placeholder'=>'Email'))}}
-                </p>
+                {{--<label>Email:</label>--}}
+                {{--<p>--}}
+                    {{--{{Form::text('email', Auth::user()->email, array('class'=>'input_3', 'placeholder'=>'Email'))}}--}}
+                {{--</p>--}}
                 <label for="">Số CMND:</label>
                 <p>
                     {{Form::text('cmnd', Auth::user()->cmnd, array('class'=>'input_3', 'placeholder'=>'Số Chứng minh nhân dân'))}}
@@ -37,6 +37,7 @@
                 </p>
 
                 <br />
+                @if(!isset(Auth::user()->fbid))
                 <p><strong class="notice_1 uppercase color_red mgb10 mgt20">Thay đổi mật khẩu</strong></p>
                 <label for="old_pass">Mật khẩu cũ:</label>
                 <p>
@@ -51,6 +52,7 @@
                     {{Form::password('password_confirmation', array('class'=>'input_3'))}}
                 </p>
                 <br />
+                @endif
                 <p><strong class="notice_1 uppercase color_red mgb10 mgt20">Thông báo</strong></p>
                 <p>{{Form::checkbox('chkNoti', 1, isset(Auth::user()->thong_bao['noti']) && Auth::user()->thong_bao['noti']==1)}}Nhận thông báo từ English360</p>
 {{--                <p>{{Form::checkbox('chkSms', 1, isset(Auth::user()->thong_bao['sms']) && Auth::user()->thong_bao['sms']==1)}}Nhận SMS hàng ngày</p>--}}

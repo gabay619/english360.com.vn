@@ -127,7 +127,7 @@
                             @else
                             <h3 class="heading3">Đăng nhập</h3>
                             <span id="userAjaxMsg" style="color: red"></span>
-                            <span><input type="text" class="input_1 input_uf"  placeholder="Tên đăng nhập" id="txtPhone1"/></span>
+                            <span><input type="text" class="input_1 input_uf"  placeholder="Email" id="txtPhone1"/></span>
                             <span><input type="password" class="input_1 input_uf"  placeholder="Mật khẩu" id="txtPassword1"/></span>
                             <span><input type="checkbox" checked />Ghi nhớ đăng nhập</span>
                             <span><a class="text-link" href="/user/forget-pass">Quên mật khẩu</a></span>
@@ -181,10 +181,10 @@
     });
 
     function login(){
-        phone = $('#txtPhone1').val();
+        email = $('#txtPhone1').val();
         password = $('#txtPassword1').val();
         $.post('/user/login', {
-            phone: phone, password: password, _token : '{{ csrf_token() }}'
+            email: email, password: password, _token : '{{ csrf_token() }}'
         }, function(result) {
             if(result.success){
                 location.reload();

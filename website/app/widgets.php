@@ -246,6 +246,7 @@ Widget::register('popup', function(){
 });
 
 Widget::register('event_welcome', function(){
+    return;
     $user = Auth::user();
     if(!$user)
         return;
@@ -270,6 +271,7 @@ Widget::register('event_welcome', function(){
 });
 
 Widget::register('event', function (){
+    return;
     if (isset($_SESSION['event_id'])){
         $event = EventModel::where('_id',$_SESSION['event_id'])->first();
 //        print_r($event);
@@ -306,6 +308,7 @@ Widget::register('review', function($id,$type){
 });
 
 Widget::register('regpopup', function(){
+    return;
     if(Auth::user()) return;
     if(Session::has('popreg_require_login'))
         return View::make('widgets.regpopup');
@@ -329,6 +332,7 @@ Widget::register('banner', function ($type=Constant::BANNER_WEB_FOOTER){
 });
 
 Widget::register('emailbox', function($type=''){
+    return;
     $email = '';
     if(Auth::user()){
         $checked = isset(Auth::user()->reg_lession) ? Auth::user()->reg_lession : array();
@@ -351,6 +355,7 @@ Widget::register('emailbox', function($type=''){
 });
 
 Widget::register('reglession', function (){
+    return;
     if(Session::has('reg_lession_popup') && Session::has('email_reg_lession')){
         $allType = Common::getAllLessionType();
         $checked = array(Constant::TYPE_FAMOUS);

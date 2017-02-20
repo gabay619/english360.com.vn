@@ -15,7 +15,7 @@
                         <h4 class="title_1">Đăng ký</h4>
                         <p class="text-danger" id="flsMss"></p>
                         {{Form::open(array('url' => '#', 'style'=>'width: 500px'))}}
-                        <p>{{Form::text('username', Input::get('username'), array('class'=>'input_3', 'placeholder'=>'Tên đăng nhập','id'=>'txtRegUsername','autofocus', 'required'))}}</p>
+                        <p>{{Form::text('email', Input::get('email'), array('class'=>'input_3', 'placeholder'=>'Email','id'=>'txtRegEmail','autofocus', 'required'))}}</p>
                         <p>{{Form::password('password', array('class'=>'input_3', 'placeholder'=>'Mật khẩu','id'=>'txtRegPassword'))}}</p>
                         <p>{{Form::password('password_confirmation', array('class'=>'input_3', 'placeholder'=>'Xác nhận mật khẩu','id'=>'txtRegPasswordConfirmation'))}}</p>
                         <p>
@@ -33,11 +33,11 @@
     </div>
     <script>
         function register() {
-            username = $('#txtRegUsername').val();
+            email = $('#txtRegEmail').val();
             password = $('#txtRegPassword').val();
             password_confirmation = $('#txtRegPasswordConfirmation').val();
             $.post('/user/register', {
-                username: username, password:password, password_confirmation:password_confirmation,_token : '{{ csrf_token() }}', rd_login:1
+                email: email, password:password, password_confirmation:password_confirmation,_token : '{{ csrf_token() }}', rd_login:1
             }, function (re) {
                 if(re.success){
                     window.location.href= '/user/login?username='+username;

@@ -8,7 +8,7 @@
  */
 class Constant
 {
-    const BASE_URL = 'http://english360.vn';
+    const BASE_URL = 'http://english360.com.vn';
     const PLAYER_SKIN = 'bekle';
     const PLAYER_SUB_COLOR = '#FFF';
     const PLAYER_SUB_CONFIG =   'color: "#FFF",

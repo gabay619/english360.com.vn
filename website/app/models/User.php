@@ -26,23 +26,23 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
 	public static 	$rules = array(
         'full_name'=>'min:2',
-        'email'=>'required|email|unique:user',
-        'username'=>'required|alpha_num|unique:user',
+        'email'=>'required|email',
+//        'username'=>'required|alpha_num|unique:user',
         'phone'=>'between:9,13|unique:user',
         'password'=>'required|alpha_num|between:6,12|confirmed',
         'password_confirmation'=>'required|alpha_num|between:6,12',
 	);
 
     public function getDisplayName(){
-        if(isset($this->displayname) && !empty($this->displayname) && $this->displayname!=$this->phone) return $this->displayname;
-        if(!empty($this->phone)) return Common::maskPhone($this->phone);
+        if(isset($this->displayname) && !empty($this->displayname) && $this->displayname!=$this->email) return $this->displayname;
+        if(!empty($this->email)) return $this->email;
         if(isset($this->username) && !empty($this->username)) return $this->username;
         return '';
     }
 
     public function getFullDisplayName(){
         if(isset($this->displayname) && !empty($this->displayname)) return $this->displayname;
-        if(!empty($this->phone)) return $this->phone;
+        if(!empty($this->email)) return $this->email;
         if(isset($this->username) && !empty($this->username)) return $this->username;
         return '';
     }

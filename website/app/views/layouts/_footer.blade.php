@@ -115,17 +115,18 @@
         //Đăng ký tài khoản
         $('.btn_register').click(function(){
             parent = $(this).parents('.content_dangkyTK');
-            username = parent.find('.txtUsername').val();
+            email = parent.find('.txtEmail').val();
             password = parent.find('.txtPassword').val();
-            password_confirmation = parent.find('.txtUsername').val();
+            password_confirmation = parent.find('.txtPasswordConfirmation').val();
             $.post('/user/register', {
-                username:username, password: password, password_confirmation:password_confirmation, _token: '{{csrf_token()}}'
+                email:email, password: password, password_confirmation:password_confirmation, _token: '{{csrf_token()}}'
             }, function(result){
                 if(result.success){
-                    location.reload();
+                    $.featherlight.close();
+                    showMss(result.message);
                 }else{
                     parent.find('.registerAjaxMsg').html(result.message);
-                    parent.find('.txtAuthKey').focus();
+//                    parent.find('.txtAuthKey').focus();
                 }
             }, 'json')
         });
@@ -179,7 +180,7 @@
         <div class="content_dangkyTK">
             <p class="p_avatar center"><label class="icon_ava"><i class="fa fa-fw"></i></label></p>
             <p><span class="registerAjaxMsg" style="color:red;"></span></p>
-            <p><input class="input_1 txtUsername" type="text" placeholder="Tên đăng nhập" /></p>
+            <p><input class="input_1 txtEmail" type="text" placeholder="Email" /></p>
             <p><input type="password" class="input_1 input_uf txtPassword"  placeholder="Nhập mật khẩu"/></p>
             <p><input type="password" class="input_1 input_uf txtPasswordConfirmation"  placeholder="Xác nhận mật khẩu"/></p>
             <p class="center"><a href="javascript:void(0);" class="btn_x btn_blue btn_register">Đăng ký</a></p>
