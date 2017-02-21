@@ -10,7 +10,7 @@ class UsersController extends \BaseController {
         )));
         $this->beforeFilter('auth', array('only' => array(
 			'getProfile',
-			'getLogout',
+//			'getLogout',
 			'postSetting',
             'getSaveLession',
             'postDeleteSaveLession',
@@ -374,21 +374,22 @@ class UsersController extends \BaseController {
 					return Response::json(array('success' => true, 'message' => 'Đăng nhập thành công.'));
 				else{
                     //Nếu đang có yêu cầu xác thực email
-                    if(Session::has('required_verify_email')){
-                        $verifyEmail = Session::get('required_verify_email');
-                        $bodyEmail = '<p>Xin chào,</p>'.
-                            '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào link bên dưới</p>'.
-                            '<p><a href="'.Common::getVerifyEmailUrl($user->_id,$verifyEmail).'">'.Common::getVerifyEmailUrl($user->_id,$verifyEmail).'</a></p>'.
-                            '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
-                        $mail = new \helpers\Mail($verifyEmail, 'Xác thực email English360.vn', $bodyEmail);
-                        $mail->send();
-                        Session::remove('required_verify_email');
-                        return Redirect::to('/thong-bao.html')->with('success','Chúng tôi đã gửi 1 email xác nhận về địa chỉ '.$verifyEmail.', vui lòng xác nhận địa chỉ email này là của bạn.');
-                    }
-                    if(Session::has('return_url'))
-                        return Redirect::to(Session::get('return_url'));
-                    else
-                        return Redirect::intended('/');
+//                    if(Session::has('required_verify_email')){
+//                        $verifyEmail = Session::get('required_verify_email');
+//                        $bodyEmail = '<p>Xin chào,</p>'.
+//                            '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào link bên dưới</p>'.
+//                            '<p><a href="'.Common::getVerifyEmailUrl($user->_id,$verifyEmail).'">'.Common::getVerifyEmailUrl($user->_id,$verifyEmail).'</a></p>'.
+//                            '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
+//                        $mail = new \helpers\Mail($verifyEmail, 'Xác thực email English360.vn', $bodyEmail);
+//                        $mail->send();
+//                        Session::remove('required_verify_email');
+//                        return Redirect::to('/thong-bao.html')->with('success','Chúng tôi đã gửi 1 email xác nhận về địa chỉ '.$verifyEmail.', vui lòng xác nhận địa chỉ email này là của bạn.');
+//                    }
+//                    return Session::get('return_url','/');
+//                    if(Session::has('return_url'))
+                    return Redirect::to(Session::get('return_url','/'));
+//                    else
+//                        return Redirect::to('/');
                 }
 			}else{
 				if(Request::ajax())
@@ -439,7 +440,7 @@ class UsersController extends \BaseController {
             '<p>Mật khẩu để sử dụng dịch vụ English360 của quý khách là: '.$password.'</p>';
         $mail = new \helpers\Mail($email,'Lấy lại mật khẩu tài khoản English360.com.vn',$content);
         if($mail->send()){
-            return Redirect::back()->with('success', 'Mật khẩu đã được gửi về email của bạn. Vui lòng kiểm tra lại.')->withInput();
+            return Redirect::to('/user/login')->with('success', 'Mật khẩu đã được gửi về email của bạn. Vui lòng kiểm tra lại.')->withInput();
         }else{
             return Redirect::back()->with('error', 'Không thể gửi mật khẩu đến email của bạn, vui lòng thử lại sau.')->withInput();
         }
@@ -535,10 +536,10 @@ class UsersController extends \BaseController {
                 'action' => HistoryLog::LOG_DANG_XUAT,
                 'chanel' => HistoryLog::CHANEL_WEB,
                 'ip' => Network::ip(),
-                'uid' => Auth::user()->_id,
+                'uid' => Auth::user() ? Auth::user()->_id : '',
                 'url' => Request::url(),
                 'status' => Constant::STATUS_ENABLE,
-                'phone' => Auth::user()->phone,
+//                'phone' => Auth::user()->phone,
                 'price' => 0
         );
         HisLog::insert($newHistoryLog);
@@ -1108,9 +1109,9 @@ class UsersController extends \BaseController {
             Auth::login($checkUser);
         }
 
-        if(Session::has('return_url'))
-            return Redirect::to(Session::get('return_url'));
-        else
-            return Redirect::intended('/');
+//        if(Session::has('return_url'))
+        return Redirect::to(Session::get('return_url','/'));
+//        else
+//            return Redirect::to('/');
     }
 }

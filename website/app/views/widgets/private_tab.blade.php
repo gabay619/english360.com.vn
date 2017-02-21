@@ -1,4 +1,5 @@
 <ul class="tab-legend">
+    <li @if(strpos(Request::url(),'charge')) class="active" @endif><a href="/txn/charge"><i class="fa fa-fw"></i> Nạp {{Constant::CASH_NAME}}</a></li>
     <li @if(strpos(Request::url(),'package')) class="active" @endif><a href="/user/package"><i class="fa fa-fw"></i> @if($checkPackage != 1)Đăng ký gói cước @else Thông tin gói cước @endif</a></li>
     <li @if(strpos(Request::url(),'reg-lession')) class="active" @endif><a href="/user/reg-lession"><i class="glyphicon glyphicon-send"></i> Đăng ký bài học</a></li>
     <li @if(strpos(Request::url(),'profile')) class="active" @endif><a href="/user/profile"><i class="fa fa-fw"></i>Cài đặt riêng tư</a></li>

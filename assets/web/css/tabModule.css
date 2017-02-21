@@ -73,30 +73,30 @@
 	width: 100%;
 }
 /*Vertical specific*/
-.tab-vert .tab-legend {
+.tab-vert >.tab-legend {
 	width: 194px;
 	float: left;
 	position:absolute;
 	z-index:1;
 	top:194px;
 }
-.tab.tab-vert .tab-legend .active {
+.tab.tab-vert >.tab-legend .active {
   border-left: 1px solid #ccc;
 }
-.tab-vert .tab-legend > li {
+.tab-vert >.tab-legend > li {
 	width: 100%;
 	border-top: solid 1px #CCC;
 	border-right: solid 1px #CCC;
 }
-.tab-vert .tab-legend > li.active {
+.tab-vert >.tab-legend > li.active {
 	border-right: 0;
 }
-.tab-vert .tab-content {
+.tab-vert >.tab-content {
 	width: 74.5%;
 	display: block;
 	float: right;
 }
-.tab-vert .tab-content > li {
+.tab-vert >.tab-content > li {
 	min-height: 100%;
 	display: block;
 }

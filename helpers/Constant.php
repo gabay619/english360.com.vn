@@ -54,4 +54,11 @@ class Constant
     const BANNER_WEB_HEADER = 'webheader';
     const FACEBOOK_APP_ID = '1539737363001576';
     const FACEBOOK_APP_KEY = '4e2fd0ebbaacbaca83e713c966d1969d';
+    const CASH_NAME = 'Ecoin';
+    
+    //Txn
+    const TXN_CARD_RESPONSE_CODE_SUCCESS = 1;
+    const TXN_CARD_RESPONSE_CODE_FAIL = 2;
+    const TXN_CARD_RESPONSE_CODE_PENDING = 0;
+    const CARD_TO_CASH = 1/1000;
 }

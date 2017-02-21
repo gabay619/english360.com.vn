@@ -103,9 +103,9 @@
                 </div>
                 <div class="account_area">
                     <div class="userlink">
-                        <button class="userlink_btn">@if(Auth::user()) {{Auth::user()->getFullDisplayName()}} @else Tài khoản @endif<i class="fa fa-fw"></i></button>
+                        @if(Auth::user())
+                        <button class="userlink_btn">{{Auth::user()->getFullDisplayName()}}<i class="fa fa-fw"></i></button>
                         <div class="user_form">
-                            @if(Auth::user())
                             <div class="block notifi_user">
                                 <div class="left ava_left">
                                     <div class="avatar">
@@ -116,6 +116,10 @@
                                     <p><a href="/user/notify" style="color: #333">Bạn có <strong>(0)</strong> thông báo mới</a></p>
                                 </div>
                             </div>
+                            <div class="block notifi_user">
+                                Bạn có: <span style="font-weight: bold; color: #db2727">{{Auth::user()->getBalance()}} {{Constant::CASH_NAME}}</span>
+                                <a href="/txn/charge" class="btn btn-primary btn-sm" style="padding: 0px 5px;float: right;">Nạp {{Constant::CASH_NAME}}</a>
+                            </div>
                             <div class="block user_control_link">
                                 <a href="/user/package" title="">Đăng ký gói cước</a>
                                 <a href="/user/reg-lession" title="">Đăng ký bài học</a>
@@ -124,19 +128,22 @@
                                 <a href="/user/question" title="">Câu hỏi của bạn</a>
                                 <a href="/user/logout" title="">Thoát</a>
                             </div>
-                            @else
-                            <h3 class="heading3">Đăng nhập</h3>
-                            <span id="userAjaxMsg" style="color: red"></span>
-                            <span><input type="text" class="input_1 input_uf"  placeholder="Email" id="txtPhone1"/></span>
-                            <span><input type="password" class="input_1 input_uf"  placeholder="Mật khẩu" id="txtPassword1"/></span>
-                            <span><input type="checkbox" checked />Ghi nhớ đăng nhập</span>
-                            <span><a class="text-link" href="/user/forget-pass">Quên mật khẩu</a></span>
-                            <span><a class="btn_x btn_blue btn_dangnhap" href="javascript:login();">Đăng nhập</a></span>
-                            <span style="text-align: center">hoặc</span>
-                            <span><a class="btn_x btn_blue btn_dangnhap" href="/user/login?redirect=1" style="background-color: rgb(64,93,155) !important;">Đăng nhập qua Facebook</a></span>
-                            <span><a class="text-link-2" data-featherlight="#fl1" href="/user/register">Tạo tài khoản mới</a></span>
-                            @endif
                         </div>
+                            @else
+                            <button class="userlink_btn">Tài khoản <i class="fa fa-fw"></i></button>
+                            <div class="user_form">
+                                <h3 class="heading3">Đăng nhập</h3>
+                                <span id="userAjaxMsg" style="color: red"></span>
+                                <span><input type="text" class="input_1 input_uf"  placeholder="Email" id="txtPhone1"/></span>
+                                <span><input type="password" class="input_1 input_uf"  placeholder="Mật khẩu" id="txtPassword1"/></span>
+                                <span><input type="checkbox" checked />Ghi nhớ đăng nhập</span>
+                                <span><a class="text-link" href="/user/forget-pass">Quên mật khẩu</a></span>
+                                <span><a class="btn_x btn_blue btn_dangnhap" href="javascript:login();">Đăng nhập</a></span>
+                                <span style="text-align: center">hoặc</span>
+                                <span><a class="btn_x btn_blue btn_dangnhap" href="/user/login?redirect=1" style="background-color: rgb(64,93,155) !important;">Đăng nhập qua Facebook</a></span>
+                                <span><a class="text-link-2" data-featherlight="#fl1" href="/user/register">Tạo tài khoản mới</a></span>
+                            </div>
+                            @endif
                     </div>
                 </div>
             </div>

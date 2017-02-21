@@ -51,6 +51,10 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
         return isset($this->priavatar) && !empty($this->priavatar) ? $this->priavatar : '/assets/web/images/avatar_user_comment_default.png';
     }
 
+    public function getBalance(){
+        return isset($this->balance) && !empty($this->balance) ? $this->balance : 0;
+    }
+
     public function getSavedExam(){
         $save = SaveExam::where(array('uid' => $this->_id))->first();
         if(!$save){
