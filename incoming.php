@@ -601,19 +601,23 @@ function sendconfirmkey() {
     global $dbmg;
     $usercl = $dbmg->user;
     $dtr['status'] = 404;
-    if (!isset($_POST['phone']) || empty($_POST['phone'])){
-        $dtr['mss'] = 'Vui lòng nhập số điện thoại.';
+    if (!isset($_POST['email']) || empty($_POST['email'])){
+        $dtr['mss'] = 'Vui lòng nhập email.';
         echo json_encode($dtr);exit;
     }
-    $phone = $_POST['phone'];
-    if(!Network::mobifoneNumber($phone)){
-        $dtr['mss'] = 'Vui lòng nhập số điện thoại MobiFone.';
+    $email = $_POST['email'];
+    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+        $dtr['mss'] = 'Email không hợp lệ.';
         echo json_encode($dtr);exit;
     }
-    $criteria = array('phone' => $phone);
+    $criteria = array('email' => $email);
     $userinfo = $usercl->findOne($criteria);
     if(!$userinfo){
-        $dtr['mss'] = 'Số điện thoại này hiện chưa đăng ký tài khoản.';
+        $dtr['mss'] = 'Email này hiện chưa đăng ký tài khoản.';
+        echo json_encode($dtr);exit;
+    }
+    if(!empty($userinfo['fbid'])){
+        $dtr['mss'] = 'Tài khoản quý khách được đăng ký qua Facebook, vui lòng đăng nhập bằng Facebook.';
         echo json_encode($dtr);exit;
     }
 
@@ -626,17 +630,24 @@ function sendconfirmkey() {
         $dtr['mss'] = 'Quý khách đã lấy mật khẩu 5 lần. Vui lòng chờ sau 60 phút để lấy lại mật khẩu.';
         echo json_encode($dtr);exit;
     }
+    $usercl->update(array('_id' => $userinfo['_id']), array('$set'=>array('send_pass'=>array('count'=>$sendPassCount + 1, 'time'=>time()))));
     $password = $userinfo['un_password'];
-    $info = 'Mật khẩu để sử dụng dịch vụ English360 của Quý khách là:'.$password;
-    $result = Network::sentMT($phone, 'MK', $info);
-    if($result != 0){
-        $dtr['mss'] = 'Không thể gửi tin nhắn đến số điện thoại của bạn, vui lòng thử lại sau.';
+    $content = '<p>Xin chào,</p>'.
+        '<p>Mật khẩu để sử dụng dịch vụ English360 của quý khách là: '.$password.'</p>';
+    $mail = new \helpers\Mail($email,'Lấy lại mật khẩu tài khoản English360.com.vn',$content);
+    if(!$mail->send()){
+        $dtr['mss'] = 'Không thể gửi mật khẩu đến email của bạn, vui lòng thử lại sau.';
         echo json_encode($dtr);exit;
     }
-    $usercl->update(array('phone' => $phone), array('$set'=>array('send_pass'=>array('count'=>$sendPassCount + 1, 'time'=>time()))));
+//    $info = 'Mật khẩu để sử dụng dịch vụ English360 của Quý khách là:'.$password;
+//    $result = Network::sentMT($phone, 'MK', $info);
+//    if($result != 0){
+//        $dtr['mss'] = 'Không thể gửi tin nhắn đến số điện thoại của bạn, vui lòng thử lại sau.';
+//        echo json_encode($dtr);exit;
+//    }
     $dtr['status'] = 200;
-    $dtr['mss'] = 'Mật khẩu đã được gửi về số điện thoại của bạn. Vui lòng kiểm tra lại.';
-    $_SESSION['flash_mss'] = 'Mật khẩu đã được gửi về số điện thoại của bạn. Mời bạn đăng nhập.';
+    $dtr['mss'] = 'Mật khẩu đã được gửi về email của bạn. Vui lòng kiểm tra lại.';
+    $_SESSION['flash_mss'] = 'Mật khẩu đã được gửi về email của bạn. Mời bạn đăng nhập.';
     echo json_encode($dtr);exit;
 }
 function confirmnewpass() {

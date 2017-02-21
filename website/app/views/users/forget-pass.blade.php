@@ -15,10 +15,10 @@
                         <h4 class="title_1">Quên mật khẩu</h4>
                         @include('layouts._messages')
                         @if(!Session::has('success'))
-                        <p>Vui lòng nhập số điện thoại của bạn. Hệ thống sẽ gửi mật khẩu về điện thoại của bạn trong giây lát.</p>
+                        <p>Vui lòng nhập email của bạn. Hệ thống sẽ gửi mật khẩu về email của bạn trong giây lát.</p>
                         @endif
                         {{Form::open(array('url' => '/user/forget-pass', 'style'=>'width: 500px'))}}
-                        <p>{{Form::text('phone', Input::get('phone'), array('class'=>'input_3', 'placeholder'=>'Số điện thoại', 'autofocus', 'required'))}}</p>
+                        <p>{{Form::text('email', Input::get('email'), array('class'=>'input_3', 'placeholder'=>'Email', 'autofocus', 'required'))}}</p>
                         <p>{{Form::submit('Nhận mật khẩu', array('class' => 'btn_x btn_blue btn_padding bold'))}}</p>
                         {{Form::close()}}
                     </div>

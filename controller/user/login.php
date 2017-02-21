@@ -94,7 +94,7 @@ if(!empty($_POST)){
             $mes2 = array('mss'=>"Sai mật khẩu","class"=>"none");
         }
     }else{
-        $mes1 = array('mss'=>"Tên đăng nhập không tồn tại.","class"=>"none");
+        $mes1 = array('mss'=>"Email chưa đăng ký tài khoản.","class"=>"none");
     }
 //    }else{
 //        $mes1 = array('mss'=>"Vui lòng nhập số điện thoại mạng Mobifone","class"=>"none");
