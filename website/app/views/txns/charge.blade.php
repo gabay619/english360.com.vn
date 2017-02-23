@@ -24,8 +24,16 @@
                     {{Form::close()}}
                 </div>
                 <div id="bank" class="tab-pane fade">
-                    <h3>Nạp tiền qua Ngân hàng</h3>
-                    <p>Đang xây dựng.</p>
+                    <p class="text-danger" id="ajaxBankMss"></p>
+                    @include('layouts._messages')
+                    {{Form::open(array('url' => '#'))}}
+                    <p>{{Form::number('amount', Input::get('amount'), array('class'=>'input_3', 'placeholder'=>'Số tiền cần nạp (lớn hơn 10.000đ)', 'required','id'=>'numAmount'))}}</p>
+                    <p>
+                        <button class="btn_x btn_blue btn_padding bold" onclick="chargeBank()" type="button">
+                            Thanh toán
+                        </button>
+                    </p>
+                    {{Form::close()}}
                 </div>
                 <div id="method3" class="tab-pane fade">
                     <h3>Method 3</h3>
@@ -39,4 +47,19 @@
         </div>
 
     </div>
+
+    <script>
+        function chargeBank() {
+            amount = $('#numAmount').val();
+            $.post('/txn/charge-bank', {
+                amount:amount, _token: '{{csrf_token()}}'
+            }, function (re) {
+                if(re.success){
+                    window.location.href = re.payUrl;
+                }else{
+                    $('#ajaxBankMss').html(re.message);
+                }
+            })
+        }
+    </script>
 @endsection

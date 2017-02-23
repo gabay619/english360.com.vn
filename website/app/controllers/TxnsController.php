@@ -7,10 +7,12 @@ class TxnsController extends \BaseController {
     }
 
     public function getCharge(){
+        $tab = Input::get('tab','#card');
         $listCardType = Common::getCardType();
         $listCardType[''] = '--Chọn loại thẻ--';
         return View::make('txns.charge', array(
-            'listCardType' => $listCardType
+            'listCardType' => $listCardType,
+            'tab' => $tab
         ));
     }
 
@@ -104,7 +106,6 @@ class TxnsController extends \BaseController {
      */
     protected function _onCardSuccess(TxnCard $txnCard)
     {
-//        DB::beginTransaction();
         try {
             //cập nhật bảng txn_cards
             if (!$txnCard->save()) {
@@ -116,18 +117,9 @@ class TxnsController extends \BaseController {
             //cập nhật số dư tài khoản
             $user->balance = $user->getBalance()+$txnCard->card_amount * Constant::CARD_TO_CASH;
             $user->save();
-//            $account_trace = new AccountTrace;
-//            $account_trace->account_id = $user->account->id;
-//            $account_trace->change_balance = $txnCard->card_amount * Config::get('common.vnd_to_xu_rate');
-//            $account_trace->txn_id = $txnCard->id;
-//            if (!$account_trace->save()) {
-//                throw new Exception('DB Error');
-//            }
         } catch (Exception $e) {
-//            DB::rollBack();
             throw $e;
         }
-//        DB::commit();
     }
 
     /**Xử lý khi nạp thẻ thất bại
@@ -136,33 +128,89 @@ class TxnsController extends \BaseController {
      */
     protected function _onCardFail(TxnCard $txnCard)
     {
-//        DB::beginTransaction();
         try {
             //cập nhật bảng txn_cards
             if (!$txnCard->save()) {
                 throw new Exception('DB Error');
             }
         } catch (Exception $e) {
-//            DB::rollBack();
         }
-//        DB::commit();
     }
 
-    public function postNew(){
-//        $id = Input::get('id');
-//        $type = Input::get('type');
-//        $content = Input::get('content');
-//
-//        $newReport = new Report();
-//        $newReport->_id = strval(time());
-//        $newReport->content = $content;
-//        $newReport->uid = Auth::user()->_id;
-//        $newReport->itemid = $id;
-//        $newReport->type = $type;
-//        $newReport->datecreate = time();
-//        $newReport->save();
-//
-//        return Response::json(array('success'=>true, 'message' => 'Cảm ơn bạn đã gửi báo cáo cho chúng tôi. Chúng tôi sẽ xem xét trong thời gian sớm nhất.'));
+    public function postChargeBank(){
+        $amount = Input::get('amount');
+        if(!is_numeric($amount) || $amount<10000){
+            return Response::json(array('success'=>false, 'message'=>'Số tiền cần nạp không hợp lệ.'));
+        }
+
+        $txn = new TxnBank;
+        $txn->_id = strval(time());
+        $txn->datecreate = time();
+        $txn->uid = Auth::user()->id;
+        $txn->amount = $amount;
+        if(!$txn->save()){
+            return Response::json(array('success'=>false, 'message'=>'Có lỗi xảy ra, vui lòng thử lại sau.'));
+        }
+
+        require_once app_path('../../sdk/1pay/OnePayBank.php');
+        $mpc = new OnePayBank();
+        $order_id = $txn->_id;
+        $order_info = Auth::user()->email.' nap '.$txn->amount.'d English360';
+        $payUrl = $mpc->getPayUrl($txn->amount, $order_id, $order_info);
+        if(!$payUrl)
+            return Response::json(array('success'=>false, 'message'=>'Có lỗi xảy ra, vui lòng thử lại sau.'));
+
+        return Response::json(array('success'=>true, 'payUrl'=>$payUrl));
+    }
+
+
+    /**
+     * Xử lý khi nạp thẻ thành công
+     * @param $txnCard
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function _onBankSuccess(TxnBank $txnBank)
+    {
+        try {
+            //cập nhật bảng txn_cards
+            if (!$txnBank->save()) {
+                throw new Exception('DB Error');
+            }
+
+            $user=User::where('_id',$txnBank->uid)->first();
+
+            //cập nhật số dư tài khoản
+            $user->balance = $user->getBalance()+$txnBank->amount * Constant::BANK_TO_CASH;
+            $user->save();
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+
+    public function bankResult(){
+        require_once app_path('../../sdk/1pay/OnePayBank.php');
+        $mpc = new OnePayBank();
+
+        //Log
+        $log = Input::all();
+        $log['_id'] = strval(time());
+        LogTxnBank::insert($log);
+        $rs = $mpc->exeResult($log);
+        //Log
+
+        //Xử lý kết quả trả về
+        $txn = TxnBank::where('_id',$rs['id'])->first();
+        $txn->response_code = $rs['code'];
+        if($txn->response_code == Constant::TXN_BANK_SUCCESS){
+            $txn->card_name = $rs['card_name'];
+            $txn->card_type = $rs['card_type'];
+            $this->_onBankSuccess($txn);
+            return Redirect::to('/thong-bao.html')->with('success','Giao dịch thành công.');
+        }else{
+            $txn->save();
+            return Redirect::to('/thong-bao.html')->with('error',Common::getTxnBankMss($rs['code']));
+        }
     }
 
 }

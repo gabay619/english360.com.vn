@@ -18,6 +18,7 @@ Route::get('/fb-callback.html', 'UsersController@facebookCallback');
 Route::get('/verify-email.html', 'UsersController@verifyEmail');
 Route::get('/thong-bao.html', 'HomeController@showMessage');
 Route::get('/bai-hoc-free.html', 'FreeLessionController@index');
+Route::get('/bank-result.html', 'TxnsController@bankResult');
 
 Route::controller('user', 'UsersController');
 Route::controller('job', 'JobsController');

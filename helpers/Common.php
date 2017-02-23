@@ -801,4 +801,23 @@ class Common
         );
         return isset($arr[$code]) ? $arr[$code] : 'Chờ xử lý';
     }
+
+    public static function getTxnBankMss($code){
+        $arr = array(
+            Constant::TXN_BANK_SUCCESS => 'Thành công',
+            Constant::TXN_BANK_REFUSE => 'Ngân hàng từ chối thanh toán',
+            Constant::TXN_BANK_INVALID => 'Thẻ không hợp lệ',
+            Constant::TXN_BANK_USER_ERROR => 'Lỗi từ phía người dùng',
+            Constant::TXN_BANK_ERROR => 'Lỗi kết nối với Ngân hàng',
+            Constant::TXN_BANK_ACCOUNT_NOT_ENOUGH => 'Tài khoản không đủ tiền',
+            Constant::TXN_BANK_FAIL => 'Giao dịch thất bại',
+            Constant::TXN_BANK_WRONG_INFO => 'Nhập sai thông tin thẻ',
+            Constant::TXN_BANK_NOT_INTERNETBANKING => 'Tài khoản chưa đăng ký InternetBanking',
+            Constant::TXN_BANK_ERROR_OTP => 'Lỗi xác thực OTP',
+            Constant::TXN_BANK_OVER_LIMIT => 'Giao dịch thất bại do sử dụng quá hạn mức ngân hàng',
+            Constant::TXN_BANK_TIMEOUT => 'Thời gian thực hiện giao dịch quá lâu',
+            Constant::TXN_BANK_PENDING => 'Giao dịch chờ xử lý',
+        );
+        return isset($arr[$code]) ? $arr[$code] : 'Giao dịch chờ xử lý';
+    }
 }

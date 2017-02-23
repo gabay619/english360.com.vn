@@ -56,7 +56,7 @@ class Constant
     const FACEBOOK_APP_KEY = '4e2fd0ebbaacbaca83e713c966d1969d';
     const CASH_NAME = 'Ecoin';
     
-    //Txn
+    //Txn Card
     const TXN_CARD_SUCCESS = 1;
     const TXN_CARD_USED = 2;
     const TXN_CARD_PENDING = 0;
@@ -70,4 +70,21 @@ class Constant
     const CARD_TYPE_VIETTEL = 'VTE';
     const CARD_TYPE_MOBIFONE = 'VMS';
     const CARD_TYPE_VINAPHONE = 'VNP';
+    //Txn Bank
+    const TXN_BANK_SUCCESS = 1;
+    const TXN_BANK_REFUSE = 2;
+    const TXN_BANK_INVALID = 3;
+    const TXN_BANK_USER_ERROR = 4;
+    const TXN_BANK_ERROR = 5;
+    const TXN_BANK_ACCOUNT_NOT_ENOUGH = 6;
+    const TXN_BANK_FAIL = 7;
+    const TXN_BANK_WRONG_INFO = 8;
+    const TXN_BANK_NOT_INTERNETBANKING = 9;
+    const TXN_BANK_ERROR_OTP = 10;
+    const TXN_BANK_OVER_LIMIT = 11;
+    const TXN_BANK_TIMEOUT = 12;
+    const TXN_BANK_PENDING = 13;
+    const BANK_TO_CASH = 1/1000;
+
+
 }
