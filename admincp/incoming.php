@@ -46,6 +46,7 @@ switch($act){
 	case 'sendMail': sendMail(); break;
     case 'uploadExcel': uploadExcel(); break;
     case 'sendSMS': sendSMS(); break;
+    case 'recheckCard': recheckCard(); break;
 }
 function sport_getteam(){
     global $dbmg;
@@ -686,6 +687,46 @@ function uploadExcel(){
         $ret= array('status'=>500,'mss'=>'File không tồn tại');
     }
     echo json_encode($ret);exit;
+}
+
+function recheckCard(){
+    global $dbmg;
+    $txncl = $dbmg->txn_card;
+    $logcl = $dbmg->log_txn_card;
+    $id = $_POST['id'];
+    $txn = $txncl->findOne(array('_id',$id));
+    if(!$txn){
+        $dtr['mss'] = 'Giao dịch không tồn tại';
+        echo json_encode($dtr);exit;
+    }
+
+    $log = $logcl->findOne(array('txn_id',$id));
+    if(!$log){
+        $dtr['mss'] = 'Log giao dịch không tồn tại';
+        echo json_encode($dtr);exit;
+    }
+
+    require_once __DIR__.'../sdk/1pay/OnePayClient.php';
+    $mpc = new OnePayClient();
+    $query = $mpc->recheck('', $txn['pin'], $txn['seri'], $logcl['provider_txn_id'], $txn['card_type']);
+    if($query['code'] == Constant::TXN_CARD_SUCCESS){
+        $set = array(
+            'response_code'=>Constant::TXN_CARD_SUCCESS,
+            'card_amount' => $query['card_amount']
+        );
+        $txncl->update(array('_id'=>$id), array('$set'=>$set));
+        $dtr['mss'] = 'Giao dịch thành công.';
+        echo json_encode($dtr);exit;
+    }elseif ($query['code'] != Constant::TXN_CARD_PENDING){
+        $set = array(
+            'response_code'=>$query['code']
+        );
+        $txncl->update(array('_id'=>$id), array('$set'=>$set));
+        $dtr['mss'] = $query['message'];
+    }else{
+        $dtr['mss'] = 'Giao dịch chờ xử lý';
+        echo json_encode($dtr);exit;
+    }
 }
 
 function uploadHssv(){

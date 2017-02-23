@@ -57,8 +57,17 @@ class Constant
     const CASH_NAME = 'Ecoin';
     
     //Txn
-    const TXN_CARD_RESPONSE_CODE_SUCCESS = 1;
-    const TXN_CARD_RESPONSE_CODE_FAIL = 2;
-    const TXN_CARD_RESPONSE_CODE_PENDING = 0;
+    const TXN_CARD_SUCCESS = 1;
+    const TXN_CARD_USED = 2;
+    const TXN_CARD_PENDING = 0;
+    const TXN_CARD_PROVIDER_ERROR = 3;
+    const TXN_CARD_LOCKED = 4;
+    const TXN_CARD_INVALID = 5;
+    const TXN_CARD_PIN_INVALID = 6;
+    const TXN_CARD_SERI_INVALID = 6;
     const CARD_TO_CASH = 1/1000;
+    //Cardtype
+    const CARD_TYPE_VIETTEL = 'VTE';
+    const CARD_TYPE_MOBIFONE = 'VMS';
+    const CARD_TYPE_VINAPHONE = 'VNP';
 }

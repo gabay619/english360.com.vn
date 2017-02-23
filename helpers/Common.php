@@ -779,4 +779,26 @@ class Common
         $char = stripos($_SERVER['HTTP_USER_AGENT'],"iPhone") ? '&' : '?';
         return 'sms:'.$to.$char.'body='.$body;
     }
+    
+    public static function getCardType(){
+        return array(
+            Constant::CARD_TYPE_VIETTEL => 'Viettel',
+            Constant::CARD_TYPE_MOBIFONE => 'Mobifone',
+            Constant::CARD_TYPE_VINAPHONE => 'Vinaphone'
+        );
+    }
+
+    public static function getTxnCardMss($code){
+        $arr = array(
+            Constant::TXN_CARD_SUCCESS => 'Thành công',
+            Constant::TXN_CARD_USED => 'Thẻ đã sử dụng',
+            Constant::TXN_CARD_PENDING => 'Chờ xử lý',
+            Constant::TXN_CARD_PROVIDER_ERROR => 'Lỗi hệ thống',
+            Constant::TXN_CARD_LOCKED => 'Thẻ bị khóa',
+            Constant::TXN_CARD_INVALID => 'Thẻ không hợp lệ',
+            Constant::TXN_CARD_PIN_INVALID => 'Mã thẻ không hợp lệ',
+            Constant::TXN_CARD_SERI_INVALID => 'Số seri không hợp lệ'
+        );
+        return isset($arr[$code]) ? $arr[$code] : 'Chờ xử lý';
+    }
 }

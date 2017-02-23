@@ -36,6 +36,11 @@ $module[] = array("name"=>"SMS","key"=>"sms","controller"=>"controller/sms/index
         array("name"=>"Gửi sms cho user","key"=>"sms_new"),
     )
 );
+$module[] = array("name"=>"Thanh toán","key"=>"txn","controller"=>"controller/txn/index.php","permission"=>
+    array(
+        array("name"=>"Quản lý thẻ cào","key"=>"txn_card"),
+    )
+);
 
 $module[] = array("name"=>"Giao tiếp cơ bản","key"=>"gtcb","controller"=>"controller/gtcb/index.php","permission"=>
     array(

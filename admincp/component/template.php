@@ -38,7 +38,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.php">English360</a>
+            <a class="navbar-brand" href="index.php">ADMIN</a>
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
@@ -99,6 +99,14 @@
                 </li>
                 <?php if(acceptpermiss("email")) { ?><li class="<?php echo $act=="email"?"active":"" ?>"><a href="?act=email">Email</a></li><?php } ?>
                 <?php if(acceptpermiss("sms")) { ?><li class="<?php echo $act=="sms"?"active":"" ?>"><a href="?act=sms">SMS</a></li><?php } ?>
+                <?php if(acceptpermiss("txn")) { ?>
+                <li class="dropdown <?php echo in_array($act,array("txn"))?"active":"" ?>">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Thanh toán <span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <?php if(acceptpermiss("txn_card")) { ?><li class="<?php echo $tact=="txn_card"?"active":"" ?>"><a href="?act=txn&tact=txn_card">Thẻ cào</a></li><?php } ?>
+                    </ul>
+                </li>
+                <?php } ?>
                 <li class="dropdown <?php echo in_array($act,array("user_manage","role_manage"))?"active":"" ?>">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">Hệ thống<span class="caret"></span></a>
                     <ul role="menu" class="dropdown-menu">

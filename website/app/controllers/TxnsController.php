@@ -7,15 +7,20 @@ class TxnsController extends \BaseController {
     }
 
     public function getCharge(){
-        $listCardType = array(
-            ''=>'--Loại thẻ--',
-            'VTE' => 'Viettel',
-            'VMS' => 'Mobifone',
-            'VNP' => 'Vinaphone'
-        );
+        $listCardType = Common::getCardType();
+        $listCardType[''] = '--Chọn loại thẻ--';
         return View::make('txns.charge', array(
             'listCardType' => $listCardType
         ));
+    }
+
+    public function getTest(){
+        $type = 'VTE';
+        $pin = '0555779568737';
+        $seri = '57823615867';
+        require_once app_path('../../sdk/1pay/OnePayClient.php');
+        $mpc = new OnePayClient();
+        print_r($mpc->recheck('', $pin,  $seri, '0016146259', $type));
     }
 
     public function postChargeCard(){
@@ -25,6 +30,7 @@ class TxnsController extends \BaseController {
         //Lưu giao dịch thẻ cào
         $txn = new TxnCard;
         $txn->_id = strval(time());
+        $txn->datecreate = time();
         $txn->uid = Auth::user()->id;
         $txn->card_type = $cardType;
         $txn->pin = $pin;
@@ -34,17 +40,17 @@ class TxnsController extends \BaseController {
         }
 
         //Gọi sang cổng thẻ cào
-        $true_card = '65682321546';
+        $true_card = array('65682321546');
         if(in_array($txn->pin, $true_card)){
-            list($response_code,$card_amount,$response_message)=array(Constant::TXN_CARD_RESPONSE_CODE_SUCCESS,10000,'success');
+            list($response_code,$card_amount,$response_message)=array(Constant::TXN_CARD_SUCCESS,10000,'success');
         }else{
-            list($response_code,$card_amount,$response_message)=$this->_doCharge($txn);
+            list($response_code,$card_amount,$response_message)=$this->_doChargeCard($txn);
         }
 
         //Xử lý kết quả trả về
         $txn->card_amount=$card_amount;
         $txn->response_code=$response_code;
-        if($response_code==Constant::TXN_CARD_RESPONSE_CODE_SUCCESS){
+        if($response_code==Constant::TXN_CARD_SUCCESS){
             $this->_onCardSuccess($txn);
             return Redirect::back()->with('success','Nạp thẻ thành công');
         }else{
@@ -54,12 +60,13 @@ class TxnsController extends \BaseController {
 //        return Redirect::back()->with('error','Thẻ không hợp lệ.')->withInput();
     }
 
-    private function _doCharge(Txn $txn){
-        $provider = 'Baokim';
+    private function _doChargeCard(TxnCard $txn){
+        $provider = '1pay';
         //Lưu log
         $log = new LogTxnCard();
         $log->_id = strval(time());
         $log->txn_id = $txn->_id;
+        $log->datecreate = time();
         $log->card_type = $txn->card_type;
         $log->pin = $txn->pin;
         $log->seri = $txn->seri;
@@ -68,12 +75,12 @@ class TxnsController extends \BaseController {
             throw new Exception('DB error while storing card log');
         }
 
-        if($provider == 'Baokim'){
-            require_once app_path('../../sdk/baokim/BaokimClient.php');
-            $mpc = new BaokimClient();
+        if($provider == '1pay'){
+            require_once app_path('../../sdk/1pay/OnePayClient.php');
+            $mpc = new OnePayClient();
         }else{
-            require_once app_path('/libs/maxpay/MaxpayClient.php');
-            $mpc = new MaxpayClient();
+            require_once app_path('../../sdk/baokim/BaoKimClient.php');
+            $mpc = new BaoKimClient();
         }
 
         $rs = $mpc->charge($log->merchant_txn_id, $txn->card_type, $txn->pin, $txn->seri);
@@ -82,21 +89,12 @@ class TxnsController extends \BaseController {
         $log->response_code = $rs['code'];
         $log->response_message = $rs['message'];
         $log->card_amount = isset($rs['card_amount']) ? $rs['card_amount'] : 0;
+        $log->provider_txn_id = $rs['transId'];
         if (!$log->save()) {
             throw new Exception('DB error while storing card log');
         }
 
-        switch ($rs['code']) {
-            case 1:
-                return array(Constant::TXN_CARD_RESPONSE_CODE_SUCCESS, $rs['card_amount'], $rs['message']);
-                break;
-            case 98:
-                return array(Constant::TXN_CARD_RESPONSE_CODE_PENDING, 0, $rs['message']);
-                break;
-            default:
-                return array(Constant::TXN_CARD_RESPONSE_CODE_FAIL, 0, $rs['message']);
-                break;
-        }
+        return array($rs['code'], $rs['card_amount'], Common::getTxnCardMss($rs['code']));
     }
 
     /**
