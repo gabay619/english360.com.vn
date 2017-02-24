@@ -62,8 +62,65 @@
                 }
             </script>
             {elseif condition="$type=='bank'"}
+            <div class="title_cate">
+                <a href="/charge.php">NẠP TIỀN TỪ NGÂN HÀNG</a>
+            </div>
+            <div class="content_items">
+                <p>Bạn hiện có <b style="color: #f4333c" class="check_cash">0 Ecoin</b></p>
+                <form action="">
+                    <div class="ttcn_info block">
+                        <span class="error-notify red center"></span>
+                        <p>
+                            <span>Số tiền nạp (lớn hơn 10.000đ)</span>
+                            <input type="number" class="input1" name="amount" id="txtAmount">
+                        </p>
+                        <p class="p_button center">
+                            <button type="button" onclick="chargeBank()" class="btn_df btn_a" id="btnChargeBank">Thanh toán</button>
+                        </p>
+                    </div>
+                </form>
+            </div>
+            <script>
+                function chargeBank() {
+                    $('#btnChargeBank').hide();
+                    amount = $('#txtAmount').val();
+                    $.post('/incoming.php?act=charge_bank', {
+                        amount: amount
+                    }, function (re) {
+                        if(re.success){
+                            window.location.href = re.payUrl
+                        }else{
+                            $('.error-notify').html(re.mss)
+                        }
+                        $('#btnChargeBank').show();
+                    })
+
+                }
+            </script>
             {elseif condition="$type=='sms'"}
+            <div class="title_cate">
+                <a href="/charge.php">NẠP TIỀN SMS PLUS</a>
+            </div>
+            <div class="content_items">
+                <p>Bạn hiện có <b style="color: #f4333c" class="check_cash">0 Ecoin</b></p>
+                <form action="">
+                    <div class="ttcn_info block">
+                        <span class="error-notify red center">Tính năng đang xây dựng</span>
+                    </div>
+                </form>
+            </div>
             {elseif condition="$type=='api'"}
+            <div class="title_cate">
+                <a href="/charge.php">NẠP API OTP</a>
+            </div>
+            <div class="content_items">
+                <p>Bạn hiện có <b style="color: #f4333c" class="check_cash">0 Ecoin</b></p>
+                <form action="">
+                    <div class="ttcn_info block">
+                        <span class="error-notify red center">Tính năng đang xây dựng</span>
+                    </div>
+                </form>
+            </div>
             {/if}
         </div>
     </div>

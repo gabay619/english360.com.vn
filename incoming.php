@@ -1412,10 +1412,10 @@ function chargeCard(){
     $txncl->update(array('_id'=>$txn['_id']), array('$set'=>$setTxn));
     if($response_code==Constant::TXN_CARD_SUCCESS){
         //Cộng tiền cho user
-        $user = $usercl->findOne(array('_id'=>$_SESSION['uinfo']['_id']));
+        $user = $usercl->findOne(array('_id'=>$txn['uid']));
         $balance = isset($user['balance']) ? $user['balance'] : 0;
         $balance = $balance + $card_amount * Constant::CARD_TO_CASH;
-        $usercl->update(array('_id'=>$_SESSION['uinfo']['_id']), array('$set'=>array('balance'=>$balance)));
+        $usercl->update(array('_id'=>$txn['uid']), array('$set'=>array('balance'=>$balance)));
         $dtr['success'] = true;
         $dtr['mss'] = 'Nạp thẻ thành công';
     }else{
@@ -1424,13 +1424,40 @@ function chargeCard(){
     echo json_encode($dtr);exit;
 }
 
-function _doChargeCard(){
-
-}
-
 function chargeBank(){
     global $dbmg;
     $txncl = $dbmg->txn_bank;
+    $dtr['success'] = false;
+    if(!isset($_SESSION['uinfo'])){
+        $dtr['mss'] = 'Thao tác không hợp lệ.';
+        echo json_encode($dtr);exit;
+    }
+
+    $amount = $_POST['amount'];
+    if(!is_numeric($amount) || $amount<10000){
+        $dtr['mss'] = 'Số tiền cần nạp không hợp lệ.';
+        echo json_encode($dtr);exit;
+    }
+
+    $txn = array(
+        '_id' => strval(time()),
+        'datecreate' => time(),
+        'uid' => $_SESSION['uinfo']['_id'],
+        'amount' => $amount
+    );
+    $txncl->insert($txn);
+    require_once 'sdk/1pay/OnePayBank.php';
+    $mpc = new OnePayBank();
+    $order_id = $txn['_id'];
+    $order_info = $_SESSION['uinfo']['email'].' nap '.$amount.'d English360';
+    $payUrl = $mpc->getPayUrl($amount, $order_id, $order_info);
+    if(!$payUrl){
+        $dtr['mss'] = 'Có lỗi xảy ra, vui lòng thử lại sau.';
+        echo json_encode($dtr);exit;
+    }
+    $dtr['success'] = true;
+    $dtr['payUrl'] = $payUrl;
+    echo json_encode($dtr);exit;
 }
 
 function test(){
