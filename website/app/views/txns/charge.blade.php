@@ -27,7 +27,7 @@
                     <p class="text-danger" id="ajaxBankMss"></p>
                     @include('layouts._messages')
                     {{Form::open(array('url' => '#'))}}
-                    <p>{{Form::number('amount', Input::get('amount'), array('class'=>'input_3', 'placeholder'=>'Số tiền cần nạp (lớn hơn 10.000đ)', 'required','id'=>'numAmount'))}}</p>
+                    <p>{{Form::number('amount', Input::get('amount'), array('class'=>'input_3', 'placeholder'=>'Số tiền cần nạp (ít nhất 10.000đ)', 'required','id'=>'numAmount'))}}</p>
                     <p>
                         <button class="btn_x btn_blue btn_padding bold" onclick="chargeBank()" type="button">
                             Thanh toán

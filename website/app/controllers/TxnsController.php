@@ -196,6 +196,9 @@ class TxnsController extends \BaseController {
         $log = Input::all();
         $log['_id'] = strval(time());
         LogTxnBank::insert($log);
+        if(!isset($log['order_id'])){
+            return Redirect::to('/thong-bao.html')->with('error','Giao dịch thất bại');
+        }
         $rs = $mpc->exeResult($log);
         //Log
 

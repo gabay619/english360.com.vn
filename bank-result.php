@@ -17,6 +17,11 @@ $mpc = new OnePayBank();
 $log = $_GET;
 $log['_id'] = strval(time());
 $logcl->insert($log);
+if(!isset($log['order_id'])){
+    $_SESSION['flash_mss'] = 'Giao dịch thất bại.';
+    header('Location: thong-bao.php');exit;
+}
+
 $rs = $mpc->exeResult($log);
 
 //Xử lý kết quả trả về

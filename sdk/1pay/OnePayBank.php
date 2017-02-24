@@ -47,6 +47,9 @@ class OnePayBank
     }
 
     public function exeResult($input){
+        if(!isset($input['order_id'])) $input['order_id'] = '';
+        if(!isset($input['response_code'])) $input['response_code'] = '';
+        if(!isset($input['response_message'])) $input['response_message'] = '';
         $result = array('id'=>$input['order_id']);
         if($input['response_code'] == self::SUCCESS_CODE){
             $postRs = $this->_postResult($input['trans_ref']);
