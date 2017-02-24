@@ -39,6 +39,7 @@ $module[] = array("name"=>"SMS","key"=>"sms","controller"=>"controller/sms/index
 $module[] = array("name"=>"Thanh toán","key"=>"txn","controller"=>"controller/txn/index.php","permission"=>
     array(
         array("name"=>"Quản lý thẻ cào","key"=>"txn_card"),
+        array("name"=>"Quản lý giao dịch bank","key"=>"txn_bank"),
     )
 );
 

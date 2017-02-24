@@ -2,7 +2,6 @@
 $title = "Quản lý giao dịch thẻ cào";
 $txncl = $dbmg->txn_card;
 $usercl = $dbmg->user;
-$txncl->remove(array('_id'=>array('$in'=>array('1487821522','1487821489'))));
 //$newscl = $dbmg->news;
 #condition
 $limit = 25;
@@ -60,9 +59,6 @@ $list = $cursor->skip($cp)->limit($limit);
     <div class="clearfix"></div>
 <?php include "component/message.php"; ?>
     <div class="row">
-        <div class="col-xs-3 text-left">
-            <?php if(acceptpermiss("news_insert")) { ?><a href="<?php echo cpagerparm("tact,id,status") ?>tact=addnew">Thêm mới</a><?php }?>
-        </div>
         <div class="col-xs-12">
             <form action="" method="get" class="form-inline">
                 <?php foreach($_GET as $key=>$val) if(!in_array($key,array("q","status","id","p"))) {?> <input type="hidden" name="<?php echo $key ?>" value="<?php echo $val ?>" /> <?php } ?>
@@ -121,7 +117,7 @@ $list = $cursor->skip($cp)->limit($limit);
                     <td><?php echo $item['seri'] ?></td>
                     <td><?php echo number_format($item['card_amount']) ?></td>
                     <td><?php echo date("d-m-Y H:i:s", $item['datecreate']) ?></td>
-                    <td><?php echo $item['response_code'] == Constant::TXN_CARD_SUCCESS ? 'Thành công' : ($item['response_code'] == Constant::TXN_CARD_PENDING ? 'Chờ xử lý' : 'Thất bại')  ?></td>
+                    <td><?php echo $item['response_code'] == Constant::TXN_CARD_SUCCESS ? '<b class="text-success">Thành công</b>' : ($item['response_code'] == Constant::TXN_CARD_PENDING ? '<b class="text-info">Chờ xử lý</b>' : '<b class="text-danger">Thất bại</b>')  ?></td>
                     <td>
                         <?php if($item['response_code']==Constant::TXN_CARD_PENDING) { ?><button onclick="recheck('<?php echo $item['_id']?>')">Recheck<?php }?>
                     </td>

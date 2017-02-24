@@ -8,8 +8,8 @@
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#card" data-toggle="tab">Thẻ cào</a></li>
                 <li><a href="#bank" data-toggle="tab">Banking</a></li>
-                <li><a href="#method3" data-toggle="tab">Method 3</a></li>
-                <li><a href="#method4" data-toggle="tab">Method 4</a></li>
+                <li><a href="#sms" data-toggle="tab">SMS PLUS</a></li>
+                <li><a href="#otp" data-toggle="tab">API OTP</a></li>
             </ul>
             <div class="tab-content" style="padding: 20px; border-top: none">
                 <div id="card" class="tab-pane fade in active">
@@ -35,12 +35,12 @@
                     </p>
                     {{Form::close()}}
                 </div>
-                <div id="method3" class="tab-pane fade">
-                    <h3>Method 3</h3>
+                <div id="sms" class="tab-pane fade">
+                    <h3>SMS PLUS</h3>
                     <p>Đang xây dựng.</p>
                 </div>
-                <div id="method4" class="tab-pane fade">
-                    <h3>Method 4</h3>
+                <div id="otp" class="tab-pane fade">
+                    <h3>API OTP</h3>
                     <p>Đang xây dựng.</p>
                 </div>
             </div>

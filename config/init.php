@@ -26,81 +26,81 @@ if(($detechMobile && $version!='web') || $version == 'wap' || isset($onWap)) {
 //    include "config/autoload.php";
     include "config/rain.tpl.class.php";
     //detect 3g
-    if(Network::is3g() && Network::is3gmobifone()){
-        $phone = Network::is3g();
-        include "connect.php";
-        if(!isset($_SESSION['uinfo']) || $_SESSION['uinfo']['phone'] != $phone){
-            $usercl = $dbmg->user;
-            $user = $usercl->findOne(array('phone' => $phone));
-            if(!$user){
-                $password = Common::generateRandomPassword();
-                $newUser = array(
-                        '_id' => strval(time()),
-                        'phone' => $phone,
-                        'un_password' => $password,
-                        'password' => Common::encryptpassword($password),
-                        'datecreate' => time(),
-                        'status' => Constant::STATUS_ENABLE,
-                        'fullname'=>'',
-                        'email'=> '',
-                        'cmnd'=> '',
-                        'cmnd_ngaycap'=>'',
-                        'cmnd_noicap'=>'',
-                        'birthday'=>'',
-                        'priavatar'=>'',
-                        'thong_bao' => array(
-                            'noti' => "1",
-                            'sms' => "1",
-                            'email' => "1",
-                        )
-                );
-                $usercl->insert($newUser);
-            }
-            $o = (array) $usercl->findOne(array('phone'=>$phone));
-            $_SESSION['uinfo'] = $o;
-        }
-        //log
-        $logCl = $dbmg->log;
-        $date = date('d/m/Y');
-        $logTime = $logCl->findOne(array('date'=>$date));
-        if($logTime){
-            $logCl->update(array('date'=>$date), array('$set'=>array('total'=>$logTime['total']+1)));
-
-        }else{
-            $newLog = array(
-                    'date' => $date,
-                    'chanel' => 'wap',
-                    'total' => 1
-            );
-            $logCl->insert($newLog);
-        }
-        //log3g
-        $log3gCl = $dbmg->log3g;
-        $useragent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
-        $newLog3g = array(
-                '_id' => strval(time()),
-                'phone' => $phone,
-                'ip' => Network::ip(),
-                'chanel' => 'WAP',
-                'useragent' => $useragent,
-                'status' => Constant::STATUS_ENABLE,
-                'datecreate' => time()
-        );
-        $log3gCl->insert($newLog3g);
-    }elseif(Network::is3g() && !Network::is3gmobifone()){
-        $log3gCl = $dbmg->log3g;
-        $useragent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
-        $newLog3g = array(
-                '_id' => strval(time()),
-                'phone' => $phone,
-                'ip' => Network::ip(),
-                'chanel' => 'WAP',
-                'useragent' => $useragent,
-                'status' => Constant::STATUS_DISABLE,
-                'datecreate' => time()
-        );
-        $log3gCl->insert($newLog3g);
-    }
+//    if(Network::is3g() && Network::is3gmobifone()){
+//        $phone = Network::is3g();
+//        include "connect.php";
+//        if(!isset($_SESSION['uinfo']) || $_SESSION['uinfo']['phone'] != $phone){
+//            $usercl = $dbmg->user;
+//            $user = $usercl->findOne(array('phone' => $phone));
+//            if(!$user){
+//                $password = Common::generateRandomPassword();
+//                $newUser = array(
+//                        '_id' => strval(time()),
+//                        'phone' => $phone,
+//                        'un_password' => $password,
+//                        'password' => Common::encryptpassword($password),
+//                        'datecreate' => time(),
+//                        'status' => Constant::STATUS_ENABLE,
+//                        'fullname'=>'',
+//                        'email'=> '',
+//                        'cmnd'=> '',
+//                        'cmnd_ngaycap'=>'',
+//                        'cmnd_noicap'=>'',
+//                        'birthday'=>'',
+//                        'priavatar'=>'',
+//                        'thong_bao' => array(
+//                            'noti' => "1",
+//                            'sms' => "1",
+//                            'email' => "1",
+//                        )
+//                );
+//                $usercl->insert($newUser);
+//            }
+//            $o = (array) $usercl->findOne(array('phone'=>$phone));
+//            $_SESSION['uinfo'] = $o;
+//        }
+//        //log
+//        $logCl = $dbmg->log;
+//        $date = date('d/m/Y');
+//        $logTime = $logCl->findOne(array('date'=>$date));
+//        if($logTime){
+//            $logCl->update(array('date'=>$date), array('$set'=>array('total'=>$logTime['total']+1)));
+//
+//        }else{
+//            $newLog = array(
+//                    'date' => $date,
+//                    'chanel' => 'wap',
+//                    'total' => 1
+//            );
+//            $logCl->insert($newLog);
+//        }
+//        //log3g
+//        $log3gCl = $dbmg->log3g;
+//        $useragent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
+//        $newLog3g = array(
+//                '_id' => strval(time()),
+//                'phone' => $phone,
+//                'ip' => Network::ip(),
+//                'chanel' => 'WAP',
+//                'useragent' => $useragent,
+//                'status' => Constant::STATUS_ENABLE,
+//                'datecreate' => time()
+//        );
+//        $log3gCl->insert($newLog3g);
+//    }elseif(Network::is3g() && !Network::is3gmobifone()){
+//        $log3gCl = $dbmg->log3g;
+//        $useragent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
+//        $newLog3g = array(
+//                '_id' => strval(time()),
+//                'phone' => $phone,
+//                'ip' => Network::ip(),
+//                'chanel' => 'WAP',
+//                'useragent' => $useragent,
+//                'status' => Constant::STATUS_DISABLE,
+//                'datecreate' => time()
+//        );
+//        $log3gCl->insert($newLog3g);
+//    }
     $templatedir = $config['template']['mobile']['folder'];
     $sourcedir = $config['template']['mobile']['path'];
     raintpl::$tpl_dir = $sourcedir; // template directory

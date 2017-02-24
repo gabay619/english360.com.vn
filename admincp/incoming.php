@@ -47,6 +47,7 @@ switch($act){
     case 'uploadExcel': uploadExcel(); break;
     case 'sendSMS': sendSMS(); break;
     case 'recheckCard': recheckCard(); break;
+    case 'getLogBank': getLogBank(); break;
 }
 function sport_getteam(){
     global $dbmg;
@@ -727,6 +728,15 @@ function recheckCard(){
         $dtr['mss'] = 'Giao dịch chờ xử lý';
         echo json_encode($dtr);exit;
     }
+}
+
+function getLogBank(){
+    global $dbmg;
+    $logcl = $dbmg->log_txn_bank;
+    $id = $_POST['id'];
+    $log = $logcl->findOne(array('order_id'=>$id));
+//    $dtr['mss'] = json_encode($log);
+    echo json_encode($log);exit;
 }
 
 function uploadHssv(){
