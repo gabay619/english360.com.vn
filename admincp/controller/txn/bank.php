@@ -95,7 +95,7 @@ $list = $cursor->skip($cp)->limit($limit);
                 <td><?php echo number_format($item['amount']) ?></td>
                 <td><?php echo isset($item['card_type']) ? $item['card_type'] : $item['card_type'] ?></td>
                 <td><?php echo date("d-m-Y H:i:s", $item['datecreate']) ?></td>
-                <td><?php echo $item['response_code'] == Constant::TXN_BANK_SUCCESS ? '<b class="text-success">Thành công</b>' : ($item['response_code'] == Constant::TXN_BANK_PENDING ? '<b class="text-info">Chờ xử lý</b>' : '<b class="text-danger">Thất bại</b>')  ?></td>
+                <td><?php echo $item['response_code'] == Constant::TXN_BANK_SUCCESS ? '<b class="text-success">Thành công</b>' : ($item['response_code'] == Constant::TXN_BANK_PENDING ? '<b class="text-info">Chờ xử lý</b>' : '<b class="text-danger">'.Common::getTxnBankMss($item['response_code']).'</b>')  ?></td>
                 <td>
                     <button class="btn btn-default btn-sm" onclick="getLog('<?php echo $item['_id']?>')" type="button">Log</button>
                 </td>

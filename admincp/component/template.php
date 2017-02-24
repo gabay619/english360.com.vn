@@ -104,6 +104,7 @@
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">Thanh toán <span class="caret"></span></a>
                     <ul role="menu" class="dropdown-menu">
                         <?php if(acceptpermiss("txn_card")) { ?><li class="<?php echo $tact=="txn_card"?"active":"" ?>"><a href="?act=txn&tact=txn_card">Thẻ cào</a></li><?php } ?>
+                        <?php if(acceptpermiss("txn_bank")) { ?><li class="<?php echo $tact=="txn_bank"?"active":"" ?>"><a href="?act=txn&tact=txn_bank">Ngân hàng</a></li><?php } ?>
                     </ul>
                 </li>
                 <?php } ?>

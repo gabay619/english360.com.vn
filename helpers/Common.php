@@ -818,6 +818,6 @@ class Common
             Constant::TXN_BANK_TIMEOUT => 'Thời gian thực hiện giao dịch quá lâu',
             Constant::TXN_BANK_PENDING => 'Giao dịch chờ xử lý',
         );
-        return isset($arr[$code]) ? $arr[$code] : 'Giao dịch chờ xử lý';
+        return isset($arr[$code]) ? $arr[$code] : 'Giao dịch thất bại';
     }
 }
