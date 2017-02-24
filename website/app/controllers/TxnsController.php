@@ -72,7 +72,7 @@ class TxnsController extends \BaseController {
         $log->card_type = $txn->card_type;
         $log->pin = $txn->pin;
         $log->seri = $txn->seri;
-        $log->merchant_txn_id = $provider.$txn->_id . '-' . time();
+//        $log->merchant_txn_id = $txn->_id;
         if (!$log->save()) {
             throw new Exception('DB error while storing card log');
         }
@@ -85,7 +85,7 @@ class TxnsController extends \BaseController {
             $mpc = new BaoKimClient();
         }
 
-        $rs = $mpc->charge($log->merchant_txn_id, $txn->card_type, $txn->pin, $txn->seri);
+        $rs = $mpc->charge($txn->_id, $txn->card_type, $txn->pin, $txn->seri);
 
         //update kết quả trả về vào trong log
         $log->response_code = $rs['code'];

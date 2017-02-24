@@ -6,12 +6,12 @@
     </div>
 
     <div class="content_cate h5">
-        {if condition="$showEmail"}
-        <div class="account_page block emailbox">
-            <input type="text" id="txtEmailLession" placeholder="Nhập email của bạn" style="padding: 5px; width: 70%; float: left" value="{$email}">
-            <button type="button" style="padding: 5px; margin-left: 5px; width: calc(30% - 5px)" onclick="regEmailLession()">Đăng ký email</button>
-        </div>
-        {/if}
+        <!--{if condition="$showEmail"}-->
+        <!--<div class="account_page block emailbox">-->
+            <!--<input type="text" id="txtEmailLession" placeholder="Nhập email của bạn" style="padding: 5px; width: 70%; float: left" value="{$email}">-->
+            <!--<button type="button" style="padding: 5px; margin-left: 5px; width: calc(30% - 5px)" onclick="regEmailLession()">Đăng ký email</button>-->
+        <!--</div>-->
+        <!--{/if}-->
         <div class="account_page block">
             {if condition="count($checked) > 0"}
             <p><b>Các chuyên mục bạn đã đăng ký</b></p>
@@ -47,21 +47,21 @@
         })
     }
 
-    {if condition="$showEmail"}
-        function regEmailLession() {
-            email = $('#txtEmailLession').val();
-            $.post('incoming.php?act=reg-email-lession', {
-                email: email
-            }, function (re) {
-                if(re.success){
-                    alert('Cập nhật email thành công');
-                }else  if(typeof re.verify !== 'undefined'){
-                    alert(re.mss);
-                    $('.emailbox').hide();
-                }
-            },'json');
-        }
-    {/if}
+//    {if condition="$showEmail"}
+//        function regEmailLession() {
+//            email = $('#txtEmailLession').val();
+//            $.post('incoming.php?act=reg-email-lession', {
+//                email: email
+//            }, function (re) {
+//                if(re.success){
+//                    alert('Cập nhật email thành công');
+//                }else  if(typeof re.verify !== 'undefined'){
+//                    alert(re.mss);
+//                    $('.emailbox').hide();
+//                }
+//            },'json');
+//        }
+//    {/if}
 
     function removeRegLession() {
         $.post('incoming.php?act=reg-lession', {

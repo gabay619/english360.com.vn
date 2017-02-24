@@ -1,6 +1,7 @@
 <div class="main">
     <div class="content_cate p5">
         <div class="item_cate">
+
             <div class="center hello">Xin chào, {function="getFullDisplayName($SESSION.uinfo)"}</div>
             <div class="content_items taikhoan">
                 {if condition="$result==1"}
@@ -8,16 +9,16 @@
                 {else}
                 <a href="/regispack.php" class="ht">Đăng ký gói cước</a>
                 {/if}
+                <a href="charge.php" class="ht">Nạp {function="Constant::CASH_NAME"}</a>
                 <a href="setup.php" class="ht">Cài đặt riêng tư</a>
                 <a href="saveexam.php" class="ht">Bài học đã lưu</a>
                 <a href="reg-lession.php" class="ht">Đăng ký bài học</a>
                 <a href="yourfaq.php" class="ht">Câu hỏi của bạn</a>
                 <a href="notify.php" class="ht your-notify">Thông báo của bạn </a>
-                {if condition="!$is3g"}
                 <a href="logout.php" class="ht">Thoát</a>
-                {/if}
             </div>
             <div class="clearfix"></div>
+
         </div>
     </div>
 </div>

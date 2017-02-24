@@ -38,20 +38,6 @@
     <div id="dialog-trans" title="Tra từ">
         <div id="content_result"></div>
     </div>
-    <script>
-//        $(function(){
-//            $( "#dialog-trans" ).dialog({
-//                autoOpen: false,
-//                modal:true,
-//                closeOnEscape: true,
-//                draggable: false,
-//                width:450,
-//                create: function() {
-//                    $(this).css("maxHeight", 600);
-//                }
-//            });
-//        });
-    </script>
 <div class="header">
     <ul>
         <li class="left sidebar"><a id="sib_btn" href="javascript:void(0)" title=""></a></li>
@@ -130,6 +116,7 @@
 <script>
     $(function(){
         countNotify();
+        checkCash();
     })
 
     function countNotify(){
@@ -139,6 +126,15 @@
                 $('.tk_box_link_hi').append(htmlx);
                 var htmlx2 = '<span class="count_notification" style="float: none; display: inline-block">'+res.count+'</span>'
                 $('.your-notify').append(htmlx2);
+            }
+
+        })
+    }
+
+    function checkCash() {
+        $.post('incoming.php?act=check_cash', {}, function(res){
+            if(res.status==200){
+                $('.check_cash').html(res.info);
             }
 
         })

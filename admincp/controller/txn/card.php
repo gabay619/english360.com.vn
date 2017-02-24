@@ -117,7 +117,7 @@ $list = $cursor->skip($cp)->limit($limit);
                     <td><?php echo $item['seri'] ?></td>
                     <td><?php echo number_format($item['card_amount']) ?></td>
                     <td><?php echo date("d-m-Y H:i:s", $item['datecreate']) ?></td>
-                    <td><?php echo $item['response_code'] == Constant::TXN_CARD_SUCCESS ? '<b class="text-success">Thành công</b>' : ($item['response_code'] == Constant::TXN_CARD_PENDING ? '<b class="text-info">Chờ xử lý</b>' : '<b class="text-danger">Thất bại</b>')  ?></td>
+                    <td><?php echo $item['response_code'] == Constant::TXN_CARD_SUCCESS ? '<b class="text-success">Thành công</b>' : ($item['response_code'] == Constant::TXN_CARD_PENDING ? '<b class="text-info">Chờ xử lý</b>' : '<b class="text-danger">'.Common::getTxnCardMss($item['response_code']).'</b>')  ?></td>
                     <td>
                         <?php if($item['response_code']==Constant::TXN_CARD_PENDING) { ?><button onclick="recheck('<?php echo $item['_id']?>')">Recheck<?php }?>
                     </td>

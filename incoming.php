@@ -53,6 +53,9 @@ switch($act){
     case 'test': test(); break;
     case 'removeEvent': removeEvent(); break;
     case 'regEvent': regEvent(); break;
+    case 'check_cash': checkCash(); break;
+    case 'charge_card': chargeCard(); break;
+    case 'charge_bank': chargeBank(); break;
 
 }
 function cancelpack(){
@@ -1241,25 +1244,6 @@ function regEvent(){
         echo json_encode($dtr);exit;
     }
     if(isset($_SESSION['uinfo']['phone'])){
-//        $user = $usercl->findOne(array('_id'=>$_SESSION['uinfo']['_id']));
-//        $eventUser = $eucl->findOne(array('eid'=>$eventId, 'uid'=>$_SESSION['uinfo']['_id']));
-//        if(!$eventUser){
-//            $eucl->insert(array(
-//                '_id' => strval(time()),
-//                'datecreate' => time(),
-//                'uid' => $_SESSION['uinfo']['_id'],
-//                'eid' => $eventId
-//            ));
-//            $start = time();
-//            $end = $start + $event['free_day']*24*60*60;
-//            $mtcontent = str_replace(array('{phone}','{pass}','{start}','{end}'), array($user['phone'], $user['un_password'],date('d/m/Y',$start), date('d/m/Y',$end)), $event['contentMT']);
-//            $rs = Network::sentMT($_SESSION['uinfo']['phone'], 'DKKM', $mtcontent);
-//            if($rs != 0){
-//                $dtr['mss'] = 'Không thể gửi tin nhắn đến số điện thoại của bạn. Vui lòng thử lại sau.';
-//                echo json_encode($dtr);exit;
-//            }
-//        }
-
         $dtr['success'] = true;
         $dtr['mss'] = '<p>Cảm ơn bạn đã tham gia Chương trình Khuyến mại của English360.</p>
         <p>Tài khoản miễn phí đã được gửi về số điện thoại của bạn</p>';
@@ -1344,6 +1328,109 @@ function regEvent(){
         <p>Tài khoản miễn phí đã được gửi về địa chỉ email của bạn. Vui lòng kiểm tra email và làm theo hướng dẫn.</p>';
         echo json_encode($dtr);exit;
     }
+}
+
+function checkCash(){
+    global $dbmg;
+    $usercl = $dbmg->user;
+    $dtr['status'] = 500;
+    if(!isset($_SESSION['uinfo'])){
+        echo json_encode($dtr);exit;
+    }
+
+    $user = $usercl->findOne(array('_id'=>$_SESSION['uinfo']['_id']));
+    if(!$user){
+        echo json_encode($dtr);exit;
+    }
+    $balance = isset($user['balance']) ? $user['balance'] : 0 ;
+    $dtr['status'] = 200;
+    $dtr['info'] = $balance.' '.Constant::CASH_NAME;
+    $dtr['user'] = $user;
+    echo json_encode($dtr);exit;
+}
+
+function chargeCard(){
+    global $dbmg;
+    $txncl = $dbmg->txn_card;
+    $logcl = $dbmg->log_txn_card;
+    $usercl = $dbmg->user;
+    $dtr['success'] = false;
+    if(!isset($_SESSION['uinfo'])){
+        $dtr['mss'] = 'Thao tác không hợp lệ.';
+        echo json_encode($dtr);exit;
+    }
+
+    $pin = $_POST['pin'];
+    $seri = $_POST['seri'];
+    $card_type = $_POST['card_type'];
+    if(empty($pin) || empty($seri) || empty($card_type)){
+        $dtr['mss'] = 'Vui lòng nhập đủ thông tin';
+        echo json_encode($dtr);exit;
+    }
+
+    $txn = array(
+        '_id' =>strval(time()),
+        'datecreate' =>time(),
+        'uid' => $_SESSION['uinfo']['_id'],
+        'card_type' => $card_type,
+        'pin' => $pin,
+        'seri' => $seri
+    );
+    $txncl->insert($txn);
+
+    //Gọi sang cổng thẻ cào
+    //Tạo log
+    $log = array(
+        '_id' => strval(time()),
+        'txn_id' => $txn['_id'],
+        'datecreate' => time(),
+        'card_type' => $card_type,
+        'pin' => $pin,
+        'seri' => $seri
+    );
+    $logcl->insert($log);
+    require_once 'sdk/1pay/OnePayClient.php';
+    $mpc = new OnePayClient();
+    $rs = $mpc->charge($txn['_id'], $card_type, $pin, $seri);
+    //update kết quả trả về vào trong log
+    $setLog = array(
+        'response_code' => $rs['code'],
+        'response_message' => $rs['message'],
+        'card_amount' => isset($rs['card_amount']) ? $rs['card_amount'] : 0,
+        'provider_txn_id' => $rs['transId']
+    );
+    $logcl->update(array('_id'=>$log['_id']), array('$set'=>$setLog));
+
+    $response_code = $rs['code'];
+    $card_amount = $rs['card_amount'];
+    $response_message = Common::getTxnCardMss($rs['code']);
+    //Xử lý kết quả trả về
+    $setTxn = array(
+        'card_amount' => $card_amount,
+        'response_code' => $response_code
+    );
+    $txncl->update(array('_id'=>$txn['_id']), array('$set'=>$setTxn));
+    if($response_code==Constant::TXN_CARD_SUCCESS){
+        //Cộng tiền cho user
+        $user = $usercl->findOne(array('_id'=>$_SESSION['uinfo']['_id']));
+        $balance = isset($user['balance']) ? $user['balance'] : 0;
+        $balance = $balance + $card_amount * Constant::CARD_TO_CASH;
+        $usercl->update(array('_id'=>$_SESSION['uinfo']['_id']), array('$set'=>array('balance'=>$balance)));
+        $dtr['success'] = true;
+        $dtr['mss'] = 'Nạp thẻ thành công';
+    }else{
+        $dtr['mss'] = $response_message;
+    }
+    echo json_encode($dtr);exit;
+}
+
+function _doChargeCard(){
+
+}
+
+function chargeBank(){
+    global $dbmg;
+    $txncl = $dbmg->txn_bank;
 }
 
 function test(){

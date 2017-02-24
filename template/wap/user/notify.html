@@ -8,6 +8,7 @@
         <div class="account_page block">
             <div class="hoidap_list">
                 <ul>
+                    {if="$item"}
                     {loop="item"}
                     <li>
                         <a href="{$value.url}">
@@ -17,7 +18,9 @@
                         </a>
                     </li>
                     {/loop}
-
+                    {else}
+                    <li>Bạn không có thông báo nào</li>
+                    {/if}
                 </ul>
             </div>
         </div>
