@@ -695,16 +695,18 @@ class UsersController extends \BaseController {
 
     public function getPackage(){
         $user = Auth::user();
-        $checkPackage = Network::getUserInfo($user->phone,'E',$user->_id);
-        $eventUser = EventUser::where('uid',$user->_id)->first();
-        $event = false;
-        if($eventUser){
-            $event = EventModel::where('_id',$eventUser->eid)->first();
-        }
+//        $checkPackage = Network::getUserInfo($user->phone,'E',$user->_id);
+//        $eventUser = EventUser::where('uid',$user->_id)->first();
+//        $event = false;
+//        if($eventUser){
+//            $event = EventModel::where('_id',$eventUser->eid)->first();
+//        }
+        $packages = Package::where('status', Constant::STATUS_ENABLE)->get();
         return View::make('users.package', array(
-            'checkPackage' => $checkPackage,
-            'event' => $event,
-            'eventUser' => $eventUser
+            'packages' => $packages
+//            'checkPackage' => $checkPackage,
+//            'event' => $event,
+//            'eventUser' => $eventUser
         ));
     }
 
