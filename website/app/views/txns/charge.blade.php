@@ -2,7 +2,7 @@
 @section('content')
     <!--TAB CONTENT-->
     <div class="content_tab_text">
-        <p><strong class="notice_1 uppercase color_red mgb10">Bạn hiện có: {{Auth::user()->getBalance()}} {{Constant::CASH_NAME}}</strong></p>
+        <p><strong class="notice_1 uppercase color_red mgb10">Số dư của bạn: {{Auth::user()->getBalance()}} đ</strong></p>
         <div style="clear: both"></div>
         <div>
             <ul class="nav nav-tabs">

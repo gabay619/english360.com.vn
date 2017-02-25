@@ -43,6 +43,15 @@ $module[] = array("name"=>"Thanh toán","key"=>"txn","controller"=>"controller/t
     )
 );
 
+$module[] = array("name"=>"Gói cước","key"=>"package","controller"=>"controller/package/index.php","permission"=>
+    array(
+        array("name"=>"Xem thông tin gói cước","key"=>"package_view"),
+        array("name"=>"Thêm gói cước","key"=>"package_insert"),
+        array("name"=>"Sửa gói cước","key"=>"package_update"),
+        array("name"=>"Xóa gói cước","key"=>"package_delete"),
+    )
+);
+
 $module[] = array("name"=>"Giao tiếp cơ bản","key"=>"gtcb","controller"=>"controller/gtcb/index.php","permission"=>
     array(
         array("name"=>"Xem danh sách bài giảng","key"=>"gtcb_view"),

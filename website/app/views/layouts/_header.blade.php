@@ -117,11 +117,11 @@
                                 </div>
                             </div>
                             <div class="block notifi_user">
-                                Bạn có: <span style="font-weight: bold; color: #db2727">{{Auth::user()->getBalance()}} {{Constant::CASH_NAME}}</span>
-                                <a href="/txn/charge" class="btn btn-primary btn-sm" style="padding: 0px 5px;float: right;">Nạp {{Constant::CASH_NAME}}</a>
+                                {{Constant::CASH_NAME}} của bạn: <span style="font-weight: bold; color: #db2727">{{number_format(Auth::user()->getBalance())}}đ</span>
+                                {{--<a href="/txn/charge" class="btn btn-primary btn-sm" style="padding: 0px 5px;float: right;">Nạp {{Constant::CASH_NAME}}</a>--}}
                             </div>
                             <div class="block user_control_link">
-                                <a href="/user/package" title="">Đăng ký gói cước</a>
+                                <a href="/user/package" title="">Đăng ký khóa học</a>
                                 <a href="/user/reg-lession" title="">Đăng ký bài học</a>
                                 <a href="/user/profile" title="">Cài đặt riêng tư</a>
                                 <a href="/user/save-lession" title="">Bài học đã lưu</a>
@@ -158,20 +158,20 @@
             }
         });
         @if(Auth::user())
-        $('.userlink_btn').click(function(){
-                $.post('/user/load-unread-notify', {
-                    _token : '{{ csrf_token() }}'
-                }, function(result){
-                    $('.user_notification strong').html('('+result+')');
-                });
+        {{--$('.userlink_btn').click(function(){--}}
+                {{--$.post('/user/load-unread-notify', {--}}
+                    {{--_token : '{{ csrf_token() }}'--}}
+                {{--}, function(result){--}}
+                    {{--$('.user_notification strong').html('('+result+')');--}}
+                {{--});--}}
 
-                $.post('/user/check-package', {
-                    _token : '{{ csrf_token() }}'
-                }, function(result){
-                    if(result.success)
-                        $('.user_control_link a:first-child').html('Thông tin gói cước');
-                });
-        });
+                {{--$.post('/user/check-package', {--}}
+                    {{--_token : '{{ csrf_token() }}'--}}
+                {{--}, function(result){--}}
+                    {{--if(result.success)--}}
+                        {{--$('.user_control_link a:first-child').html('Thông tin gói cước');--}}
+                {{--});--}}
+        {{--});--}}
 
 
         @endif
