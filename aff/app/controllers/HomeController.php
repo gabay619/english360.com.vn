@@ -14,10 +14,18 @@ class HomeController extends BaseController {
 	|	Route::get('/', 'HomeController@showWelcome');
 	|
 	*/
-
-	public function showWelcome()
+	public function __construct()
 	{
-		return View::make('hello');
+		$this->beforeFilter('auth', array('only' => array(
+			'getDashboard',
+		)));
+		$this->beforeFilter('guest', array('only' => array(
+			'getIndex',
+		)));
+	}
+
+	public function getDashboard(){
+		return View::make('home.dashboard');
 	}
 
 	public function getIndex(){

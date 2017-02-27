@@ -12,9 +12,8 @@
 */
 
 Route::get('/', 'HomeController@getIndex');
-Route::get('/disable-email.html', 'UsersController@disableEmail');
+Route::get('/dashboard', 'HomeController@getDashboard');
 Route::get('/fb-callback.html', 'UsersController@facebookCallback');
-Route::get('/verify-email.html', 'UsersController@verifyEmail');
 
 Route::controller('user', 'UsersController');
 Route::controller('test', 'TestController');
