@@ -57,7 +57,7 @@ class UsersController extends \BaseController {
 //            return Response::json(array('success'=>false, 'message'=>'Yêu cầu nhập số điện thoại MobiFone.'));
 //        }
 
-        //kiểm tra có đăng ký nhận SMS không
+        //kiểm tra email đã đăng ký chưa
         $checkEmail = User::where('email',$input['email'])->first();
         if($checkEmail){
             if($checkEmail->status == Constant::STATUS_ENABLE){

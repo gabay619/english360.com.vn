@@ -14,6 +14,7 @@
 Route::get('/', 'HomeController@getIndex');
 Route::get('/dashboard', 'HomeController@getDashboard');
 Route::get('/fb-callback.html', 'UsersController@facebookCallback');
+Route::get('/thong-bao.html', 'HomeController@showMessage');
 
 Route::controller('user', 'UsersController');
 Route::controller('test', 'TestController');

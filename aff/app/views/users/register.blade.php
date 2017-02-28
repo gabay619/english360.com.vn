@@ -9,7 +9,9 @@
             </div>
         </div>
         <div class="main-login main-center">
-            {{Form::open(array('url'=>'/user/login', 'class'=>'form-horizontal', 'method'=>'post'))}}
+            {{Form::open(array('url'=>'/user/register', 'class'=>'form-horizontal', 'method'=>'post'))}}
+            @include('layouts._messages')
+
             <div class="form-group">
                 <label for="email" class="cols-sm-2 control-label">Họ và tên</label>
                 <div class="cols-sm-10">

@@ -24,7 +24,60 @@ class UsersController extends \BaseController {
     }
 
     public function postRegister(){
+        $rules = User::$rules;
+        $validator = Validator::make(Input::all(), $rules);
+        if($validator->fails()){
+            return Redirect::back()->with('error', $validator->errors()->first())->withInput();
+        }
+        if(!Common::isPhoneNumber(Input::get('phone'))){
+            return Redirect::back()->with('error', 'Số điện thoại không hợp lệ.')->withInput();
+        }
 
+        $checkEmail = User::where('email',Input::get('email'))->first();
+        if($checkEmail){
+            if($checkEmail->status == Constant::STATUS_ENABLE){
+                return Redirect::back()->with('error', 'Địa chỉ Email đã được sử dụng.')->withInput();
+            }
+            $user = $checkEmail;
+            $user->un_password = Input::get('password');
+            $user->password = Common::encryptpassword($user->un_password);
+            $user->save();
+        }else{
+            $user = new User();
+            $user->_id = strval(time());
+            $user->datecreate = time();
+            $user->status = Constant::STATUS_DISABLE;
+            $user->phone = Input::get('phone');
+            $user->email = Input::get('email');
+            $user->un_password = Input::get('password');
+            $user->fullname = Input::get('phone');
+            $user->password = Common::encryptpassword($user->un_password);
+            $user->cmnd = '';
+            $user->cmnd_ngaycap = '';
+            $user->cmnd_noicap = '';
+            $user->priavatar = '';
+            $user->thong_bao = array(
+                'noti' => '1',
+                'email' => '1',
+            );
+            $user->save();
+        }
+
+        //Gửi email xác nhận
+        $content = '<p>Xin chào,</p>'.
+            '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào đường link bên dưới:</p>'.
+            '<p><a href="'.Common::getVerifyEmailUrl($user->_id,$user->email).'">'.Common::getVerifyEmailUrl($user->_id,$user->email).'</a></p>'.
+            '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
+        $mail = new \helpers\Mail($user->email,'Xác nhận tài khoản English360.com.vn',$content);
+        try{
+            if(!$mail->send()){
+                throw new Exception('MAIL ERROR!');
+            }
+        }catch (Exception $e){
+            return Redirect::back()->with('error', 'Không thể gửi thư xác nhận đến địa chỉ email của bạn, vui lòng thử lại sau.')->withInput();
+        }
+
+        return Redirect::back()->with('true', 'Vui lòng kiểm tra email để xác thực tài khoản của bạn.');
     }
 
 	public function getLogin()

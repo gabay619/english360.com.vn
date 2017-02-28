@@ -14,12 +14,8 @@
             </ol>
         </div>
     </div>
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="alert alert-success">
-        <h1 style="margin: 0">Số dư: <strong>1.200.000đ</strong></h1>
-    </div>
-    <div class="row">
 
+    <div class="row">
         <div class="col-lg-3 col-md-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
@@ -72,8 +68,8 @@
                             <i class="fa fa-money fa-5x"></i>
                         </div>
                         <div class="col-xs-9 text-right">
-                            <div class="huge">25.5%</div>
-                            <div>Tỷ lệ chuyển đổi</div>
+                            <div class="huge">4.5%</div>
+                            <div>Doanh thu</div>
                         </div>
                     </div>
                 </div>

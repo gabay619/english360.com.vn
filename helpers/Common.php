@@ -820,4 +820,8 @@ class Common
         );
         return isset($arr[$code]) ? $arr[$code] : 'Giao dịch thất bại';
     }
+
+    public static function isPhoneNumber($phone){
+       return preg_match("/^\+?(84|0)(1\d{9}|9\d{8})$/", $phone);
+    }
 }
