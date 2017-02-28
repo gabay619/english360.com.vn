@@ -1,93 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/media/admin-theme/css/bootstrap.min.css" rel="stylesheet">
+@extends('layouts.outform')
 
-    <!-- Website CSS style -->
-{{--<link rel="stylesheet" type="text/css" href="assets/css/main.css">--}}
-
-<!-- Website Font style -->
-    <link href="/media/admin-theme/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-    <!-- Google Fonts -->
-    <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
-
-    <title>Admin</title>
-</head>
-<body>
-<style>
-    body, html{
-        height: 100%;
-        background-repeat: no-repeat;
-        background-color: #d3d3d3;
-        font-family: 'Oxygen', sans-serif;
-    }
-
-    .main{
-        margin-top: 70px;
-    }
-
-    h1.title {
-        font-size: 50px;
-        font-family: 'Passion One', cursive;
-        font-weight: 400;
-    }
-
-    hr{
-        width: 10%;
-        color: #fff;
-    }
-
-    .form-group{
-        margin-bottom: 15px;
-    }
-
-    label{
-        margin-bottom: 15px;
-    }
-
-    input,
-    input::-webkit-input-placeholder {
-        font-size: 11px;
-        padding-top: 3px;
-    }
-
-    .main-login{
-        background-color: #fff;
-        /* shadows and rounded borders */
-        -moz-border-radius: 2px;
-        -webkit-border-radius: 2px;
-        border-radius: 2px;
-        -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-        -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-
-    }
-
-    .main-center{
-        margin-top: 30px;
-        margin: 0 auto;
-        max-width: 330px;
-        padding: 40px 40px;
-
-    }
-
-    .login-button{
-        margin-top: 5px;
-    }
-
-    .login-register{
-        font-size: 11px;
-        text-align: center;
-    }
-</style>
-<div class="container">
-    <div class="row main">
+@section('content')
         <div class="panel-heading">
             <div class="panel-title text-center">
-                <h1 class="title">English360</h1>
+                <h1 class="title">Đăng nhập</h1>
                 <hr />
             </div>
         </div>
@@ -119,14 +35,10 @@
                 <p class="text-center">hoặc</p>
                 <a href="{{$fb_login}}" class="btn btn-primary btn-lg btn-block" style="background-color: rgb(64,93,155) !important;">Đăng nhập bằng Facebook</a>
             </div>
-            {{--<div class="login-register">--}}
-                {{--<a href="/user/login">Đăng nhập</a>--}}
-            {{--</div>--}}
+            <div class="login-register">
+                <a href="/user/register">Đăng ký</a> -
+                <a href="#">Quên mật khẩu</a>
+            </div>
             {{Form::close()}}
         </div>
-    </div>
-</div>
-
-<script type="text/javascript" src="assets/js/bootstrap.js"></script>
-</body>
-</html>
+@endsection
