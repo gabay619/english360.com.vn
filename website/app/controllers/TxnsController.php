@@ -219,7 +219,7 @@ class TxnsController extends \BaseController {
                 $package = Package::where('_id',$txn->pkg_id)->first();
                 $time = $package->time*86400;
                 $user->pkg_id = $package->_id;
-                $user->pkg_expried = time()+$time;
+                $user->pkg_expired = $user->getPackageTime() ? $user->getPackageTime()+$time : time()+$time;
                 $user->save();
                 $mess = 'Thanh toán khóa học thành công. Số dư tài khoản hiện tại: '.number_format($user->balance).'đ';
                 return Redirect::to('/user/package?step=4')->with('success', $mess);

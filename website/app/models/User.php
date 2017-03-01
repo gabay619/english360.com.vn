@@ -55,6 +55,10 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
         return isset($this->balance) && !empty($this->balance) ? $this->balance : 0;
     }
 
+    public function getPackageTime(){
+        return isset($this->pkg_expired) && $this->pkg_expired > time() ? $this->pkg_expired : false;
+    }
+
     public function getSavedExam(){
         $save = SaveExam::where(array('uid' => $this->_id))->first();
         if(!$save){

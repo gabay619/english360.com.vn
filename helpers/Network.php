@@ -180,12 +180,13 @@ class Network
 
     public static function getUserInfo($msisdn, $serviceCode = "E", $uid='')
     {
-        return 1;
         if(Common::isTestUser($msisdn) || Common::isFreeUser($msisdn)) return 1;
         if(!empty($uid)){
-            if(Common::isHssvUser($uid)) return 1;
-            if(Common::isEventUser($uid)) return 1;
+//            if(Common::isHssvUser($uid)) return 1;
+//            if(Common::isEventUser($uid)) return 1;
+            if(Common::isRegPackage($uid)) return 1;
         }
+        return 0;
 
         try {
             $client = new SoapClient(static::getLinkService(),array('cache_wsdl'=>WSDL_CACHE_NONE));

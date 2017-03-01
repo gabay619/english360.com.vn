@@ -118,6 +118,10 @@
                             </div>
                             <div class="block notifi_user">
                                 {{Constant::CASH_NAME}} của bạn: <span style="font-weight: bold; color: #db2727">{{number_format(Auth::user()->getBalance())}}đ</span>
+                                @if(Auth::user()->getPackageTime())
+                                    <br>
+                                Thời hạn khóa học: <span style="font-weight: bold; color: #db2727">{{date('d/m/Y',Auth::user()->getPackageTime())}}</span>
+                                @endif
                                 {{--<a href="/txn/charge" class="btn btn-primary btn-sm" style="padding: 0px 5px;float: right;">Nạp {{Constant::CASH_NAME}}</a>--}}
                             </div>
                             <div class="block user_control_link">

@@ -71,6 +71,7 @@
             </li>
             <li><h2><a href="/tu-dien.html" title="">Từ điển</a></h2></li>
             <li><h2><a href="/hoi-dap.html" title="">Hỏi đáp</a></h2></li>
+            <li><h2><a href="/user/package" title="">Học phí</a></h2></li>
             {{--<li><h2><a href="/hoi-dap.html" title="" class="">Giới thiệu</a></h2></li>--}}
         </ul>
     </div>
