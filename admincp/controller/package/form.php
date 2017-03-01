@@ -49,6 +49,12 @@ if ($tact != "package_insert") $_POST = (array)$packagecl->findOne(array("_id" =
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-sm-2 control-label">Mô tả</label>
+                <div class="col-sm-10">
+                    <input type="text" name="description" class="form-control" value="<?php echo $_POST['description'] ?>" placeholder="Mô tả">
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-2 control-label">Giá gói</label>
                 <div class="col-sm-10">
                     <input type="text" name="price" class="form-control" value="<?php echo $_POST['price'] ?>" placeholder="Giá">

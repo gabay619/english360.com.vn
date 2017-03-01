@@ -161,5 +161,9 @@ class HomeController extends BaseController {
         return View::make('home.message');
     }
 
+    public function aff(){
+        return Redirect::to(Input::get('redirect'));
+    }
+
 
 }

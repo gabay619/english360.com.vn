@@ -19,6 +19,7 @@ Route::get('/verify-email.html', 'UsersController@verifyEmail');
 Route::get('/thong-bao.html', 'HomeController@showMessage');
 Route::get('/bai-hoc-free.html', 'FreeLessionController@index');
 Route::get('/bank-result.html', 'TxnsController@bankResult');
+Route::get('/aff.html', 'HomeController@aff');
 
 Route::controller('user', 'UsersController');
 Route::controller('job', 'JobsController');

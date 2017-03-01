@@ -54,6 +54,9 @@ class Constant
     const BANNER_WEB_HEADER = 'webheader';
     const FACEBOOK_APP_ID = '1539737363001576';
     const FACEBOOK_APP_KEY = '4e2fd0ebbaacbaca83e713c966d1969d';
+    const GOOGLE_APP_ID = '440039211672-b01gs92p5nc2iuke6j3mfjfhgcl02p1e.apps.googleusercontent.com';
+    const GOOGLE_APP_SECRET = 'M2yzirHAhLJexKk-Fk-_Ztd2';
+    const GOOLE_APP_KEY = 'AIzaSyAn7B6h2yxxCSAx3mb-6ZcnlWKvCKuDWTI';
     const CASH_NAME = 'Số dư';
     
     //Txn Card

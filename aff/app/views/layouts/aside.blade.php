@@ -1,10 +1,10 @@
 <div class="collapse navbar-collapse navbar-ex1-collapse">
     <ul class="nav navbar-nav side-nav">
-        <li>
+        <li @if(strpos(Request::url(),'/dashboard')) class="active" @endif>
             <a href="/dashboard"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
         </li>
-        <li>
-            <a href="#"><i class="fa fa-fw fa-edit"></i> Tạo link phân phối</a>
+        <li @if(strpos(Request::url(),'/link/new')) class="active" @endif>
+            <a href="/link/new"><i class="fa fa-fw fa-edit"></i> Tạo link phân phối</a>
         </li>
         <li>
             <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Báo cáo</a>

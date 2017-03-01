@@ -5,105 +5,43 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-                Dashboard <small>Statistics Overview</small>
+                Tạo link phân phối
             </h1>
-            <ol class="breadcrumb">
-                <li class="active">
-                    <i class="fa fa-dashboard"></i> Dashboard
-                </li>
-            </ol>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <i class="fa fa-mouse-pointer fa-5x"></i>
-                        </div>
-                        <div class="col-xs-9 text-right">
-                            <div class="huge">100</div>
-                            <div>CLICKS!</div>
-                        </div>
-                    </div>
+        <div class="col-md-6">
+            <form role="form">
+                <div class="form-group">
+                    <label>Link đích</label>
+                    <input class="form-control" id="redirectLink">
+                    <p class="help-block">Nhập link đích và click "Lấy link" để tạo link phân phối.</p>
                 </div>
-                <a href="#">
-                    <div class="panel-footer">
-                        <span class="pull-left">Chi tiết</span>
-                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                        <div class="clearfix"></div>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-yellow">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <i class="fa fa-shopping-cart fa-5x"></i>
-                        </div>
-                        <div class="col-xs-9 text-right">
-                            <div class="huge">12</div>
-                            <div>Lượt thanh toán</div>
-                        </div>
-                    </div>
+                <button type="button" class="btn btn-primary" onclick="generateLink()" id="btnGetLink">Lấy link</button>
+                <div class="form-group" style="margin-top: 10px">
+                    <label>Link phân phối</label>
+                    <input class="form-control" placeholder="Link rút gọn" readonly id="shortUrl">
+                    <input class="form-control" placeholder="Link đầy đủ" readonly id="longUrl">
                 </div>
-                <a href="#">
-                    <div class="panel-footer">
-                        <span class="pull-left">Chi tiết</span>
-                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                        <div class="clearfix"></div>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-green">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <i class="fa fa-money fa-5x"></i>
-                        </div>
-                        <div class="col-xs-9 text-right">
-                            <div class="huge">4.5%</div>
-                            <div>Doanh thu</div>
-                        </div>
-                    </div>
-                </div>
-                <a href="#">
-                    <div class="panel-footer">
-                        <span class="pull-left">Chi tiết</span>
-                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                        <div class="clearfix"></div>
-                    </div>
-                </a>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-red">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <i class="fa fa-users fa-5x"></i>
-                        </div>
-                        <div class="col-xs-9 text-right">
-                            <div class="huge">25</div>
-                            <div>Khách hàng</div>
-                        </div>
-                    </div>
-                </div>
-                <a href="#">
-                    <div class="panel-footer">
-                        <span class="pull-left">Chi tiết</span>
-                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                        <div class="clearfix"></div>
-                    </div>
-                </a>
-            </div>
+            </form>
         </div>
     </div>
+    <script>
+        function generateLink() {
+            $('#btnGetLink').prop('disabled',true);
+            link = $('#redirectLink').val();
+            $.post('/link/generate-link',{
+                link:link,  _token: '{{csrf_token()}}'
+            }, function (re) {
+                if(re.success){
+                    $('#shortUrl').val(re.shortUrl)
+                    $('#longUrl').val(re.longUrl)
+                }else{
+                    alert(re.message)
+                }
+                $('#btnGetLink').prop('disabled',false);
+            })
+        }
+    </script>
 @endsection
