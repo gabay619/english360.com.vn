@@ -4,12 +4,13 @@
 
             <div class="center hello">Xin chào, {function="getFullDisplayName($SESSION.uinfo)"}</div>
             <div class="content_items taikhoan">
-                {if condition="$result==1"}
-                <a href="/regispacked.php"  class="ht">Thông tin gói cước</a>
-                {else}
-                <a href="/regispack.php" class="ht">Đăng ký gói cước</a>
-                {/if}
-                <a href="charge.php" class="ht">Nạp {function="Constant::CASH_NAME"}</a>
+                <!--{if condition="$result==1"}-->
+                <!--<a href="/regispacked.php"  class="ht">Thông tin gói cước</a>-->
+                <!--{else}-->
+                <!--<a href="/regispack.php" class="ht">Đăng ký gói cước</a>-->
+                <!--{/if}-->
+                <a href="/regispack.php" class="ht">Học phí</a>
+                <!--<a href="charge.php" class="ht">Nạp {function="Constant::CASH_NAME"}</a>-->
                 <a href="setup.php" class="ht">Cài đặt riêng tư</a>
                 <a href="saveexam.php" class="ht">Bài học đã lưu</a>
                 <a href="reg-lession.php" class="ht">Đăng ký bài học</a>

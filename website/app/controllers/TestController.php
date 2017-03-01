@@ -156,7 +156,7 @@ class TestController extends \BaseController {
 
     public function getPackageInfo(){
 //        echo file_get_contents(Network::getLinkService());die;
-        var_dump(Auth::user()->registedPackage());
+        var_dump(Common::getBalance(Auth::user()->_id));
     }
 
     public function getUserInfo(){

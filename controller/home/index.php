@@ -1,6 +1,6 @@
 <?php
 ##List News For Slideshow
-
+//echo $_SESSION['uinfo']['_id'];die;
 $gtcbcl = $dbmg->gtcb;
 
 //$songCl = $dbmg->song;

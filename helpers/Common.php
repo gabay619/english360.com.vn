@@ -647,6 +647,19 @@ class Common
         return $dateDiff <= $freeday;
     }
 
+    public static function getBalance($uid){
+        global $dbmg;
+        $usercl = $dbmg->user;
+//        return $uid;
+        $cond = array(array('_id',$uid));
+        $user = $usercl->findOne($cond);
+        return $user;
+//        return $user['email'];
+        if($user)
+            return isset($user['balance']) ? $user['balance'] : 0;
+        return 0;
+    }
+
     public static function isFreeLession($id,$type){
         global $dbmg;
         $showcl = $dbmg->showcl;

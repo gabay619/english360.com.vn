@@ -13,8 +13,8 @@ if($countView > Constant::MAX_CONTENT_FREE){
         header("Location: /quick-package.php?link=".urlencode(Constant::BASE_URL.$_SERVER['REQUEST_URI']));exit();
     }
     else{
-        $result = Network::getUserInfo($_SESSION['uinfo']['phone'],'E',$_SESSION['uinfo']['_id']);
-        if($result != 1){
+        $result = Common::isRegPackage($_SESSION['uinfo']['_id']);
+        if(!$result){
 //            if(Network::is3g() && Network::is3gmobifone() && Network::OPEN_REG){
 //                $link_callback = Constant::BASE_URL . "/wapportal.php?params=" . base64_encode('E' . '&WAP');
 //                $linkVms = Network::genLinkConfirmVms("E",$link_callback);

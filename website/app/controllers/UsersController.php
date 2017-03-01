@@ -651,10 +651,10 @@ class UsersController extends \BaseController {
         if($response_code==Constant::TXN_CARD_SUCCESS){
             $txn->save();
             $missBlance = $selectPkg->price - $txn->card_amount;
+            $user=User::where('_id',$txn->uid)->first();
             //Mệnh giá thẻ nhỏ hơn giá gói
             if($missBlance > 0){
                 //cập nhật số dư tài khoản
-                $user=User::where('_id',$txn->uid)->first();
                 $user->balance = $user->getBalance() + $txn->card_amount * Constant::CARD_TO_CASH;
                 $user->save();
                 $mess = 'Số dư tài khoản hiện tại: '.number_format($user->balance).'đ. Bạn cần nạp thêm '.number_format($missBlance).'đ và thanh toán khóa học bằng số dư tài khoản.';
@@ -662,15 +662,13 @@ class UsersController extends \BaseController {
             }else{
                 //Đăng ký gói
                 $time = $selectPkg->time*86400;
-                $user=User::where('_id',$txn->uid)->first();
                 $user->pkg_id = $selectPkg->_id;
                 $user->pkg_expired = $user->getPackageTime() ? $user->getPackageTime()+$time : time()+$time;
-                $user->save();
                 if($missBlance < 0){
                     //cập nhật số dư tài khoản
-                    $user->balance = $user->getBalance() + ($txn->card_amount-$selectPkg->price) * Constant::CARD_TO_CASH;
-                    $user->save();
+                    $user->balance = $user->getBalance() + $txn->card_amount * Constant::CARD_TO_CASH - $selectPkg->price;
                 }
+                $user->save();
                 $mess = 'Thanh toán khóa học thành công. Số dư tài khoản hiện tại: '.number_format($user->balance).'đ';
                 return Redirect::to('/user/package?step=4')->with('success', $mess);
             }

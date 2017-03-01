@@ -1,0 +1,28 @@
+<div class="main">
+    <div class="content_cate p5">
+        <div class="item_cate">
+            <div class="center" style="padding-bottom: 10px">
+                <p>
+                    Vui lòng chọn hình thức thanh toán
+                </p>
+            </div>
+            <div class="content_items taikhoan">
+                <a href="?step=3&pkg={$selectPkg._id}&type=card" class="ht" style="">
+                    <h3>Thẻ cào</h3>
+                </a>
+                <a href="?step=3&pkg={$selectPkg._id}&type=bank" class="ht" style="">
+                    <h3>Thẻ ATM nội địa</h3>
+                </a>
+                {if condition="$selectPkg.price<=$balance"}
+                <a href="?step=3&pkg={$selectPkg._id}&type=cash" class="ht" style="">
+                    <h3>Số dư tài khoản</h3>
+                    <p><span style="color: #f4333c">({function="number_format($balance)"}đ)</span></p>
+                </a>
+                {/if}
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+    </div>
+</div>
+

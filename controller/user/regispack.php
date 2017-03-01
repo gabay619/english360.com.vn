@@ -31,25 +31,72 @@
 //result 1 = đang sử dụng gói
 
 //$tpl->assign("obj", $sentKey);
+//error_reporting(E_ALL);
+//ini_set('display_errors', 1);
 include '/checkLogin.php';
-
-$is3g = Network::is3g();
-$linkVms = '';
-if($is3g && Network::is3gmobifone() && Network::OPEN_REG){
-    $link_callback = Constant::BASE_URL . "/wapportal.php?params=" . base64_encode('E' . '&WAP');
-    $linkVms = Network::genLinkConfirmVms("E",$link_callback);
+$packagecl = $dbmg->package;
+$usercl = $dbmg->user;
+$step = isset($_GET['step']) ? $_GET['step'] : 1;
+switch ($step){
+    case 1:
+        $allPackage = iterator_to_array($packagecl->find(array('status'=>Constant::STATUS_ENABLE)));
+        $tpl->assign("allPackage", $allPackage);
+        $tpl->assign("pagefile", "user/regispack_1");
+        break;
+    case 2:
+        $selectPkg = $packagecl->findOne(array('_id'=>$_GET['pkg']));
+        if(!$selectPkg){
+            $_SESSION['flash_mss'] = 'Gói cước không tồn tại';
+            header('Location: /thong-bao.html');
+        }
+        $user = $usercl->findOne(array('_id'=>$_SESSION['uinfo']['_id']));
+        $balance = isset($user['balance']) ? $user['balance'] : 0;
+//        $balance = Common::getBalance($_SESSION['uinfo']['_id']);
+        $tpl->assign("selectPkg", $selectPkg);
+        $tpl->assign("balance", $balance);
+        $tpl->assign("pagefile", "user/regispack_2");
+        break;
+    case 3:
+        $selectPkg = $packagecl->findOne(array('_id'=>$_GET['pkg']));
+        if(!$selectPkg){
+            $_SESSION['flash_mss'] = 'Gói cước không tồn tại';
+            header('Location: /thong-bao.html');
+        }
+        switch ($_GET['type']){
+            case 'card':
+                $listCardType = array(''=>'--Chọn loại thẻ--')+Common::getCardType();
+                $tpl->assign("selectPkg", $selectPkg);
+                $tpl->assign("listCardType", $listCardType);
+                $tpl->assign("pagefile", "user/regispack_card");
+                break;
+            case 'bank':
+                break;
+            case 'cash';
+                break;
+            default:
+                break;
+        }
+        break;
+    default:
+        break;
 }
-$act = isset($_GET['act']) ? $_GET['act'] : '';
-$confirm = $act == 'confirm';
-$isLogin = isset($_SESSION['uinfo']);
-$flash_mss = isset($_SESSION['flash_mss']) ? $_SESSION['flash_mss'] : '';
-$tpl->assign("flash_mss", $flash_mss);
-unset($_SESSION['flash_mss']);
-
-$tpl->assign("confirm", "$confirm");
-$tpl->assign("isLogin", $isLogin);
-$tpl->assign("linkVms", "$linkVms");
-$tpl->assign("is3g", "$is3g");
-$tpl->assign("pagefile", "user/regispack");
+//$is3g = Network::is3g();
+//$linkVms = '';
+//if($is3g && Network::is3gmobifone() && Network::OPEN_REG){
+//    $link_callback = Constant::BASE_URL . "/wapportal.php?params=" . base64_encode('E' . '&WAP');
+//    $linkVms = Network::genLinkConfirmVms("E",$link_callback);
+//}
+//$act = isset($_GET['act']) ? $_GET['act'] : '';
+//$confirm = $act == 'confirm';
+//$isLogin = isset($_SESSION['uinfo']);
+//$flash_mss = isset($_SESSION['flash_mss']) ? $_SESSION['flash_mss'] : '';
+//$tpl->assign("flash_mss", $flash_mss);
+//unset($_SESSION['flash_mss']);
+//
+//$tpl->assign("confirm", "$confirm");
+//$tpl->assign("isLogin", $isLogin);
+//$tpl->assign("linkVms", "$linkVms");
+//$tpl->assign("is3g", "$is3g");
+//$tpl->assign("pagefile", "user/regispack");
 include "controller/hmc/index.php";
 ?>

@@ -1,0 +1,60 @@
+<div class="main">
+    <div class="content_cate p5">
+        <div class="item_cate">
+            <div class="title_cate">
+                <a href="/charge.php">NẠP THẺ ĐIỆN THOẠI</a>
+            </div>
+            <div class="content_items">
+                <div class="center">
+                    <p>Gói cước có giá <strong>{function="number_format($selectPkg.price)"}đ</strong>, quý khách vui lòng nạp thẻ có mệnh giá ít nhất <strong>{function="number_format($selectPkg.price)"}đ</strong></p>
+                    <p>Số tiền thừa sẽ được cộng vào <strong>Số dư</strong> để sử dụng về sau</p>
+                </div>
+                <form action="">
+                    <div class="ttcn_info block">
+                        <span class="error-notify red center"></span>
+                        <p>
+                            <span>Loại thẻ</span>
+                            <select name="card_type" id="sltCardType" class="input1">
+                                {loop="listCardType"}
+                                <option value="{$key}">{$value}</option>
+                                {/loop}
+                            </select>
+                        </p>
+                        <p>
+                            <span>Mã thẻ</span>
+                            <input type="text" class="input1" name="pin" id="txtPin">
+                        </p>
+                        <p>
+                            <span>Số Seri</span>
+                            <input type="text" class="input1" name="seri" id="txtSeri">
+                        </p>
+                        <p class="p_button center">
+                            <button type="button" onclick="chargeCard()" class="btn_df btn_a" id="btnChargeCard">Nạp thẻ</button>
+                        </p>
+                    </div>
+                </form>
+            </div>
+            <script>
+                function chargeCard() {
+                    $('#btnChargeCard').hide();
+                    card_type = $('#sltCardType').val();
+                    pin = $('#txtPin').val();
+                    seri = $('#txtSeri').val();
+                    $.post('/incoming.php?act=package_card', {
+                        card_type:card_type, pin:pin, seri:seri, pkg: '{$selectPkg._id}'
+                    }, function (re) {
+                        if(re.success){
+                            window.location.href = '/thong-bao.html';
+                        }
+                        else{
+                            $('.error-notify').html(re.mss)
+                        }
+//                        checkCash();
+                        $('#btnChargeCard').show();
+                    })
+                }
+            </script>
+        </div>
+    </div>
+</div>
+

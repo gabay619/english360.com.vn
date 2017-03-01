@@ -1,0 +1,25 @@
+<div class="main">
+    <div class="content_cate p5">
+        <div class="item_cate">
+            <div class="center" style="padding-bottom: 10px">
+                <p>
+                    English360 cung cấp cho bạn những khóa học <strong>chất lượng</strong> với học phí <strong>hấp dẫn</strong> và <strong>linh hoạt</strong>.
+                </p>
+                <p>
+                    Sau khi mua khóa học, bạn được học toàn bộ các khóa học của English360 trong thời gian đăng ký.
+                </p>
+            </div>
+            <div class="content_items taikhoan">
+                {loop="allPackage"}
+                <a href="?step=2&pkg={$value._id}" class="ht" style="">
+                    <h3>{$value.name} - {function="number_format($value.price)"}đ</h3>
+                    <p style="font-style: italic">({$value.description})</p>
+                </a>
+                {/loop}
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+    </div>
+</div>
+
