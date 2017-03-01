@@ -517,21 +517,11 @@ class UsersController extends \BaseController {
     }
 
     public function getPackage(){
-//        $user = Auth::user();
-//        $checkPackage = Network::getUserInfo($user->phone,'E',$user->_id);
-//        $eventUser = EventUser::where('uid',$user->_id)->first();
-//        $event = false;
-//        if($eventUser){
-//            $event = EventModel::where('_id',$eventUser->eid)->first();
-//        }
         $step = Input::get('step',1);
         if($step == 1){
             $packages = Package::where('status', Constant::STATUS_ENABLE)->get();
             return View::make('users.package', array(
                 'packages' => $packages
-//            'checkPackage' => $checkPackage,
-//            'event' => $event,
-//            'eventUser' => $eventUser
             ));
         }
         //filter auth
@@ -553,7 +543,6 @@ class UsersController extends \BaseController {
             if(!$selectPkg){
                 return Redirect::to('/user/package?step=4')->with('error', 'Gói cước không tồn tại');
             }
-//            $price = $selectPkg->price;
             return View::make('users.package_2', array(
                 'selectPkg' => $selectPkg
             ));

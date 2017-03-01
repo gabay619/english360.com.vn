@@ -40,6 +40,7 @@ $module[] = array("name"=>"Thanh toán","key"=>"txn","controller"=>"controller/t
     array(
         array("name"=>"Quản lý thẻ cào","key"=>"txn_card"),
         array("name"=>"Quản lý giao dịch bank","key"=>"txn_bank"),
+        array("name"=>"Quản lý giao dịch số dư","key"=>"txn_cash"),
     )
 );
 
