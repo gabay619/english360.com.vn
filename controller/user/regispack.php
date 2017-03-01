@@ -92,8 +92,37 @@ switch ($step){
                 header('Location: '.$payUrl);exit;
                 break;
             case 'cash';
+                $user = $usercl->findOne(array('_id'=>$_SESSION['uinfo']['_id']));
+                $balance = isset($user['balance']) ? $user['balance'] : 0;
+                $missBalance = $selectPkg['price'] - $balance;
+                //So du nho hon hoc phi
+                if($missBalance > 0){
+                    $_SESSION['flash_mss'] = 'Số dư không đủ. Vui lòng nạp tiền vào tài khoản để thanh toán khóa học.';
+                    header('Location: /thong-bao.html');exit;
+                }
+                //Tao giao dich
+                $txncl = $dbmg->txn;
+                $txn = array(
+                    '_id' => strval(time()),
+                    'datecreate' => time(),
+                    'uid' => $_SESSION['uinfo']['_id'],
+                    'amount' => $selectPkg['price']
+                );
+                $txncl->insert($txn);
+                //Update số dư+đăng ký gói
+                $time = $selectPkg['time']*86400;
+                $balance = $balance - $selectPkg['price'];
+                if(isset($user['pkg_expired']) && $user['pkg_expired']>time()){
+                    //Cong don
+                    $time = $user['pkg_expired'] + $time;
+                }
+                $usercl->update(array('_id'=>$txn['uid']), array('$set'=>array('pkg_id'=>$txn['pkg_id'],'pkg_expired'=>$time+time(),'balance'=>$balance)));
+                $_SESSION['flash_mss'] = 'Thanh toán khóa học thành công. Số dư tài khoản hiện tại: '.number_format($balance).'đ';
+                header('Location: /thong-bao.html');exit;
                 break;
             default:
+                $_SESSION['flash_mss'] = 'Phương thức thanh toán không hỗ trợ';
+                header('Location: /thong-bao.html');exit;
                 break;
         }
         break;
