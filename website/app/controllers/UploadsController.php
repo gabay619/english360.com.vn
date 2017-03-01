@@ -8,7 +8,7 @@ class UploadsController extends \BaseController {
         if(!Auth::user())
             return Response::json(array('status'=>500, 'mss'=>'Bạn cần đăng nhập trước.'));
 
-        if(Network::getUserInfo(Auth::user()->phone,'E',Auth::user()->_id) != 1){
+        if(Common::isRegPackage(Auth::user()->_id)){
             return Response::json(array('status'=>500, 'mss' => 'Bạn cần đăng ký gói cước.', 'package' => true));
         }
 		$targetFolder = "/uploads/audio/".date("d-m-Y")."/";

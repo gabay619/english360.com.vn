@@ -156,8 +156,7 @@ class TestController extends \BaseController {
 
     public function getPackageInfo(){
 //        echo file_get_contents(Network::getLinkService());die;
-        $phone = Input::get('phone');
-        print_r(Network::getUserInfo($phone));
+        var_dump(Auth::user()->registedPackage());
     }
 
     public function getUserInfo(){

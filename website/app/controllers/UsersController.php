@@ -10,17 +10,13 @@ class UsersController extends \BaseController {
         )));
         $this->beforeFilter('auth', array('only' => array(
 			'getProfile',
-//			'getLogout',
 			'postSetting',
             'getSaveLession',
             'postDeleteSaveLession',
             'getQuestion',
-            'getPackage',
             'getNotify',
 			'postDeleteNotify',
 			'postLoadUnreadNotify',
-            'getPackage',
-            'getRegisterPackage',
             'getRegLession',
 		)));
 
@@ -118,179 +114,6 @@ class UsersController extends \BaseController {
         HisLog::insert($newHistoryLog);
 		return Response::json(array('success'=> true, 'message'=>'Vui lòng kiểm tra email để xác thực tài khoản của bạn.'));
 	}
-
-	public function postSendAuthKey(){
-		$phone = Input::get('phone', Session::get('new_user')['phone']);
-		if(empty($phone))
-			return Response::json(array('success'=>false, 'message' => 'Yêu cầu nhập số điện thoại Mobifone.'));
-
-        if(!Network::mobifoneNumber($phone)){
-            return Response::json(array('success'=>false, 'message' => 'Yêu cầu nhập số điện thoại Mobifone.'));
-        }
-
-		$checkUser = User::where('phone', $phone)->first();
-		if($checkUser && !Input::get('check_exist', false))
-			return Response::json(array('success'=>false, 'message' => 'Số điện thoại này đã đăng ký tài khoản, vui lòng đăng nhập.'));
-
-		$authkey = AuthKey::findOrCreateNew($phone);
-		//Đếm số lượt lấy mã xác thực
-		if($authkey->count > 5)
-		{
-			return Response::json(array('success'=>false, 'message'=>'Bạn đã lấy mã xác thực quá 5 lần cho phép. Vui lòng đợi sau 60 phút để lấy lại mã xác thực.'));
-		}else{
-			$authkey->count = $authkey->count + 1;
-			$authkey->save();
-		}
-        //Gửi MT
-		$key = $authkey->getAuthKey();
-        $info = 'Mã xác thực dịch vụ English360 của bạn là: '.$key;
-        $result = Network::sentMT($phone, 'OTP', $info);
-        if($result != 0){
-            return Response::json(array('success'=>false, 'message' => 'Không thể gửi tin nhắn đến số điện thoại của bạn, vui lòng thử lại sau.'));
-        }
-		Session::put('new_user', array(
-			'phone' => $phone,
-			'validate' => false,
-		));
-		return Response::json(array('success'=> true, 'message'=>'Thanh cong: '.$key));
-	}
-
-	public function postValidateAuthKey(){
-		if(!Session::has('new_user')){
-			return Response::json(array('success'=>false, 'message' => 'Có lỗi xảy ra, vui lòng thử lại sau!'));
-		}
-		$new_user = Session::get('new_user');
-		$phone = $new_user['phone'];
-		$auth_key = Input::get('auth_key');
-		$confirm = AuthKey::findOrCreateNew($phone);
-
-		if($confirm->checkAuthKeyExpired())
-			return Response::json(array('success'=>false, 'message' => 'Mã xác thực đã hết hạn.'));
-
-		if(!$confirm->validateAuthKey($auth_key))
-			return Response::json(array('success'=>false, 'message' => 'Mã xác thực không đúng.'));
-
-		$confirm->removeAuthKey();
-
-		Session::put('new_user', array(
-			'phone' => $new_user['phone'],
-			'validate' => true
-		));
-		return Response::json(array('success'=>true, 'message'=>'Thanh cong!'));
-	}
-
-    public function postAuthKey(){
-        $phone = Auth::user()->phone;
-        $authkey = AuthKey::findOrCreateNew($phone);
-        //Đếm số lượt lấy mã xác thực
-        if($authkey->count > 5)
-        {
-            return Response::json(array('success'=>false, 'message'=>'Bạn đã lấy mã xác thực quá 5 lần cho phép. Vui lòng đợi sau 60 phút để lấy lại mã xác thực.'));
-        }else{
-            $authkey->count = $authkey->count + 1;
-            $authkey->save();
-        }
-        //Gửi MT
-        $key = $authkey->getAuthKey();
-        $info = 'Mã xác thực dịch vụ English360 của bạn là: '.$key;
-        $result = Network::sentMT($phone, 'OTP', $info);
-        if($result != 0){
-            return Response::json(array('success'=>false, 'message' => 'Không thể gửi tin nhắn đến số điện thoại của bạn, vui lòng thử lại sau.'));
-        }
-        return Response::json(array('success'=> true, 'message'=>'Thanh cong: '.$key));
-    }
-
-    public function postCheckAuthKey(){
-        $phone = Auth::user()->phone;
-        $auth_key = Input::get('auth_key');
-        $confirm = AuthKey::findOrCreateNew($phone);
-
-        if($confirm->checkAuthKeyExpired())
-            return Response::json(array('success'=>false, 'message' => 'Mã xác thực đã hết hạn.'));
-
-        if(!$confirm->validateAuthKey($auth_key))
-            return Response::json(array('success'=>false, 'message' => 'Mã xác thực không đúng.'));
-
-        $confirm->removeAuthKey();
-        return Response::json(array('success'=>true, 'message'=>'Thanh cong!'));
-    }
-
-    public function postCheckAuthKeyAndPackage(){
-        if(!Session::has('new_user')){
-            return Response::json(array('success'=>false, 'message' => 'Có lỗi xảy ra, vui lòng thử lại sau!'));
-        }
-        $new_user = Session::get('new_user');
-        $phone = $new_user['phone'];
-        $auth_key = Input::get('auth_key');
-        $confirm = AuthKey::findOrCreateNew($phone);
-
-        if($confirm->checkAuthKeyExpired())
-            return Response::json(array('success'=>false, 'message' => 'Mã xác thực đã hết hạn.'));
-
-        if(!$confirm->validateAuthKey($auth_key))
-            return Response::json(array('success'=>false, 'message' => 'Mã xác thực không đúng.'));
-
-        $confirm->removeAuthKey();
-        $user = User::where('phone',$phone)->first();
-        if(!$user){
-            $password = Common::generateRandomPassword();
-            $user = new User();
-            $user->_id = strval(time());
-            $user->datecreate = time();
-            $user->phone = $phone;
-            $user->email = '';
-            $user->un_password = $password;
-            $user->displayname = '';
-            $user->password = Common::encryptpassword($user->un_password);
-            $user->cmnd = '';
-            $user->cmnd_ngaycap = '';
-            $user->cmnd_noicap = '';
-            $user->fullname = '';
-            $user->priavatar = '';
-            $user->thong_bao = array(
-                'noti' => '1',
-                'sms' => '1',
-                'email' => '1',
-            );
-            $user->save();
-            $newHistoryLog = array(
-                '_id' => strval(time().rand(10,99)),
-                'datecreate' => time(),
-                'action' => HistoryLog::LOG_DANG_KY,
-                'chanel' => HistoryLog::CHANEL_WEB,
-                'ip' => Network::ip(),
-                'uid' => $user->_id,
-                'url' => Request::url(),
-                'status' => Constant::BASE_URL.'/user/quick-package',
-                'phone' => $phone,
-                'price' => 0
-            );
-            HisLog::insert($newHistoryLog);
-        }
-        Auth::login($user);
-        if(Network::getUserInfo($phone) != 1){
-            $rs = Network::registedpack($phone);
-            if($rs != 0)
-                return Response::json(array('success'=>false, 'message' => 'Đăng ký không thành công, vui lòng thử lại sau.'));
-
-            $packageInfo = Network::getCancelInfo($phone);
-            $newHistoryLog = array(
-                '_id' => strval(time().rand(10,99)),
-                'datecreate' => time(),
-                'action' => HistoryLog::LOG_DANG_KY_GOI_CUOC,
-                'chanel' => HistoryLog::CHANEL_WEB,
-                'ip' => Network::ip(),
-                'uid' => $user->_id,
-                'url' => Request::url(),
-                'status' => Constant::BASE_URL.'/user/quick-package',
-                'phone' => $phone,
-                'price' => $packageInfo == 0 ? 0 : Network::getPackageItem()['E']['price']
-            );
-            HisLog::insert($newHistoryLog);
-        }
-
-        return Response::json(array('success'=>true, 'message'=>'Thanh cong!'));
-    }
 
 	public function getLogin()
 	{
@@ -711,6 +534,20 @@ class UsersController extends \BaseController {
 //            'eventUser' => $eventUser
             ));
         }
+        //filter auth
+        if (Auth::guest())
+        {
+            if (Request::ajax())
+            {
+                Session::put('return_url', Input::get('return_url', '/'));
+                return Response::json(array('success'=>false, 'message'=> 'Bạn cần đăng nhập để thực hiện chức năng này'));
+            }
+            else
+            {
+                Session::put('return_url', Request::url());
+                return Redirect::guest('/user/login');
+            }
+        }
         if($step==2){
             $selectPkg = Package::where('_id',Input::get('pkg'))->first();
             if(!$selectPkg){
@@ -1056,17 +893,10 @@ class UsersController extends \BaseController {
         $user->email = $email;
         $user->status = Constant::STATUS_ENABLE;
         $user->save();
-//        User::where('_id', strval($uid))->update(array('status'=> Constant::STATUS_ENABLE));
         Auth::login($user);
-        return Redirect::to('/thong-bao.html')->with('success','Xác thực email thành công. Mời bạn tiếp tục sử dụng dịch vụ.');
-//        print_r($dataArr);die;
-//        Session::set('reg_lession_popup', true);
-//        if(Auth::user() && Auth::user()->_id==$uid){
-//            return Redirect::to('/user/reg-lession');
-//        }else{
-//            Session::set('email_reg_lession',$email);
-//            return Redirect::to('/');
-//        }
+        return Redirect::to(Session::get('return_url','/user/package'));
+
+//        return Redirect::to('/thong-bao.html')->with('success','Xác thực email thành công. Mời bạn tiếp tục sử dụng dịch vụ.');
     }
 
     public function getRegLession(){
@@ -1078,14 +908,6 @@ class UsersController extends \BaseController {
             'checked' => $checked,
             'showEmail' => $showEmail
         ));
-    }
-
-    public function getQuickPackage(){
-        return View::make('users.quick_package');
-    }
-
-    public function postQuickPackage(){
-
     }
 
     public function facebookCallback(){
@@ -1164,9 +986,6 @@ class UsersController extends \BaseController {
             Auth::login($checkUser);
         }
 
-//        if(Session::has('return_url'))
-        return Redirect::to(Session::get('return_url','/'));
-//        else
-//            return Redirect::to('/');
+        return Redirect::to(Session::get('return_url','/user/package'));
     }
 }

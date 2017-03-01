@@ -201,7 +201,7 @@ Widget::register('right_ads', function(){
 });
 
 Widget::register('private_tab', function(){
-    $checkPackage = Network::getUserInfo(Auth::user()->phone,'E',Auth::user()->_id);
+    $checkPackage = Common::isRegPackage(Auth::user()->_id);
    return View::make('widgets.private_tab', array(
        'checkPackage' => $checkPackage
    ));
