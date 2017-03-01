@@ -694,143 +694,160 @@ class UsersController extends \BaseController {
     }
 
     public function getPackage(){
-        $user = Auth::user();
+//        $user = Auth::user();
 //        $checkPackage = Network::getUserInfo($user->phone,'E',$user->_id);
 //        $eventUser = EventUser::where('uid',$user->_id)->first();
 //        $event = false;
 //        if($eventUser){
 //            $event = EventModel::where('_id',$eventUser->eid)->first();
 //        }
-        $packages = Package::where('status', Constant::STATUS_ENABLE)->get();
-        return View::make('users.package', array(
-            'packages' => $packages
+        $step = Input::get('step',1);
+        if($step == 1){
+            $packages = Package::where('status', Constant::STATUS_ENABLE)->get();
+            return View::make('users.package', array(
+                'packages' => $packages
 //            'checkPackage' => $checkPackage,
 //            'event' => $event,
 //            'eventUser' => $eventUser
-        ));
-    }
-
-    public function getRegisterPackage(){
-        $phone = Auth::user()->phone;
-        $checkPackage = Network::getUserInfo($phone);
-        if($checkPackage == 1)
-            return Redirect::to('/user/package');
-
-        $result = Network::registedpack($phone, "WEB");
-//        print_r($result);die;
-        if($result != 0)
-            return View::make('users.register_package', array(
-                'mss' => 'Quá trình đăng ký thất bại, mời quý khách thử lại.',
-                'class' => 'text-danger'
             ));
-
-        $packageInfo = Network::getCancelInfo($phone);
-        $newHistoryLog = array(
-            '_id' => strval(time().rand(10,99)),
-            'datecreate' => time(),
-            'action' => HistoryLog::LOG_DANG_KY_GOI_CUOC,
-            'chanel' => HistoryLog::CHANEL_WEB,
-            'ip' => Network::ip(),
-            'uid' => Auth::user()->_id,
-            'url' => Request::url(),
-            'status' => Constant::STATUS_ENABLE,
-            'phone' => $phone,
-            'price' => $packageInfo == 0 ? 0 : Network::getPackageItem()['E']['price']
-        );
-        HisLog::insert($newHistoryLog);
-        return View::make('users.register_package', array(
-                'mss' => 'Quý khách đã đăng ký thành công dịch vụ English360. Chi tiết liên hệ '.Constant::SUPPORT_PHONE.' (200d/phút). Trân trọng cảm ơn!',
-                'class' => 'text-success'
-        ));
-    }
-
-
-    public function postRegisterPackage(){
-        $phone = Auth::user()->phone;
-        $checkPackage = Network::getUserInfo($phone);
-        if($checkPackage == 1)
-            return Redirect::to('/user/package');
-
-        $result = Network::registedpack($phone, "WEB");
-//        print_r($result);die;
-        if($result != 0){
-            //Log
-            $newHistoryLog = array(
-                    '_id' => strval(time().rand(10,99)),
-                    'datecreate' => time(),
-                    'action' => HistoryLog::LOG_DANG_KY_GOI_CUOC,
-                    'chanel' => HistoryLog::CHANEL_WEB,
-                    'ip' => Network::ip(),
-                    'uid' => Auth::user()->_id,
-                    'url' => Constant::BASE_URL.'/user/package',
-                    'status' => Constant::STATUS_DISABLE,
-                    'phone' => Auth::user()->phone,
-                    'price' => 0
-            );
-            HisLog::insert($newHistoryLog);
-            return Response::json(array('success'=>false, 'message' => 'Đăng ký gói cước thất bại, vui lòng thử lại sau.'));
         }
-        //Log
-        $packageInfo = Network::getCancelInfo($phone);
-        $newHistoryLog = array(
-                '_id' => strval(time().rand(10,99)),
-                'datecreate' => time(),
-                'action' => HistoryLog::LOG_DANG_KY_GOI_CUOC,
-                'chanel' => HistoryLog::CHANEL_WEB,
-                'ip' => Network::ip(),
-                'uid' => Auth::user()->_id,
-                'url' => Constant::BASE_URL.'/user/package',
-                'status' => Constant::STATUS_ENABLE,
-                'phone' => Auth::user()->phone,
-                'price' => $packageInfo == 0 ? 0 : Network::getPackageItem()['E']['price']
-        );
-        HisLog::insert($newHistoryLog);
-        return Response::json(array('success'=>true, 'message' => 'Đăng ký gói cước E thành công.'));
+        if($step==2){
+            $selectPkg = Package::where('_id',Input::get('pkg'))->first();
+            if(!$selectPkg){
+                return Redirect::to('/user/package?step=4')->with('error', 'Gói cước không tồn tại');
+            }
+//            $price = $selectPkg->price;
+            return View::make('users.package_2', array(
+                'selectPkg' => $selectPkg
+            ));
+        }
+        if($step==3){
+            $selectPkg = Package::where('_id',Input::get('pkg'))->first();
+            if(!$selectPkg){
+                return Redirect::to('/user/package?step=4')->with('error', 'Gói cước không tồn tại');
+            }
+            switch (Input::get('type')){
+                case 'card':
+                    $listCardType = array(''=>'--Chọn loại thẻ--')+Common::getCardType();
+                    return View::make('users.package_card',array(
+                        'listCardType' => $listCardType,
+                        'selectPkg' => $selectPkg
+                    ));
+                    break;
+                case 'bank':
+                    break;
+                case 'cash':
+                    break;
+                default:
+                    return Redirect::to('/user/package?step=4')->with('error', 'Phương thức thanh toán không hỗ trợ.');
+                    break;
+            }
+        }
+        if($step>3){
+            return View::make('users.package_end');
+        }
     }
 
-    public function getCancelPackage(){
-        $checkPackage = Network::getUserInfo(Auth::user()->phone);
-        if($checkPackage != 1)
-            return Redirect::to('/user/package');
-
-        return View::make('users.cancel_package', array(
-            'checkPackage' => $checkPackage
-        ));
-    }
-
-    public function postCancelPackage(){
-        $phone = Auth::user()->phone;
-        $checkPackage = Network::getUserInfo($phone);
-        if($checkPackage != 1)
-            return Response::json(array('success'=>false, 'message' => 'Bạn chưa đăng ký gói E.'));
-
-        $result = Network::cancelpack($phone, "WEB");
-        if($result != 0){
-            return Response::json(array('success'=>false, 'message' => 'Hủy thất bại, vui lòng thử lại sau.'));
+    public function postPackageCard(){
+        $selectPkg = Package::where('_id',Input::get('pkg'))->first();
+        if(!$selectPkg){
+            return Redirect::to('/user/package?step=4')->with('error', 'Gói cước không tồn tại');
         }
 
-        $newHistoryLog = array(
-                '_id' => strval(time().rand(10,99)),
-                'datecreate' => time(),
-                'action' => HistoryLog::LOG_HUY_GOI_CUOC,
-                'chanel' => HistoryLog::CHANEL_WEB,
-                'ip' => Network::ip(),
-                'uid' => Auth::user()->_id,
-                'url' => Constant::BASE_URL.'/user/package',
-                'status' => Constant::STATUS_ENABLE,
-                'phone' => Auth::user()->phone,
-                'price' => 0
-        );
-        HisLog::insert($newHistoryLog);
-        return Response::json(array('success'=>true, 'message' => 'Bạn đã hủy gói cước E thành công.'));
+        $pin = Input::get('pin');
+        $seri = Input::get('seri');
+        $cardType = Input::get('card_type');
+        //Lưu giao dịch thẻ cào
+        $txn = new TxnCard;
+        $txn->_id = strval(time());
+        $txn->datecreate = time();
+        $txn->uid = Auth::user()->id;
+        $txn->card_type = $cardType;
+        $txn->pin = $pin;
+        $txn->seri = $seri;
+        $txn->pkg_id = $selectPkg->_id;
+        if(!$txn->save()){
+            return Redirect::back()->with('error','Có lỗi xảy ra, vui lòng thử lại.');
+        }
+
+        //Gọi sang cổng thẻ cào
+        $true_card = array('65682321546');
+        if(in_array($txn->pin, $true_card)){
+            list($response_code,$card_amount,$response_message)=array(Constant::TXN_CARD_SUCCESS,100000,'success');
+        }else{
+            list($response_code,$card_amount,$response_message)=$this->_doChargeCard($txn);
+        }
+
+        //Xử lý kết quả trả về
+        $txn->card_amount=$card_amount;
+        $txn->response_code=$response_code;
+        if($response_code==Constant::TXN_CARD_SUCCESS){
+            $txn->save();
+            $missBlance = $selectPkg->price - $txn->card_amount;
+            //Mệnh giá thẻ nhỏ hơn giá gói
+            if($missBlance > 0){
+                //cập nhật số dư tài khoản
+                $user=User::where('_id',$txn->uid)->first();
+                $user->balance = $user->getBalance() + $txn->card_amount * Constant::CARD_TO_CASH;
+                $user->save();
+                $mess = 'Số dư tài khoản hiện tại: '.number_format($user->balance).'đ. Bạn cần nạp thêm '.number_format($missBlance).'đ và thanh toán khóa học bằng số dư tài khoản.';
+                return Redirect::to('/user/package?step=4')->with('error', $mess);
+            }else{
+                //Đăng ký gói
+                $this->_regPackage($selectPkg);
+                $user=User::where('_id',$txn->uid)->first();
+                if($missBlance < 0){
+                    //cập nhật số dư tài khoản
+                    $user->balance = $user->getBalance() + ($txn->card_amount-$selectPkg->price) * Constant::CARD_TO_CASH;
+                    $user->save();
+                }
+                $mess = 'Thanh toán khóa học thành công. Số dư tài khoản hiện tại: '.number_format($user->balance).'đ';
+                return Redirect::to('/user/package?step=4')->with('success', $mess);
+            }
+
+        }else{
+            $txn->save();
+            return Redirect::back()->with('error',$response_message)->withInput();
+        }
     }
 
-    public function postCheckPackage(){
-        $checkPackage = Network::getUserInfo(Auth::user()->phone,'E',Auth::user()->_id);
-        if($checkPackage != 1)
-            return Response::json(array('success'=>false));
+    private function _regPackage(Package $package){
+        $time = $package->time*86400;
+        $user = Auth::user();
+        $user->pkg_id = $package->_id;
+        $user->pkg_expried = time()+$time;
+        $user->save();
+    }
 
-        return Response::json(array('success'=>true));
+    private function _doChargeCard(TxnCard $txn){
+        //Lưu log
+        $log = new LogTxnCard();
+        $log->_id = strval(time());
+        $log->txn_id = $txn->_id;
+        $log->datecreate = time();
+        $log->card_type = $txn->card_type;
+        $log->pin = $txn->pin;
+        $log->seri = $txn->seri;
+//        $log->merchant_txn_id = $txn->_id;
+        if (!$log->save()) {
+            throw new Exception('DB error while storing card log');
+        }
+
+        require_once app_path('../../sdk/1pay/OnePayClient.php');
+        $mpc = new OnePayClient();
+
+        $rs = $mpc->charge($txn->_id, $txn->card_type, $txn->pin, $txn->seri);
+
+        //update kết quả trả về vào trong log
+        $log->response_code = $rs['code'];
+        $log->response_message = $rs['message'];
+        $log->card_amount = isset($rs['card_amount']) ? $rs['card_amount'] : 0;
+        $log->provider_txn_id = $rs['transId'];
+        if (!$log->save()) {
+            throw new Exception('DB error while storing card log');
+        }
+
+        return array($rs['code'], $rs['card_amount'], Common::getTxnCardMss($rs['code']));
     }
 
 	public function getSaveLession(){

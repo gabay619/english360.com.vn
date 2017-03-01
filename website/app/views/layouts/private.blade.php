@@ -10,7 +10,7 @@
                 <div class="breadcrum">
                     <ul class="ul_breadcrum">
                         <li><a href="/">Trang chủ</a></li>
-                        <li><a href="">Tài khoản</a></li>
+                        <li><a href="">{{isset($breadcrumb) ? $breadcrumb : 'Tài khoản'}}</a></li>
                     </ul>
                 </div>
                 <div class="individual_control_page">
