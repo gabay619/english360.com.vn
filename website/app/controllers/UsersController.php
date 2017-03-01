@@ -735,8 +735,49 @@ class UsersController extends \BaseController {
                     ));
                     break;
                 case 'bank':
+                    //Tạo giao dịch
+                    $txn = new TxnBank;
+                    $txn->_id = strval(time());
+                    $txn->datecreate = time();
+                    $txn->uid = Auth::user()->id;
+                    $txn->amount = $selectPkg->price;
+                    $txn->pkg_id = $selectPkg->_id;
+                    if(!$txn->save()){
+                        return Redirect::to('/user/package?step=4')->with('error', 'Có lỗi xảy ra, vui lòng thử lại sau.');
+                    }
+                    require_once app_path('../../sdk/1pay/OnePayBank.php');
+                    $mpc = new OnePayBank();
+                    $order_id = $txn->_id;
+                    $order_info = Auth::user()->email.' nap '.$txn->amount.'d thanh toan '.$selectPkg->name;
+                    $payUrl = $mpc->getPayUrl($txn->amount, $order_id, $order_info);
+                    if(!$payUrl)
+                        return Redirect::to('/user/package?step=4')->with('error', 'Có lỗi xảy ra, vui lòng thử lại sau.');
+                    return Redirect::to($payUrl);
                     break;
                 case 'cash':
+                    $user = Auth::user();
+                    $missBlance = $selectPkg->price - $user->getBalance();
+                    //Số dư nhỏ hơn học phí
+                    if($missBlance >0){
+                        return Redirect::to('/user/package?step=4')->with('error', 'Số dư không đủ. Vui lòng nạp tiền vào tài khoản để thanh toán khóa học.');
+                    }
+                    //Tạo giao dịch
+                    $txn = new Txn;
+                    $txn->_id = strval(time());
+                    $txn->datecreate = time();
+                    $txn->uid = Auth::user()->id;
+                    $txn->amount = $selectPkg->price;
+                    $txn->pkg_id = $selectPkg->_id;
+                    if(!$txn->save()){
+                        return Redirect::to('/user/package?step=4')->with('error', 'Có lỗi xảy ra, vui lòng thử lại sau.');
+                    }
+                    //Update số dư+đăng ký gói
+                    $time = $selectPkg->time*86400;
+                    $user->balance = $user->getBalance() - $selectPkg->price;
+                    $user->pkg_expried = time()+$time;
+                    $user->save();
+                    $mess = 'Thanh toán khóa học thành công. Số dư tài khoản hiện tại: '.number_format($user->balance).'đ';
+                    return Redirect::to('/user/package?step=4')->with('success', $mess);
                     break;
                 default:
                     return Redirect::to('/user/package?step=4')->with('error', 'Phương thức thanh toán không hỗ trợ.');
@@ -794,8 +835,11 @@ class UsersController extends \BaseController {
                 return Redirect::to('/user/package?step=4')->with('error', $mess);
             }else{
                 //Đăng ký gói
-                $this->_regPackage($selectPkg);
+                $time = $selectPkg->time*86400;
                 $user=User::where('_id',$txn->uid)->first();
+                $user->pkg_id = $selectPkg->_id;
+                $user->pkg_expried = time()+$time;
+                $user->save();
                 if($missBlance < 0){
                     //cập nhật số dư tài khoản
                     $user->balance = $user->getBalance() + ($txn->card_amount-$selectPkg->price) * Constant::CARD_TO_CASH;
@@ -809,14 +853,6 @@ class UsersController extends \BaseController {
             $txn->save();
             return Redirect::back()->with('error',$response_message)->withInput();
         }
-    }
-
-    private function _regPackage(Package $package){
-        $time = $package->time*86400;
-        $user = Auth::user();
-        $user->pkg_id = $package->_id;
-        $user->pkg_expried = time()+$time;
-        $user->save();
     }
 
     private function _doChargeCard(TxnCard $txn){

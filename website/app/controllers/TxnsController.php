@@ -176,8 +176,12 @@ class TxnsController extends \BaseController {
             if (!$txnBank->save()) {
                 throw new Exception('DB Error');
             }
-
             $user=User::where('_id',$txnBank->uid)->first();
+            //Nếu là thanh toán trực tiếp -> đăng ký gói
+            if(!empty($txnBank->pkg_id)){
+                $package = Package::where('_id',$txnBank->pkg_id)->first();
+
+            }
 
             //cập nhật số dư tài khoản
             $user->balance = $user->getBalance()+$txnBank->amount * Constant::BANK_TO_CASH;
@@ -208,7 +212,21 @@ class TxnsController extends \BaseController {
         if($txn->response_code == Constant::TXN_BANK_SUCCESS){
             $txn->card_name = $rs['card_name'];
             $txn->card_type = $rs['card_type'];
-            $this->_onBankSuccess($txn);
+            $txn->save();
+            $user=User::where('_id',$txn->uid)->first();
+            //Nếu là thanh toán trực tiếp -> đăng ký gói
+            if(!empty($txn->pkg_id)){
+                $package = Package::where('_id',$txn->pkg_id)->first();
+                $time = $package->time*86400;
+                $user->pkg_id = $package->_id;
+                $user->pkg_expried = time()+$time;
+                $user->save();
+                $mess = 'Thanh toán khóa học thành công. Số dư tài khoản hiện tại: '.number_format($user->balance).'đ';
+                return Redirect::to('/user/package?step=4')->with('success', $mess);
+            }
+            //cập nhật số dư tài khoản
+            $user->balance = $user->getBalance()+$txn->amount * Constant::BANK_TO_CASH;
+            $user->save();
             return Redirect::to('/thong-bao.html')->with('success','Giao dịch thành công.');
         }else{
             $txn->save();
