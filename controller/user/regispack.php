@@ -47,7 +47,7 @@ switch ($step){
         $selectPkg = $packagecl->findOne(array('_id'=>$_GET['pkg']));
         if(!$selectPkg){
             $_SESSION['flash_mss'] = 'Gói cước không tồn tại';
-            header('Location: /thong-bao.html');
+            header('Location: /thong-bao.html');exit;
         }
         $user = $usercl->findOne(array('_id'=>$_SESSION['uinfo']['_id']));
         $balance = isset($user['balance']) ? $user['balance'] : 0;
@@ -60,7 +60,7 @@ switch ($step){
         $selectPkg = $packagecl->findOne(array('_id'=>$_GET['pkg']));
         if(!$selectPkg){
             $_SESSION['flash_mss'] = 'Gói cước không tồn tại';
-            header('Location: /thong-bao.html');
+            header('Location: /thong-bao.html');exit;
         }
         switch ($_GET['type']){
             case 'card':
@@ -70,6 +70,26 @@ switch ($step){
                 $tpl->assign("pagefile", "user/regispack_card");
                 break;
             case 'bank':
+                $txnbankcl = $dbmg->txn_bank;
+                $amount = $selectPkg['price'];
+                $txnbank = array(
+                    '_id' => strval(time()),
+                    'datecreate' => time(),
+                    'uid' => $_SESSION['uinfo']['_id'],
+                    'amount' => $amount
+                );
+                $txnbankcl->insert($txnbank);
+                require_once '/sdk/1pay/OnePayBank.php';
+                $mpc = new OnePayBank();
+                $order_id = $txnbank['_id'];
+                $order_info = $_SESSION['uinfo']['email'].' nap '.$amount.'d English360';
+                $payUrl = $mpc->getPayUrl($amount, $order_id, $order_info);
+//                var_dump($payUrl);die;
+                if(!$payUrl){
+                    $_SESSION['flash_mss'] = 'Có lỗi xảy ra, vui lòng thử lại sau.';
+                    header('Location: /thong-bao.html');exit;
+                }
+                header('Location: '.$payUrl);exit;
                 break;
             case 'cash';
                 break;

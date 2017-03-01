@@ -20,6 +20,7 @@ class OnePayBank
         $data = "access_key=".self::ACCESS_KEY."&amount=".$amount."&command=".$command."&order_id=".$order_id."&order_info=".$order_info."&return_url=".$return_url;
         $signature = hash_hmac("sha256", $data, self::SECRET_KEY);
         $data.= "&signature=".$signature;
+//        return $data;
         $json_bankCharging = $this->_execPostRequest(self::API_URL, $data);
         $decode_bankCharging = json_decode($json_bankCharging,true);  // decode json
         $pay_url = $decode_bankCharging["pay_url"];

@@ -44,7 +44,7 @@
         }
         $.post("incoming.php",formData , function(res) {
             if (res.status == 200) {
-                window.location.href = "/thong-bao.php";
+                window.location.href = "/thong-bao.html";
             } else {
                 $(".error-notify").show();
                 $(".error-notify").html(res.mss);

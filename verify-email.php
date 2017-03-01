@@ -13,19 +13,19 @@ try{
     $time = $dataArr[2];
 }catch (Exception $e){
     $_SESSION['flash_mss'] = 'Thao tác không hợp lệ.';
-    header('Location: thong-bao.php');exit;
+    header('Location: thong-bao.html');exit;
 }
 
 if($emailC != $email || time() - $time > 30*60){
     $_SESSION['flash_mss'] = 'Thao tác không hợp lệ.';
-    header('Location: thong-bao.php');exit;
+    header('Location: thong-bao.html');exit;
 }
 $usercl->update(array('email'=>$email), array('$set'=>array('email'=>'')));
 $usercl->update(array('_id'=>$uid), array('$set'=>array('email'=>$email, 'status'=>Constant::STATUS_ENABLE)));
 $o = $usercl->findOne(array('_id'=>$uid));
 $_SESSION['uinfo'] = $o;
 $_SESSION['flash_mss'] = 'Xác thực email thành công. Mời bạn tiếp tục sử dụng dịch vụ.';
-header('Location: /thong-bao.php');exit;
+header('Location: /thong-bao.html');exit;
 //$_SESSION['reg_lession_popup'] = true;
 //if(isset($_SESSION['uinfo']) && $_SESSION['uinfo']['_id'] == $uid){
 //    header('Location: reg-lession.php');exit;
