@@ -108,6 +108,7 @@ class OnePayClient
 
         // close connection
         curl_close($ch);
+//        return $result;
 //        $json_cardCharging = $this->_execPostRequest($txn_id, $cardType, $pin, $seri);
 //        return $json_cardCharging;
         $decode_cardCharging=json_decode($result,true);  // decode json
@@ -189,6 +190,6 @@ class OnePayClient
             'VNP' => 'vinaphone',
             'FPT' => 'gate'
         );
-        return isset($arr[$cardtype]) ? $arr[$cardtype] : $cardtype;
+        return isset($arr[$cardtype]) ? $arr[$cardtype] : 'viettel';
     }
 }

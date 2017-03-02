@@ -15,7 +15,7 @@
                 <div id="card" class="tab-pane fade in active">
                     @include('layouts._messages')
                     {{Form::open(array('url' => '/txn/charge-card'))}}
-                    <p>{{Form::select('card_type', $listCardType, null, array('class'=>'input_3'))}}</p>
+                    <p>{{Form::select('card_type', $listCardType, null, array('class'=>'input_3','required'))}}</p>
                     <p>{{Form::text('pin', Input::get('pin'), array('class'=>'input_3', 'placeholder'=>'Mã thẻ', 'required','value'=>Input::get('pin')))}}</p>
                     <p>{{Form::text('seri', Input::get('seri'), array('class'=>'input_3', 'placeholder'=>'Số Seri', 'required','value'=>Input::get('seri')))}}</p>
                     <p>

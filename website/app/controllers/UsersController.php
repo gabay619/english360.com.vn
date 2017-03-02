@@ -620,7 +620,7 @@ class UsersController extends \BaseController {
         if(!$selectPkg){
             return Redirect::to('/user/package?step=4')->with('error', 'Gói cước không tồn tại');
         }
-
+        
         $pin = Input::get('pin');
         $seri = Input::get('seri');
         $cardType = Input::get('card_type');

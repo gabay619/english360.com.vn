@@ -707,9 +707,11 @@ function recheckCard(){
         echo json_encode($dtr);exit;
     }
 
-    require_once __DIR__.'../sdk/1pay/OnePayClient.php';
+    require_once '../sdk/1pay/OnePayClient.php';
     $mpc = new OnePayClient();
+//    print_r($mpc);die;
     $query = $mpc->recheck('', $txn['pin'], $txn['seri'], $log['provider_txn_id'], $txn['card_type']);
+//    print_r($query);die;
     if($query['code'] == Constant::TXN_CARD_SUCCESS){
         $set = array(
             'response_code'=>Constant::TXN_CARD_SUCCESS,
@@ -727,6 +729,7 @@ function recheckCard(){
         $dtr['code'] = $query['provider_code'];
     }else{
         $dtr['mss'] = 'Giao dịch chờ xử lý';
+        $dtr['code'] = $query['provider_code'];
         echo json_encode($dtr);exit;
     }
 }
