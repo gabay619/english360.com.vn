@@ -700,6 +700,7 @@ class UsersController extends \BaseController {
 
         //update kết quả trả về vào trong log
         $log->response_code = $rs['code'];
+        $log->provider_code = $rs['provider_code'];
         $log->response_message = $rs['message'];
         $log->card_amount = isset($rs['card_amount']) ? $rs['card_amount'] : 0;
         $log->provider_txn_id = $rs['transId'];

@@ -1,5 +1,5 @@
 <?php
-$title = "Quản lý Trang";
+$title = "Quản lý học phí";
 $packageCl = $dbmg->package;
 #condition
 $cond = array();

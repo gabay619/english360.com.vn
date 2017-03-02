@@ -29,14 +29,16 @@ class OnePayClient
                     'code' => $this->_mapCode($status),
                     'message' => 'Nạp thành công',
                     'card_amount' => $amount,
-                    'transId' => $transId
+                    'transId' => $transId,
+                    'provider_code' => $status
                 );
             }else{
                 return array(
                     'code' => $this->_mapCode($status),
                     'message' => $description,
                     'card_amount' => $amount,
-                    'transId' => $transId
+                    'transId' => $transId,
+                    'provider_code' => $status
                 );
             }
         }else{
@@ -44,7 +46,8 @@ class OnePayClient
                 'code' => Constant::TXN_CARD_PENDING,
                 'message' => 'Chờ xử lý',
                 'card_amount' => 0,
-                'transId' => ''
+                'transId' => '',
+                'provider_code' => '99'
             );
         }
     }
@@ -120,14 +123,18 @@ class OnePayClient
                     'code' => $this->_mapCode($status),
                     'message' => 'Nạp thành công',
                     'card_amount' => $amount,
-                    'transId' => $transId
+                    'transId' => $transId,
+                    'provider_code' => $status
+
                 );
             }else{
                 return array(
                     'code' => $this->_mapCode($status),
                     'message' => $description,
                     'card_amount' => $amount,
-                    'transId' => $transId
+                    'transId' => $transId,
+                    'provider_code' => $status
+
                 );
             }
         }else{
@@ -135,7 +142,9 @@ class OnePayClient
                 'code' => Constant::TXN_CARD_PENDING,
                 'message' => 'Chờ xử lý',
                 'card_amount' => 0,
-                'transId' => ''
+                'transId' => '',
+                'provider_code' => '99'
+
             );
         }
 //        return $result;

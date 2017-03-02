@@ -35,7 +35,7 @@ if ($tact != "package_insert") $_POST = (array)$packagecl->findOne(array("_id" =
 ?>
 <form class="form-horizontal" role="form" action="" method="post">
     <ul class="nav nav-tabs" role="tablist" id="myTab">
-        <li class="active"><a href="#info" role="tab" data-toggle="tab">Thông tin trang</a></li>
+        <li class="active"><a href="#info" role="tab" data-toggle="tab">Thông tin học phí</a></li>
     </ul>
 
     <div class="tab-content">

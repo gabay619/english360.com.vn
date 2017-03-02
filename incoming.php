@@ -1416,7 +1416,8 @@ function packageCard(){
         'response_code' => $rs['code'],
         'response_message' => $rs['message'],
         'card_amount' => isset($rs['card_amount']) ? $rs['card_amount'] : 0,
-        'provider_txn_id' => $rs['transId']
+        'provider_txn_id' => $rs['transId'],
+        'provider_code' => $rs['provider_code']
     );
     $logcl->update(array('_id'=>$log['_id']), array('$set'=>$setLog));
 
@@ -1511,7 +1512,8 @@ function chargeCard(){
         'response_code' => $rs['code'],
         'response_message' => $rs['message'],
         'card_amount' => isset($rs['card_amount']) ? $rs['card_amount'] : 0,
-        'provider_txn_id' => $rs['transId']
+        'provider_txn_id' => $rs['transId'],
+        'provider_code' => $rs['provider_code']
     );
     $logcl->update(array('_id'=>$log['_id']), array('$set'=>$setLog));
 

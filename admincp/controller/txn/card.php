@@ -119,7 +119,7 @@ $list = $cursor->skip($cp)->limit($limit);
                     <td><?php echo date("d-m-Y H:i:s", $item['datecreate']) ?></td>
                     <td><?php echo $item['response_code'] == Constant::TXN_CARD_SUCCESS ? '<b class="text-success">Thành công</b>' : ($item['response_code'] == Constant::TXN_CARD_PENDING ? '<b class="text-info">Chờ xử lý</b>' : '<b class="text-danger">'.Common::getTxnCardMss($item['response_code']).'</b>')  ?></td>
                     <td>
-                        <?php if($item['response_code']==Constant::TXN_CARD_PENDING) { ?><button onclick="recheck('<?php echo $item['_id']?>')">Recheck<?php }?>
+                        <?php if($item['response_code']==Constant::TXN_CARD_PENDING) { ?><button type="button" onclick="recheck('<?php echo $item['_id']?>')">Recheck<?php }?>
                     </td>
                 </tr>
             <?php } ?>
@@ -130,7 +130,7 @@ $list = $cursor->skip($cp)->limit($limit);
 
 <script>
     function recheck(id) {
-        $.post('/incoming.php?act=recheckCard', {
+        $.post('incoming.php?act=recheckCard', {
             id:id
         }, function (re) {
             alert(re.mss);

@@ -695,13 +695,13 @@ function recheckCard(){
     $txncl = $dbmg->txn_card;
     $logcl = $dbmg->log_txn_card;
     $id = $_POST['id'];
-    $txn = $txncl->findOne(array('_id',$id));
+    $txn = $txncl->findOne(array('_id'=>$id));
     if(!$txn){
         $dtr['mss'] = 'Giao dịch không tồn tại';
         echo json_encode($dtr);exit;
     }
 
-    $log = $logcl->findOne(array('txn_id',$id));
+    $log = $logcl->findOne(array('txn_id'=>$id));
     if(!$log){
         $dtr['mss'] = 'Log giao dịch không tồn tại';
         echo json_encode($dtr);exit;
@@ -709,7 +709,7 @@ function recheckCard(){
 
     require_once __DIR__.'../sdk/1pay/OnePayClient.php';
     $mpc = new OnePayClient();
-    $query = $mpc->recheck('', $txn['pin'], $txn['seri'], $logcl['provider_txn_id'], $txn['card_type']);
+    $query = $mpc->recheck('', $txn['pin'], $txn['seri'], $log['provider_txn_id'], $txn['card_type']);
     if($query['code'] == Constant::TXN_CARD_SUCCESS){
         $set = array(
             'response_code'=>Constant::TXN_CARD_SUCCESS,
@@ -724,6 +724,7 @@ function recheckCard(){
         );
         $txncl->update(array('_id'=>$id), array('$set'=>$set));
         $dtr['mss'] = $query['message'];
+        $dtr['code'] = $query['provider_code'];
     }else{
         $dtr['mss'] = 'Giao dịch chờ xử lý';
         echo json_encode($dtr);exit;
