@@ -841,6 +841,16 @@ class Common
         return isset($arr[$code]) ? $arr[$code] : 'Giao dịch thất bại';
     }
 
+    public static function getTxnSmsMss($code){
+        $arr = array(
+            Constant::TXN_SMS_SUCCESS => 'Thành công',
+            Constant::TXN_SMS_INVALID => 'Thuê bao không hợp lệ',
+            Constant::TXN_SMS_ERROR => 'Giao dịch thất bại',
+            Constant::TXN_SMS_NOT_ENOUGH => 'Tài khoản không đủ'
+        );
+        return isset($arr[$code]) ? $arr[$code] : 'Giao dịch thất bại';
+    }
+
     public static function isPhoneNumber($phone){
        return preg_match("/^\+?(84|0)(1\d{9}|9\d{8})$/", $phone);
     }

@@ -89,5 +89,13 @@ class Constant
     const TXN_BANK_PENDING = 13;
     const BANK_TO_CASH = 1;
 
+    //Txn Sms
+    const TXN_SMS_SUCCESS = 'WCG-0000';
+    const TXN_SMS_INVALID = 'WCG-0001';
+    const TXN_SMS_ERROR = 'WCG-0002';
+    const TXN_SMS_NOT_ENOUGH = 'WCG-0005';
+    const SMS_TO_CASH = 1;
+
+
 
 }

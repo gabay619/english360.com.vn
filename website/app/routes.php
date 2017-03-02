@@ -31,6 +31,7 @@ Route::controller('upload', 'UploadsController');
 Route::controller('report', 'ReportsController');
 Route::controller('ajax', 'AjaxController');
 Route::controller('txn', 'TxnsController');
+Route::controller('api', 'ApiController');
 Route::get('/trang/{slug}.html', 'PagesController@getDetail');
 Route::get('/hoi-dap.html', 'QuestionsController@getIndex');
 Route::get('/hoi-dap/chi-tiet.html', 'QuestionsController@getDetail');

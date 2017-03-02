@@ -12,6 +12,8 @@ class OnePayClient
     const ACCESS_KEY = '4o3fu8sl04i24br64wmb';
     const SECRET_KEY = 'url0b0xm4s4l3309d455xyigdac6161y';
     const SUCCESS_CODE = '00';
+    const SMS_SUCCESS_CODE = 'WCG-0000';
+    const API_SMS_URL = 'http://merchant.1pay.vn/charging/service/logs';
 
     public function charge($txn_id, $cardType, $pin, $seri){
         $json_cardCharging = $this->_execPostRequest($txn_id, $cardType, $pin, $seri);
