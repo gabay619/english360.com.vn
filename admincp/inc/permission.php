@@ -41,6 +41,8 @@ $module[] = array("name"=>"Thanh toán","key"=>"txn","controller"=>"controller/t
         array("name"=>"Quản lý thẻ cào","key"=>"txn_card"),
         array("name"=>"Quản lý giao dịch bank","key"=>"txn_bank"),
         array("name"=>"Quản lý giao dịch số dư","key"=>"txn_cash"),
+        array("name"=>"Quản lý giao dịch sms plus","key"=>"txn_sms"),
+        array("name"=>"Quản lý giao dịch api otp","key"=>"txn_otp"),
     )
 );
 

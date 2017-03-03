@@ -22,10 +22,12 @@ if(!empty($_GET['email'])){
     if($user)
         $cond['uid'] = $user['_id'];
 }
+$startdate = $_GET['start'];
 if(!empty($startdate)){
     $convertStartdate = DateTime::createFromFormat('d/m/Y', $startdate)->format('Y-m-d');
     $cond['datecreate']['$gte'] = (int)strtotime($convertStartdate. ' 00:00:00');
 }
+$enddate = $_GET['end'];
 if(!empty($enddate)){
     $convertEnddate = DateTime::createFromFormat('d/m/Y', $enddate)->format('Y-m-d');
     $cond['datecreate']['$lte'] = (int)strtotime($convertEnddate. ' 23:59:59');

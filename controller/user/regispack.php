@@ -76,7 +76,8 @@ switch ($step){
                     '_id' => strval(time()),
                     'datecreate' => time(),
                     'uid' => $_SESSION['uinfo']['_id'],
-                    'amount' => $amount
+                    'amount' => $amount,
+                    'pkg_id' => $selectPkg['_id']
                 );
                 $txnbankcl->insert($txnbank);
                 require_once '/sdk/1pay/OnePayBank.php';
