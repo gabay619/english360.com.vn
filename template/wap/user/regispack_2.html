@@ -13,6 +13,11 @@
                 <a href="?step=3&pkg={$selectPkg._id}&type=bank" class="ht" style="">
                     <h3>Thẻ ATM nội địa</h3>
                 </a>
+                {if condition="$selectPkg.price<=100000"}
+                <a href="?step=3&pkg={$selectPkg._id}&type=sms" class="ht" style="">
+                    <h3>Tin nhắn SMS</h3>
+                </a>
+                {/if}
                 {if condition="$selectPkg.price<=$balance"}
                 <a href="?step=3&pkg={$selectPkg._id}&type=cash" class="ht" style="">
                     <h3>Số dư tài khoản</h3>

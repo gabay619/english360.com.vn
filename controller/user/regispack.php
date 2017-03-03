@@ -120,6 +120,18 @@ switch ($step){
                 $_SESSION['flash_mss'] = 'Thanh toán khóa học thành công. Số dư tài khoản hiện tại: '.number_format($balance).'đ';
                 header('Location: /thong-bao.html');exit;
                 break;
+            case 'sms':
+                $contentId = 'NAP';
+                $contentId .= $selectPkg['price']/1000;
+                $mo = array(
+                    'VTE' => 'MW '.$selectPkg['price'].' E360 NAP '.$_SESSION['uinfo']['_id'].'.'.$selectPkg['code'],
+                    'VMS' => 'MW E360 '.$contentId.' '.$_SESSION['uinfo']['_id'].'.'.$selectPkg['code'],
+                    'VNP' => 'MW E360 '.$contentId.' '.$_SESSION['uinfo']['_id'].'.'.$selectPkg['code']
+                );
+                $tpl->assign("mo", $mo);
+                $tpl->assign("selectPkg", $selectPkg);
+                $tpl->assign("pagefile", "user/regispack_sms");
+                break;
             default:
                 $_SESSION['flash_mss'] = 'Phương thức thanh toán không hỗ trợ';
                 header('Location: /thong-bao.html');exit;

@@ -1,0 +1,45 @@
+<script src="/assets/js/clipboard.min.js"></script>
+<div class="main">
+    <div class="content_cate p5">
+        <div class="item_cate">
+            <div class="title_cate">
+                <a href="/charge.php">NẠP QUA TIN NHẮN SMS</a>
+            </div>
+            <div class="content_items">
+                <div class="center" style="border: 1px solid #ccc; margin-bottom: 15px; padding: 10px 0">
+                    <h3>Đối với thuê bao Viettel</h3>
+                    <p>Quý khách vui lòng soạn tin theo cú pháp</p>
+                    <p><strong id="moVTE">{$mo.VTE}</strong> gửi <strong>9029</strong></p>
+                    <button type="button" class="btn-clb btn_blue" data-clipboard-text="{$mo.VTE}"><i class="fa fa-files-o"></i> Copy cú pháp</button>
+                    <p style="font-style: italic">Hoặc nhấn vào <strong><a style="color: blue; text-decoration: underline" href="sms:9029?body={$mo.VTE}">ĐÂY</a></strong> nếu dùng điện thoại Android</p>
+                </div>
+                <div class="center" style="border: 1px solid #ccc; margin-bottom: 15px; padding: 10px 0">
+                    <h3>Đối với thuê bao Mobifone</h3>
+                    <p>Quý khách vui lòng soạn tin theo cú pháp</p>
+                    <p><strong>{$mo.VMS}</strong> gửi <strong>9029</strong></p>
+                    <button type="button" class="btn-clb btn_blue" data-clipboard-text="{$mo.VMS}"><i class="fa fa-files-o"></i> Copy cú pháp</button>
+                    <p style="font-style: italic">Hoặc nhấn vào <strong><a style="color: blue; text-decoration: underline" href="sms:9029?body={$mo.VMS}">ĐÂY</a></strong> nếu dùng điện thoại Android</p>
+                </div>
+                <div class="center" style="border: 1px solid #ccc; margin-bottom: 15px; padding: 10px 0">
+                    <h3>Đối với thuê bao Vinaphone</h3>
+                    <p>Quý khách vui lòng soạn tin theo cú pháp</p>
+                    <p><strong>{$mo.VNP}</strong> gửi <strong>9029</strong></p>
+                    <button type="button" class="btn-clb btn_blue" data-clipboard-text="{$mo.VNP}"><i class="fa fa-files-o"></i> Copy cú pháp</button>
+                    <p style="font-style: italic">Hoặc nhấn vào <strong><a style="color: blue; text-decoration: underline" href="sms:9029?body={$mo.VNP}">ĐÂY</a></strong> nếu dùng điện thoại Android</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var clipboard = new Clipboard('.btn-clb');
+    clipboard.on('success', function(e) {
+        alert('Đã copy, vui lòng paste nội dung vào Tin nhắn SMS và gửi tới 9029');
+        window.location.href = 'sms:9029'
+    });
+    clipboard.on('error', function(e) {
+        console.log(e);
+    });
+
+</script>
+
