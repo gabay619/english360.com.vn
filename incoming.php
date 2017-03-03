@@ -1403,7 +1403,8 @@ function packageCard(){
         'card_type' => $card_type,
         'pin' => $pin,
         'seri' => $seri,
-        'pkg_id'=>$package['_id']
+        'pkg_id'=>$package['_id'],
+        'pkg_price' => $package['price']
     );
     $txncl->insert($txn);
 

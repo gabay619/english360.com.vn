@@ -85,6 +85,7 @@ switch ($step){
                 $order_id = $txnbank['_id'];
                 $order_info = $_SESSION['uinfo']['email'].' nap '.$amount.'d English360';
                 $payUrl = $mpc->getPayUrl($amount, $order_id, $order_info);
+//                echo $payUrl;exit;
 //                var_dump($payUrl);die;
                 if(!$payUrl){
                     $_SESSION['flash_mss'] = 'Có lỗi xảy ra, vui lòng thử lại sau.';

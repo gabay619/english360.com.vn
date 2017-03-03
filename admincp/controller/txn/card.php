@@ -2,6 +2,8 @@
 $title = "Quản lý giao dịch thẻ cào";
 $txncl = $dbmg->txn_card;
 $usercl = $dbmg->user;
+$pkgcl = $dbmg->package;
+
 //$newscl = $dbmg->news;
 #condition
 $limit = 25;
@@ -101,6 +103,7 @@ $list = $cursor->skip($cp)->limit($limit);
                 <th>Mã thẻ</th>
                 <th>Seri</th>
                 <th>Mệnh giá</th>
+                <th>Gói</th>
                 <th>Thời gian</th>
                 <th>Trạng thái</th>
                 <th>Thao tác</th>
@@ -109,6 +112,10 @@ $list = $cursor->skip($cp)->limit($limit);
             <tbody>
             <?php foreach ($list as $item) {
                 $user = $usercl->findOne(array('_id'=>$item['uid']));
+                $pkg = false;
+                if(isset($item['pkg_id'])){
+                    $pkg = $pkgcl->findOne(array('_id'=>$item['pkg_id']));
+                }
                 ?>
                 <tr>
 <!--                    <td><input type="checkbox" class="checkitem" name="id[]" value="--><?php //echo $item['_id'] ?><!--" /></td>-->
@@ -118,6 +125,7 @@ $list = $cursor->skip($cp)->limit($limit);
                     <td><?php echo Common::maskPhone($item['pin']) ?></td>
                     <td><?php echo $item['seri'] ?></td>
                     <td><?php echo number_format($item['card_amount']) ?></td>
+                    <td><?php echo $pkg ? $pkg['name'] : '' ?></td>
                     <td><?php echo date("d-m-Y H:i:s", $item['datecreate']) ?></td>
                     <td><?php echo $item['response_code'] == Constant::TXN_CARD_SUCCESS ? '<b class="text-success">Thành công</b>' : ($item['response_code'] == Constant::TXN_CARD_PENDING ? '<b class="text-info">Chờ xử lý</b>' : '<b class="text-danger">'.Common::getTxnCardMss($item['response_code']).'</b>')  ?></td>
                     <td>

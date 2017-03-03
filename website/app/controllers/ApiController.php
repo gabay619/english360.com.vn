@@ -95,8 +95,11 @@ class ApiController extends \BaseController
         $txn->uid = $uid;
         if(!empty($pkgCode)){
             $package = Package::where('code',$pkgCode)->first();
-            if($package)
+            if($package){
                 $txn->pkg_id = $package->_id;
+                $txn->pkg_price = $package->price;
+            }
+
         }
         $txn->save();
         if($txn->response_code == OnePayClient::SMS_SUCCESS_CODE){

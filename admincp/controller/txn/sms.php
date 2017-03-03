@@ -2,6 +2,8 @@
 $title = "Quản lý giao dịch SMS+";
 $txncl = $dbmg->txn_sms;
 $usercl = $dbmg->user;
+$pkgcl = $dbmg->package;
+
 //$newscl = $dbmg->news;
 #condition
 $limit = 25;
@@ -77,6 +79,7 @@ $list = $cursor->skip($cp)->limit($limit);
         <th>User</th>
         <th>Số điện thoại</th>
         <th>Số tiền</th>
+        <th>Gói</th>
         <th>Thời gian</th>
         <th>Trạng thái</th>
         <th>Thao tác</th>
@@ -93,6 +96,7 @@ $list = $cursor->skip($cp)->limit($limit);
             <td><?php echo $user['email'] ?></td>
             <td><?php echo $item['msisdn'] ?></td>
             <td><?php echo number_format($item['amount']) ?></td>
+            <td><?php echo $pkg ? $pkg['name'] : '' ?></td>
             <td><?php echo date("d-m-Y H:i:s", $item['datecreate']) ?></td>
             <td><?php echo $item['response_code'] == Constant::TXN_SMS_SUCCESS ? '<b class="text-success">Thành công</b>' : '<b class="text-danger">'.Common::getTxnSmsMss($item['response_code']).'</b>'  ?></td>
             <td>

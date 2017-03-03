@@ -633,6 +633,7 @@ class UsersController extends \BaseController {
         $txn->pin = $pin;
         $txn->seri = $seri;
         $txn->pkg_id = $selectPkg->_id;
+        $txn->pkg_price = $selectPkg->price;
         if(!$txn->save()){
             return Redirect::back()->with('error','Có lỗi xảy ra, vui lòng thử lại.');
         }
