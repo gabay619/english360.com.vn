@@ -54,6 +54,7 @@ switch($act){
     case 'removeEvent': removeEvent(); break;
     case 'regEvent': regEvent(); break;
     case 'check_cash': checkCash(); break;
+    case 'check_package': checkPackage(); break;
     case 'charge_card': chargeCard(); break;
     case 'charge_bank': chargeBank(); break;
     case 'package_card': packageCard(); break;
@@ -1352,6 +1353,25 @@ function checkCash(){
     echo json_encode($dtr);exit;
 }
 
+function checkPackage(){
+    global $dbmg;
+    $usercl = $dbmg->user;
+    $dtr['status'] = 500;
+    if(!isset($_SESSION['uinfo'])){
+        echo json_encode($dtr);exit;
+    }
+    $user = $usercl->findOne(array('_id'=>$_SESSION['uinfo']['_id']));
+    if(!$user){
+        echo json_encode($dtr);exit;
+    }
+    $pkg_expired = isset($user['pkg_expired']) && $user['pkg_expired'] > time() ? $user['pkg_expired'] : false;
+    if($pkg_expired){
+        $dtr['status'] = 200;
+        $dtr['info'] = 'Thời hạn khóa học: <b style="color: #f4333c">'.date('d/m/Y',$pkg_expired).'</b>';
+    }
+    echo json_encode($dtr);exit;
+}
+
 function packageCard(){
     global $dbmg;
     $txncl = $dbmg->txn_card;
@@ -1446,9 +1466,11 @@ function packageCard(){
             if(isset($user['pkg_expired']) && $user['pkg_expired']>time()){
                 //Cong don
                 $time = $user['pkg_expired'] + $time;
+            }else{
+                $time = time() + $time;
             }
             $balance = isset($user['balance']) ? $user['balance'] : 0;
-            $setUser = array('pkg_id'=>$package['_id'], 'pkg_expired'=>$time+time());
+            $setUser = array('pkg_id'=>$package['_id'], 'pkg_expired'=>$time);
             if($missBalance < 0){
                 $balance = $balance + $card_amount * Constant::CARD_TO_CASH - $package['price'];
                 $setUser['balance'] = $balance;

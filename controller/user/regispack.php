@@ -115,8 +115,10 @@ switch ($step){
                 if(isset($user['pkg_expired']) && $user['pkg_expired']>time()){
                     //Cong don
                     $time = $user['pkg_expired'] + $time;
+                }else{
+                    $time = time() + $time;
                 }
-                $usercl->update(array('_id'=>$txn['uid']), array('$set'=>array('pkg_id'=>$txn['pkg_id'],'pkg_expired'=>$time+time(),'balance'=>$balance)));
+                $usercl->update(array('_id'=>$txn['uid']), array('$set'=>array('pkg_id'=>$txn['pkg_id'],'pkg_expired'=>$time,'balance'=>$balance)));
                 $_SESSION['flash_mss'] = 'Thanh toán khóa học thành công. Số dư tài khoản hiện tại: '.number_format($balance).'đ';
                 header('Location: /thong-bao.html');exit;
                 break;

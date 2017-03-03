@@ -118,7 +118,7 @@ class ApiController extends \BaseController
                         //cập nhật số dư tài khoản
                         $user->balance = $user->getBalance() + $txn->amount * Constant::SMS_TO_CASH - $package->price;
                     }
-                    $arResponse['sms'] = 'Ban da dang ky thanh cong khoa hoc '.Common::vietnameseToEnglish($package->name).'. Truy cap http://english360.com.vn de su dung. Chi tiet lien he: '.Constant::SUPPORT_PHONE.'.';
+                    $arResponse['sms'] = 'Ban da dang ky thanh cong khoa hoc '.Common::vietnameseToEnglish($package->name).'. Thoi han su dung den '.date('d/m/Y',$user->pkg_expired).'. Truy cap http://english360.com.vn de su dung. Chi tiet lien he: '.Constant::SUPPORT_PHONE.'.';
                 }
             }else{
                 //update so du
@@ -129,7 +129,6 @@ class ApiController extends \BaseController
         }else{
             $arResponse['sms'] = 'Giao dich that bai. Chi tiet lien he: '.Constant::SUPPORT_PHONE.'.';
         }
-
         return Response::json($arResponse);
     }
 }
