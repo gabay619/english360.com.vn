@@ -9,6 +9,7 @@
 class ApiController extends \BaseController 
 {
     public function getCheckMoSmsPlus(){
+        LogTxnSms::insert(Input::all());
         require_once app_path('../../sdk/1pay/OnePayClient.php');
         $data = "access_key=" . Input::get('access_key','') . "&amount=" . Input::get('amount','') . "&command_code=" . Input::get('command_code','') . "&mo_message=" . Input::get('mo_message','') . "&msisdn=" . Input::get('msisdn','') . "&telco=" . Input::get('telco','');
         $secret = OnePayClient::SECRET_KEY; //product's secret key (get value from 1Pay product detail)
@@ -24,13 +25,13 @@ class ApiController extends \BaseController
         $moArr = explode(' ', $moContent);
         $info = isset($moArr[2]) ? $moArr[2] : '';
         if(empty($info)){
-            $arResponse['sms'] = 'Cú pháp không hợp lệ. Vui lòng thử lại.';
+            $arResponse['sms'] = 'Cu phap khong hop le. Vui long thu lai.';
             return Response::json($arResponse);
         }
         $uid = explode('.',$info)[0];
         $user = User::where('_id', $uid)->first();
         if(!$user){
-            $arResponse['sms'] = 'Tài khoản không tồn tại. Vui lòng thử lại.';
+            $arResponse['sms'] = 'Tai khoan khong ton tai. Vui long thu lai.';
             return Response::json($arResponse);
         }
         //if sms content and amount and ... are ok. return success case
@@ -42,6 +43,7 @@ class ApiController extends \BaseController
     }
 
     public function getSmsPlus(){
+        LogTxnSms::insert(Input::all());
         require_once app_path('../../sdk/1pay/OnePayClient.php');
         $data = "access_key=" . Input::get('access_key','') . "&amount=" . Input::get('amount','') .
             "&command_code=" . Input::get('command_code','') . "&error_code=" . Input::get('error_code','') .
@@ -60,18 +62,44 @@ class ApiController extends \BaseController
         $moContent = Input::get('mo_message','');
         $moArr = explode(' ', $moContent);
         $info = isset($moArr[2]) ? $moArr[2] : '';
+        if(empty($info)){
+            $arResponse['sms'] = 'Cu phap khong hop le. Vui long thu lai.';
+            return Response::json($arResponse);
+        }
         $infoArr = explode('.',$info);
         $uid = $infoArr[0];
         $pkgCode = isset($infoArr[1]) ?$infoArr[1]:'';
         $package = false;
-//        $user = User::where('_id', $uid)->first();
+        $user = User::where('_id', $uid)->first();
+        if(!$user){
+            $arResponse['sms'] = 'Tai khoan khong ton tai. Vui long thu lai.';
+            return Response::json($arResponse);
+        }
         $txn = TxnSms::where('request_id',Input::get('request_id',''))->first();
         if($txn){
             return Response::json($arResponse);
         }
 
+        //Tao giao dich
+        $txn = new TxnSms();
+        $txn->_id = strval(time());
+        $txn->datecreate = time();
+        $txn->amount = Input::get('amount','');
+        $txn->command_code = Input::get('command_code','');
+        $txn->response_code = Input::get('error_code','');
+        $txn->response_message = Input::get('error_message','');
+        $txn->mo_message = Input::get('mo_message','');
+        $txn->msisdn = Input::get('msisdn','');
+        $txn->request_id = Input::get('request_id','');
+        $txn->request_time = Input::get('request_time');
+        $txn->uid = $uid;
+        if(!empty($pkgCode)){
+            $package = Package::where('code',$pkgCode)->first();
+            if($package)
+                $txn->pkg_id = $package->_id;
+        }
+        $txn->save();
         if($txn->response_code == OnePayClient::SMS_SUCCESS_CODE){
-            $user=User::where('_id',$uid)->first();
             $arResponse['status'] = 1;
             //Neu kem goi cuoc
             if($package){
@@ -101,6 +129,7 @@ class ApiController extends \BaseController
         }else{
             $arResponse['sms'] = 'Giao dich that bai. Chi tiet lien he: '.Constant::SUPPORT_PHONE.'.';
         }
+
         return Response::json($arResponse);
     }
 }
