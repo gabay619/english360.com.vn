@@ -851,6 +851,21 @@ class Common
         return isset($arr[$code]) ? $arr[$code] : 'Giao dịch thất bại';
     }
 
+    public static function getTxnOtpMss($code){
+        $arr = array(
+            Constant::TXN_OTP_SUCCESS => 'Giao dịch thành công',
+            Constant::TXN_OTP_PROVIDER_ERROR => 'Lỗi hệ thống, vui lòng thử lại sau',
+            Constant::TXN_OTP_MSISDN_INVALID => 'Thuê bao không hợp lệ',
+            Constant::TXN_OTP_SENT_ERROR => 'Không thể gửi OTP',
+            Constant::TXN_OTP_ACCOUNT_NOT_ENOUGH => 'Tài khoản không đủ tiền',
+            Constant::TXN_OTP_INPUT_WRONG => 'OTP không chính xác',
+            Constant::TXN_OTP_TOO_MUCH => 'Số tiền thanh toán quá lớn',
+            Constant::TXN_OTP_SENT_SUCCESS => 'Gửi OTP thành công',
+            Constant::TXN_OTP_ERROR => 'Lỗi không xác định, vui lòng thử lại sau'
+        );
+        return isset($arr[$code]) ? $arr[$code] : 'Giao dịch thất bại';
+    }
+
     public static function isPhoneNumber($phone){
        return preg_match("/^\+?(84|0)(1\d{9}|9\d{8})$/", $phone);
     }

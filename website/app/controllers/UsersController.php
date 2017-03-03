@@ -605,6 +605,13 @@ class UsersController extends \BaseController {
                     $mess = 'Thanh toán khóa học thành công. Số dư tài khoản hiện tại: '.number_format($user->balance).'đ';
                     return Redirect::to('/user/package?step=4')->with('success', $mess);
                     break;
+                case 'otp':
+                    $listCardType = array(''=>'--Chọn nhà mạng--')+Common::getCardType();
+                    return View::make('users.package_otp',array(
+                        'listCardType' => $listCardType,
+                        'selectPkg' => $selectPkg
+                    ));
+                    break;
                 default:
                     return Redirect::to('/user/package?step=4')->with('error', 'Phương thức thanh toán không hỗ trợ.');
                     break;
@@ -612,6 +619,88 @@ class UsersController extends \BaseController {
         }
         if($step>3){
             return View::make('users.package_end');
+        }
+    }
+
+    public function postPackageOtp(){
+        $selectPkg = Package::where('_id',Input::get('pkg'))->first();
+        if(!$selectPkg){
+            return Redirect::to('/user/package?step=4')->with('error', 'Gói cước không tồn tại');
+        }
+
+        $card_type = Input::get('card_type');
+        $msisdn = Input::get('msisdn');
+        if(empty($card_type)){
+            return Redirect::back()->with('error', 'Vui lòng chọn nhà mạng.')->withInput();
+        }
+        if(!Common::isPhoneNumber($msisdn)){
+            return Redirect::back()->with('error', 'Số điện thoại không hợp lệ')->withInput();
+        }
+        
+        $txn = new TxnOtp();
+        $txn->_id = strval(time());
+        $txn->datecreate = time();
+        $txn->uid = Auth::user()->id;
+        $txn->card_type = $card_type;
+        $txn->msisdn = $msisdn;
+        $txn->pkg_id = $selectPkg->_id;
+        $txn->pkg_price = $selectPkg->price;
+        if(!$txn->save()){
+            return Redirect::back()->with('error','Có lỗi xảy ra, vui lòng thử lại.');
+        }
+        
+        require_once app_path('../../sdk/1pay/OnePayClient.php');
+        $mpc = new OnePayClient();
+        if($card_type == 'VNP'){
+            return Redirect::back()->with('error','Chưa hỗ trợ.');
+        }
+        $param = $mpc->requestOtp($txn->_id, $selectPkg->price, $msisdn, Auth::user()->email.' thanh toan '.$selectPkg->price);
+        //Luu log
+        LogTxn::insert($param);
+        //Cap nhat trang thai
+        $txn->otp_response_code = $param['code'];
+        $txn->response_message = Common::getTxnOtpMss($param['code']);
+        $txn->transId = $param['transId'];
+        $txn->save();
+        if($param['code'] != Constant::TXN_OTP_SENT_SUCCESS){
+            return Redirect::back()->with('error',Common::getTxnOtpMss($param['code']));
+        }
+        return View::make('user.package_otp_2', array(
+            'txn' => $txn
+        ));
+    }
+
+    public function postPackageOtpConfirm(){
+        $txn_id = Input::get('txn_id');
+        $otp = Input::get('otp');
+        if(empty($otp)){
+            return Redirect::back()->with('error', 'Vui lòng nhập mã xác thực.')->withInput();
+        }
+        $txn = TxnOtp::where('_id',$txn_id)->first();
+        if(!$txn){
+            return Redirect::back()->with('error', 'Thao tác không hợp lệ.')->withInput();
+        }
+        require_once app_path('../../sdk/1pay/OnePayClient.php');
+        $mpc = new OnePayClient();
+        $param = $mpc->confirmOtp($otp, $txn->_id, $txn->transId);
+        //Luu log
+        LogTxn::insert($param);
+        //Cap nhat trang thai
+        $txn->response_code = $param['code'];
+        $txn->response_message = Common::getTxnOtpMss($param['code']);
+        $txn->save();
+        //
+        $user = User::where('_id',$txn->uid)->first();
+
+        if($param['code'] == Constant::TXN_OTP_SUCCESS){
+            $package = Package::where('_id',$txn->pkg_id)->first();
+            $time = $package->price;
+            $user->pkg_expired = $user->getPackageTime() ? $user->getPackageTime()+$time : time()+$time;
+            $user->save();
+            $mess = 'Thanh toán khóa học thành công. Số dư tài khoản hiện tại: '.number_format($user->balance).'đ';
+            return Redirect::to('/user/package?step=4')->with('success', $mess);
+        }else{
+            return Redirect::to('/user/package?step=4')->with('error', $txn->response_message);
         }
     }
 

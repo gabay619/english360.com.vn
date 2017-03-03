@@ -14,6 +14,7 @@ class OnePayClient
     const SUCCESS_CODE = '00';
     const SMS_SUCCESS_CODE = 'WCG-0000';
     const API_SMS_URL = 'http://merchant.1pay.vn/charging/service/logs';
+    const API_OTP_URL = 'http://api.1pay.vn/direct-charging/charge';
 
     public function charge($txn_id, $cardType, $pin, $seri){
         $json_cardCharging = $this->_execPostRequest($txn_id, $cardType, $pin, $seri);
@@ -153,6 +154,104 @@ class OnePayClient
 //        return $result;
     }
 
+    public function requestOtpVnp($txn_id, $amount, $msisdn, $content){
+        $data = "access_key=" .self::ACCESS_KEY. "&amount=" .$amount. "&content=" .$content. "&msisdn=" .$msisdn. "&requestId=" .$txn_id;
+        $signature = hash_hmac("sha256", $data, self::SECRET_KEY);
+        $data.= "&signature=" . $signature; //"&backUrl=".$back_url.
+        $json_Charging = $this->_exec(self::API_OTP_URL.'/request', $data);
+        $decode_Charging=json_decode($json_Charging,true);  // decode json
+        $errorMessage = $decode_Charging["errorMessage"];
+        $requestId_back = $decode_Charging["requestId"];
+        $transId = $decode_Charging["transId"];
+        $errorCode = $decode_Charging["errorCode"];
+        $redirect_url = $decode_Charging["redirectUrl"];
+    }
+
+    public function requestOtp($txn_id, $amount, $msisdn, $content){
+        $data = "access_key=".self::ACCESS_KEY."&amount=".$amount."&content=".$content."&msisdn=".$msisdn."&requestId=".$txn_id;
+        $signature = hash_hmac("sha256", $data, self::SECRET_KEY);
+        $data.= "&signature=" . $signature;
+        $json_bankCharging = $this->_exec(self::API_OTP_URL.'/request', $data);
+        $decode_bankCharging=json_decode($json_bankCharging,true);		// decode json
+        $errorMessage = $decode_bankCharging["errorMessage"];
+        $requestId_back = $decode_bankCharging["requestId"];
+        $transId = $decode_bankCharging["transId"];
+        $errorCode = $decode_bankCharging["errorCode"];
+        return array(
+            'code' => $this->_mapCodeOtp($errorCode),
+            'message' => $errorMessage,
+            'id' =>$requestId_back,
+            'transId' => $transId,
+            'provider_code' => $errorCode
+        );
+    }
+
+    public function confirmOtp($otp, $txn_id, $transId){
+		$data = "access_key=".self::ACCESS_KEY."&otp=".$otp."&requestId=".$txn_id."&transId=".$transId;
+        $signature = hash_hmac("sha256", $data, self::SECRET_KEY);
+        $data.= "&signature=" . $signature;
+        $json_bankCharging = $this->_exec(self::API_OTP_URL.'/confirm', $data);
+        //decode json
+        $decode_bankCharging=json_decode($json_bankCharging,true);
+        $errorMessage = $decode_bankCharging["errorMessage"];
+        $requestId_back = $decode_bankCharging["requestId"];
+        $transId = $decode_bankCharging["transId"];
+        $errorCode = $decode_bankCharging["errorCode"];
+        return array(
+            'code' => $this->_mapCodeOtp($errorCode),
+            'message' => $errorMessage,
+            'id' =>$requestId_back,
+            'transId' => $transId,
+            'provider_code' => $errorCode
+        );
+    }
+
+    private function _exec($url, $data){
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return $result;
+    }
+    
+    private function _mapCodeOtp($code){
+        $arr = array(
+            '00' => Constant::TXN_OTP_SUCCESS,
+            '01' => Constant::TXN_OTP_PROVIDER_ERROR,
+            '02' => Constant::TXN_OTP_PROVIDER_ERROR,
+            '03' => Constant::TXN_OTP_PROVIDER_ERROR,
+            '04' => Constant::TXN_OTP_PROVIDER_ERROR,
+            '05' => Constant::TXN_OTP_PROVIDER_ERROR,
+            '06' => Constant::TXN_OTP_PROVIDER_ERROR,
+            '07' => Constant::TXN_OTP_MSISDN_INVALID,
+            '08' => Constant::TXN_OTP_SENT_ERROR,
+            '09' => Constant::TXN_OTP_PROVIDER_ERROR,
+            '10' => Constant::TXN_OTP_ACCOUNT_NOT_ENOUGH,
+            '11' => Constant::TXN_OTP_INPUT_WRONG,
+            '12' => Constant::TXN_OTP_PROVIDER_ERROR,
+            '13' => Constant::TXN_OTP_PROVIDER_ERROR,
+            '14' => Constant::TXN_OTP_TOO_MUCH,
+            '15' => Constant::TXN_OTP_PROVIDER_ERROR,
+            '16' => Constant::TXN_OTP_TOO_MUCH,
+            '17' => Constant::TXN_OTP_PROVIDER_ERROR,
+            '18' => Constant::TXN_OTP_SENT_SUCCESS,
+            '19' => Constant::TXN_OTP_MSISDN_INVALID,
+            '20' => Constant::TXN_OTP_MSISDN_INVALID,
+            '21' => Constant::TXN_OTP_PROVIDER_ERROR,
+            '22' => Constant::TXN_OTP_PROVIDER_ERROR,
+            '23' => Constant::TXN_OTP_PROVIDER_ERROR,
+            '24' => Constant::TXN_OTP_PROVIDER_ERROR,
+            '99' => Constant::TXN_OTP_ERROR,
+        );
+        return isset($arr[$code]) ? $arr[$code] : Constant::TXN_CARD_PENDING;
+    }
+
     private function _mapCode($code){
         $arr = array(
             '00' => Constant::TXN_CARD_SUCCESS,
@@ -193,5 +292,14 @@ class OnePayClient
             'FPT' => 'gate'
         );
         return isset($arr[$cardtype]) ? $arr[$cardtype] : 'viettel';
+    }
+
+    private function _mapTelcoOtp($cardtype){
+        $arr = array(
+            'VTE' => 'vtm',
+            'VMS' => 'vms',
+            'VNP' => 'vnp',
+        );
+        return isset($arr[$cardtype]) ? $arr[$cardtype] : 'vtm';
     }
 }

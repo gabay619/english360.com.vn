@@ -96,6 +96,17 @@ class Constant
     const TXN_SMS_NOT_ENOUGH = 'WCG-0005';
     const SMS_TO_CASH = 1;
 
+    //Txn Otp
+    const TXN_OTP_SUCCESS = 0;
+    const TXN_OTP_PROVIDER_ERROR = 1;
+    const TXN_OTP_MSISDN_INVALID = 2;
+    const TXN_OTP_SENT_ERROR = 3;
+    const TXN_OTP_ACCOUNT_NOT_ENOUGH = 4;
+    const TXN_OTP_INPUT_WRONG = 5;
+    const TXN_OTP_TOO_MUCH = 6;
+    const TXN_OTP_SENT_SUCCESS = 7;
+    const TXN_OTP_ERROR = 8;
+    const OTP_TO_CASH =1;
 
 
 }

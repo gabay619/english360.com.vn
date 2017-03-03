@@ -30,6 +30,20 @@
                         </div>
                     </a>
                 </div>
+                @if($selectPkg->price <= 100000)
+                <div class="col-sm-4 text-center">
+                    <a href="?step=3&pkg={{Input::get('pkg')}}&type=otp">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">TIN NHẮN SMS</h3>
+                            </div>
+                            <div class="panel-body">
+                                <img src="/assets/images/napsms.png" alt="" style="width: 100%">
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                @endif
                 @if($selectPkg->price <= Auth::user()->getBalance())
                 <div class="col-sm-4 text-center">
                     <a href="?step=3&pkg={{Input::get('pkg')}}&type=cash">
