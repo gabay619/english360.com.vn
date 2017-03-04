@@ -10,7 +10,7 @@ if(!isset($_SESSION['CountView'])){
 $countView = $_SESSION['CountView'];
 if($countView > Constant::MAX_CONTENT_FREE){
     if(!isset($_SESSION['uinfo'])){
-        header("Location: /quick-package.php?link=".urlencode(Constant::BASE_URL.$_SERVER['REQUEST_URI']));exit();
+        header("Location: /login.php");exit();
     }
     else{
         $result = Common::isRegPackage($_SESSION['uinfo']['_id']);
