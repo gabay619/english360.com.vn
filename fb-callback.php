@@ -72,6 +72,14 @@ $userNode = $response->getGraphUser();
 //    $userNode->getField('email'), $userNode['email']
 //);
 $fb_email = $userNode->getField('email');
+$checkEmail = $usercl->findOne(array(
+   'email' => $fb_email,
+    'fbid' => array('$ne'=>$fb_uid)
+));
+if($checkEmail){
+    $_SESSION['flass_mss'] = 'Email đã được sử dụng';
+    header('Location: /thong-bao.html');exit;
+}
 $fb_name = $userNode->getField('name');
 $checkUser = $usercl->findOne(array('fbid'=>$fb_uid));
 if(!$checkUser){
@@ -107,35 +115,3 @@ if(!$checkUser){
     $o = $checkUser;
 $_SESSION['uinfo'] = $o;
 header('Location: index.php');exit;
-
-// Validation (these will throw FacebookSDKException's when they fail)
-$tokenMetadata->validateAppId('1539737363001576'); // Replace {app-id} with your app id
-// If you know the user ID this access token belongs to, you can validate it here
-//$tokenMetadata->validateUserId('123');
-$tokenMetadata->validateExpiration();
-
-if (! $accessToken->isLongLived()) {
-    // Exchanges a short-lived access token for a long-lived one
-    try {
-        $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
-    } catch (Facebook\Exceptions\FacebookSDKException $e) {
-        echo "<p>Error getting long-lived access token: " . $helper->getMessage() . "</p>\n\n";
-        exit;
-    }
-
-    echo '<h3>Long-lived</h3>';
-    var_dump($accessToken->getValue());
-}
-
-
-echo '<img src="//graph.facebook.com/'.$tokenMetadata->getUserId().'/picture?type=large">';
-//$fb->setDefaultAccessToken($_SESSION['fb_access_token']);
-//$response = $fb->get('/me?locale=en_US&fields=name,email,picture');
-//$userNode = $response->getGraphUser();
-//echo $userNode->getField('id');
-//var_dump(
-//    $userNode->getField('email'), $userNode['email']
-//);
-// User is logged in with a long-lived access token.
-// You can redirect them to a members-only page.
-//header('Location: https://example.com/members.php');

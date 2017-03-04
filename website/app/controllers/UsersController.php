@@ -966,7 +966,11 @@ class UsersController extends \BaseController {
         }catch (Exception $e){
             return Redirect::to('/thong-bao.html')->with('error',$e->getMessage());
         }
-        User::where('email', $email)->update(array('email'=> ''));
+        $checkEmail = User::where(array('email'=>$email, '_id'=>array('$ne'=>$uid)))->first();
+        if($checkEmail){
+            return Redirect::to('/thong-bao.html')->with('error','Email đã được sử dụng.');
+        }
+//        User::where('email', $email)->update(array('email'=> ''));
         $user = User::where('_id', strval($uid))->first();
         $user->email = $email;
         $user->status = Constant::STATUS_ENABLE;
@@ -1039,6 +1043,10 @@ class UsersController extends \BaseController {
 //    $userNode->getField('email'), $userNode['email']
 //);
         $fb_email = $userNode->getField('email');
+        $checkEmail = User::where(array('email'=>$fb_email,'status'=>Constant::STATUS_ENABLE,'fbid'=>array('$ne'=>$fb_uid)))->first();
+        if($checkEmail){
+            return Redirect::to('/thong-bao.html')->with('error', 'Email đã được sử dụng');
+        }
         $fb_name = $userNode->getField('name');
         $checkUser = User::where('fbid',$fb_uid)->first();
         if(!$checkUser){
