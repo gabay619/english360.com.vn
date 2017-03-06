@@ -386,6 +386,16 @@ function register(){
             'email' => "1",
         )
     );
+    //if aff
+    if(isset($_COOKIE[Constant::AFF_COOKIE_NAME])){
+        $cookie_value = Common::decodeAffCookie($_COOKIE[Constant::AFF_COOKIE_NAME]);
+        $cookieArr = explode('&',$cookie_value);
+        $newAccount['aff'] = array(
+            'uid' => $cookieArr[0],
+            'sub_id' => isset($cookieArr[1]) ? $cookieArr[1] : '',
+            'datecreate' => time()
+        );
+    }
 //    $info = 'Mật khẩu để sử dụng dịch vụ English360 của Quý khách là: '.$unpassword;
     $usercl->insert($newAccount);
 

@@ -18,33 +18,49 @@ class ReportsController extends \BaseController {
     }
 
     public function getClick(){
-        $limit = 10;
-        $p = Input::get('page',1);
-        if($p<=1) $p=1;
-        $cp = ($p-1)*$limit;
-        $stpage = $p;
-
-
+//        $limit = 10;
+//        $p = Input::get('page',1);
+//        if($p<=1) $p=1;
+//        $cp = ($p-1)*$limit;
+//        $stpage = $p;
         $cond = array(
             'uid' => Auth::user()->_id
         );
+        $start = $end = date('d/m/Y');
         if(!empty(Input::get('start'))){
-            $convertStartdate = DateTime::createFromFormat('d/m/Y', Input::get('start'))->format('Y-m-d');
-            $cond['datecreate']['$gte'] = (int)strtotime($convertStartdate. ' 00:00:00');
+            $start = Input::get('start');
         }
         if(!empty(Input::get('end'))){
-            $convertEnddate = DateTime::createFromFormat('d/m/Y', Input::get('end'))->format('Y-m-d');
-            $cond['datecreate']['$lte'] = (int)strtotime($convertEnddate. ' 23:59:59');
+            $end = Input::get('end');
         }
-        $allClick = AffClick::raw()->aggregate(array(
+        $convertStartdate = DateTime::createFromFormat('d/m/Y', $start)->format('Y-m-d');
+        $convertEnddate = DateTime::createFromFormat('d/m/Y', $end)->format('Y-m-d');
+        $cond['datecreate'] = array(
+            '$gte' => (int)strtotime($convertStartdate. ' 00:00:00'),
+            '$lte' => (int)strtotime($convertEnddate. ' 23:59:59')
+        );
+
+        $clickByUrl = AffClick::raw()->aggregate(array(
             array('$match' => $cond),
             array('$group' => array('_id'=>'$redirect', 'numclick'=>array('$sum'=>1))),
-            array('$sort' => array('numclick'=>-1), '$limit'=>$limit, '$skip'=>$cp)
+            array('$sort' => array('numclick'=>-1)),
+//            array('$limit' => $limit),
+//            array('$skip' => $cp)
         ));
-        print_r($allClick);die;
+        $clickBySub = AffClick::raw()->aggregate(array(
+            array('$match' => $cond),
+            array('$group' => array('_id'=>'$sub_id', 'numclick'=>array('$sum'=>1))),
+            array('$sort' => array('numclick'=>-1)),
+//            array('$limit' => $limit),
+//            array('$skip' => $cp)
+        ));
+//        print_r($allClick);die;
 
         return View::make('report.click', array(
-            'allClick' => $allClick['result']
+            'clickByUrl' => $clickByUrl['result'],
+            'clickBySub' => $clickBySub['result'],
+            'start' => $start,
+            'end' => $end
         ));
     }
 }

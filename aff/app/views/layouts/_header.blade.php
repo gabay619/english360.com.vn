@@ -37,9 +37,13 @@
     <script src="{{ asset('/jquery/jquery-2.1.0.min.js') }}"></script>
     <script src="{{ asset('/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('lib/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('lib/daterangepicker/moment.min.js') }}"></script>
     {{--<script src="{{ asset('lib/jquery-ui/jquery-ui-timepicker-addon.js') }}"></script>--}}
     <script src="{{ asset('lib/ckeditor/ckeditor.js') }}"></script>
     <script src="{{ asset('lib/bootstrap-tag-input/bootstrap-tagsinput.min.js') }}"></script>
+    <!-- Include Date Range Picker -->
+    <script type="text/javascript" src="{{ asset('lib/daterangepicker/daterangepicker.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('lib/daterangepicker/daterangepicker.css') }}" />
 
 </head>
 

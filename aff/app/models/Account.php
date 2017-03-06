@@ -12,9 +12,9 @@ use Jenssegers\Mongodb\Model as Eloquent;
  * Date: 11/18/2015
  * Time: 5:17 PM
  */
-class Aff extends Eloquent
+class Account extends Eloquent
 {
-    protected $collection = 'aff';
+    protected $collection = 'account';
 
     public function user(){
         return User::where('_id', $this->uid)->first();

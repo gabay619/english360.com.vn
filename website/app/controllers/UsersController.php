@@ -87,10 +87,11 @@ class UsersController extends \BaseController {
             if(isset($_COOKIE[Constant::AFF_COOKIE_NAME])){
                 $cookie_value = Common::decodeAffCookie($_COOKIE[Constant::AFF_COOKIE_NAME]);
                 $cookieArr = explode('&',$cookie_value);
-                $aff_id = $cookieArr[0];
-                $user->aff_id = $aff_id;
-                if(isset($cookieArr[1]))
-                    $user->aff_subid = $cookieArr[1];
+                $user->aff = array(
+                    'uid' => $cookieArr[0],
+                    'sub_id' => isset($cookieArr[1]) ? $cookieArr[1] : '',
+                    'datecreate' => time()
+                );
             }
             $user->save();
         }
@@ -1079,10 +1080,11 @@ class UsersController extends \BaseController {
             if(isset($_COOKIE[Constant::AFF_COOKIE_NAME])){
                 $cookie_value = Common::decodeAffCookie($_COOKIE[Constant::AFF_COOKIE_NAME]);
                 $cookieArr = explode('&',$cookie_value);
-                $aff_id = $cookieArr[0];
-                $user->aff_id = $aff_id;
-                if(isset($cookieArr[1]))
-                    $user->aff_subid = $cookieArr[1];
+                $user->aff = array(
+                    'uid' => $cookieArr[0],
+                    'sub_id' => isset($cookieArr[1]) ? $cookieArr[1] : '',
+                    'datecreate' => time()
+                );
             }
             $user->save();
 

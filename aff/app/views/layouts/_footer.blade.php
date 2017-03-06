@@ -18,9 +18,10 @@
 
 <script>
     $(function() {
-        $("#start_time" ).datepicker({ dateFormat: 'yy-mm-dd' }).val();
-        $("#end_time").datepicker({ dateFormat: 'yy-mm-dd' }).val();
+//        $("#start_time" ).datepicker({ dateFormat: 'yy-mm-dd' }).val();
+//        $("#end_time").datepicker({ dateFormat: 'yy-mm-dd' }).val();
         $('.selectpicker').selectpicker();
+//        $('.datepicker').datepicker({ dateFormat: 'dd/mm/yy' });
     });
 </script>
 
