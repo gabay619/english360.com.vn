@@ -8,8 +8,7 @@ class LinksController extends \BaseController {
 
     public function postGenerateLink(){
         $linkRedirect = Input::get('link');
-        $token = 
-        $longUrl = Constant::BASE_URL.'/aff.html?ref='.Auth::user()->_id.'&redirect='.$linkRedirect;
+        $longUrl = Constant::BASE_URL.'/aff/'.Auth::user()->_id.'?redirect='.$linkRedirect;
         $ggApiUrl = 'https://www.googleapis.com/urlshortener/v1/url?key='.Constant::GOOLE_APP_KEY;
         $data = array(
             'longUrl' => $longUrl

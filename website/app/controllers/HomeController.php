@@ -161,7 +161,8 @@ class HomeController extends BaseController {
         return View::make('home.message');
     }
 
-    public function aff(){
+    public function aff($uid){
+//        echo $uid;exit;
         return Redirect::to(Input::get('redirect'));
     }
 
