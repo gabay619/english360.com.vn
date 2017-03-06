@@ -3,7 +3,10 @@
 use Captioning\Format\SubripFile;
 class TestController extends \BaseController {
 
-	public function getChat(){
+	public function getDecode(){
+        $str = '123456@789abc';
+        $str = 'rDIrNP6NgzM0orNERGd0jHSCHxuauaN3Naepd54lRbo=';
+        echo Common::decodeAffCookie($str);die;
 		return View::make('test.chat');
 	}
 

@@ -163,8 +163,16 @@ class HomeController extends BaseController {
 
     public function aff($uid){
 //        echo $uid;exit;
-        return Redirect::to(Input::get('redirect'));
+        $redirect = Input::get('redirect','/');
+        $affClick = new AffClick();
+        $affClick->_id = strval(time());
+        $affClick->datecreate = time();
+        $affClick->uid = $uid;
+        $affClick->redirect = $redirect;
+        $affClick->ip = Request::ip();
+        $affClick->save();
+
+        Session::put('aff_uid', $uid);
+        return Redirect::to($redirect);
     }
-
-
 }

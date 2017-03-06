@@ -110,4 +110,6 @@ class Constant
 
     //Aff
     const AFF_SECRET_KEY = 'rAlFu8v6KxcBTYgJm7Tq';
+    const AFF_COOKIE_NAME = 'aff_uid';
+    const AFF_COOKIE_EXPIRED = 86400*60;
 }

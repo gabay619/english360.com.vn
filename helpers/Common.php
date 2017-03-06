@@ -911,4 +911,12 @@ class Common
             37 => 'Ngân hàng Việt Nam thịnh vượng (VPBank)'
         );
     }
+
+    public static function encodeAffCookie($input){
+        return base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5(Constant::AFF_SECRET_KEY), $input, MCRYPT_MODE_CBC, md5(md5(Constant::AFF_SECRET_KEY))));
+    }
+
+    public static function decodeAffCookie($input){
+        return rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5(Constant::AFF_SECRET_KEY), base64_decode($input), MCRYPT_MODE_CBC, md5(md5(Constant::AFF_SECRET_KEY))), "\0");
+    }
 }

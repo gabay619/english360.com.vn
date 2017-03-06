@@ -23,6 +23,7 @@ Route::controller('ajax', 'AjaxController');
 Route::controller('txn', 'TxnsController');
 Route::controller('link', 'LinksController');
 Route::controller('payment', 'PaymentsController');
+Route::controller('report', 'ReportsController');
 Route::get('/trang/{slug}.html', 'PagesController@getDetail');
 
 
