@@ -869,4 +869,46 @@ class Common
     public static function isPhoneNumber($phone){
        return preg_match("/^\+?(84|0)(1\d{9}|9\d{8})$/", $phone);
     }
+
+    public static function getAllBank(){
+        return array(
+            1 => 'Ngân hàng Á Châu (ACB)',
+            2 => 'Ngân hàng Nông nghiệp và Phát triển Nông thôn Việt Nam (Agribank)',
+            3 => 'ANZ Việt Nam (ANZ)',
+            4 => 'Ngân hàng Bắc Á (BACABank)',
+            5 => 'Ngân hàng Bảo Việt (BaoViet Bank)',
+            6 => 'Ngân hàng đầu tư và phát triển Việt Nam (BIDV)',
+            7 => 'Ngân hàng An Bình (ABBank)',
+            8 => 'Ngân hàng Đông Á (DongA Bank)',
+            9 => 'Ngân hàng Xuất nhập khẩu (Eximbank)',
+            10 => 'Ngân hàng Dầu khí toàn cầu (GP Bank)',
+            11 => 'Ngân hàng phát triển nhà TPHCM (HDBank)',
+            12 => 'Ngân hàng HSBC (HSBC)',
+            13 => 'Ngân hàng Kiên Long (KienLongBank)',
+            14 => 'Ngân hàng Liên Việt (LienVietBank)',
+            15 => 'Ngân hàng quân đội (MB)',
+            16 => 'Ngân hàng Hàng hải Việt Nam (MSB)',
+            17 => 'Ngân hàng Nam Á (Nam A Bank)',
+            18 => 'Ngân hàng Quốc dân (NCB)',
+            19 => 'Ngân hàng Phương Đông (OCB)',
+            20 => 'Ngân hàng Đại Dương (Ocean Bank)',
+            21 => 'Ngân hàng TMCP Xăng Dầu (PG Bank)',
+            22 => 'Ngân hàng Sài Gòn Thương tín (Sacombank)',
+            23 => 'Ngân hàng Sài Gòn Công Thương (Saigonbank)',
+            24 => 'Ngân hàng TMCP Sài Gòn (SCB)',
+            25 => 'Ngân hàng Đông Nam Á (SeaBank)',
+            26 => 'Ngân hàng Sài Gòn - Hà Nội (SHB)',
+            27 => 'Ngân hàng Phương Nam (Southern Bank)',
+            28 => 'Ngân hàng Kỹ thương Việt Nam (Techcombank)',
+            29 => 'Ngân hàng Tiên Phong (TienPhongBank)',
+            30 => 'Ngân hàng TMCP Việt Nam Tín Nghĩa (TinNghiaBank)',
+            31 => 'Ngân hàng Xây dựng Việt Nam (Trurst Bank)',
+            32 => 'Ngân hàng Quốc tế (VIB)',
+            33 => 'Ngân hàng Việt Nam Thương Tín (VietBank)',
+            34 => 'Ngân hàng TMCP Bản Việt (VietCapitalBank)',
+            35 => 'Ngân hàng Ngoại thương Việt Nam (Vietcombank)',
+            36 => 'Ngân hàng Công thương Việt Nam (Vietinbank)',
+            37 => 'Ngân hàng Việt Nam thịnh vượng (VPBank)'
+        );
+    }
 }

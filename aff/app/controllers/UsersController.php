@@ -6,16 +6,18 @@ class UsersController extends \BaseController {
         $this->beforeFilter('csrf', array('on' => 'post', 'except'=>array(
 //            'postUploadAvatar',
         )));
-        $this->beforeFilter('auth', array('only' => array(
-			'getProfile',
-			'postSetting',
-            'getPackage',
-            'getRegisterPackage',
+        $this->beforeFilter('auth', array('except' => array(
+			'getLogin',
+			'postLogin',
+            'getRegister',
+            'postRegister',
 		)));
 
 		$this->beforeFilter('guest', array('only' => array(
 			'getLogin',
 			'postLogin',
+            'getRegister',
+            'postRegister',
 		)));
 	}
 
@@ -144,8 +146,69 @@ class UsersController extends \BaseController {
 		return View::make('users.profile');
 	}
 
-	public function postSetting(){
+    public function getSetting(){
+        echo Auth::user()->aff()->_id;exit;
+        return View::make('users.setting');
+    }
 
+	public function postSetting(){
+        $fullname = Input::get('fullname', '');
+        $birthday = Input::get('birthday', '');
+        $cmnd = Input::get('cmnd','');
+        $cmnd_ngaycap = Input::get('cmnd_ngaycap', '');
+        $cmnd_noicap = Input::get('cmnd_noicap', '');
+        $user = Auth::user();
+
+        if(!empty($birthday) && DateTime::createFromFormat('d/m/Y', $birthday)->getTimestamp() > time()){
+            return Redirect::back()->with('error', 'Ngày sinh không được lớn hơn ngày hiện tại.')->withInput();
+        }
+
+        if(!empty($birthday) && !empty($cmnd_ngaycap) && DateTime::createFromFormat('d/m/Y', $birthday)->getTimestamp() > DateTime::createFromFormat('d/m/Y', $cmnd_ngaycap)->getTimestamp()){
+            return Redirect::back()->with('error', 'Ngày cấp CMND không được nhỏ hơn ngày sinh.')->withInput();
+        }
+
+        $rules = array(
+            'fullname' => 'min:2',
+            'cmnd' => 'numeric|min:8',
+            'phone' => 'between:9,13|unique:user',
+        );
+        $validator = Validator::make(Input::all(), $rules);
+        if($validator->fails()){
+            return Redirect::back()->with('error', $validator->errors()->first())->withInput();
+        }
+        $user->fullname = $fullname;
+        $user->birthday = $birthday;
+        $user->cmnd = $cmnd;
+        $user->cmnd_ngaycap = $cmnd_ngaycap;
+        $user->cmnd_noicap = $cmnd_noicap;
+        $user->save();
+        return Redirect::back()->with('success', 'Thay đổi thông tin thành công.');
+    }
+
+    public function getChangePassword(){
+        return View::make('users.change_pass');
+    }
+
+    public function postChangePassword(){
+        $old_password = Input::get('old_password');
+        if(Auth::user()->password != Common::encryptpassword($old_password)){
+            return Redirect::back()->with('error', 'Mật khẩu cũ không đúng');
+        }
+
+        $rules = array(
+            'old_pass'=>'required|alpha_num',
+            'password'=>'required|alpha_num|between:6,12|confirmed',
+            'password_confirmation'=>'required|alpha_num|between:6,12',
+        );
+        $validator = Validator::make(Input::all(), $rules);
+        if($validator->fails()){
+            return Redirect::back()->withInput()->with('error', $validator->errors()->first());
+        }
+        $user = Auth::user();
+        $user->un_password = Input::get('password');
+        $user->password = Common::encryptpassword($user->un_password);
+        $user->save();
+        return Redirect::back()->with('success', 'Đổi mật khẩu thành công.');
     }
 
 	public function getTest(){

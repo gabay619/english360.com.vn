@@ -108,5 +108,6 @@ class Constant
     const TXN_OTP_ERROR = 8;
     const OTP_TO_CASH =1;
 
-
+    //Aff
+    const AFF_SECRET_KEY = 'rAlFu8v6KxcBTYgJm7Tq';
 }

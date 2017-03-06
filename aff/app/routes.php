@@ -22,6 +22,7 @@ Route::controller('upload', 'UploadsController');
 Route::controller('ajax', 'AjaxController');
 Route::controller('txn', 'TxnsController');
 Route::controller('link', 'LinksController');
+Route::controller('payment', 'PaymentsController');
 Route::get('/trang/{slug}.html', 'PagesController@getDetail');
 
 

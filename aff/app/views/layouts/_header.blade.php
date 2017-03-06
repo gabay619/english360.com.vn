@@ -65,14 +65,14 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{Auth::user()->email}} <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li>
-                        <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
+                        <a href="/user/profile"><i class="fa fa-fw fa-user"></i> Thông tin cá nhân</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
+                        <a href="/payment/info"><i class="fa fa-fw fa-credit-card"></i> Thông tin thanh toán</a>
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <a href="/user/logout"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                        <a href="/user/logout"><i class="fa fa-fw fa-power-off"></i> Đăng xuất</a>
                     </li>
                 </ul>
             </li>
