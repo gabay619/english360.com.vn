@@ -82,6 +82,16 @@ class UsersController extends \BaseController {
                 'noti' => '1',
                 'email' => '1',
             );
+
+            //Nếu có aff
+            if(isset($_COOKIE[Constant::AFF_COOKIE_NAME])){
+                $cookie_value = Common::decodeAffCookie($_COOKIE[Constant::AFF_COOKIE_NAME]);
+                $cookieArr = explode('&',$cookie_value);
+                $aff_id = $cookieArr[0];
+                $user->aff_id = $aff_id;
+                if(isset($cookieArr[1]))
+                    $user->aff_subid = $cookieArr[1];
+            }
             $user->save();
         }
 
@@ -1065,6 +1075,15 @@ class UsersController extends \BaseController {
                 'noti' => '1',
                 'email' => '1',
             );
+            //Nếu có aff
+            if(isset($_COOKIE[Constant::AFF_COOKIE_NAME])){
+                $cookie_value = Common::decodeAffCookie($_COOKIE[Constant::AFF_COOKIE_NAME]);
+                $cookieArr = explode('&',$cookie_value);
+                $aff_id = $cookieArr[0];
+                $user->aff_id = $aff_id;
+                if(isset($cookieArr[1]))
+                    $user->aff_subid = $cookieArr[1];
+            }
             $user->save();
 
             Auth::login($user);

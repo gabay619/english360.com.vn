@@ -10,6 +10,12 @@ class TestController extends \BaseController {
 		return View::make('test.chat');
 	}
 
+    public function getCookie(){
+//        setcookie(Constant::AFF_COOKIE_NAME, 'abc', );
+        Cookie::make(Constant::AFF_COOKIE_NAME, 'abc', time()+Constant::AFF_COOKIE_EXPIRED);
+        print_r($_COOKIE);
+    }
+
     public function getDate(){
         $rs = User::where('phone','01208300293')->update(array('event'=>Event::HOC_SINH_SINH_VIEN));
         var_dump($rs);

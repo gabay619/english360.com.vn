@@ -5,6 +5,7 @@
  * Date: 06/03/2017
  * Time: 10:15 AM
  */
+
 $onWap = 1;
 include "config/init.php";
 include "config/connect.php";
@@ -25,5 +26,6 @@ $newclick = $clickcl->insert(array(
 ));
 //Luư cookie
 $cookie_value = Common::encodeAffCookie($uid.'&'.$sub_id);
-setcookie(Constant::AFF_COOKIE_NAME, $cookie_value, Constant::AFF_COOKIE_EXPIRED);
+setcookie(Constant::AFF_COOKIE_NAME, $cookie_value, time()+ Constant::AFF_COOKIE_EXPIRED, '/');
+//print_r($_COOKIE);die;
 header('Location: '.$redirect);exit;
