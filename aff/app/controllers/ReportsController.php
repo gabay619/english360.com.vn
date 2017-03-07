@@ -111,7 +111,7 @@ class ReportsController extends \BaseController {
             '$gte' => (int)strtotime($convertStartdate. ' 00:00:00'),
             '$lte' => (int)strtotime($convertEnddate. ' 23:59:59')
         );
-        $allTxn = AffTxn::where($cond)->orderBy('datecreate', 'asc')->paginate(20);
+        $allTxn = AffTxn::where($cond)->orderBy('datecreate', 'desc')->paginate(20);
         return View::make('report.txn', array(
             'allTxn'=> $allTxn,
             'start' => $start,

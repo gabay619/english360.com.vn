@@ -70,7 +70,7 @@
                 <ul class="dropdown-menu">
                     <li>
                         <a href="#">
-                            <i class="fa fa-fw fa-money"></i> Số dư <strong>{{number_format(Auth::user()->account()->balance)}}đ</strong>
+                            <i class="fa fa-fw fa-money"></i> Số dư: <strong>{{number_format(Auth::user()->account()->balance)}}đ</strong>
                         </a>
                     </li>
                     <li class="divider"></li>
