@@ -1388,6 +1388,8 @@ function packageCard(){
     $logcl = $dbmg->log_txn_card;
     $usercl = $dbmg->user;
     $packagecl = $dbmg->package;
+    $aff_txncl = $dbmg->aff_txn;
+    $accountcl = $dbmg->account;
     $dtr['success'] = false;
     if(!isset($_SESSION['uinfo'])){
         $dtr['mss'] = 'Thao tác không hợp lệ.';
@@ -1462,8 +1464,39 @@ function packageCard(){
     );
     $txncl->update(array('_id'=>$txn['_id']), array('$set'=>$setTxn));
     if($response_code==Constant::TXN_CARD_SUCCESS){
-        $missBalance = $package['price'] -  $card_amount;
         $user = $usercl->findOne(array('_id'=>$txn['uid']));
+        //Tinh tien aff
+        if(isset($user['aff']['uid'])){
+            $aff = $usercl->findOne(array('_id'=>$user['aff']['uid']));
+            $aff_rate = Constant::AFF_RATE_CARD;
+            $aff_discount = $aff_rate*$card_amount;
+            //Luu log aff
+            $aff_txncl->insert(array(
+                '_id' => strval(time()),
+                'datecreate' => time(),
+                'txn_id' => $txn['_id'],
+                'uid' => $aff['_id'],
+                'ref_id' => $user['_id'],
+                'method' => Constant::CARD_METHOD_NAME,
+                'discount' => $aff_discount,
+                'rate' => $aff_rate,
+                'amount' => $card_amount
+            ));
+            //Cong tien cho pub
+            $account = $accountcl->findOne(array('uid'=>$aff['_id']));
+            if(!$account){
+                $account = array(
+                    '_id' => strval(time()),
+                    'uid' => $aff['_id'],
+                    'balance' => 0
+                );
+                $accountcl->insert($account);
+            }
+            $setAcc = array('balance'=>$account['balance']+$aff_discount);
+            $accountcl->update(array('_id'=>$account['_id']), array('$set'=>$setAcc));
+        }
+
+        $missBalance = $package['price'] -  $card_amount;
         if($missBalance > 0){
             //Menh gia the nho hon hoc phi
             //Cộng tiền cho user
@@ -1502,6 +1535,8 @@ function chargeCard(){
     $txncl = $dbmg->txn_card;
     $logcl = $dbmg->log_txn_card;
     $usercl = $dbmg->user;
+    $aff_txncl = $dbmg->aff_txn;
+    $accountcl = $dbmg->account;
     $dtr['success'] = false;
     if(!isset($_SESSION['uinfo'])){
         $dtr['mss'] = 'Thao tác không hợp lệ.';
@@ -1560,8 +1595,38 @@ function chargeCard(){
     );
     $txncl->update(array('_id'=>$txn['_id']), array('$set'=>$setTxn));
     if($response_code==Constant::TXN_CARD_SUCCESS){
-        //Cộng tiền cho user
         $user = $usercl->findOne(array('_id'=>$txn['uid']));
+        //Tinh tien aff
+        if(isset($user['aff']['uid'])){
+            $aff = $usercl->findOne(array('_id'=>$user['aff']['uid']));
+            $aff_rate = Constant::AFF_RATE_CARD;
+            $aff_discount = $aff_rate*$card_amount;
+            //Luu log aff
+            $aff_txncl->insert(array(
+                '_id' => strval(time()),
+                'datecreate' => time(),
+                'txn_id' => $txn['_id'],
+                'uid' => $aff['_id'],
+                'ref_id' => $user['_id'],
+                'method' => Constant::CARD_METHOD_NAME,
+                'discount' => $aff_discount,
+                'rate' => $aff_rate,
+                'amount' => $card_amount
+            ));
+            //Cong tien cho pub
+            $account = $accountcl->findOne(array('uid'=>$aff['_id']));
+            if(!$account){
+                $account = array(
+                    '_id' => strval(time()),
+                    'uid' => $aff['_id'],
+                    'balance' => 0
+                );
+                $accountcl->insert($account);
+            }
+            $setAcc = array('balance'=>$account['balance']+$aff_discount);
+            $accountcl->update(array('_id'=>$account['_id']), array('$set'=>$setAcc));
+        }
+        //Cộng tiền cho user
         $balance = isset($user['balance']) ? $user['balance'] : 0;
         $balance = $balance + $card_amount * Constant::CARD_TO_CASH;
         $usercl->update(array('_id'=>$txn['uid']), array('$set'=>array('balance'=>$balance)));

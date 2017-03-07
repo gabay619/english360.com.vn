@@ -63,13 +63,13 @@ switch ($step){
             header('Location: /thong-bao.html');exit;
         }
         switch ($_GET['type']){
-            case 'card':
+            case Constant::CARD_METHOD_NAME:
                 $listCardType = array(''=>'--Chọn loại thẻ--')+Common::getCardType();
                 $tpl->assign("selectPkg", $selectPkg);
                 $tpl->assign("listCardType", $listCardType);
                 $tpl->assign("pagefile", "user/regispack_card");
                 break;
-            case 'bank':
+            case Constant::BANK_METHOD_NAME:
                 $txnbankcl = $dbmg->txn_bank;
                 $amount = $selectPkg['price'];
                 $txnbank = array(
@@ -124,7 +124,7 @@ switch ($step){
                 $_SESSION['flash_mss'] = 'Thanh toán khóa học thành công. Số dư tài khoản hiện tại: '.number_format($balance).'đ';
                 header('Location: /thong-bao.html');exit;
                 break;
-            case 'sms':
+            case Constant::SMS_METHOD_NAME:
                 $contentId = 'NAP';
                 $contentId .= $selectPkg['price']/1000;
                 $mo = array(
