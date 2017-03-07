@@ -802,9 +802,8 @@ class UsersController extends \BaseController {
                     'rate' => Constant::AFF_RATE_CARD,
                     'amount' => $txn->card_amount
                 ));
-                $account = $aff->account();
-                $account->balance = isset($account->balance) ? $account->balance + $aff_discount : $aff_discount;
-                $account->save();
+                $aff->account_balance += $aff_discount;
+                $aff->save();
             }
             //Cap nhat user
             $missBlance = $selectPkg->price - $txn->card_amount;

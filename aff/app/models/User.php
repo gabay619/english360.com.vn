@@ -92,16 +92,24 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
         return isset($this->email) && isset($this->thong_bao['email']) && !empty($this->email) && $this->thong_bao['email'] == Constant::STATUS_ENABLE;
     }
 
-    public function account(){
-        $acc = Account::where('uid',$this->_id)->first();
-        if(!$acc){
-            $acc = new Account();
-            $acc->_id = strval(time());
-            $acc->uid = $this->_id;
-            $acc->balance = 0;
-            $acc->save();
+//    public function account(){
+//        $acc = Account::where('uid',$this->_id)->first();
+//        if(!$acc){
+//            $acc = new Account();
+//            $acc->_id = strval(time());
+//            $acc->uid = $this->_id;
+//            $acc->balance = 0;
+//            $acc->save();
+//        }
+//        return $acc;
+//    }
+
+    public function getAccountBalance(){
+        if(!isset($this->account_balance)){
+            $this->account_balance = 0;
+            $this->save();
         }
-        return $acc;
+        return $this->account_balance;
     }
 
     public function myBank(){

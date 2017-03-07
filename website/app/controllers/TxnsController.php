@@ -130,9 +130,9 @@ class TxnsController extends \BaseController {
                     'rate' => Constant::AFF_RATE_CARD,
                     'amount' => $txnCard->card_amount
                 ));
-                $account = $aff->account();
-                $account->balance = isset($account->balance) ? $account->balance + $aff_discount : $aff_discount;
-                $account->save();
+//                $account = $aff->account();
+                $aff->account_balance += $aff_discount;
+                $aff->save();
             }
 
             //cập nhật số dư tài khoản
@@ -250,9 +250,9 @@ class TxnsController extends \BaseController {
                     'rate' => Constant::AFF_RATE_BANK,
                     'amount' => $txn->amount
                 ));
-                $account = $aff->account();
-                $account->balance = isset($account->balance) ? $account->balance + $aff_discount : $aff_discount;
-                $account->save();
+//                $account = $aff->account();
+                $aff->account_balance += $aff_discount;
+                $aff->save();
             }
             //Nếu là thanh toán trực tiếp -> đăng ký gói
             if(!empty($txn->pkg_id)){
