@@ -27,7 +27,7 @@
                     <strong>Số tài khoản: </strong>{{$myBank['account_number']}}
                 </li>
             </ul>
-            <a href="/payment/setting" class="btn btn-info">Thay đổi</a>
+            <a href="/payment/setting" class="btn btn-info"><i class="fa fa-fw fa-edit"></i> Thay đổi</a>
         </div>
     </div>
 @endsection

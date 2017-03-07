@@ -23,9 +23,9 @@
         <li>
             <a href="javascript:;" data-toggle="collapse" data-target="#payment"><i class="fa fa-fw fa-dollar"></i> Thanh toán <i class="fa fa-fw fa-caret-down"></i></a>
             <ul id="payment" class="collapse @if(strpos(Request::url(),'/payment')) in @endif">
-                <li>
-                    <a href="/payment/withdraw">Rút tiền</a>
-                </li>
+                {{--<li>--}}
+                    {{--<a href="/payment/withdraw">Rút tiền</a>--}}
+                {{--</li>--}}
                 <li>
                     <a href="/payment/info">Thông tin thanh toán</a>
                 </li>

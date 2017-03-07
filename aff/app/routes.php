@@ -1,5 +1,5 @@
 <?php
-
+use Gregwar\Captcha\CaptchaBuilder;
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -15,6 +15,14 @@ Route::get('/', 'HomeController@getIndex');
 Route::get('/dashboard', 'HomeController@getDashboard');
 Route::get('/fb-callback.html', 'UsersController@facebookCallback');
 Route::get('/thong-bao.html', 'HomeController@showMessage');
+
+Route::get('/captcha', function(){
+    $builder = new CaptchaBuilder;
+    $builder->build();
+    $captcha = $builder->inline();
+    Session::put('captchaPhrase', $builder->getPhrase());
+    return $captcha;
+});
 
 Route::controller('user', 'UsersController');
 Route::controller('test', 'TestController');

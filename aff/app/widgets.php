@@ -12,3 +12,14 @@ Widget::register('datepicker', function ($start, $end, $url=''){
         'url' => $url
     ));
 });
+
+use Gregwar\Captcha\CaptchaBuilder;
+Widget::register('captcha',function(){
+    $builder = new CaptchaBuilder;
+    $builder->build();
+    $captcha = $builder->inline();
+    Session::put('captchaPhrase', $builder->getPhrase());
+    return View::make('widgets.captcha',array(
+        'captcha' => $captcha
+    ));
+});

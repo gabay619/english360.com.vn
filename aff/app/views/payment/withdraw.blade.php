@@ -34,8 +34,19 @@
             </div>
             <p id="note" style="color: red"></p>
             <div class="form-group">
-                <label>Ghi chút</label>
+                <label>Ghi chú</label>
                 {{Form::textarea('description',Input::get('description'), array('class'=>'form-control', 'rows'=>5))}}
+            </div>
+            <div class="form-group">
+                <label>Mã xác thực</label>
+                <div class="row">
+                    <div class="col-sm-6">
+                        {{Form::text('captcha', null, array('class'=>'form-control', 'placeholder'=>'Nhập các ký tự trong ảnh'))}}
+                    </div>
+                    <div class="col-sm-6">
+                        @captcha()
+                    </div>
+                </div>
             </div>
             {{--<div class="form-group">--}}
                 {{--<label>Số tài khoản</label>--}}

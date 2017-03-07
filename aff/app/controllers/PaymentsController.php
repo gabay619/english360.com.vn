@@ -1,5 +1,5 @@
 <?php
-
+use Gregwar\Captcha\CaptchaBuilder;
 /**
  * Created by PhpStorm.
  * User: Administrator
@@ -51,14 +51,47 @@ class PaymentsController extends \BaseController
         return Redirect::to('/payment/info')->with('success', 'Cập nhật thông tin thanh toán thành công');
     }
 
-    public function getWithdraw(){
-        return View::make('payment.withdraw');
-    }
-    
-    public function postWithdraw(){
-        if(Input::get('amount') > Auth::user()->account()->balance){
-            return Redirect::back()->with('error','Số tiền quá lớn.')->withInput();
+    public function getList()
+    {
+        $cond = array(
+            'uid' => Auth::user()->_id,
+        );
+        $start = date('01/m/Y');
+        $end = date('d/m/Y');
+        if(!empty(Input::get('start'))){
+            $start = Input::get('start');
         }
-        //TODO: Dat lenh rut tien
+        if(!empty(Input::get('end'))){
+            $end = Input::get('end');
+        }
+        $convertStartdate = DateTime::createFromFormat('d/m/Y', $start)->format('Y-m-d');
+        $convertEnddate = DateTime::createFromFormat('d/m/Y', $end)->format('Y-m-d');
+        $cond['datecreate'] = array(
+            '$gte' => (int)strtotime($convertStartdate. ' 00:00:00'),
+            '$lte' => (int)strtotime($convertEnddate. ' 23:59:59')
+        );
+        $allTxn = Withdraw::where($cond)->paginate(10);
+        return View::make('payment.list',array(
+            'allTxn'=> $allTxn,
+            'start' => $start,
+            'end' => $end
+        ));
     }
+//
+//    public function getWithdraw(){
+//        return View::make('payment.withdraw');
+//    }
+
+
+//    public function postWithdraw(){
+//        if(Input::get('amount') > Auth::user()->account()->balance){
+//            return Redirect::back()->with('error','Số tiền quá lớn.')->withInput();
+//        }
+//        $builder = new CaptchaBuilder;
+//        $builder->setPhrase(Session::get('captchaPhrase'));
+//        if(!$builder->testPhrase(Input::get('captcha'))) {
+//            return Redirect::back()->with('error','Mã xác thực nhập không chính xác')->withInput();
+//        }
+//        //TODO: Dat lenh rut tien
+//    }
 }

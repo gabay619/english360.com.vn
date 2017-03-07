@@ -30,7 +30,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-9 col-sm-offset-3">
-                            <button type="button" class="btn btn-primary" onclick="generateLink()" id="btnGetLink">Lấy link</button>
+                            <button type="button" class="btn btn-primary" onclick="generateLink()" id="btnGetLink"><i class="fa fa-external-link"></i> Lấy link</button>
                         </div>
                     </div>
                     <div id="linkArea" style="display: none">
