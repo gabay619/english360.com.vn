@@ -45,4 +45,14 @@ class PaymentsController extends \BaseController
         $user->save();
         return Redirect::to('/payment/info')->with('success', 'Cập nhật thông tin thanh toán thành công');
     }
+
+    public function getWithdraw(){
+        return View::make('payment.withdraw');
+    }
+    
+    public function postWithdraw(){
+        if(Input::get('amount') > Auth::user()->account()->balance){
+            return Redirect::back()->with('error','Số tiền quá lớn.')->withInput();
+        }
+    }
 }

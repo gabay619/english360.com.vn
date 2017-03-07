@@ -12,6 +12,7 @@
 
     <div class="row">
         <div class="col-sm-12 col-lg-6">
+            @include('layouts._messages')
             <ul class="list-group">
                 <li class="list-group-item">
                     <strong>Ngân hàng: </strong>{{Common::getAllBank()[$myBank['id']]}}

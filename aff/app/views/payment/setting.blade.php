@@ -12,7 +12,8 @@
 
     <div class="row">
         <div class="col-sm-12 col-lg-6">
-            {{Form::open(array('url'=>'/user/payment-setting'))}}
+            @include('layouts._messages')
+            {{Form::open(array('url'=>'/payment/setting'))}}
             <div class="form-group">
                 <label>Chọn ngân hàng</label>
                 {{Form::select('id',$allBank,$myBank['id'], array('class'=>'form-control'))}}
