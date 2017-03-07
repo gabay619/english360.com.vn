@@ -37,7 +37,7 @@
                 </table>
             </div>
             <div class="text-center">
-                {{--                {{$aTxn->appends(['start' => $start, 'end'=>$end])->links()}}--}}
+                    {{$allTxn->appends(['start' => $start, 'end'=>$end])->links()}}
             </div>
         </div>
 
