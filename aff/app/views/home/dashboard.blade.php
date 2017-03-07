@@ -32,6 +32,28 @@
     </div>
     <div class="row">
         <div class="col-lg-3 col-md-6">
+            <div class="panel panel-green">
+                <div class="panel-heading">
+                    <div class="row">
+                        {{--<div class="col-xs-3">--}}
+                        {{--<i class="fa fa-money fa-5x"></i>--}}
+                        {{--</div>--}}
+                        <div class="col-xs-12 text-right">
+                            <div class="huge">0đ</div>
+                            <div>Doanh thu</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <div class="panel-footer">
+                        <span class="pull-left">Chi tiết</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <div class="row">
@@ -61,7 +83,7 @@
                             <i class="fa fa-shopping-cart fa-5x"></i>
                         </div>
                         <div class="col-xs-9 text-right">
-                            <div class="huge">12</div>
+                            <div class="huge">0</div>
                             <div>Lượt thanh toán</div>
                         </div>
                     </div>
@@ -76,29 +98,6 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-6">
-            <div class="panel panel-green">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <i class="fa fa-money fa-5x"></i>
-                        </div>
-                        <div class="col-xs-9 text-right">
-                            <div class="huge">25.5%</div>
-                            <div>Tỷ lệ chuyển đổi</div>
-                        </div>
-                    </div>
-                </div>
-                <a href="#">
-                    <div class="panel-footer">
-                        <span class="pull-left">Chi tiết</span>
-                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                        <div class="clearfix"></div>
-                    </div>
-                </a>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
             <div class="panel panel-red">
                 <div class="panel-heading">
                     <div class="row">
@@ -111,7 +110,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="#">
+                <a href="/report/user?{{http_build_query(Input::all())}}">
                     <div class="panel-footer">
                         <span class="pull-left">Chi tiết</span>
                         <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>

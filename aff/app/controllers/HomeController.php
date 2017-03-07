@@ -28,7 +28,8 @@ class HomeController extends BaseController {
 		$cond = array(
 			'uid' => Auth::user()->_id
 		);
-		$start = $end = date('d/m/Y');
+		$start = date('01/m/Y');
+		$end = date('d/m/Y');
 		if(!empty(Input::get('start'))){
 			$start = Input::get('start');
 		}
