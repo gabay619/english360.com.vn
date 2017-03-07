@@ -919,4 +919,14 @@ class Common
     public static function decodeAffCookie($input){
         return rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5(Constant::AFF_SECRET_KEY), base64_decode($input), MCRYPT_MODE_CBC, md5(md5(Constant::AFF_SECRET_KEY))), "\0");
     }
+
+    public static function getPaymentMethod($code){
+        $arr = array(
+            Constant::CARD_METHOD_NAME => 'Thẻ cào',
+            Constant::BANK_METHOD_NAME => 'ATM nội địa',
+            Constant::SMS_METHOD_NAME => 'Tin nhắn SMS',
+            Constant::OTP_METHOD_NAME => 'OTP'
+        );
+        return isset($arr[$code]) ? $arr[$code] : '';
+    }
 }

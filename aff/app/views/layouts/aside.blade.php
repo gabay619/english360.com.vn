@@ -7,7 +7,18 @@
             <a href="/link/new"><i class="fa fa-fw fa-edit"></i> Tạo link phân phối</a>
         </li>
         <li>
-            <a href="#"><i class="fa fa-fw fa-bar-chart-o"></i> Báo cáo</a>
+            <a href="javascript:;" data-toggle="collapse" data-target="#report"><i class="fa fa-fw fa-bar-chart-o"></i> Báo cáo <i class="fa fa-fw fa-caret-down"></i></a>
+            <ul id="report" class="collapse @if(strpos(Request::url(),'/report')) in @endif">
+                <li>
+                    <a href="/report/click">Lượt click</a>
+                </li>
+                <li>
+                    <a href="/report/user">Khách hàng</a>
+                </li>
+                <li>
+                    <a href="/report/txn">Doanh thu</a>
+                </li>
+            </ul>
         </li>
         <li>
             <a href="javascript:;" data-toggle="collapse" data-target="#sup"><i class="fa fa-fw fa-question-circle"></i> Hỗ trợ <i class="fa fa-fw fa-caret-down"></i></a>

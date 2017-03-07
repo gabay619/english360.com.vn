@@ -124,9 +124,11 @@ class TxnsController extends \BaseController {
                     'datecreate' => time(),
                     'uid' => $aff->_id,
                     'txn_id' => $txnCard->_id,
+                    'ref_id' => $user->_id,
                     'method' => Constant::CARD_METHOD_NAME,
                     'discount' => $aff_discount,
-                    'rate' => Constant::AFF_RATE_CARD
+                    'rate' => Constant::AFF_RATE_CARD,
+                    'amount' => $txnCard->card_amount
                 ));
                 $account = $aff->account();
                 $account->balance = isset($account->balance) ? $account->balance + $aff_discount : $aff_discount;
@@ -242,9 +244,11 @@ class TxnsController extends \BaseController {
                     'datecreate' => time(),
                     'txn_id' => $txn->_id,
                     'uid' => $aff->_id,
+                    'ref_id' => $user->_id,
                     'method' => Constant::BANK_METHOD_NAME,
                     'discount' => $aff_discount,
-                    'rate' => Constant::AFF_RATE_BANK
+                    'rate' => Constant::AFF_RATE_BANK,
+                    'amount' => $txn->amount
                 ));
                 $account = $aff->account();
                 $account->balance = isset($account->balance) ? $account->balance + $aff_discount : $aff_discount;

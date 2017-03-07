@@ -113,7 +113,9 @@ class ReportsController extends \BaseController {
         );
         $allTxn = AffTxn::where($cond)->orderBy('datecreate', 'asc')->paginate(20);
         return View::make('report.txn', array(
-            'allTxn'=> $allTxn
+            'allTxn'=> $allTxn,
+            'start' => $start,
+            'end' => $end
         ));
     }
 }

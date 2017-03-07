@@ -10,4 +10,7 @@ class AffTxn extends Eloquent
 {
     protected $collection = 'aff_txn';
 
+    public function ref(){
+        return User::find($this->ref_id);
+    }
 }

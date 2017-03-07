@@ -770,9 +770,11 @@ class UsersController extends \BaseController {
                     'datecreate' => time(),
                     'txn_id' => $txn->_id,
                     'uid' => $aff->_id,
+                    'ref_id' => $user->_id,
                     'method' => Constant::CARD_METHOD_NAME,
                     'discount' => $aff_discount,
-                    'rate' => Constant::AFF_RATE_CARD
+                    'rate' => Constant::AFF_RATE_CARD,
+                    'amount' => $txn->card_amount
                 ));
                 $account = $aff->account();
                 $account->balance = isset($account->balance) ? $account->balance + $aff_discount : $aff_discount;

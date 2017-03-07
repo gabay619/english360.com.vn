@@ -66,7 +66,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="#">
+                <a href="/report/txn?{{http_build_query(Input::all())}}">
                     <div class="panel-footer">
                         <span class="pull-left">Chi tiết</span>
                         <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -88,7 +88,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="#">
+                <a href="/report/txn?{{http_build_query(Input::all())}}">
                     <div class="panel-footer">
                         <span class="pull-left">Chi tiết</span>
                         <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>

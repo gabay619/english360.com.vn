@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-12" style="margin-bottom: 10px">
             {{Form::open(array('url'=>'/report/click','method'=>'get','class'=>'form-inline','id'=>'datePick'))}}
             {{Form::hidden('start',null,array('id'=>'dateStart'))}}
             {{Form::hidden('end',null,array('id'=>'dateEnd'))}}
