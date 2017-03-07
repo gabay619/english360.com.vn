@@ -14,12 +14,12 @@
                     <div class="vertical_tab individual_tab block">
                         <h4 class="title_1">Đăng ký</h4>
                         <p class="text-danger" id="flsMss"></p>
-                        {{Form::open(array('url' => '#', 'style'=>'width: 500px'))}}
+                        {{Form::open(array('url' => '/user/register', 'style'=>'width: 500px'))}}
                         <p>{{Form::text('email', Input::get('email'), array('class'=>'input_3', 'placeholder'=>'Email','id'=>'txtRegEmail','autofocus', 'required'))}}</p>
                         <p>{{Form::password('password', array('class'=>'input_3', 'placeholder'=>'Mật khẩu','id'=>'txtRegPassword'))}}</p>
                         <p>{{Form::password('password_confirmation', array('class'=>'input_3', 'placeholder'=>'Xác nhận mật khẩu','id'=>'txtRegPasswordConfirmation'))}}</p>
                         <p>
-                            <button type="button" onclick="register()" class="btn_x btn_blue btn_padding bold">Đăng ký</button>
+                            <button type="submit" class="btn_x btn_blue btn_padding bold">Đăng ký</button>
                             hoặc
                             <a href="/user/login?redirect=1" class="btn_x btn_padding bold btn_blue" style="background-color: rgb(64,93,155) !important;">Đăng ký bằng Facebook</a>
                         </p>
@@ -31,20 +31,20 @@
             </div>
         </div>
     </div>
-    <script>
-        function register() {
-            email = $('#txtRegEmail').val();
-            password = $('#txtRegPassword').val();
-            password_confirmation = $('#txtRegPasswordConfirmation').val();
-            $.post('/user/register', {
-                email: email, password:password, password_confirmation:password_confirmation,_token : '{{ csrf_token() }}', rd_login:1
-            }, function (re) {
-                if(re.success){
-                    window.location.href= '/user/login?username='+username;
-                }else{
-                    $('#flsMss').html('<b>'+re.message+'</br>');
-                }
-            })
-        }
-    </script>
+    {{--<script>--}}
+        {{--function register() {--}}
+            {{--email = $('#txtRegEmail').val();--}}
+            {{--password = $('#txtRegPassword').val();--}}
+            {{--password_confirmation = $('#txtRegPasswordConfirmation').val();--}}
+            {{--$.post('/user/register', {--}}
+                {{--email: email, password:password, password_confirmation:password_confirmation,_token : '{{ csrf_token() }}', rd_login:1--}}
+            {{--}, function (re) {--}}
+                {{--if(re.success){--}}
+                    {{--window.location.href= '/user/login?username='+username;--}}
+                {{--}else{--}}
+                    {{--$('#flsMss').html('<b>'+re.message+'</br>');--}}
+                {{--}--}}
+            {{--})--}}
+        {{--}--}}
+    {{--</script>--}}
 @endsection

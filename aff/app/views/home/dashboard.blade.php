@@ -28,7 +28,7 @@
     </div>
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="alert alert-success">
-        <h2 style="margin: 0">Doanh thu: <strong>0đ</strong></h2>
+        <h2 style="margin: 0">Doanh thu: <strong>{{number_format($revenue)}}đ</strong></h2>
     </div>
     <div class="row">
         <div class="col-lg-3 col-md-6">
@@ -61,7 +61,7 @@
                             <i class="fa fa-shopping-cart fa-5x"></i>
                         </div>
                         <div class="col-xs-9 text-right">
-                            <div class="huge">0</div>
+                            <div class="huge">{{$countRevenue}}</div>
                             <div>Lượt thanh toán</div>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                             <i class="fa fa-money fa-5x"></i>
                         </div>
                         <div class="col-xs-9 text-right">
-                            <div class="huge">0%</div>
+                            <div class="huge">{{$payRate}}%</div>
                             <div>Tỷ lệ thanh toán</div>
                         </div>
                     </div>

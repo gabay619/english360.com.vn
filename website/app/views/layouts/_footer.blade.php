@@ -114,6 +114,7 @@
         });
         //Đăng ký tài khoản
         $('.btn_register').click(function(){
+            $(this).hide();
             parent = $(this).parents('.content_dangkyTK');
             email = parent.find('.txtEmail').val();
             password = parent.find('.txtPassword').val();
@@ -128,6 +129,7 @@
                     parent.find('.registerAjaxMsg').html(result.message);
 //                    parent.find('.txtAuthKey').focus();
                 }
+                parent.find('.btn_register').show();
             }, 'json')
         });
         $('.txtAuthKey').keyup(function(){

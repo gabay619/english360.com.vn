@@ -53,9 +53,22 @@ class HomeController extends BaseController {
 			'status' => Constant::STATUS_ENABLE
 		))->count();
 
+		$countRevenue = AffTxn::raw()->aggregate(array(
+			array('$match'=>$cond),
+			array('$group' => array('_id'=>null,'sum'=>array('$sum'=>'$discount'),'count'=>array('$sum'=>1))),
+		));
+		$revenue = isset($countRevenue['result'][0]['sum']) ? $countRevenue['result'][0]['sum'] : 0;
+		$countRevenue = isset($countRevenue['result'][0]['count']) ? $countRevenue['result'][0]['count'] : 0;
+//		print_r($countRevenue);die;
+		$payRate = number_format($countRevenue/$countClick*100,2);
+
+
 		return View::make('home.dashboard',array(
 			'click' => $countClick,
 			'user' => $countUser,
+			'revenue' =>$revenue,
+			'payRate' =>$payRate,
+			'countRevenue' =>$countRevenue,
 			'start' => $start,
 			'end' => $end
 		));

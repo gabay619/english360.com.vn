@@ -43,7 +43,10 @@ class UsersController extends \BaseController {
 //        unset($rules['email']);
 		$validator = Validator::make($input, $rules);
 		if($validator->fails()){
-			return Response::json(array('success'=>false, 'message'=>$validator->errors()->first()));
+            if(Request::ajax())
+			    return Response::json(array('success'=>false, 'message'=>$validator->errors()->first()));
+            else
+                return Redirect::back()->with('error', $validator->errors()->first());
 		}
 //        if($input['password'] != $input['password_confirmation']){
 //            return Redirect::back()->with('error', 'Mật khẩu xác nhận không khớp')->withInput();
@@ -105,7 +108,10 @@ class UsersController extends \BaseController {
             '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
         $mail = new \helpers\Mail($user->email,'Xác nhận tài khoản English360.com.vn',$content);
         if(!$mail->send()){
-            return Response::json(array('success'=>false, 'message'=>'Không thể gửi thư xác nhận đến địa chỉ email của bạn, vui lòng thử lại sau.'));
+            if(Request::ajax())
+                return Response::json(array('success'=>false, 'message'=>'Không thể gửi thư xác nhận đến địa chỉ email của bạn, vui lòng thử lại sau.'));
+            else
+                return Redirect::back()->with('error', 'Không thể gửi thư xác nhận đến địa chỉ email của bạn, vui lòng thử lại sau.');
         }
 
 //		Auth::login($user);
@@ -123,7 +129,10 @@ class UsersController extends \BaseController {
                 'price' => 0
         );
         HisLog::insert($newHistoryLog);
-		return Response::json(array('success'=> true, 'message'=>'Vui lòng kiểm tra email để xác thực tài khoản của bạn.'));
+        if(Request::ajax())
+		    return Response::json(array('success'=> true, 'message'=>'Vui lòng kiểm tra email để xác thực tài khoản của bạn.'));
+        else
+            return Redirect::to('/thong-bao.html')->with('success', 'Vui lòng kiểm tra email để xác thực tài khoản của bạn.');
 	}
 
 	public function getLogin()
@@ -754,12 +763,13 @@ class UsersController extends \BaseController {
             $user=User::where('_id',$txn->uid)->first();
             //Tính tiền cho aff
             $aff = $user->aff();
-            if($aff()){
+            if($aff){
                 $aff_discount = Constant::AFF_RATE_CARD*$txn->card_amount;
                 AffTxn::insert(array(
                     '_id' => strval(time()),
                     'datecreate' => time(),
                     'txn_id' => $txn->_id,
+                    'uid' => $aff->_id,
                     'method' => Constant::CARD_METHOD_NAME,
                     'discount' => $aff_discount,
                     'rate' => Constant::AFF_RATE_CARD
@@ -1004,7 +1014,7 @@ class UsersController extends \BaseController {
         $user->status = Constant::STATUS_ENABLE;
         $user->save();
         Auth::login($user);
-        return Redirect::to(Session::get('return_url','/user/package'));
+        return Redirect::to('/thong-bao.html')->with('success','Chúc mừng bạn trở thành thành viên của English360');
 
 //        return Redirect::to('/thong-bao.html')->with('success','Xác thực email thành công. Mời bạn tiếp tục sử dụng dịch vụ.');
     }
@@ -1071,6 +1081,9 @@ class UsersController extends \BaseController {
 //    $userNode->getField('email'), $userNode['email']
 //);
         $fb_email = $userNode->getField('email');
+        if(empty($fb_email)){
+            return Redirect::to('/thong-bao.html')->with('error', 'Bạn vui lòng cho English360 quyền truy cập vào địa chỉ email Facebook của bạn.');
+        }
         $checkEmail = User::where(array('email'=>$fb_email,'status'=>Constant::STATUS_ENABLE,'fbid'=>array('$ne'=>$fb_uid)))->first();
         if($checkEmail){
             return Redirect::to('/thong-bao.html')->with('error', 'Email đã được sử dụng');

@@ -32,7 +32,7 @@ if($checkEmail){
 $usercl->update(array('_id'=>$uid), array('$set'=>array('email'=>$email, 'status'=>Constant::STATUS_ENABLE)));
 $o = $usercl->findOne(array('_id'=>$uid));
 $_SESSION['uinfo'] = $o;
-$_SESSION['flash_mss'] = 'Xác thực email thành công. Mời bạn tiếp tục sử dụng dịch vụ.';
+$_SESSION['flash_mss'] = 'Chúc mừng bạn trở thành thành viên của English360.';
 header('Location: /thong-bao.html');exit;
 //$_SESSION['reg_lession_popup'] = true;
 //if(isset($_SESSION['uinfo']) && $_SESSION['uinfo']['_id'] == $uid){

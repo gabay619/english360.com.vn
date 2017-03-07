@@ -72,6 +72,10 @@ $userNode = $response->getGraphUser();
 //    $userNode->getField('email'), $userNode['email']
 //);
 $fb_email = $userNode->getField('email');
+if(empty($fb_email)){
+    $_SESSION['flass_mss'] = 'Bạn vui lòng cho English360 quyền truy cập vào địa chỉ email Facebook của bạn';
+    header('Location: /thong-bao.html');exit;
+}
 $checkEmail = $usercl->findOne(array(
    'email' => $fb_email,
     'fbid' => array('$ne'=>$fb_uid)

@@ -117,11 +117,12 @@ class TxnsController extends \BaseController {
 
             //Tính tiền cho aff
             $aff = $user->aff();
-            if($aff()){
+            if($aff){
                 $aff_discount = Constant::AFF_RATE_CARD*$txnCard->card_amount;
                 AffTxn::insert(array(
                     '_id' => strval(time()),
                     'datecreate' => time(),
+                    'uid' => $aff->_id,
                     'txn_id' => $txnCard->_id,
                     'method' => Constant::CARD_METHOD_NAME,
                     'discount' => $aff_discount,
@@ -234,12 +235,13 @@ class TxnsController extends \BaseController {
             $user=User::where('_id',$txn->uid)->first();
             //Tính tiền cho aff
             $aff = $user->aff();
-            if($aff()){
+            if($aff){
                 $aff_discount = Constant::AFF_RATE_BANK*$txn->amount;
                 AffTxn::insert(array(
                     '_id' => strval(time()),
                     'datecreate' => time(),
                     'txn_id' => $txn->_id,
+                    'uid' => $aff->_id,
                     'method' => Constant::BANK_METHOD_NAME,
                     'discount' => $aff_discount,
                     'rate' => Constant::AFF_RATE_BANK
