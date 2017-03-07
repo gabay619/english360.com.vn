@@ -72,6 +72,7 @@ $userNode = $response->getGraphUser();
 //    $userNode->getField('email'), $userNode['email']
 //);
 $fb_email = $userNode->getField('email');
+$fb_name = $userNode->getField('name');
 if(empty($fb_email)){
     $_SESSION['flass_mss'] = 'Bạn vui lòng cho English360 quyền truy cập vào địa chỉ email Facebook của bạn';
     header('Location: /thong-bao.html');exit;
@@ -81,10 +82,20 @@ $checkEmail = $usercl->findOne(array(
     'fbid' => array('$ne'=>$fb_uid)
 ));
 if($checkEmail){
-    $_SESSION['flass_mss'] = 'Email đã được sử dụng';
-    header('Location: /thong-bao.html');exit;
+    if(isset($checkEmail['fbid']) && !empty($checkEmail['fbid'])){
+        $_SESSION['flass_mss'] = 'Email đã được sử dụng';
+        header('Location: /thong-bao.html');exit;
+    }
+    //Nếu có user đk cùng mail trước đó thì gộp làm 1
+    $updateUser = array(
+        'fbid' => $fb_uid
+    );
+    if(!empty($checkEmail['displayname'])) $updateUser['displayname'] = $fb_name;
+    $usercl->update(array('_id'=>$checkEmail['_id']), array('$set'=>$updateUser));
+    $o = $usercl->findOne(array('_id'=>$checkEmail['_id']));
+    $_SESSION['uinfo'] = $o;
+    header('Location: index.php');exit;
 }
-$fb_name = $userNode->getField('name');
 $checkUser = $usercl->findOne(array('fbid'=>$fb_uid));
 if(!$checkUser){
 //    $img = 'http://graph.facebook.com/'.$fb_uid.'/picture?type=large';
