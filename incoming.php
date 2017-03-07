@@ -1389,7 +1389,6 @@ function packageCard(){
     $usercl = $dbmg->user;
     $packagecl = $dbmg->package;
     $aff_txncl = $dbmg->aff_txn;
-    $accountcl = $dbmg->account;
     $dtr['success'] = false;
     if(!isset($_SESSION['uinfo'])){
         $dtr['mss'] = 'Thao tác không hợp lệ.';
@@ -1483,17 +1482,19 @@ function packageCard(){
                 'amount' => $card_amount
             ));
             //Cong tien cho pub
-            $account = $accountcl->findOne(array('uid'=>$aff['_id']));
-            if(!$account){
-                $account = array(
-                    '_id' => strval(time()),
-                    'uid' => $aff['_id'],
-                    'balance' => 0
-                );
-                $accountcl->insert($account);
-            }
-            $setAcc = array('balance'=>$account['balance']+$aff_discount);
-            $accountcl->update(array('_id'=>$account['_id']), array('$set'=>$setAcc));
+            $affBalance = $aff['account_balance'] +$aff_discount;
+            $usercl->update(array('_id'=>$aff['_id']),array('$set'=>array('account_balance'=>$affBalance)));
+//            $account = $accountcl->findOne(array('uid'=>$aff['_id']));
+//            if(!$account){
+//                $account = array(
+//                    '_id' => strval(time()),
+//                    'uid' => $aff['_id'],
+//                    'balance' => 0
+//                );
+//                $accountcl->insert($account);
+//            }
+//            $setAcc = array('balance'=>$account['balance']+$aff_discount);
+//            $accountcl->update(array('_id'=>$account['_id']), array('$set'=>$setAcc));
         }
 
         $missBalance = $package['price'] -  $card_amount;
@@ -1536,7 +1537,7 @@ function chargeCard(){
     $logcl = $dbmg->log_txn_card;
     $usercl = $dbmg->user;
     $aff_txncl = $dbmg->aff_txn;
-    $accountcl = $dbmg->account;
+//    $accountcl = $dbmg->account;
     $dtr['success'] = false;
     if(!isset($_SESSION['uinfo'])){
         $dtr['mss'] = 'Thao tác không hợp lệ.';
@@ -1614,17 +1615,19 @@ function chargeCard(){
                 'amount' => $card_amount
             ));
             //Cong tien cho pub
-            $account = $accountcl->findOne(array('uid'=>$aff['_id']));
-            if(!$account){
-                $account = array(
-                    '_id' => strval(time()),
-                    'uid' => $aff['_id'],
-                    'balance' => 0
-                );
-                $accountcl->insert($account);
-            }
-            $setAcc = array('balance'=>$account['balance']+$aff_discount);
-            $accountcl->update(array('_id'=>$account['_id']), array('$set'=>$setAcc));
+            $affBalance = $aff['account_balance'] +$aff_discount;
+            $usercl->update(array('_id'=>$aff['_id']),array('$set'=>array('account_balance'=>$affBalance)));
+//            $account = $accountcl->findOne(array('uid'=>$aff['_id']));
+//            if(!$account){
+//                $account = array(
+//                    '_id' => strval(time()),
+//                    'uid' => $aff['_id'],
+//                    'balance' => 0
+//                );
+//                $accountcl->insert($account);
+//            }
+//            $setAcc = array('balance'=>$account['balance']+$aff_discount);
+//            $accountcl->update(array('_id'=>$account['_id']), array('$set'=>$setAcc));
         }
         //Cộng tiền cho user
         $balance = isset($user['balance']) ? $user['balance'] : 0;

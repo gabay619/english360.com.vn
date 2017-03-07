@@ -120,9 +120,9 @@ class ApiController extends \BaseController
                     'rate' => $aff_rate,
                     'amount' => $txn->amount
                 ));
-                $account = $aff->account();
-                $account->balance = isset($account->balance) ? $account->balance + $aff_discount : $aff_discount;
-                $account->save();
+//                $account = $aff->account();
+                $aff->account_balance += $aff_discount;
+                $aff->save();
             }
             //Neu kem goi cuoc
             if($package){

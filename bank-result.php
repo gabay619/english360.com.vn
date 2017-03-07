@@ -15,7 +15,7 @@ $logcl = $dbmg->log_txn_bank;
 $txncl = $dbmg->txn_bank;
 $packagecl = $dbmg->package;
 $aff_txncl = $dbmg->aff_txn;
-$accountcl = $dbmg->account;
+//$accountcl = $dbmg->account;
 $mpc = new OnePayBank();
 $log = $_GET;
 $log['_id'] = strval(time());
@@ -56,17 +56,19 @@ if($rs['code'] == Constant::TXN_BANK_SUCCESS){
             'amount' => $txn['amount']
         ));
         //Cong tien cho pub
-        $account = $accountcl->findOne(array('uid'=>$aff['_id']));
-        if(!$account){
-            $account = array(
-                '_id' => strval(time()),
-                'uid' => $aff['_id'],
-                'balance' => 0
-            );
-            $accountcl->insert($account);
-        }
-        $setAcc = array('balance'=>$account['balance']+$aff_discount);
-        $accountcl->update(array('_id'=>$account['_id']), array('$set'=>$setAcc));
+        $affBalance = $aff['account_balance'] +$aff_discount;
+        $usercl->update(array('_id'=>$aff['_id']),array('$set'=>array('account_balance'=>$affBalance)));
+//        $account = $accountcl->findOne(array('uid'=>$aff['_id']));
+//        if(!$account){
+//            $account = array(
+//                '_id' => strval(time()),
+//                'uid' => $aff['_id'],
+//                'balance' => 0
+//            );
+//            $accountcl->insert($account);
+//        }
+//        $setAcc = array('balance'=>$account['balance']+$aff_discount);
+//        $accountcl->update(array('_id'=>$account['_id']), array('$set'=>$setAcc));
     }
 
     //Neu la thanh toan truc tiep-> dang ky goi
