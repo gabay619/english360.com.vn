@@ -21,7 +21,6 @@
             {{Form::close()}}
         </div>
         <div class="col-sm-12">
-            <h2>Theo URL</h2>
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
                     <thead>

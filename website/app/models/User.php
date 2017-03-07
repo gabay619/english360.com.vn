@@ -95,4 +95,23 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
     public function isAllowEmail(){
         return isset($this->email) && isset($this->thong_bao['email']) && !empty($this->email) && $this->thong_bao['email'] == Constant::STATUS_ENABLE;
     }
+
+    public function aff(){
+        if(isset($this->aff['uid'])){
+            return static::find($this->aff['uid']);
+        }
+        return false;
+    }
+
+    public function account(){
+        $acc = Account::where('uid',$this->_id)->first();
+        if(!$acc){
+            $acc = new Account();
+            $acc->_id = strval(time());
+            $acc->uid = $this->_id;
+            $acc->balance = 0;
+            $acc->save();
+        }
+        return $acc;
+    }
 }

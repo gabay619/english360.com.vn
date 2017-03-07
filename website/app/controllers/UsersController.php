@@ -564,14 +564,14 @@ class UsersController extends \BaseController {
                 return Redirect::to('/user/package?step=4')->with('error', 'Gói cước không tồn tại');
             }
             switch (Input::get('type')){
-                case 'card':
+                case Constant::CARD_METHOD_NAME:
                     $listCardType = array(''=>'--Chọn loại thẻ--')+Common::getCardType();
                     return View::make('users.package_card',array(
                         'listCardType' => $listCardType,
                         'selectPkg' => $selectPkg
                     ));
                     break;
-                case 'bank':
+                case Constant::BANK_METHOD_NAME:
                     //Tạo giao dịch
                     $txn = new TxnBank;
                     $txn->_id = strval(time());
@@ -616,7 +616,7 @@ class UsersController extends \BaseController {
                     $mess = 'Thanh toán khóa học thành công. Số dư tài khoản hiện tại: '.number_format($user->balance).'đ';
                     return Redirect::to('/user/package?step=4')->with('success', $mess);
                     break;
-                case 'otp':
+                case Constant::OTP_METHOD_NAME:
                     $listCardType = array(''=>'--Chọn nhà mạng--')+Common::getCardType();
                     return View::make('users.package_otp',array(
                         'listCardType' => $listCardType,
@@ -751,8 +751,25 @@ class UsersController extends \BaseController {
         $txn->response_code=$response_code;
         if($response_code==Constant::TXN_CARD_SUCCESS){
             $txn->save();
-            $missBlance = $selectPkg->price - $txn->card_amount;
             $user=User::where('_id',$txn->uid)->first();
+            //Tính tiền cho aff
+            $aff = $user->aff();
+            if($aff()){
+                $aff_discount = Constant::AFF_RATE_CARD*$txn->card_amount;
+                AffTxn::insert(array(
+                    '_id' => strval(time()),
+                    'datecreate' => time(),
+                    'txn_id' => $txn->_id,
+                    'method' => Constant::CARD_METHOD_NAME,
+                    'discount' => $aff_discount,
+                    'rate' => Constant::AFF_RATE_CARD
+                ));
+                $account = $aff->account();
+                $account->balance = isset($account->balance) ? $account->balance + $aff_discount : $aff_discount;
+                $account->save();
+            }
+            //Cap nhat user
+            $missBlance = $selectPkg->price - $txn->card_amount;
             //Mệnh giá thẻ nhỏ hơn giá gói
             if($missBlance > 0){
                 //cập nhật số dư tài khoản

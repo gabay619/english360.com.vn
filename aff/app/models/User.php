@@ -93,14 +93,15 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
     }
 
     public function account(){
-        $aff = Account::where('uid',$this->_id)->first();
-        if(!$aff){
-            $aff = new Account();
-            $aff->_id = strval(time());
-            $aff->uid = $this->_id;
-            $aff->save();
+        $acc = Account::where('uid',$this->_id)->first();
+        if(!$acc){
+            $acc = new Account();
+            $acc->_id = strval(time());
+            $acc->uid = $this->_id;
+            $acc->balance = 0;
+            $acc->save();
         }
-        return $aff;
+        return $acc;
     }
 
     public function myBank(){

@@ -10,10 +10,8 @@ class TestController extends \BaseController {
 		return View::make('test.chat');
 	}
 
-    public function getCookie(){
-//        setcookie(Constant::AFF_COOKIE_NAME, 'abc', );
-        Cookie::make(Constant::AFF_COOKIE_NAME, 'abc', time()+Constant::AFF_COOKIE_EXPIRED);
-        print_r($_COOKIE);
+    public function getAff(){
+        echo Auth::user()->aff()->email;
     }
 
     public function getDate(){

@@ -115,6 +115,23 @@ class TxnsController extends \BaseController {
 
             $user=User::where('_id',$txnCard->uid)->first();
 
+            //Tính tiền cho aff
+            $aff = $user->aff();
+            if($aff()){
+                $aff_discount = Constant::AFF_RATE_CARD*$txnCard->card_amount;
+                AffTxn::insert(array(
+                    '_id' => strval(time()),
+                    'datecreate' => time(),
+                    'txn_id' => $txnCard->_id,
+                    'method' => Constant::CARD_METHOD_NAME,
+                    'discount' => $aff_discount,
+                    'rate' => Constant::AFF_RATE_CARD
+                ));
+                $account = $aff->account();
+                $account->balance = isset($account->balance) ? $account->balance + $aff_discount : $aff_discount;
+                $account->save();
+            }
+
             //cập nhật số dư tài khoản
             $user->balance = $user->getBalance()+$txnCard->card_amount * Constant::CARD_TO_CASH;
             $user->save();
@@ -215,6 +232,22 @@ class TxnsController extends \BaseController {
             $txn->card_type = $rs['card_type'];
             $txn->save();
             $user=User::where('_id',$txn->uid)->first();
+            //Tính tiền cho aff
+            $aff = $user->aff();
+            if($aff()){
+                $aff_discount = Constant::AFF_RATE_BANK*$txn->amount;
+                AffTxn::insert(array(
+                    '_id' => strval(time()),
+                    'datecreate' => time(),
+                    'txn_id' => $txn->_id,
+                    'method' => Constant::BANK_METHOD_NAME,
+                    'discount' => $aff_discount,
+                    'rate' => Constant::AFF_RATE_BANK
+                ));
+                $account = $aff->account();
+                $account->balance = isset($account->balance) ? $account->balance + $aff_discount : $aff_discount;
+                $account->save();
+            }
             //Nếu là thanh toán trực tiếp -> đăng ký gói
             if(!empty($txn->pkg_id)){
                 $package = Package::where('_id',$txn->pkg_id)->first();

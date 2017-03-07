@@ -69,6 +69,7 @@ class Constant
     const TXN_CARD_PIN_INVALID = 6;
     const TXN_CARD_SERI_INVALID = 6;
     const CARD_TO_CASH = 1;
+    const CARD_METHOD_NAME = 'card';
     //Cardtype
     const CARD_TYPE_VIETTEL = 'VTE';
     const CARD_TYPE_MOBIFONE = 'VMS';
@@ -88,6 +89,7 @@ class Constant
     const TXN_BANK_TIMEOUT = 12;
     const TXN_BANK_PENDING = 13;
     const BANK_TO_CASH = 1;
+    const BANK_METHOD_NAME = 'bank';
 
     //Txn Sms
     const TXN_SMS_SUCCESS = 'WCG-0000';
@@ -95,6 +97,7 @@ class Constant
     const TXN_SMS_ERROR = 'WCG-0002';
     const TXN_SMS_NOT_ENOUGH = 'WCG-0005';
     const SMS_TO_CASH = 1;
+    const SMS_METHOD_NAME = 'sms';
 
     //Txn Otp
     const TXN_OTP_SUCCESS = 0;
@@ -107,9 +110,14 @@ class Constant
     const TXN_OTP_SENT_SUCCESS = 7;
     const TXN_OTP_ERROR = 8;
     const OTP_TO_CASH =1;
+    const OTP_METHOD_NAME = 'otp';
 
     //Aff
     const AFF_SECRET_KEY = 'rAlFu8v6KxcBTYgJm7Tq';
     const AFF_COOKIE_NAME = 'aff_uid';
     const AFF_COOKIE_EXPIRED = 86400*60;
+    const AFF_RATE_CARD = 0.3;
+    const AFF_RATE_BANK = 0.3;
+    const AFF_RATE_SMS = 0.3;
+    const AFF_RATE_OTP = 0.3;
 }

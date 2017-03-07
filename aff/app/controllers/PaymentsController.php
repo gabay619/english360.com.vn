@@ -54,5 +54,6 @@ class PaymentsController extends \BaseController
         if(Input::get('amount') > Auth::user()->account()->balance){
             return Redirect::back()->with('error','Số tiền quá lớn.')->withInput();
         }
+        //TODO: Dat lenh rut tien
     }
 }
