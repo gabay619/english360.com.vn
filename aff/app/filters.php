@@ -32,6 +32,10 @@ App::after(function($request, $response)
 | integrates HTTP Basic authentication for quick, simple checking.
 |
 */
+Route::filter('payment', function (){
+	if(!isset(Auth::user()->bank['id']))
+		return Redirect::to('/payment/setting')->with('error','Bạn cần cập nhật thông tin thanh toán');
+});
 
 Route::filter('auth', function()
 {

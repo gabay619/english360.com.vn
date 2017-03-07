@@ -16,6 +16,11 @@ class PaymentsController extends \BaseController
         )));
         $this->beforeFilter('auth', array('except' => array(
         )));
+
+        $this->beforeFilter('payment', array('except' =>    array(
+            'getSetting',
+            'postSetting'
+        )));
     }
 
     public function getInfo(){

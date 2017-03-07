@@ -46,8 +46,8 @@
         </div>
     </div>
     <script>
-{{--        var balance = {{intval(Auth::user()->account()->balance)}};--}}
-        var balance = 100000;
+        var balance = {{intval(Auth::user()->account()->balance)}};
+//        var balance = 100000;
         $(function(){
             $("#amount").keyup(function(){
                 var amount = $("#amount").val();

@@ -21,6 +21,20 @@
             </ul>
         </li>
         <li>
+            <a href="javascript:;" data-toggle="collapse" data-target="#payment"><i class="fa fa-fw fa-dollar"></i> Thanh toán <i class="fa fa-fw fa-caret-down"></i></a>
+            <ul id="payment" class="collapse @if(strpos(Request::url(),'/payment')) in @endif">
+                <li>
+                    <a href="/payment/withdraw">Rút tiền</a>
+                </li>
+                <li>
+                    <a href="/payment/info">Thông tin thanh toán</a>
+                </li>
+                <li>
+                    <a href="/payment/list">Lịch sử rút tiền</a>
+                </li>
+            </ul>
+        </li>
+        <li>
             <a href="javascript:;" data-toggle="collapse" data-target="#sup"><i class="fa fa-fw fa-question-circle"></i> Hỗ trợ <i class="fa fa-fw fa-caret-down"></i></a>
             <ul id="sup" class="collapse">
                 <li>
