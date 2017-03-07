@@ -104,6 +104,26 @@ class ApiController extends \BaseController
         $txn->save();
         if($txn->response_code == OnePayClient::SMS_SUCCESS_CODE){
             $arResponse['status'] = 1;
+            //tinh tien cho Aff
+            $aff = $user->aff();
+            if($aff){
+                $aff_rate = Constant::AFF_RATE_SMS;
+                $aff_discount = $aff_rate*$txn->amount;
+                AffTxn::insert(array(
+                    '_id' => strval(time()),
+                    'datecreate' => time(),
+                    'txn_id' => $txn->_id,
+                    'uid' => $aff->_id,
+                    'ref_id' => $user->_id,
+                    'method' => Constant::SMS_METHOD_NAME,
+                    'discount' => $aff_discount,
+                    'rate' => $aff_rate,
+                    'amount' => $txn->amount
+                ));
+                $account = $aff->account();
+                $account->balance = isset($account->balance) ? $account->balance + $aff_discount : $aff_discount;
+                $account->save();
+            }
             //Neu kem goi cuoc
             if($package){
                 $missBalance = $package->price - $txn->amount;
