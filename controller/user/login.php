@@ -47,13 +47,14 @@ if(!empty($_POST)){
             //Nếu tài khoản chưa kích hoạt
             if($o['status'] != Constant::STATUS_ENABLE){
                 //Gửi lai email xác nhận
-                $content = '<p>Xin chào,</p>'.
-                    '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào đường link bên dưới:</p>'.
-                    '<p><a href="'.Common::getVerifyEmailUrl($o['_id'],$email).'">'.Common::getVerifyEmailUrl($o['_id'],$email).'</a></p>'.
-                    '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
-                $mail = new \helpers\Mail($email,'Xác nhận tài khoản English360.com.vn',$content);
-                $mail->send();
-                $mes1 = array('mss'=>"Vui lòng xác thực email.","class"=>"none");
+//                $content = '<p>Xin chào,</p>'.
+//                    '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào đường link bên dưới:</p>'.
+//                    '<p><a href="'.Common::getVerifyEmailUrl($o['_id'],$email).'">'.Common::getVerifyEmailUrl($o['_id'],$email).'</a></p>'.
+//                    '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
+//                $mail = new \helpers\Mail($email,'Xác nhận tài khoản English360.com.vn',$content);
+//                $mail->send();
+                $reVerify = Constant::BASE_URL.'/send-verify-email.php?token='.base64_encode($email.'+'.time());
+                $mes1 = array('mss'=>'Vui lòng xác thực email. <a style="text-decoration:underline" href="'.$reVerify.'">Gửi lại link xác thực</a>',"class"=>"none");
             }else{
                 $_SESSION['uinfo'] = $o;
                 $newHistoryLog = array(
