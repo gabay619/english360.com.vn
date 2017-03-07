@@ -111,10 +111,9 @@ class ReportsController extends \BaseController {
             '$gte' => (int)strtotime($convertStartdate. ' 00:00:00'),
             '$lte' => (int)strtotime($convertEnddate. ' 23:59:59')
         );
-        $countRevenue = AffTxn::raw()->aggregate(array(
-			array('$match'=>$cond),
-			array('$group' => array('_id'=>null,'sum'=>array('$sum'=>'$discount'))),
-		));
-		print_r($countRevenue['result'][0]['sum']);die;
+        $allTxn = AffTxn::where($cond)->orderBy('datecreate', 'asc')->paginate(20);
+        return View::make('report.txn', array(
+            'allTxn'=> $allTxn
+        ));
     }
 }

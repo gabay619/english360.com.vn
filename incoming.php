@@ -631,7 +631,7 @@ function sendconfirmkey() {
         $dtr['mss'] = 'Email này hiện chưa đăng ký tài khoản.';
         echo json_encode($dtr);exit;
     }
-    if(!empty($userinfo['fbid'])){
+    if(!empty($userinfo['fbid']) && empty($userinfo['un_password'])){
         $dtr['mss'] = 'Tài khoản quý khách được đăng ký qua Facebook, vui lòng đăng nhập bằng Facebook.';
         echo json_encode($dtr);exit;
     }

@@ -262,7 +262,7 @@ class UsersController extends \BaseController {
 
         if(!$user)
             return Redirect::back()->with('error', 'Email này hiện chưa đăng ký tài khoản.')->withInput();
-        if(isset($user->fbid))
+        if(isset($user->fbid) && !isset($user->un_password))
             return Redirect::back()->with('error', 'Tài khoản quý khách được đăng ký qua Facebook, vui lòng đăng nhập bằng Facebook.')->withInput();
 
         $sendPassCount = isset($user->send_pass['count']) ? $user->send_pass['count'] : 0;
@@ -1081,14 +1081,23 @@ class UsersController extends \BaseController {
 //    $userNode->getField('email'), $userNode['email']
 //);
         $fb_email = $userNode->getField('email');
+        $fb_name = $userNode->getField('name');
         if(empty($fb_email)){
             return Redirect::to('/thong-bao.html')->with('error', 'Bạn vui lòng cho English360 quyền truy cập vào địa chỉ email Facebook của bạn.');
         }
         $checkEmail = User::where(array('email'=>$fb_email,'status'=>Constant::STATUS_ENABLE,'fbid'=>array('$ne'=>$fb_uid)))->first();
         if($checkEmail){
-            return Redirect::to('/thong-bao.html')->with('error', 'Email đã được sử dụng');
+            if(isset($checkEmail->fbid) && !empty($checkEmail->fbid))
+                return Redirect::to('/thong-bao.html')->with('error', 'Email đã được sử dụng');
+            else{
+                //Nếu có user đk cùng mail trước đó thì gộp làm 1
+                $checkEmail->fbid = $fb_uid;
+                if(empty($checkEmail->displayname)) $checkEmail->displayname = $fb_name;
+                $checkEmail->save();
+                Auth::login($checkEmail);
+                return Redirect::to(Session::get('return_url','/user/package'));
+            }
         }
-        $fb_name = $userNode->getField('name');
         $checkUser = User::where('fbid',$fb_uid)->first();
         if(!$checkUser){
             $user = new User();

@@ -60,7 +60,7 @@ class HomeController extends BaseController {
 		$revenue = isset($countRevenue['result'][0]['sum']) ? $countRevenue['result'][0]['sum'] : 0;
 		$countRevenue = isset($countRevenue['result'][0]['count']) ? $countRevenue['result'][0]['count'] : 0;
 //		print_r($countRevenue);die;
-		$payRate = number_format($countRevenue/$countClick*100,2);
+		$payRate = $countClick > 0 ? number_format($countRevenue/$countClick*100,2) : 0;
 
 
 		return View::make('home.dashboard',array(
