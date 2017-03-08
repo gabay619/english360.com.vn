@@ -30,7 +30,7 @@
                 'Hôm qua': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                 '7 ngày qua': [moment().subtract(6, 'days'), moment()],
                 '30 ngày qua': [moment().subtract(29, 'days'), moment()],
-                'Tháng này': [moment().startOf('month'), moment().endOf('month')],
+                'Tháng này': [moment().startOf('month'), moment()],
                 'Tháng trước': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
             },
             locale: {

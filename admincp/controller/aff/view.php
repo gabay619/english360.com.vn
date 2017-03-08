@@ -59,13 +59,15 @@ $list = $list['result'][0]['data'];
         <th>Số dư</th>
         <th>Doanh thu</th>
         <th>Lượt thanh toán</th>
+        <th>Chiết khấu</th>
         <th>Thao tác</th>
     </tr>
     </thead>
     <tbody>
     <?php foreach($list as $key=>$item):
-        $user = $usercl->findOne(array('_id'=>$item['_id']))
+        $user = $usercl->findOne(array('_id'=>$item['_id']));
 //        $lastChat = $item['chat'][count($item['chat']) - 1];
+        $discount = isset($user['aff_discount']) ? $user['aff_discount'] : Constant::AFF_RATE_CARD;
         ?>
         <tr>
             <td><?php echo $user['email']; ?></td>
@@ -73,7 +75,11 @@ $list = $list['result'][0]['data'];
             <td><?php echo number_format($item['sum_discount']); ?></td>
             <td><?php echo $item['count']; ?></td>
             <td>
-                <button type="button" class="btn btn-primary" onclick="getDetail('<?php echo $item['_id'] ?>','<?php echo $user['email']; ?>')">Chi tiết</button>
+                <?php echo number_format($discount*100); ?>%
+                <button type="button" class="btn btn-sm btn-default" onclick="changeDiscount('<?php echo $item['_id'] ?>')"><i class="glyphicon glyphicon-edit"></i></button>
+            </td>
+            <td>
+                <button type="button" class="btn btn-sm btn-primary" onclick="getDetail('<?php echo $item['_id'] ?>','<?php echo $user['email']; ?>')">Chi tiết</button>
             </td>
         </tr>
     <?php endforeach; ?>
@@ -94,7 +100,7 @@ $list = $list['result'][0]['data'];
                     <tr>
                         <th>Click</th>
                         <th>Lượt thanh toán</th>
-                        <th>Tỷ lệ</th>
+                        <th>Hiệu suất</th>
                         <th>Doanh thu</th>
                         <th>Khách hàng</th>
                     </tr>
@@ -132,5 +138,19 @@ $list = $list['result'][0]['data'];
 //            alert(JSON.stringify(re, null, 4));
         });
         $('#myModal').modal('show');
+    }
+
+    function changeDiscount(id) {
+        discount = prompt('Nhập mức chiết khấu mới (%)');
+        $.post('incoming.php?act=changeDiscount', {
+            id:id, discount:discount
+        }, function (re) {
+            if(re.success){
+                alert('Success!');
+                location.reload();
+            }else{
+                alert('Failed!');
+            }
+        });
     }
 </script>

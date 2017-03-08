@@ -790,7 +790,8 @@ class UsersController extends \BaseController {
             //Tính tiền cho aff
             $aff = $user->aff();
             if($aff){
-                $aff_discount = Constant::AFF_RATE_CARD*$txn->card_amount;
+                $aff_discount_rate = isset($aff['aff_discount']) ? $aff['aff_discount'] : Constant::AFF_RATE_CARD;
+                $aff_discount = $aff_discount_rate*$txn->card_amount;
                 AffTxn::insert(array(
                     '_id' => strval(time()),
                     'datecreate' => time(),
@@ -799,7 +800,7 @@ class UsersController extends \BaseController {
                     'ref_id' => $user->_id,
                     'method' => Constant::CARD_METHOD_NAME,
                     'discount' => $aff_discount,
-                    'rate' => Constant::AFF_RATE_CARD,
+                    'rate' => $aff_discount_rate,
                     'amount' => $txn->card_amount
                 ));
                 $aff->account_balance += $aff_discount;

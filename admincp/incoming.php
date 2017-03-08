@@ -50,6 +50,7 @@ switch($act){
     case 'getLogBank': getLogBank(); break;
     case 'getLogSms': getLogSms(); break;
     case 'getAffDetail': getAffDetail(); break;
+    case 'changeDiscount': changeDiscount(); break;
 }
 function sport_getteam(){
     global $dbmg;
@@ -795,6 +796,20 @@ function getAffDetail(){
         'rate' => $payRate.'%',
         'count_revenue' => $countRevenue,
     );
+    echo json_encode($dtr);exit;
+}
+
+function changeDiscount(){
+    global $dbmg;
+    $usercl = $dbmg->user;
+    $dtr['success'] = false;
+    $id = $_POST['id'];
+    $discount = intval($_POST['discount'])/100;
+    $usercl->update(array('_id'=>"$id"), array('$set'=>array('aff_discount'=>$discount)));
+    $user = $usercl->findOne(array('_id'=>$id));
+    if($user['aff_discount'] == $discount){
+        $dtr['success'] = true;
+    }
     echo json_encode($dtr);exit;
 }
 

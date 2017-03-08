@@ -107,7 +107,7 @@ class ApiController extends \BaseController
             //tinh tien cho Aff
             $aff = $user->aff();
             if($aff){
-                $aff_rate = Constant::AFF_RATE_SMS;
+                $aff_rate = isset($aff['aff_discount']) ? $aff['aff_discount'] : Constant::AFF_RATE_SMS;
                 $aff_discount = $aff_rate*$txn->amount;
                 AffTxn::insert(array(
                     '_id' => strval(time()),

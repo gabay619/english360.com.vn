@@ -51,11 +51,11 @@
                         <?php if(acceptpermiss("hmcaudio")) { ?><li class="<?php echo $act=="hmcaudio"?"active":"" ?>"><a href="?act=hmcaudio">Bài hát tiếng Anh</a></li><?php } ?>
                         <?php if(acceptpermiss("luyennguam")) { ?><li class="<?php echo $act=="luyennguam"?"active":"" ?>"><a href="?act=luyennguam">Luyện ngữ âm</a></li><?php } ?>
                         <?php if(acceptpermiss("nguphap")) { ?><li class="<?php echo $act=="nguphap"?"active":"" ?>"><a href="?act=nguphap">Ngữ pháp</a></li><?php } ?>
+                        <?php if(acceptpermiss("hmcgame")) { ?><li class="<?php echo $act=="hmcgame"?"active":"" ?>"><a href="?act=hmcgame">Trò chơi</a></li><?php } ?>
                     </ul>
                 </li>
 <!--                --><?php //if(acceptpermiss("news")) { ?><!--<li class="--><?php //echo $act=="news"?"active":"" ?><!--"><a href="?act=news">Tin tức</a></li>--><?php //} ?>
                 <?php if(acceptpermiss("thuvien")) { ?><li class="<?php echo $act=="thuvien"?"active":"" ?>"><a href="?act=thuvien">Thư viện</a></li><?php } ?>
-                <?php if(acceptpermiss("hmcgame")) { ?><li class="<?php echo $act=="hmcgame"?"active":"" ?>"><a href="?act=hmcgame">Trò chơi</a></li><?php } ?>
                 <?php if(acceptpermiss("tudien")) { ?><li class="<?php echo $act=="tudien"?"active":"" ?>"><a href="?act=tudien">Từ điển</a></li><?php } ?>
 
                 <li class="dropdown <?php echo in_array($act,array("user_manage","role_manage"))?"active":"" ?>">
@@ -110,6 +110,15 @@
                         <?php if(acceptpermiss("txn_cash")) { ?><li class="<?php echo $tact=="txn_cash"?"active":"" ?>"><a href="?act=txn&tact=txn_cash">GD <?php echo Constant::CASH_NAME ?></a></li><?php } ?>
                     </ul>
                 </li>
+                <?php } ?>
+                <?php if(acceptpermiss("aff")) { ?>
+                    <li class="dropdown <?php echo in_array($act,array("txn"))?"active":"" ?>">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="?act=aff">Aff <span class="caret"></span></a>
+                        <ul role="menu" class="dropdown-menu">
+                            <?php if(acceptpermiss("aff_pub")) { ?><li class="<?php echo $act=="aff"&& empty($tact)?"active":"" ?>"><a href="?act=aff">Danh sách Publisher</a></li><?php } ?>
+                            <?php if(acceptpermiss("aff_withdraw")) { ?><li class="<?php echo $tact=="aff_withdraw"?"active":"" ?>"><a href="?act=aff&tact=withdraw">Rút tiền</a></li><?php } ?>
+                        </ul>
+                    </li>
                 <?php } ?>
                 <li class="dropdown <?php echo in_array($act,array("user_manage","role_manage"))?"active":"" ?>">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">Hệ thống<span class="caret"></span></a>

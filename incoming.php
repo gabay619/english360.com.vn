@@ -1467,7 +1467,7 @@ function packageCard(){
         //Tinh tien aff
         if(isset($user['aff']['uid'])){
             $aff = $usercl->findOne(array('_id'=>$user['aff']['uid']));
-            $aff_rate = Constant::AFF_RATE_CARD;
+            $aff_rate = isset($aff['aff_discount']) ? $aff['aff_discount'] : Constant::AFF_RATE_CARD;
             $aff_discount = $aff_rate*$card_amount;
             //Luu log aff
             $aff_txncl->insert(array(
@@ -1600,7 +1600,7 @@ function chargeCard(){
         //Tinh tien aff
         if(isset($user['aff']['uid'])){
             $aff = $usercl->findOne(array('_id'=>$user['aff']['uid']));
-            $aff_rate = Constant::AFF_RATE_CARD;
+            $aff_rate = isset($aff['aff_discount']) ? $aff['aff_discount'] : Constant::AFF_RATE_CARD;
             $aff_discount = $aff_rate*$card_amount;
             //Luu log aff
             $aff_txncl->insert(array(
