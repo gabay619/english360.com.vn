@@ -15,6 +15,7 @@ Route::get('/', 'HomeController@getIndex');
 Route::get('/dashboard', 'HomeController@getDashboard');
 Route::get('/fb-callback.html', 'UsersController@facebookCallback');
 Route::get('/thong-bao.html', 'HomeController@showMessage');
+Route::get('/verify-email.html', 'UsersController@verifyEmail');
 
 Route::get('/captcha', function(){
     $builder = new CaptchaBuilder;

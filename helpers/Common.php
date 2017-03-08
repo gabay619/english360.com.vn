@@ -766,9 +766,9 @@ class Common
         return Constant::BASE_URL.'/disable-email.html?key='.$key;
     }
 
-    public static function getVerifyEmailUrl($uid,$email){
+    public static function getVerifyEmailUrl($uid,$email,$domain=Constant::BASE_URL){
         $key = base64_encode($uid.'+'.$email.'+'.time());
-        return Constant::BASE_URL.'/verify-email.html?key='.$key.'&email='.$email;
+        return $domain.'/verify-email.html?key='.$key.'&email='.$email;
     }
 
     public static function utf8_to_url($str) {

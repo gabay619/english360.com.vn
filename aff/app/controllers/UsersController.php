@@ -52,8 +52,9 @@ class UsersController extends \BaseController {
             $user->phone = Input::get('phone');
             $user->email = Input::get('email');
             $user->un_password = Input::get('password');
-            $user->fullname = Input::get('phone');
+            $user->fullname = Input::get('fullname');
             $user->password = Common::encryptpassword($user->un_password);
+            $user->account_balance = 0;
             $user->cmnd = '';
             $user->cmnd_ngaycap = '';
             $user->cmnd_noicap = '';
@@ -65,11 +66,17 @@ class UsersController extends \BaseController {
             $user->save();
         }
 
+        $verifyUrl = Common::getVerifyEmailUrl($user->_id,$user->email,'http://aff.english360.com.vn');
         //Gửi email xác nhận
-        $content = '<p>Xin chào,</p>'.
-            '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào đường link bên dưới:</p>'.
-            '<p><a href="'.Common::getVerifyEmailUrl($user->_id,$user->email).'">'.Common::getVerifyEmailUrl($user->_id,$user->email).'</a></p>'.
-            '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
+        $content = '<p>Xin chào '.$user->fullname.'</p>'.
+            '<p>Cảm ơn bạn đã đăng ký tài khoản tại http://aff.english360.com.vn. Để hoàn thành việc kích hoạt tài khoản, bạn vui lòng click vào đường dẫn dưới đây:</p>'.
+            '<p><a href="'.$verifyUrl.'">'.$verifyUrl.'</a></p>'.
+            '<p>Tài khoản của bạn có thể sử dụng tất cả các dịch vụ của English360.</p>'.
+            '<p>Cảm ơn bạn đã đồng hành cùng chúng tôi.</p>'.
+            '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>'.
+            '<p>Ban quản trị English360</p>'.
+            '<p>Hotline: '.Constant::SUPPORT_PHONE.'; Email: cskh@english360.com.vn</p>'
+        ;
         $mail = new \helpers\Mail($user->email,'Xác nhận tài khoản English360.com.vn',$content);
         try{
             if(!$mail->send()){
@@ -80,6 +87,34 @@ class UsersController extends \BaseController {
         }
 
         return Redirect::back()->with('true', 'Vui lòng kiểm tra email để xác thực tài khoản của bạn.');
+    }
+    
+    public function getVerifyEmail(){
+        $key = Input::get('key');
+        $email = Input::get('email');
+        try{
+            $decode = base64_decode($key);
+            $dataArr = explode('+', $decode);
+            $uid = $dataArr[0];
+            $emailC = $dataArr[1];
+            $time = $dataArr[2];
+            if($emailC != $email || time() - $time > 30*60){
+                throw new Exception('Thao tác không hợp lệ.');
+            }
+        }catch (Exception $e){
+            return Redirect::to('/thong-bao.html')->with('error',$e->getMessage());
+        }
+        $checkEmail = User::where(array('email'=>$email, '_id'=>array('$ne'=>$uid)))->first();
+        if($checkEmail){
+            return Redirect::to('/thong-bao.html')->with('error','Email đã được sử dụng.');
+        }
+//        User::where('email', $email)->update(array('email'=> ''));
+        $user = User::where('_id', strval($uid))->first();
+        $user->email = $email;
+        $user->status = Constant::STATUS_ENABLE;
+        $user->save();
+        Auth::login($user);
+        return Redirect::to('/thong-bao.html')->with('success','Chúc mừng bạn trở thành thành viên của English360');
     }
 
 	public function getLogin()

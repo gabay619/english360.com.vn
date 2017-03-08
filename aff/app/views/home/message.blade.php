@@ -9,5 +9,8 @@
     </div>
     <div class="main-login main-center">
         @include('layouts._messages')
+        <div>
+            <a href="/" class="btn btn-primary btn-lg btn-block login-button">Về trang chủ</a>
+        </div>
     </div>
 @endsection
