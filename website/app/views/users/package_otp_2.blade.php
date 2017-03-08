@@ -1,7 +1,7 @@
 @extends('layouts.private_not_aside', array('breadcrumb'=>'Học phí'))
 @section('content')
     <div class="text-center">
-        <p>Mã xác thực (OTP) đã được gửi vào số điện thoại <strong>{{$msisdn}}</strong></p>
+        <p>Mã xác thực (OTP) đã được gửi vào số điện thoại <strong>{{$txn->msisdn}}</strong></p>
         <p>Vui lòng nhập vào ô bên dưới để xác nhận thanh toán.</p>
     </div>
     <div class="content_tab_text">

@@ -708,11 +708,14 @@ class UsersController extends \BaseController {
         $txn->response_message = Common::getTxnOtpMss($param['code']);
         $txn->transId = $param['transId'];
         $txn->save();
+        if(empty($param['id'])){
+            return Redirect::back()->with('error','Có lỗi xảy ra, vui lòng thử lại');
+        }
         if($param['code'] != Constant::TXN_OTP_SENT_SUCCESS){
             return Redirect::back()->with('error',Common::getTxnOtpMss($param['code']));
         }
-        return View::make('user.package_otp_2', array(
-            'txn' => $txn
+        return View::make('users.package_otp_2', array(
+            'txn' => $txn,
         ));
     }
 
@@ -739,8 +742,29 @@ class UsersController extends \BaseController {
         $user = User::where('_id',$txn->uid)->first();
 
         if($param['code'] == Constant::TXN_OTP_SUCCESS){
+            //Tính tiền cho aff
+            $aff = $user->aff();
+            if($aff){
+                $aff_discount_rate = isset($aff['aff_discount']) ? $aff['aff_discount'] : Constant::AFF_RATE_OTP;
+                $aff_discount = $aff_discount_rate*$txn->pkg_price;
+                AffTxn::insert(array(
+                    '_id' => strval(time()),
+                    'datecreate' => time(),
+                    'uid' => $aff->_id,
+                    'txn_id' => $txn->_id,
+                    'ref_id' => $user->_id,
+                    'method' => Constant::OTP_METHOD_NAME,
+                    'discount' => $aff_discount,
+                    'rate' => $aff_discount_rate,
+                    'amount' => intval($txn->pkg_price)
+                ));
+//                $account = $aff->account();
+                $aff->account_balance += $aff_discount;
+                $aff->save();
+            }
+
             $package = Package::where('_id',$txn->pkg_id)->first();
-            $time = $package->price;
+            $time = $package->time*86400;
             $user->pkg_expired = $user->getPackageTime() ? $user->getPackageTime()+$time : time()+$time;
             $user->save();
             $mess = 'Thanh toán khóa học thành công. Số dư tài khoản hiện tại: '.number_format($user->balance).'đ';
