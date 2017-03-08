@@ -154,4 +154,8 @@ class ApiController extends \BaseController
         }
         return Response::json($arResponse);
     }
+
+    public function getOtpConfirmVnp(){
+        return Response::json(array('status'=>0,'type'=>'text','sms'=>'test'));
+    }
 }

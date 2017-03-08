@@ -165,6 +165,14 @@ class OnePayClient
         $transId = $decode_Charging["transId"];
         $errorCode = $decode_Charging["errorCode"];
         $redirect_url = $decode_Charging["redirectUrl"];
+        return array(
+            'code' => $this->_mapCodeOtp($errorCode),
+            'message' => $errorMessage,
+            'id' =>$requestId_back,
+            'transId' => $transId,
+            'provider_code' => $errorCode,
+            'redirect_url' => $redirect_url
+        );
     }
 
     public function requestOtp($txn_id, $amount, $msisdn, $content){

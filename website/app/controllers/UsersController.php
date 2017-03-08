@@ -698,6 +698,7 @@ class UsersController extends \BaseController {
         require_once app_path('../../sdk/1pay/OnePayClient.php');
         $mpc = new OnePayClient();
         if($card_type == 'VNP'){
+//            $param = $mpc->requestOtpVnp($txn->_id, $selectPkg->price, $msisdn, Auth::user()->email.' thanh toan '.$selectPkg->price);
             return Redirect::back()->with('error','Chưa hỗ trợ.');
         }
         $param = $mpc->requestOtp($txn->_id, $selectPkg->price, $msisdn, Auth::user()->email.' thanh toan '.$selectPkg->price);
