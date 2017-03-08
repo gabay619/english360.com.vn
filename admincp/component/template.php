@@ -106,6 +106,7 @@
                         <li class="<?php echo $act=="package"?"active":"" ?>"><a href="?act=package">Cấu hình học phí</a></li>
                         <?php if(acceptpermiss("txn_card")) { ?><li class="<?php echo $tact=="txn_card"?"active":"" ?>"><a href="?act=txn&tact=txn_card">GD Thẻ cào</a></li><?php } ?>
                         <?php if(acceptpermiss("txn_bank")) { ?><li class="<?php echo $tact=="txn_bank"?"active":"" ?>"><a href="?act=txn&tact=txn_bank">GD Ngân hàng</a></li><?php } ?>
+                        <?php if(acceptpermiss("txn_sms")) { ?><li class="<?php echo $tact=="txn_sms"?"active":"" ?>"><a href="?act=txn&tact=txn_sms">GD SMS</a></li><?php } ?>
                         <?php if(acceptpermiss("txn_cash")) { ?><li class="<?php echo $tact=="txn_cash"?"active":"" ?>"><a href="?act=txn&tact=txn_cash">GD <?php echo Constant::CASH_NAME ?></a></li><?php } ?>
                     </ul>
                 </li>

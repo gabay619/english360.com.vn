@@ -4,6 +4,7 @@
 $title = "Quản lý giao dịch số dư";
 $txncl = $dbmg->txn;
 $usercl = $dbmg->user;
+$pkgcl = $dbmg->package;
 //$newscl = $dbmg->news;
 #condition
 $limit = 25;
@@ -75,12 +76,17 @@ $list = $cursor->skip($cp)->limit($limit);
         <th>ID</th>
         <th>User</th>
         <th>Số tiền</th>
+        <th>Gói</th>
         <th>Thời gian</th>
     </tr>
     </thead>
     <tbody>
     <?php foreach ($list as $item) {
         $user = $usercl->findOne(array('_id'=>$item['uid']));
+        $pkg = false;
+        if(isset($item['pkg_id'])){
+            $pkg = $pkgcl->findOne(array('_id'=>$item['pkg_id']));
+        }
         ?>
         <tr>
             <!--                    <td><input type="checkbox" class="checkitem" name="id[]" value="--><?php //echo $item['_id'] ?><!--" /></td>-->
@@ -88,6 +94,7 @@ $list = $cursor->skip($cp)->limit($limit);
             <td><?php echo $item['_id'] ?></td>
             <td><?php echo $user['email'] ?></td>
             <td><?php echo number_format($item['amount']) ?></td>
+            <td><?php echo $pkg ? $pkg['name'] : '' ?></td>
             <td><?php echo date("d-m-Y H:i:s", $item['datecreate']) ?></td>
         </tr>
     <?php } ?>

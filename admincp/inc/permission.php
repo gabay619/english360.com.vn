@@ -46,6 +46,15 @@ $module[] = array("name"=>"Thanh toán","key"=>"txn","controller"=>"controller/t
     )
 );
 
+$module[] = array("name"=>"Affiliate","key"=>"aff","controller"=>"controller/aff/index.php","permission"=>
+    array(
+        array("name"=>"Quản lý publisher","key"=>"aff_pub"),
+        array("name"=>"Cấu hình chiết khấu","key"=>"aff_discount"),
+        array("name"=>"Báo cáo doanh thu","key"=>"aff_report"),
+        array("name"=>"Quản lý rút tiền","key"=>"aff_withdraw"),
+    )
+);
+
 $module[] = array("name"=>"Gói cước","key"=>"package","controller"=>"controller/package/index.php","permission"=>
     array(
         array("name"=>"Xem thông tin gói cước","key"=>"package_view"),

@@ -88,6 +88,10 @@ $list = $cursor->skip($cp)->limit($limit);
     <tbody>
     <?php foreach ($list as $item) {
         $user = $usercl->findOne(array('_id'=>$item['uid']));
+        $pkg = false;
+        if(isset($item['pkg_id'])){
+            $pkg = $pkgcl->findOne(array('_id'=>$item['pkg_id']));
+        }
         ?>
         <tr>
             <!--                    <td><input type="checkbox" class="checkitem" name="id[]" value="--><?php //echo $item['_id'] ?><!--" /></td>-->
@@ -100,7 +104,7 @@ $list = $cursor->skip($cp)->limit($limit);
             <td><?php echo date("d-m-Y H:i:s", $item['datecreate']) ?></td>
             <td><?php echo $item['response_code'] == Constant::TXN_SMS_SUCCESS ? '<b class="text-success">Thành công</b>' : '<b class="text-danger">'.Common::getTxnSmsMss($item['response_code']).'</b>'  ?></td>
             <td>
-                <button class="btn btn-default btn-sm" onclick="getLog('<?php echo $item['_id']?>')" type="button">Log</button>
+                <button class="btn btn-default btn-sm" onclick="getLog('<?php echo $item['request_id']?>')" type="button">Log</button>
             </td>
         </tr>
     <?php } ?>

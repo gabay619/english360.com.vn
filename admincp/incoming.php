@@ -48,6 +48,8 @@ switch($act){
     case 'sendSMS': sendSMS(); break;
     case 'recheckCard': recheckCard(); break;
     case 'getLogBank': getLogBank(); break;
+    case 'getLogSms': getLogSms(); break;
+    case 'getAffDetail': getAffDetail(); break;
 }
 function sport_getteam(){
     global $dbmg;
@@ -742,6 +744,60 @@ function getLogBank(){
 //    $dtr['mss'] = json_encode($log);
     echo json_encode($log);exit;
 }
+
+function getLogSms(){
+    global $dbmg;
+    $logcl = $dbmg->log_txn_sms;
+    $id = $_POST['id'];
+    $log = iterator_to_array($logcl->find(array('request_id'=>$id)));
+//    $dtr['mss'] = json_encode($log);
+    echo json_encode($log);exit;
+}
+
+function getAffDetail(){
+    global $dbmg;
+    $usercl = $dbmg->user;
+    $affClickCl = $dbmg->aff_click;
+    $affTxnCl = $dbmg->aff_txn;
+    $id = $_POST['id'];
+    $cond = array('uid'=>$id);
+    $start = isset($_POST['start']) ? $_POST['start'] : date('01/m/Y');
+    $end = isset($_POST['end']) ? $_POST['end'] : date('d/m/Y');
+    $convertStartdate = DateTime::createFromFormat('d/m/Y', $start)->format('Y-m-d');
+    $convertEnddate = DateTime::createFromFormat('d/m/Y', $end)->format('Y-m-d');
+    $cond['datecreate'] = array(
+        '$gte' => (int)strtotime($convertStartdate. ' 00:00:00'),
+        '$lte' => (int)strtotime($convertEnddate. ' 23:59:59')
+    );
+
+    $countClick = $affClickCl->count($cond);
+    $countUser = $usercl->count(array(
+        'aff.uid' => $id,
+        'aff.datecreate' => array(
+            '$gte' => (int)strtotime($convertStartdate. ' 00:00:00'),
+            '$lte' => (int)strtotime($convertEnddate. ' 23:59:59')
+        ),
+        'status' => Constant::STATUS_ENABLE
+    ));
+
+    $countRevenue = $affTxnCl->aggregate(array(
+        array('$match'=>$cond),
+        array('$group' => array('_id'=>null,'sum'=>array('$sum'=>'$discount'),'count'=>array('$sum'=>1))),
+    ));
+
+    $revenue = isset($countRevenue['result'][0]['sum']) ? $countRevenue['result'][0]['sum'] : 0;
+    $countRevenue = isset($countRevenue['result'][0]['count']) ? $countRevenue['result'][0]['count'] : 0;
+    $payRate = $countClick > 0 ? number_format($countRevenue/$countClick*100,2) : 0;
+    $dtr = array(
+        'click' => $countClick,
+        'user' => $countUser,
+        'revenue' => number_format($revenue),
+        'rate' => $payRate.'%',
+        'count_revenue' => $countRevenue,
+    );
+    echo json_encode($dtr);exit;
+}
+
 
 function uploadHssv(){
     $data['status'] = 500;
