@@ -112,6 +112,14 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
         return $this->account_balance;
     }
 
+    public function getAccountSealBalance(){
+        if(!isset($this->account_seal_balance)){
+            $this->account_seal_balance = 0;
+            $this->save();
+        }
+        return $this->account_seal_balance;
+    }
+
     public function myBank(){
         if(!isset($this->bank)){
             $this->bank = array(

@@ -73,6 +73,11 @@
                             <i class="fa fa-fw fa-money"></i> Số dư: <strong>{{number_format(Auth::user()->getAccountBalance())}}đ</strong>
                         </a>
                     </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-fw fa-money"></i> Đóng băng: <strong class="text-info">{{number_format(Auth::user()->getAccountSealBalance())}}đ</strong>
+                        </a>
+                    </li>
                     <li class="divider"></li>
                     <li>
                         <a href="/user/profile"><i class="fa fa-fw fa-user"></i> Thông tin cá nhân</a>

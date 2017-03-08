@@ -80,7 +80,10 @@ $list = $list['result'][0]['data'];
             </td>
             <td>
                 <button type="button" class="btn btn-sm btn-primary" onclick="getDetail('<?php echo $item['_id'] ?>','<?php echo $user['email']; ?>')">Chi tiết</button>
-            </td>
+                <?php if($user['account_balance'] >= Constant::WITHDRAW_MIN_PAY): ?>
+                <button type="button" class="btn btn-sm btn-danger" onclick="withdraw('<?php echo $item['_id'] ?>',<?php echo $user['account_balance'] ?>)">Tạo lệnh rút tiền</button>
+                <?php endif; ?>
+        </td>
         </tr>
     <?php endforeach; ?>
     </tbody>
@@ -151,6 +154,19 @@ $list = $list['result'][0]['data'];
             }else{
                 alert('Failed!');
             }
+        });
+    }
+
+    function withdraw(id,max) {
+        amount = prompt('Nhập số tiền cần rút (vnđ)',max);
+        $.post('incoming.php?act=withdraw', {
+            id:id, amount:amount
+        },function (re) {
+           if(re.success){
+               alert('Tạo lệnh rút tiền thành công')
+           }else{
+               alert(re.mss);
+           }
         });
     }
 </script>

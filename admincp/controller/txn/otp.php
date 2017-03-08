@@ -102,7 +102,7 @@ $list = $cursor->skip($cp)->limit($limit);
             <td><?php echo number_format($item['pkg_price']) ?></td>
             <td><?php echo $pkg ? $pkg['name'] : '' ?></td>
             <td><?php echo date("d-m-Y H:i:s", $item['datecreate']) ?></td>
-            <td><?php echo $item['response_code'] == Constant::TXN_OTP_SUCCESS ? '<b class="text-success">Thành công</b>' : '<b class="text-danger">'.Common::getTxnOtpMss($item['response_code']).'</b>'  ?></td>
+            <td><?php echo $item['response_code'] === Constant::TXN_OTP_SUCCESS ? '<b class="text-success">Thành công</b>' : '<b class="text-danger">'.Common::getTxnOtpMss($item['response_code']).'</b>'  ?></td>
             <td>
                 <button class="btn btn-default btn-sm" onclick="getLog('<?php echo $item['_id']?>')" type="button">Log</button>
             </td>

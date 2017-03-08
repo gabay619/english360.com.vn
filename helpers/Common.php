@@ -929,4 +929,13 @@ class Common
         );
         return isset($arr[$code]) ? $arr[$code] : '';
     }
+
+    public static function getWithdrawStatus($code){
+        $arr = array(
+            Constant::WITHDRAW_STATUS_NEW => 'Chờ duyệt',
+            Constant::WITHDRAW_STATUS_COMPLETE => 'Hoàn thành',
+            Constant::WITHDRAW_STATUS_CANCEL => 'Đã hủy',
+        );
+        return isset($arr[$code]) ? $arr[$code] : '';
+    }
 }

@@ -120,4 +120,10 @@ class Constant
     const AFF_RATE_BANK = 0.3;
     const AFF_RATE_SMS = 0.3;
     const AFF_RATE_OTP = 0.3;
+
+    //Withdraw
+    const WITHDRAW_STATUS_NEW = 1;
+    const WITHDRAW_STATUS_COMPLETE = 2;
+    const WITHDRAW_STATUS_CANCEL = 3;   
+    const WITHDRAW_MIN_PAY = 10000;
 }

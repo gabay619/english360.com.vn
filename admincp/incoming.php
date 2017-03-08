@@ -49,8 +49,10 @@ switch($act){
     case 'recheckCard': recheckCard(); break;
     case 'getLogBank': getLogBank(); break;
     case 'getLogSms': getLogSms(); break;
+    case 'getLogOtp': getLogOtp(); break;
     case 'getAffDetail': getAffDetail(); break;
     case 'changeDiscount': changeDiscount(); break;
+    case 'withdraw':withdraw(); break;
 }
 function sport_getteam(){
     global $dbmg;
@@ -697,6 +699,8 @@ function recheckCard(){
     global $dbmg;
     $txncl = $dbmg->txn_card;
     $logcl = $dbmg->log_txn_card;
+    $usercl = $dbmg->user;
+    $aff_txncl = $dbmg->aff_txn;
     $id = $_POST['id'];
     $txn = $txncl->findOne(array('_id'=>$id));
     if(!$txn){
@@ -716,11 +720,40 @@ function recheckCard(){
     $query = $mpc->recheck('', $txn['pin'], $txn['seri'], $log['provider_txn_id'], $txn['card_type']);
 //    print_r($query);die;
     if($query['code'] == Constant::TXN_CARD_SUCCESS){
+        $card_amount = $query['card_amount'];
         $set = array(
             'response_code'=>Constant::TXN_CARD_SUCCESS,
             'card_amount' => $query['card_amount']
         );
         $txncl->update(array('_id'=>$id), array('$set'=>$set));
+        //Cap nhat so du user
+        $user = $usercl->findOne(array('_id'=>$txn['uid']));
+        //Tinh tien aff
+        if(isset($user['aff']['uid'])){
+            $aff = $usercl->findOne(array('_id'=>$user['aff']['uid']));
+            $aff_rate = isset($aff['aff_discount']) ? $aff['aff_discount'] : Constant::AFF_RATE_CARD;
+            $aff_discount = $aff_rate*$card_amount;
+            //Luu log aff
+            $aff_txncl->insert(array(
+                '_id' => strval(time()),
+                'datecreate' => $txn['datecreate'],
+                'txn_id' => $txn['_id'],
+                'uid' => $aff['_id'],
+                'ref_id' => $user['_id'],
+                'method' => Constant::CARD_METHOD_NAME,
+                'discount' => $aff_discount,
+                'rate' => $aff_rate,
+                'amount' => $card_amount
+            ));
+            //Cong tien cho pub
+            $affBalance = $aff['account_balance'] +$aff_discount;
+            $usercl->update(array('_id'=>$aff['_id']),array('$set'=>array('account_balance'=>$affBalance)));
+        }
+
+        //Update so du cho user
+        $balance = isset($user['balance']) ? $user['balance'] : 0;
+        $balance = $balance + $card_amount * Constant::CARD_TO_CASH;
+        $usercl->update(array('_id'=>$txn['uid']), array('$set'=>array('balance'=>$balance)));
         $dtr['mss'] = 'Giao dịch thành công.';
         echo json_encode($dtr);exit;
     }elseif ($query['code'] != Constant::TXN_CARD_PENDING){
@@ -754,6 +787,16 @@ function getLogSms(){
 //    $dtr['mss'] = json_encode($log);
     echo json_encode($log);exit;
 }
+
+function getLogOtp(){
+    global $dbmg;
+    $logcl = $dbmg->log_txn;
+    $id = $_POST['id'];
+    $log = iterator_to_array($logcl->find(array('id'=>$id)));
+//    $dtr['mss'] = json_encode($log);
+    echo json_encode($log);exit;
+}
+
 
 function getAffDetail(){
     global $dbmg;
@@ -813,6 +856,58 @@ function changeDiscount(){
     echo json_encode($dtr);exit;
 }
 
+function withdraw(){
+    global $dbmg;
+    $usercl = $dbmg->user;
+    $withdrawcl = $dbmg->withdraw;
+    $dtr['success'] = false;
+    if(!acceptpermiss("aff_withdraw")){
+        $dtr['mss'] = 'Bạn không có quyền thực hiện thao tác này';
+        echo json_encode($dtr);exit;
+    }
+    $id = $_POST['id'];
+    $amount = intval($_POST['amount']);
+    if($amount < Constant::WITHDRAW_MIN_PAY){
+        $dtr['mss'] = 'Số tiền rút tối thiểu là '.number_format(Constant::WITHDRAW_MIN_PAY);
+        echo json_encode($dtr);exit;
+    }
+    $user = $usercl->findOne(array('_id'=>$id));
+    if(!$user){
+        $dtr['mss'] = 'Người dùng không tồn tại.';
+        echo json_encode($dtr);exit;
+    }
+    if(empty($user['bank']['id']) || empty($user['bank']['branch']) || empty($user['bank']['account_number']) || empty($user['bank']['account_name'])){
+        $dtr['mss'] = 'Publisher chưa cập nhật đủ thông tin thanh toán.';
+        echo json_encode($dtr);exit;
+    }
+    $balance = isset($user['account_balance']) ? $user['account_balance'] : 0;
+    $seal_balance = isset($user['account_seal_balance']) ? $user['account_seal_balance'] : 0;
+    if($amount > $balance){
+        $dtr['mss'] = 'Số tiền rút quá lớn.';
+        echo json_encode($dtr);exit;
+    }
+    //Tao giao dich
+    $withdrawcl->insert(array(
+        '_id' => strval(time()),
+        'datecreate' => time(),
+        'uid' => $id,
+        'u_create' => $_SESSION['uinfo']['_id'],
+        'amount' => $amount,
+        'status' => Constant::WITHDRAW_STATUS_NEW,
+        'bank' => $user['bank']
+    ));
+    //Update so du
+    $balance = $balance - $amount;
+    $seal_balance = $seal_balance + $amount;
+    $setUser = array(
+        'account_balance' => $balance,
+        'account_seal_balance' => $seal_balance
+    );
+    $usercl->update(array('_id'=>$id), array('$set'=>$setUser));
+    $dtr['success'] = true;
+    $dtr['mss'] = 'Tạo lệnh rút tiền thành công';
+    echo json_encode($dtr);exit;
+}
 
 function uploadHssv(){
     $data['status'] = 500;

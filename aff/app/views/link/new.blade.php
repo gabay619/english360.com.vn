@@ -36,17 +36,25 @@
                     <div id="linkArea" style="display: none">
                         <div class="form-group">
                             <label class="control-label col-sm-3" for="shortUrl">Link rút gọn:</label>
-                            <div class="col-sm-8">
-                                <input class="form-control" placeholder="Link rút gọn" readonly id="shortUrl">
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="Link rút gọn" readonly id="shortUrl">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default clb-btn" type="button" data-clipboard-target="#shortUrl"><i class="fa fa-files-o"></i></button>
+                                    </span>
+                                </div>
                             </div>
-                            <button class="col-sm-1 btn btn-success clb-btn" type="button" data-clipboard-target="#shortUrl"><i class="fa fa-files-o"></i></button>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-3" for="longUrl">Link đẩy đủ:</label>
-                            <div class="col-sm-8">
-                                <input class="form-control" placeholder="Link đầy đủ" readonly id="longUrl">
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="Link đầy đủ" readonly id="longUrl">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default clb-btn" type="button" data-clipboard-target="#longUrl"><i class="fa fa-files-o"></i></button>
+                                    </span>
+                                </div>
                             </div>
-                            <button class="col-sm-1 btn btn-success clb-btn" type="button" data-clipboard-target="#longUrl"><i class="fa fa-files-o"></i></button>
                         </div>
                     </div>
                 </form>
@@ -57,6 +65,7 @@
     <script>
         function generateLink() {
             $('#btnGetLink').prop('disabled',true);
+            $('#btnGetLink i').removeClass('fa-external-link').addClass('fa-spinner fa-spin');
             link = $('#redirectLink').val();
             sub_id = $('#subId').val();
             $.post('/link/generate-link',{
@@ -70,9 +79,21 @@
                     alert(re.message)
                 }
                 $('#btnGetLink').prop('disabled',false);
+                $('#btnGetLink i').addClass('fa-external-link').removeClass('fa-spinner fa-spin');
             })
         }
 
-        new Clipboard('.clb-btn');
+        var clipboard = new Clipboard('.clb-btn');
+        clipboard.on('success', function(e) {
+            e.trigger.firstElementChild.setAttribute('class','fa fa-check');
+        });
+
+
+        $(function(){
+            $('.clb-btn i').mouseout(function(){
+                $(this).attr('class', 'fa fa-files-o')
+            })
+        })
+
     </script>
 @endsection

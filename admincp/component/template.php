@@ -113,11 +113,11 @@
                 </li>
                 <?php } ?>
                 <?php if(acceptpermiss("aff")) { ?>
-                    <li class="dropdown <?php echo in_array($act,array("txn"))?"active":"" ?>">
+                    <li class="dropdown <?php echo in_array($act,array("aff"))?"active":"" ?>">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="?act=aff">Aff <span class="caret"></span></a>
                         <ul role="menu" class="dropdown-menu">
                             <?php if(acceptpermiss("aff_pub")) { ?><li class="<?php echo $act=="aff"&& empty($tact)?"active":"" ?>"><a href="?act=aff">Danh sách Publisher</a></li><?php } ?>
-                            <?php if(acceptpermiss("aff_withdraw")) { ?><li class="<?php echo $tact=="aff_withdraw"?"active":"" ?>"><a href="?act=aff&tact=withdraw">Rút tiền</a></li><?php } ?>
+                            <?php if(acceptpermiss("aff_withdraw")) { ?><li class="<?php echo $tact=="aff_withdraw"?"active":"" ?>"><a href="?act=aff&tact=withdraw">Lệnh rút tiền</a></li><?php } ?>
                         </ul>
                     </li>
                 <?php } ?>
