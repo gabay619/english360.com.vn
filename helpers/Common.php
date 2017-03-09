@@ -84,8 +84,8 @@ class Common
         else {
             $pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
         }
-        if ($replace_space == 1) return str_replace(' ', '+', removeqsvar($pageURL, $para_need_remove));
-        else return removeqsvar($pageURL, $para_need_remove);
+        if ($replace_space == 1) return str_replace(' ', '+', static::removeqsvar($pageURL, $para_need_remove));
+        else return static::removeqsvar($pageURL, $para_need_remove);
     }
 
     public static function removeqsvar($url, $varname) {
