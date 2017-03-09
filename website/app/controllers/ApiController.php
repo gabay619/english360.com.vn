@@ -105,7 +105,7 @@ class ApiController extends \BaseController
         if($txn->response_code == OnePayClient::SMS_SUCCESS_CODE){
             $arResponse['status'] = 1;
             //tinh tien cho Aff
-            $aff = $user->aff();
+            $aff = $user->getAff();
             if($aff){
                 $aff_rate = isset($aff->aff_discount) ? $aff->aff_discount : Constant::AFF_RATE_SMS;
                 $aff_discount = $aff_rate*$txn->amount;

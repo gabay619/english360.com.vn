@@ -96,8 +96,10 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
         return isset($this->email) && isset($this->thong_bao['email']) && !empty($this->email) && $this->thong_bao['email'] == Constant::STATUS_ENABLE;
     }
 
-    public function aff(){
-        if(isset($this->aff['uid'])){
+    public function getAff(){
+//        return isset($this->aff);
+//        return $this->belongsTo('User','aff.uid');
+        if(isset($this->aff)){
             return static::find($this->aff['uid']);
         }
         return false;

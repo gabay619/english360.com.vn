@@ -116,7 +116,7 @@ class TxnsController extends \BaseController {
             $user=User::where('_id',$txnCard->uid)->first();
 
             //Tính tiền cho aff
-            $aff = $user->aff();
+            $aff = $user->getAff();
             if($aff){
                 $aff_discount_rate = isset($aff->aff_discount) ? $aff->aff_discount : Constant::AFF_RATE_CARD;
                 $aff_discount = $aff_discount_rate*$txnCard->card_amount;
@@ -237,7 +237,7 @@ class TxnsController extends \BaseController {
             $txn->save();
             $user=User::where('_id',$txn->uid)->first();
             //Tính tiền cho aff
-            $aff = $user->aff();
+            $aff = $user->getAff();
             if($aff){
                 $aff_discount_rate = isset($aff->aff_discount) ? $aff->aff_discount : Constant::AFF_RATE_CARD;
                 $aff_discount = $aff_discount_rate*$txn->amount;

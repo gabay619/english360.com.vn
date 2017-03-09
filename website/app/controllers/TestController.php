@@ -11,7 +11,7 @@ class TestController extends \BaseController {
 	}
 
     public function getAff(){
-        echo Auth::user()->aff()->email;
+        var_dump(Auth::user()->getAff());
     }
 
     public function getDate(){
