@@ -15,16 +15,14 @@ if(!empty($_GET['email'])){
     if($user)
         $cond['uid'] = $user['_id'];
 }
-$startdate = $_GET['start'];
-if(!empty($startdate)){
-    $convertStartdate = DateTime::createFromFormat('d/m/Y', $startdate)->format('Y-m-d');
-    $cond['datecreate']['$gte'] = (int)strtotime($convertStartdate. ' 00:00:00');
-}
-$enddate = $_GET['end'];
-if(!empty($enddate)){
-    $convertEnddate = DateTime::createFromFormat('d/m/Y', $enddate)->format('Y-m-d');
-    $cond['datecreate']['$lte'] = (int)strtotime($convertEnddate. ' 23:59:59');
-}
+$startdate = isset($_GET['start']) ? $_GET['start'] : date('01/m/Y');
+$enddate = isset($_GET['end']) ? $_GET['end'] : date('d/m/Y');
+$convertStartdate = DateTime::createFromFormat('d/m/Y', $startdate)->format('Y-m-d');
+$convertEnddate = DateTime::createFromFormat('d/m/Y', $enddate)->format('Y-m-d');
+$cond['datecreate'] = array(
+    '$gte' => (int)strtotime($convertStartdate. ' 00:00:00'),
+    '$lte' => (int)strtotime($convertEnddate. ' 23:59:59')
+);
 if(!empty($_GET['status'])){
     $cond['status'] = intval($_GET['status']);
 }
@@ -33,6 +31,10 @@ $sort = array("datecreate" => -1);
 $cursor = $withdrawcl->find($cond)->sort($sort);
 $rowcount = $cursor->count();
 $list = $cursor->skip($cp)->limit($limit);
+
+parse_str($_SERVER['QUERY_STRING'], $param);
+unset($param['act']);
+$exportUrl = 'incoming.php?act=exportWithdraw&'.http_build_query($param);
 ?>
 <title><?php echo $title ?></title>
 <h5 class="text-center"><?php echo $title ?></h5>
@@ -44,8 +46,8 @@ $list = $cursor->skip($cp)->limit($limit);
             <?php foreach($_GET as $key=>$val) if(!in_array($key,array("q","status","id","p"))) {?> <input type="hidden" name="<?php echo $key ?>" value="<?php echo $val ?>" /> <?php } ?>
             <div class="form-group">
                 <input type="text" placeholder="Email" name="email" value="<?php echo $_GET['email'] ?>" class="form-control">
-                <input type="text" placeholder="Từ ngày:" name="start" class="form-control datepicker" value="<?php echo $_GET['start'] ?>">
-                <input type="text" placeholder="Đến ngày:" name="end" class="form-control datepicker" value="<?php echo $_GET['end'] ?>">
+                <input type="text" placeholder="Từ ngày:" name="start" class="form-control datepicker" value="<?php echo $startdate ?>">
+                <input type="text" placeholder="Đến ngày:" name="end" class="form-control datepicker" value="<?php echo $enddate ?>">
                 <select name="status" class="form-control">
                     <option value="">--Trạng thái--</option>
                     <option value="<?php echo Constant::WITHDRAW_STATUS_NEW ?>" <?php if($_GET['status']==Constant::WITHDRAW_STATUS_NEW ) echo 'selected' ?>>Chờ duyệt</option>
@@ -53,6 +55,7 @@ $list = $cursor->skip($cp)->limit($limit);
                     <option value="<?php echo Constant::WITHDRAW_STATUS_CANCEL ?>" <?php if($_GET['status']==Constant::WITHDRAW_STATUS_CANCEL ) echo 'selected' ?>>Đã hủy</option>
                 </select>
                 <input type="submit" class="btn btn-primary" value="Tìm">
+                <a class="btn btn-success" href="<?php echo $exportUrl ?>"><i class="glyphicon glyphicon-export"></i> Export</a>
             </div>
         </form>
 

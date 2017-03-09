@@ -43,6 +43,7 @@ switch($act){
 	case 'exportHistory': exportHistory(); break;
 	case 'exportEventUser': exportEventUser(); break;
 	case 'exportLog3g': exportLog3g(); break;
+	case 'exportWithdraw': exportWithdraw(); break;
 	case 'sendMail': sendMail(); break;
     case 'uploadExcel': uploadExcel(); break;
     case 'sendSMS': sendSMS(); break;
@@ -1525,7 +1526,6 @@ function exportLog3g(){
         ->setCellValue('E1', 'Time');
     $column = 2;
     foreach ($cursor as $k=>$val){
-//        echo '<tr>';
 
         $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A'.$column, $val['phone'])
@@ -1533,26 +1533,15 @@ function exportLog3g(){
             ->setCellValue('C'.$column, $val['chanel'])
             ->setCellValue('D'.$column, $val['useragent'])
             ->setCellValue('E'.$column, date('d/m/Y H:i:s', $val['datecreate']));
-
-//        echo '<td>A'.$column.'-'.$val['phone'].'</td>';
-//        echo '<td>B'.$column.'-'.$val['ip'].'</td>';
-//        echo '<td>'.date('d/m/Y H:i:s', $val['time']).'</td>';
-//        echo '<td>'.$val['source'].'</td>';
-//        echo '<td>'.$val['link'].'</td>';
-//        echo '<td>'.$val['cuphap'].'</td>';
-//        echo '</tr>';
         $column++;
 
     }
-
-//    echo '</table>';
 
     $objPHPExcel->getActiveSheet()->setTitle('Simple');
     $objPHPExcel->setActiveSheetIndex(0);
 
 // Set active sheet index to the first sheet, so Excel opens this as the first sheet
     $objPHPExcel->setActiveSheetIndex(0);
-//    print_r($objPHPExcel);die;
 
 // Redirect output to a client’s web browser (Excel2007)
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -1608,21 +1597,11 @@ function exportEventUser(){
 
     $column = 2;
     foreach ($cursor as $k=>$val){
-//        echo '<tr>';
         $user = $usercl->findOne(array('_id'=>$val['uid']));
         $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A'.$column, $user['phone'])
             ->setCellValue('B'.$column, $user['email'])
             ->setCellValue('C'.$column, date('d/m/Y H:i:s',$val['datecreate']));
-
-
-//        echo '<td>A'.$column.'-'.$val['phone'].'</td>';
-//        echo '<td>B'.$column.'-'.$val['ip'].'</td>';
-//        echo '<td>'.date('d/m/Y H:i:s', $val['time']).'</td>';
-//        echo '<td>'.$val['source'].'</td>';
-//        echo '<td>'.$val['link'].'</td>';
-//        echo '<td>'.$val['cuphap'].'</td>';
-//        echo '</tr>';
         $column++;
 
     }
@@ -1703,7 +1682,6 @@ function exportHistory(){
         ->setCellValue('H1', 'Status');
     $column = 2;
     foreach ($cursor as $k=>$val){
-//        echo '<tr>';
 
         $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A'.$column, $val['phone'])
@@ -1714,20 +1692,9 @@ function exportHistory(){
             ->setCellValue('F'.$column, isset($val['price']) ? $val['price'] : 0)
             ->setCellValue('G'.$column, date('d/m/Y H:i:s', $val['datecreate']))
             ->setCellValue('H'.$column, $val['status'] == Constant::STATUS_ENABLE ? 'Thành công' : 'Thất bại');
-
-
-//        echo '<td>A'.$column.'-'.$val['phone'].'</td>';
-//        echo '<td>B'.$column.'-'.$val['ip'].'</td>';
-//        echo '<td>'.date('d/m/Y H:i:s', $val['time']).'</td>';
-//        echo '<td>'.$val['source'].'</td>';
-//        echo '<td>'.$val['link'].'</td>';
-//        echo '<td>'.$val['cuphap'].'</td>';
-//        echo '</tr>';
         $column++;
 
     }
-
-//    echo '</table>';
 
     $objPHPExcel->getActiveSheet()->setTitle('Simple');
     $objPHPExcel->setActiveSheetIndex(0);
@@ -1793,14 +1760,6 @@ function exportHssv(){
             ->setCellValue('C'.$column, isset($val['username']) ? $val['username'] : '')
             ->setCellValue('D'.$column, $val['un_password'])
             ->setCellValue('E'.$column, $val['birthday']);
-
-//        echo '<td>A'.$column.'-'.$val['phone'].'</td>';
-//        echo '<td>B'.$column.'-'.$val['ip'].'</td>';
-//        echo '<td>'.date('d/m/Y H:i:s', $val['time']).'</td>';
-//        echo '<td>'.$val['source'].'</td>';
-//        echo '<td>'.$val['link'].'</td>';
-//        echo '<td>'.$val['cuphap'].'</td>';
-//        echo '</tr>';
         $column++;
 
     }
@@ -1878,7 +1837,6 @@ function exportAds(){
         ->setCellValue('F1', 'Cuphap');
     $column = 2;
     foreach ($cursor as $k=>$val){
-//        echo '<tr>';
 
         $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A'.$column, $val['phone'])
@@ -1888,18 +1846,9 @@ function exportAds(){
             ->setCellValue('E'.$column, $val['link'])
             ->setCellValue('F'.$column, $val['cuphap']);
 
-//        echo '<td>A'.$column.'-'.$val['phone'].'</td>';
-//        echo '<td>B'.$column.'-'.$val['ip'].'</td>';
-//        echo '<td>'.date('d/m/Y H:i:s', $val['time']).'</td>';
-//        echo '<td>'.$val['source'].'</td>';
-//        echo '<td>'.$val['link'].'</td>';
-//        echo '<td>'.$val['cuphap'].'</td>';
-//        echo '</tr>';
         $column++;
 
     }
-
-//    echo '</table>';
 
     $objPHPExcel->getActiveSheet()->setTitle('Simple');
     $objPHPExcel->setActiveSheetIndex(0);
@@ -1911,6 +1860,95 @@ function exportAds(){
 // Redirect output to a client’s web browser (Excel2007)
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     header('Content-Disposition: attachment;filename="ExportAds.xlsx"');
+    header('Cache-Control: max-age=0');
+// If you're serving to IE 9, then the following may be needed
+    header('Cache-Control: max-age=1');
+
+// If you're serving to IE over SSL, then the following may be needed
+    header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+    header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+    header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+    header ('Pragma: public'); // HTTP/1.0
+
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    $objWriter->save('php://output');die;
+}
+
+function exportWithdraw(){
+    global $dbmg;
+    $withdrawcl = $dbmg->withdraw;
+    $usercl = $dbmg->user;
+    $cond = array();
+    if(isset($_GET['email']) && !empty($_GET['email'])){
+        $user = $usercl->findOne(array('email'=>$_GET['email']));
+        if($user)
+            $cond['uid'] = $user['_id'];
+    }
+    $startdate = isset($_GET['start']) ? $_GET['start'] : date('01/m/Y');
+    $enddate = isset($_GET['end']) ? $_GET['end'] : date('d/m/Y');
+    $convertStartdate = DateTime::createFromFormat('d/m/Y', $startdate)->format('Y-m-d');
+    $convertEnddate = DateTime::createFromFormat('d/m/Y', $enddate)->format('Y-m-d');
+    $cond['datecreate'] = array(
+        '$gte' => (int)strtotime($convertStartdate. ' 00:00:00'),
+        '$lte' => (int)strtotime($convertEnddate. ' 23:59:59')
+    );
+    if(!empty($_GET['status'])){
+        $cond['status'] = intval($_GET['status']);
+    }
+//    $limit = 25;
+//    $p = $_GET['p'];if($p<=1) $p=1;$cp = ($p-1)*$limit; $stpage = $p;
+    $sort = array("datecreate" => -1);
+    $cursor = iterator_to_array($withdrawcl->find($cond)->sort($sort));
+//    print_r($cursor);die;
+
+    require_once __DIR__.'/plugin/phpexcel/Classes/PHPExcel.php';
+    $objPHPExcel = new PHPExcel();
+
+    $objPHPExcel->getProperties()->setCreator("Nguyen Cong Chinh")
+        ->setLastModifiedBy("Nguyen Cong Chinh")
+        ->setTitle("Export Withdraw")
+        ->setSubject("Export Withdraw")
+        ->setDescription("Export Withdraw")
+        ->setKeywords("Export Withdraw")
+        ->setCategory("Export Withdraw");
+//    echo '<table>';
+    $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue('A1', 'Email')
+        ->setCellValue('B1', 'Amount')
+        ->setCellValue('C1', 'Bank')
+        ->setCellValue('D1', 'Branch')
+        ->setCellValue('E1', 'AccountName')
+        ->setCellValue('F1', 'AccountNumber')
+        ->setCellValue('G1', 'Time')
+        ->setCellValue('H1', 'Status')
+        ->setCellValue('I1', 'Create');
+    $column = 2;
+    foreach ($cursor as $k=>$val){
+        $user = $usercl->findOne(array('_id'=>$val['uid']));
+        $usercreate = $usercl->findOne(array('_id'=>$val['u_create']));
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A'.$column, $user['email'])
+            ->setCellValue('B'.$column, $val['amount'])
+            ->setCellValue('C'.$column, Common::getAllBank()[$val['bank']['id']])
+            ->setCellValue('D'.$column, $val['bank']['branch'])
+            ->setCellValue('E'.$column, $val['bank']['account_name'])
+            ->setCellValue('F'.$column, $val['bank']['account_number'])
+            ->setCellValue('G'.$column, date("d-m-Y H:i", $val['datecreate']))
+            ->setCellValue('H'.$column, Common::getWithdrawStatus($val['status']))
+            ->setCellValue('I'.$column, $usercreate['username']);
+        $column++;
+    }
+
+    $objPHPExcel->getActiveSheet()->setTitle('Simple');
+    $objPHPExcel->setActiveSheetIndex(0);
+
+// Set active sheet index to the first sheet, so Excel opens this as the first sheet
+    $objPHPExcel->setActiveSheetIndex(0);
+//    print_r($objPHPExcel);die;
+
+// Redirect output to a client’s web browser (Excel2007)
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="ExportWithdraw.xlsx"');
     header('Cache-Control: max-age=0');
 // If you're serving to IE 9, then the following may be needed
     header('Cache-Control: max-age=1');
