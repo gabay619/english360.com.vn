@@ -5,38 +5,40 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-                Báo cáo user
+                Lịch sử sử dụng <small>{{$user->email}}</small>
             </h1>
         </div>
     </div>
-    @datepicker($start, $end, '/report/user')
+    @datepicker($start, $end)
     <div class="row">
         <div class="col-sm-12">
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th>Email</th>
+                        <th>Hành động</th>
+                        <th>URL</th>
+                        <th>Kênh</th>
                         <th>Thời gian</th>
-                        <th>Nguồn</th>
-                        <th>Thao tác</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($allUser as $user)
+                    @foreach($allLog as $aLog)
                         <tr>
-                            <td>{{$user['email']}}</td>
-                            <td>{{date('d/m/Y H:i',$user['aff']['datecreate'])}}</td>
-                            <td>{{isset($user['aff']['sub_id']) ? $user['aff']['sub_id'] : ''}}</td>
-                            <td><a class="btn btn-primary btm-sm" href="/report/history/{{$user->_id}}">Lịch sử</a></td>
+                            <td>{{HistoryLog::getArr()[$aLog->action]}}</td>
+                            <td><a href="{{$aLog->url}}" target="_blank">LINK</a></td>
+                            <td>{{$aLog->chanel}}</td>
+                            <td>{{date('d/m/Y H:i',$aLog->datecreate)}}</td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
             </div>
             <div class="text-center">
-                {{$allUser->appends(['start' => $start, 'end'=>$end])->links()}}
+                {{$allLog->appends(['start' => $start, 'end'=>$end])->links()}}
             </div>
         </div>
+
     </div>
+
 @endsection

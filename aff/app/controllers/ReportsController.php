@@ -129,4 +129,41 @@ class ReportsController extends \BaseController {
             'end' => $end
         ));
     }
+
+    public function getHistory($uid){
+        $user = User::where('_id',$uid)->first();
+        if(!$user){
+            return Redirect::to('/thong-bao.html')->with('error', 'User không tồn tại');
+        }
+        if(!isset($user->aff['uid']) || $user->aff['uid'] != Auth::user()->_id){
+            return Redirect::to('/thong-bao.html')->with('error', 'Bạn không có quyền xem lịch sử sử dụng của user này');
+//            return 'Bạn không có quyền xem lịch sử sử dụng của user này';
+        }
+
+        $cond = array(
+            'uid' => $uid
+        );
+        $start = date('01/m/Y');
+        $end = date('d/m/Y');
+        if(!empty(Input::get('start'))){
+            $start = Input::get('start');
+        }
+        if(!empty(Input::get('end'))){
+            $end = Input::get('end');
+        }
+        $convertStartdate = DateTime::createFromFormat('d/m/Y', $start)->format('Y-m-d');
+        $convertEnddate = DateTime::createFromFormat('d/m/Y', $end)->format('Y-m-d');
+        $cond['datecreate'] = array(
+            '$gte' => (int)strtotime($convertStartdate. ' 00:00:00'),
+            '$lte' => (int)strtotime($convertEnddate. ' 23:59:59')
+        );
+
+        $allLog = HisLog::where($cond)->orderBy('datecreate','desc')->paginate(20);
+        return View::make('report.history', array(
+            'allLog'=> $allLog,
+            'start' => $start,
+            'end' => $end,
+            'user' => $user
+        ));
+    }
 }

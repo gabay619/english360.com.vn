@@ -79,7 +79,9 @@ class HomeController extends BaseController {
 	}
 
     public function showMessage(){
-        return View::make('home.message');
+		if(Auth::user())
+        	return View::make('home.message_auth');
+		return View::make('home.message');
     }
 
 
