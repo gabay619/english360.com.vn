@@ -117,7 +117,8 @@
                         <a data-toggle="dropdown" class="dropdown-toggle" href="?act=aff">Aff <span class="caret"></span></a>
                         <ul role="menu" class="dropdown-menu">
                             <?php if(acceptpermiss("aff_pub")) { ?><li class="<?php echo $act=="aff"&& empty($tact)?"active":"" ?>"><a href="?act=aff">Danh sách Publisher</a></li><?php } ?>
-                            <?php if(acceptpermiss("aff_withdraw")) { ?><li class="<?php echo $tact=="aff_withdraw"?"active":"" ?>"><a href="?act=aff&tact=withdraw">Lệnh rút tiền</a></li><?php } ?>
+                            <?php if(acceptpermiss("aff_pub")) { ?><li class="<?php echo $act=="aff"&& $tact=='top'?"active":"" ?>"><a href="?act=aff&tact=top">Top Publisher</a></li><?php } ?>
+                            <?php if(acceptpermiss("aff_withdraw")) { ?><li class="<?php echo $act=="aff"&& $tact=="withdraw"?"active":"" ?>"><a href="?act=aff&tact=withdraw">Lệnh rút tiền</a></li><?php } ?>
                         </ul>
                     </li>
                 <?php } ?>

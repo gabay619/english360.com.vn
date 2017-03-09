@@ -834,12 +834,18 @@ function getAffDetail(){
     $revenue = isset($countRevenue['result'][0]['sum']) ? $countRevenue['result'][0]['sum'] : 0;
     $countRevenue = isset($countRevenue['result'][0]['count']) ? $countRevenue['result'][0]['count'] : 0;
     $payRate = $countClick > 0 ? number_format($countRevenue/$countClick*100,2) : 0;
+    $user = $usercl->findOne(array('_id'=>"$id"));
+    $discount = isset($user['aff_discount']) ? $user['aff_discount'] : Constant::AFF_RATE_CARD;
+    $discount = $discount*100;
+    $balance = isset($user['account_balance']) ? $user['account_balance'] : 0;
     $dtr = array(
         'click' => $countClick,
         'user' => $countUser,
         'revenue' => number_format($revenue),
         'rate' => $payRate.'%',
         'count_revenue' => $countRevenue,
+        'discount' => $discount.'%',
+        'balance' => number_format($balance)
     );
     echo json_encode($dtr);exit;
 }

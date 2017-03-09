@@ -71,7 +71,7 @@ $list = $cursor->skip($cp)->limit($limit);
         <th>Người tạo</th>
         <th>Thời gian tạo</th>
         <th>Trạng thái</th>
-        <th>Thao tác</th>
+        <th>Duyệt</th>
     </tr>
     </thead>
     <tbody>
@@ -104,7 +104,11 @@ $list = $cursor->skip($cp)->limit($limit);
                 <?php if($item['status'] == Constant::WITHDRAW_STATUS_NEW): ?>
                 <button class="btn btn-success btn-sm" type="button" onclick="completeWithdraw('<?php echo $item['_id'] ?>')">Hoàn thành</button>
                 <button class="btn btn-danger btn-sm" type="button" onclick="cancelWithdraw('<?php echo $item['_id'] ?>')">Hủy</button>
-                <?php endif;?>
+                <?php  else:
+                    $userupdate = $usercl->findOne(array('_id'=>$item['u_update']));
+                    ?>
+                <?php echo $userupdate ? $userupdate['username'] : '' ?>
+                <?php endif; ?>
             </td>
         </tr>
     <?php } ?>

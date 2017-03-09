@@ -3,17 +3,18 @@
 //ini_set('display_errors', 1);
 $usercl = $dbmg->user;
 $aff_txncl = $dbmg->aff_txn;
+$affclickcl = $dbmg->aff_click;
 $title = "Top publisher";
 #condition
-$limit = 25;
+$limit = 10;
 $p = $_GET['p'];if($p<=1) $p=1;$cp = ($p-1)*$limit; $stpage = $p;
-$q = $_GET['q'];
+//$q = $_GET['q'];
 $cond = array();
-if(!empty($_GET['email'])){
-    $user = $usercl->findOne(array('email'=>$_GET['email']));
-    if($user)
-        $cond['uid'] = $user['_id'];
-}
+//if(!empty($_GET['email'])){
+//    $user = $usercl->findOne(array('email'=>$_GET['email']));
+//    if($user)
+//        $cond['uid'] = $user['_id'];
+//}
 $startdate = isset($_GET['start']) ? $_GET['start'] : date('01/m/Y');
 $enddate = isset($_GET['end']) ? $_GET['end'] : date('d/m/Y');
 $convertStartdate = DateTime::createFromFormat('d/m/Y', $startdate)->format('Y-m-d');
@@ -23,16 +24,41 @@ $cond['datecreate'] = array(
     '$lte' => (int)strtotime($convertEnddate. ' 23:59:59')
 );
 
-$list = $aff_txncl->aggregate(array(
+$topClick = $affclickcl->aggregate(array(
     array('$match' => $cond),
-    array('$group' => array('_id'=>'$uid', 'sum_discount'=>array('$sum'=>'$discount'),'count'=>array('$sum'=>1))),
-    array('$sort' => array('sum_discount'=>-1)),
+    array('$group' => array('_id'=>'$uid', 'numclick'=>array('$sum'=>1))),
+    array('$sort' => array('numclick'=>-1)),
     array('$group' => array('_id'=>null,'total'=>array('$sum'=>1),'data'=>array('$push'=>'$$ROOT'))),
     array('$project' => array('total' => 1, 'data'=>array('$slice'=>array('$data',$cp,$limit))  )),
 ));
+$topClick = isset($topClick['result'][0]['data']) ? $topClick['result'][0]['data'] : array();
+$rowcount = isset($topClick['result'][0]['total']) ? $topClick['result'][0]['total'] : 0;
 
-$rowcount = $list['result'][0]['total'];
-$list = $list['result'][0]['data'];
+$condUser = array(
+    'aff.datecreate' => $cond['datecreate'],
+    'status' => Constant::STATUS_ENABLE
+);
+$topUser = $usercl->aggregate(array(
+    array('$match' => $condUser),
+    array('$group' => array('_id'=>'$aff.uid', 'num_user'=>array('$sum'=>1))),
+    array('$sort' => array('num_user'=>-1)),
+    array('$limit' => $limit),
+    array('$skip' => $cp)
+//    array('$group' => array('_id'=>null,'total'=>array('$sum'=>1),'data'=>array('$push'=>'$$ROOT'))),
+//    array('$project' => array('total' => 1, 'data'=>array('$slice'=>array('$data',$cp,$limit))  )),
+));
+$topUser = isset($topUser['result']) ? $topUser['result'] : array();
+
+//$list = $aff_txncl->aggregate(array(
+//    array('$match' => $cond),
+//    array('$group' => array('_id'=>'$uid', 'sum_discount'=>array('$sum'=>'$discount'),'count'=>array('$sum'=>1))),
+//    array('$sort' => array('sum_discount'=>-1)),
+//    array('$group' => array('_id'=>null,'total'=>array('$sum'=>1),'data'=>array('$push'=>'$$ROOT'))),
+//    array('$project' => array('total' => 1, 'data'=>array('$slice'=>array('$data',$cp,$limit)))),
+//));
+//
+//$rowcount = $list['result'][0]['total'];
+//$list = $list['result'][0]['data'];
 ?>
 <title><?php echo $title ?></title>
 <h5 class="text-center"><?php echo $title ?></h5>
@@ -43,51 +69,73 @@ $list = $list['result'][0]['data'];
         <form action="" method="get" class="form-inline">
             <?php foreach($_GET as $key=>$val) if(!in_array($key,array("q","status","id","p"))) {?> <input type="hidden" name="<?php echo $key ?>" value="<?php echo $val ?>" /> <?php } ?>
             <div class="form-group">
-                <input type="text" placeholder="Email" name="email" value="<?php echo $_GET['email'] ?>" class="form-control">
                 <input type="text" placeholder="Từ ngày:" name="start" class="form-control datepicker" value="<?php echo $startdate ?>">
                 <input type="text" placeholder="Đến ngày:" name="end" class="form-control datepicker" value="<?php echo $enddate ?>">
                 <input type="submit" class="btn btn-primary" value="Tìm">
             </div>
         </form>
-
     </div>
 </div>
-<table class="table table-hover text-left">
-    <thead>
-    <tr>
-        <th>Email</th>
-        <th>Số dư</th>
-        <th>Doanh thu</th>
-        <th>Lượt thanh toán</th>
-        <th>Chiết khấu</th>
-        <th>Thao tác</th>
-    </tr>
-    </thead>
-    <tbody>
-    <?php foreach($list as $key=>$item):
-        $user = $usercl->findOne(array('_id'=>$item['_id']));
-//        $lastChat = $item['chat'][count($item['chat']) - 1];
-        $discount = isset($user['aff_discount']) ? $user['aff_discount'] : Constant::AFF_RATE_CARD;
-        ?>
-        <tr>
-            <td><?php echo $user['email']; ?></td>
-            <td><?php echo number_format($user['account_balance']); ?></td>
-            <td><?php echo number_format($item['sum_discount']); ?></td>
-            <td><?php echo $item['count']; ?></td>
-            <td>
-                <?php echo number_format($discount*100); ?>%
-                <button type="button" class="btn btn-sm btn-default" onclick="changeDiscount('<?php echo $item['_id'] ?>')"><i class="glyphicon glyphicon-edit"></i></button>
-            </td>
-            <td>
-                <button type="button" class="btn btn-sm btn-primary" onclick="getDetail('<?php echo $item['_id'] ?>','<?php echo $user['email']; ?>')">Chi tiết</button>
-                <?php if($user['account_balance'] >= Constant::WITHDRAW_MIN_PAY): ?>
-                    <button type="button" class="btn btn-sm btn-danger" onclick="withdraw('<?php echo $item['_id'] ?>',<?php echo $user['account_balance'] ?>)">Tạo lệnh rút tiền</button>
-                <?php endif; ?>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-    </tbody>
-</table>
+<div class="row">
+    <div class="col-sm-6">
+        <h2>Top Click</h2>
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>Publisher</th>
+                <th>Số Click</th>
+                <th>Chiết khấu</th>
+                <th>Thao tác</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($topClick as $item):
+                $user = $usercl->findOne(array('_id'=>$item['_id']));
+                $discount = isset($user['aff_discount']) ? $user['aff_discount'] : Constant::AFF_RATE_CARD;
+                ?>
+            <tr>
+                <td><?php echo $user['email']?></td>
+                <td><?php echo $item['numclick']?></td>
+                <td>
+                    <?php echo number_format($discount*100); ?>%
+                    <button type="button" class="btn btn-sm btn-default" onclick="changeDiscount('<?php echo $item['_id'] ?>')"><i class="glyphicon glyphicon-edit"></i></button>
+                </td>
+                <td><button type="button" class="btn btn-sm btn-primary" onclick="getDetail('<?php echo $item['_id'] ?>','<?php echo $user['email']; ?>')">Chi tiết</button></td>
+            </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-sm-6">
+        <h2>Top User</h2>
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>Publisher</th>
+                <th>Số User</th>
+                <th>Chiết khấu</th>
+                <th>Thao tác</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($topUser as $item):
+                $user = $usercl->findOne(array('_id'=>$item['_id']));
+                $discount = isset($user['aff_discount']) ? $user['aff_discount'] : Constant::AFF_RATE_CARD;
+                ?>
+                <tr>
+                    <td><?php echo $user['email']?></td>
+                    <td><?php echo $item['num_user']?></td>
+                    <td>
+                        <?php echo number_format($discount*100); ?>%
+                        <button type="button" class="btn btn-sm btn-default" onclick="changeDiscount('<?php echo $item['_id'] ?>')"><i class="glyphicon glyphicon-edit"></i></button>
+                    </td>
+                    <td><button type="button" class="btn btn-sm btn-primary" onclick="getDetail('<?php echo $item['_id'] ?>','<?php echo $user['email']; ?>')">Chi tiết</button></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
 <?php include("component/paging.php") ?>
 <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
     <div class="modal-dialog" role="document">
@@ -106,6 +154,8 @@ $list = $list['result'][0]['data'];
                         <th>Hiệu suất</th>
                         <th>Doanh thu</th>
                         <th>Khách hàng</th>
+                        <th>Chiết khấu</th>
+                        <th>Số dư</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -115,6 +165,8 @@ $list = $list['result'][0]['data'];
                         <td class="rate"></td>
                         <td class="revenue"></td>
                         <td class="count-user"></td>
+                        <td class="discount"></td>
+                        <td class="balance"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -138,6 +190,8 @@ $list = $list['result'][0]['data'];
             $('#myModal .rate').html(re.rate);
             $('#myModal .revenue').html(re.revenue);
             $('#myModal .count-user').html(re.user);
+            $('#myModal .discount').html(re.discount);
+            $('#myModal .balance').html(re.balance);
 //            alert(JSON.stringify(re, null, 4));
         });
         $('#myModal').modal('show');

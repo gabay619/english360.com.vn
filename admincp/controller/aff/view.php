@@ -31,8 +31,8 @@ $list = $aff_txncl->aggregate(array(
     array('$project' => array('total' => 1, 'data'=>array('$slice'=>array('$data',$cp,$limit))  )),
 ));
 
-$rowcount = $list['result'][0]['total'];
-$list = $list['result'][0]['data'];
+$rowcount = isset($list['result'][0]['total']) ? $list['result'][0]['total'] : 0;
+$list = isset($list['result'][0]['data']) ? $list['result'][0]['data'] : array();
 ?>
 <title><?php echo $title ?></title>
 <h5 class="text-center"><?php echo $title ?></h5>
@@ -106,6 +106,8 @@ $list = $list['result'][0]['data'];
                         <th>Hiệu suất</th>
                         <th>Doanh thu</th>
                         <th>Khách hàng</th>
+                        <th>Chiết khấu</th>
+                        <th>Số dư</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -115,6 +117,8 @@ $list = $list['result'][0]['data'];
                         <td class="rate"></td>
                         <td class="revenue"></td>
                         <td class="count-user"></td>
+                        <td class="discount"></td>
+                        <td class="balance"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -138,6 +142,8 @@ $list = $list['result'][0]['data'];
             $('#myModal .rate').html(re.rate);
             $('#myModal .revenue').html(re.revenue);
             $('#myModal .count-user').html(re.user);
+            $('#myModal .discount').html(re.discount);
+            $('#myModal .balance').html(re.balance);
 //            alert(JSON.stringify(re, null, 4));
         });
         $('#myModal').modal('show');
