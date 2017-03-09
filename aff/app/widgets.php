@@ -34,3 +34,7 @@ Widget::register('pagination', function($stpage,$rowcount,$limit,$maxshowpage=3)
         'maxshowpage' => $maxshowpage
     ));
 });
+
+Widget::register('chatbox', function(){
+    return View::make('widgets.chat');
+});

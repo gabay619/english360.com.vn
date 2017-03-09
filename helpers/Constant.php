@@ -125,5 +125,5 @@ class Constant
     const WITHDRAW_STATUS_NEW = 1;
     const WITHDRAW_STATUS_COMPLETE = 2;
     const WITHDRAW_STATUS_CANCEL = 3;   
-    const WITHDRAW_MIN_PAY = 10000;
+    const WITHDRAW_MIN_PAY = 1000;
 }

@@ -752,7 +752,7 @@ class UsersController extends \BaseController {
             //Tính tiền cho aff
             $aff = $user->aff();
             if($aff){
-                $aff_discount_rate = isset($aff['aff_discount']) ? $aff['aff_discount'] : Constant::AFF_RATE_OTP;
+                $aff_discount_rate = isset($aff->aff_discount) ? $aff->aff_discount : Constant::AFF_RATE_OTP;
                 $aff_discount = $aff_discount_rate*$txn->pkg_price;
                 AffTxn::insert(array(
                     '_id' => strval(time()),
@@ -821,7 +821,7 @@ class UsersController extends \BaseController {
             //Tính tiền cho aff
             $aff = $user->aff();
             if($aff){
-                $aff_discount_rate = isset($aff['aff_discount']) ? $aff['aff_discount'] : Constant::AFF_RATE_CARD;
+                $aff_discount_rate = isset($aff->aff_discount) ? $aff->aff_discount : Constant::AFF_RATE_CARD;
                 $aff_discount = $aff_discount_rate*$txn->card_amount;
                 AffTxn::insert(array(
                     '_id' => strval(time()),

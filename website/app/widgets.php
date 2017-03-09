@@ -217,8 +217,8 @@ Widget::register('chatbox', function(){
 //        'allChat' => $allChat,
 //        'sessionId' => Session::getId()
 //    ));
-    if(!Network::is3g())
-        return View::make('widgets.chat');
+//    if(!Network::is3g())
+    return View::make('widgets.chat');
 });
 
 Widget::register('popup', function(){

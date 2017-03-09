@@ -199,28 +199,32 @@ $topUser = isset($topUser['result']) ? $topUser['result'] : array();
 
     function changeDiscount(id) {
         discount = prompt('Nhập mức chiết khấu mới (%)');
-        $.post('incoming.php?act=changeDiscount', {
-            id:id, discount:discount
-        }, function (re) {
-            if(re.success){
-                alert('Success!');
-                location.reload();
-            }else{
-                alert('Failed!');
-            }
-        });
+        if(discount > 0){
+            $.post('incoming.php?act=changeDiscount', {
+                id:id, discount:discount
+            }, function (re) {
+                if(re.success){
+                    alert('Success!');
+                    location.reload();
+                }else{
+                    alert('Failed!');
+                }
+            });
+        }
     }
 
     function withdraw(id,max) {
-        amount = prompt('Nhập số tiền cần rút (vnđ)',max);
-        $.post('incoming.php?act=withdraw', {
-            id:id, amount:amount
-        },function (re) {
-            if(re.success){
-                alert('Tạo lệnh rút tiền thành công')
-            }else{
-                alert(re.mss);
-            }
-        });
+        amount = prompt('Nhập số tiền cần rút (ít nhất <?php echo number_format(Constant::WITHDRAW_MIN_PAY) ?>vnđ)',max);
+        if(amount>0){
+            $.post('incoming.php?act=withdraw', {
+                id:id, amount:amount
+            },function (re) {
+                if(re.success){
+                    alert('Tạo lệnh rút tiền thành công')
+                }else{
+                    alert(re.mss);
+                }
+            });
+        }
     }
 </script>

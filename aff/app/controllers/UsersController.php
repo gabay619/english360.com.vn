@@ -139,6 +139,41 @@ class UsersController extends \BaseController {
         ));
 	}
 
+    public function getSendVerifyEmail(){
+        $token = Input::get('token');
+//        $token = Common::encodeAffCookie('chinhnc@viq.vn');
+        $arr = explode('+', base64_decode($token));
+        //Expired after 10min
+        if(!isset($arr[1]) || time() - $arr[1] >= 600){
+            return Redirect::to('/thong-bao.html')->with('error', 'Thao tác không hợp lệ.');
+        }
+        $email = $arr[0];
+//        echo $email;die;
+        $user = User::where(array('email'=>$email, 'status'=>Constant::STATUS_DISABLE))->first();
+        if(!$user){
+            return Redirect::to('/thong-bao.html')->with('error', 'Thao tác không hợp lệ.');
+        }
+        $verifyUrl = Common::getVerifyEmailUrl($user->_id,$user->email,'http://aff.english360.com.vn');
+        $content = '<p>Xin chào '.$user->fullname.'</p>'.
+            '<p>Cảm ơn bạn đã đăng ký tài khoản tại http://aff.english360.com.vn. Để hoàn thành việc kích hoạt tài khoản, bạn vui lòng click vào đường dẫn dưới đây:</p>'.
+            '<p><a href="'.$verifyUrl.'">'.$verifyUrl.'</a></p>'.
+            '<p>Tài khoản của bạn có thể sử dụng tất cả các dịch vụ của English360.</p>'.
+            '<p>Cảm ơn bạn đã đồng hành cùng chúng tôi.</p>'.
+            '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>'.
+            '<p>Ban quản trị English360</p>'.
+            '<p>Hotline: '.Constant::SUPPORT_PHONE.'; Email: cskh@english360.com.vn</p>'
+        ;
+//        $content = '<p>Xin chào,</p>'.
+//            '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào đường link bên dưới:</p>'.
+//            '<p><a href="'.Common::getVerifyEmailUrl($user->_id,$user->email).'">'.Common::getVerifyEmailUrl($user->_id,$user->email).'</a></p>'.
+//            '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
+        $mail = new \helpers\Mail($user->email,'Xác nhận tài khoản English360.com.vn',$content);
+        if($mail->send()){
+            return Redirect::to('/thong-bao.html')->with('success', 'Vui lòng kiểm tra email và kích hoạt tài khoản.');
+        }
+        return Redirect::to('/thong-bao.html')->with('error', 'Không thể gửi email cho bạn, vui lòng thử lại sau.');
+    }
+
 	public function postLogin(){
         $email = Input::get('email', Session::get('popreg_phone'));
         $email = strtolower($email);
@@ -152,16 +187,17 @@ class UsersController extends \BaseController {
                 //Nếu user chưa xác thực
                 if($user->status != Constant::STATUS_ENABLE){
                     //Gửi email xác nhận
-                    $content = '<p>Xin chào,</p>'.
-                        '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào đường link bên dưới:</p>'.
-                        '<p><a href="'.Common::getVerifyEmailUrl($user->_id,$user->email).'">'.Common::getVerifyEmailUrl($user->_id,$user->email).'</a></p>'.
-                        '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
-                    $mail = new \helpers\Mail($user->email,'Xác nhận tài khoản English360.com.vn',$content);
-                    $mail->send();
+//                    $content = '<p>Xin chào,</p>'.
+//                        '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào đường link bên dưới:</p>'.
+//                        '<p><a href="'.Common::getVerifyEmailUrl($user->_id,$user->email).'">'.Common::getVerifyEmailUrl($user->_id,$user->email).'</a></p>'.
+//                        '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
+//                    $mail = new \helpers\Mail($user->email,'Xác nhận tài khoản English360.com.vn',$content);
+//                    $mail->send();
+                    $reVerify = 'http://aff.english360.com.vn/user/send-verify-email?token='.base64_encode($email.'+'.time());
                     if(Request::ajax())
-                        return Response::json(array('success' => false, 'message' => 'Vui lòng xác thực email.'));
+                        return Response::json(array('success' => false, 'message' => 'Vui lòng xác thực email. <a style="text-decoration:underline" href="'.$reVerify.'">Gửi lại link xác thực</a>'));
                     else
-                        return Redirect::back()->with('error', 'Vui lòng xác thực email.')->withInput();
+                        return Redirect::back()->with('error', 'Vui lòng xác thực email. <a style="text-decoration:underline" href="'.$reVerify.'">Gửi lại link xác thực</a>')->withInput();
                 }
 				Auth::login($user);
                 return Redirect::to('/dashboard');
