@@ -11,6 +11,8 @@ class UsersController extends \BaseController {
 			'postLogin',
             'getRegister',
             'postRegister',
+            'facebookCallback',
+            'getVerifyEmail'
 		)));
 
 		$this->beforeFilter('guest', array('only' => array(
@@ -86,7 +88,7 @@ class UsersController extends \BaseController {
             return Redirect::back()->with('error', 'Không thể gửi thư xác nhận đến địa chỉ email của bạn, vui lòng thử lại sau.')->withInput();
         }
 
-        return Redirect::back()->with('true', 'Vui lòng kiểm tra email để xác thực tài khoản của bạn.');
+        return Redirect::to('/thong-bao.html')->with('success', 'Vui lòng kiểm tra email để xác thực tài khoản của bạn.');
     }
     
     public function getVerifyEmail(){
@@ -231,7 +233,7 @@ class UsersController extends \BaseController {
         }
 
         $rules = array(
-            'old_pass'=>'required|alpha_num',
+            'old_password'=>'required|alpha_num',
             'password'=>'required|alpha_num|between:6,12|confirmed',
             'password_confirmation'=>'required|alpha_num|between:6,12',
         );
@@ -304,16 +306,18 @@ class UsersController extends \BaseController {
 //);
         $fb_email = $userNode->getField('email');
         $fb_name = $userNode->getField('name');
+//        echo $fb_email;exit;
         if(empty($fb_email)){
             return Redirect::to('/thong-bao.html')->with('error', 'Bạn vui lòng cho English360 quyền truy cập vào địa chỉ email Facebook của bạn.');
         }
-        $checkEmail = User::where(array('email'=>$fb_email,'status'=>Constant::STATUS_ENABLE,'fbid'=>array('$ne'=>$fb_uid)))->first();
+        $checkEmail = User::where(array('email'=>$fb_email,'fbid'=>array('$ne'=>$fb_uid)))->first();
         if($checkEmail){
             if(isset($checkEmail->fbid) && !empty($checkEmail->fbid))
                 return Redirect::to('/thong-bao.html')->with('error', 'Email đã được sử dụng');
             else{
                 //Nếu có user đk cùng mail trước đó thì gộp làm 1
                 $checkEmail->fbid = $fb_uid;
+                $checkEmail->status = Constant::STATUS_ENABLE;
                 if(empty($checkEmail->displayname)) $checkEmail->displayname = $fb_name;
                 if(empty($checkEmail->fullname)) $checkEmail->fullname = $fb_name;
                 $checkEmail->save();
