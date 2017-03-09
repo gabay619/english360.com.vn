@@ -25,12 +25,25 @@
                     </thead>
                     <tbody>
                     @foreach($allTxn as $aTxn)
+                        <?php
+                        switch ($aTxn->status){
+                            case Constant::WITHDRAW_STATUS_COMPLETE:
+                                $class = 'text-success';
+                                break;
+                            case Constant::WITHDRAW_STATUS_CANCEL:
+                                $class = 'text-danger';
+                                break;
+                            default:
+                                $class = 'text-info';
+                                break;
+                        }
+                        ?>
                         <tr>
                             <td>{{$aTxn->_id}}</td>
                             <td>{{number_format($aTxn->amount)}}</td>
                             <td>{{date('d/m/Y H:i',$aTxn->datecreate)}}</td>
-                            <td>Chờ duyệt</td>
-                            <td>...</td>
+                            <td><b class="{{$class}}">{{Common::getWithdrawStatus($aTxn->status)}}</b></td>
+                            <td>{{Common::getAllBank()[$aTxn->bank['id']]}} - {{Common::maskPhone($aTxn->bank['account_number'])}}</td>
                         </tr>
                     @endforeach
                     </tbody>

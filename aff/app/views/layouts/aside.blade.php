@@ -30,7 +30,7 @@
                     <a href="/payment/info">Thông tin thanh toán</a>
                 </li>
                 <li>
-                    <a href="/payment/list">Lịch sử rút tiền</a>
+                    <a href="/payment/list">Lịch sử thanh toán</a>
                 </li>
             </ul>
         </li>

@@ -53,6 +53,8 @@ switch($act){
     case 'getAffDetail': getAffDetail(); break;
     case 'changeDiscount': changeDiscount(); break;
     case 'withdraw':withdraw(); break;
+    case 'cancelWithdraw':cancelWithdraw(); break;
+    case 'completeWithdraw':completeWithdraw(); break;
 }
 function sport_getteam(){
     global $dbmg;
@@ -906,6 +908,88 @@ function withdraw(){
     $usercl->update(array('_id'=>$id), array('$set'=>$setUser));
     $dtr['success'] = true;
     $dtr['mss'] = 'Tạo lệnh rút tiền thành công';
+    echo json_encode($dtr);exit;
+}
+
+function completeWithdraw(){
+    global $dbmg;
+    $usercl = $dbmg->user;
+    $withdrawcl = $dbmg->withdraw;
+    $dtr['success'] = false;
+    if(!acceptpermiss("aff_withdraw")){
+        $dtr['mss'] = 'Bạn không có quyền thực hiện thao tác này';
+        echo json_encode($dtr);exit;
+    }
+
+    $id = $_POST['id'];
+    $withdraw = $withdrawcl->findOne(array('_id'=>"$id"));
+    if(!$withdraw){
+        $dtr['mss'] = 'Giao dịch không tồn tại.';
+        echo json_encode($dtr);exit;
+    }
+    $user = $usercl->findOne(array('_id'=>$withdraw['uid']));
+    $amount = $withdraw['amount'];
+    $seal_balance = isset($user['account_seal_balance']) ? $user['account_seal_balance'] : 0;
+    if($amount > $seal_balance){
+        $dtr['mss'] = 'Số tiền quá lớn.';
+        echo json_encode($dtr);exit;
+    }
+    //update so du
+    $seal_balance = $seal_balance - $amount;
+    $usercl->update(array('_id'=>$user['_id']), array('$set'=>array('account_seal_balance' => $seal_balance)));
+    //update giao dich
+    $setWithdraw = array(
+        'u_update' => $_SESSION['uinfo']['_id'],
+        'dateupdate' => time(),
+        'status' => Constant::WITHDRAW_STATUS_COMPLETE,
+    );
+    $withdrawcl->update(array('_id'=>"$id"),array('$set'=>$setWithdraw));
+    $dtr['success'] = true;
+    $dtr['mss'] = 'Thành công!';
+    echo json_encode($dtr);exit;
+}
+
+function cancelWithdraw(){
+    global $dbmg;
+    $usercl = $dbmg->user;
+    $withdrawcl = $dbmg->withdraw;
+    $dtr['success'] = false;
+    if(!acceptpermiss("aff_withdraw")){
+        $dtr['mss'] = 'Bạn không có quyền thực hiện thao tác này';
+        echo json_encode($dtr);exit;
+    }
+
+    $id = $_POST['id'];
+    $withdraw = $withdrawcl->findOne(array('_id'=>"$id"));
+    if(!$withdraw){
+        $dtr['mss'] = 'Giao dịch không tồn tại.';
+        echo json_encode($dtr);exit;
+    }
+    $user = $usercl->findOne(array('_id'=>$withdraw['uid']));
+    $amount = $withdraw['amount'];
+    $balance = isset($user['account_balance']) ? $user['account_balance'] : 0;
+    $seal_balance = isset($user['account_seal_balance']) ? $user['account_seal_balance'] : 0;
+    if($amount > $seal_balance){
+        $dtr['mss'] = 'Số tiền quá lớn.';
+        echo json_encode($dtr);exit;
+    }
+    //update so du
+    $seal_balance = $seal_balance - $amount;
+    $balance = $balance + $amount;
+    $setUser = array(
+        'account_balance' => $balance,
+        'account_seal_balance' => $seal_balance
+    );
+    $usercl->update(array('_id'=>$user['_id']), array('$set'=>$setUser));
+    //update giao dich
+    $setWithdraw = array(
+        'u_update' => $_SESSION['uinfo']['_id'],
+        'dateupdate' => time(),
+        'status' => Constant::WITHDRAW_STATUS_CANCEL,
+    );
+    $withdrawcl->update(array('_id'=>"$id"),array('$set'=>$setWithdraw));
+    $dtr['success'] = true;
+    $dtr['mss'] = 'Thành công!';
     echo json_encode($dtr);exit;
 }
 
