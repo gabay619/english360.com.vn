@@ -156,6 +156,7 @@ class ApiController extends \BaseController
     }
 
     public function getOtpConfirmVnp(){
+        LogTxn::insert(Input::all());
         return Response::json(array('status'=>0,'type'=>'text','sms'=>'test'));
     }
 }

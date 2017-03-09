@@ -155,7 +155,7 @@ class OnePayClient
     }
 
     public function requestOtpVnp($txn_id, $amount, $msisdn, $content){
-        $data = "access_key=" .self::ACCESS_KEY. "&amount=" .$amount. "&content=" .$content. "&msisdn=" .$msisdn. "&requestId=" .$txn_id;
+        $data = "access_key=".self::ACCESS_KEY."&amount=".$amount."&content=".$content."&msisdn=".$msisdn."&requestId=".$txn_id;
         $signature = hash_hmac("sha256", $data, self::SECRET_KEY);
         $data.= "&signature=" . $signature; //"&backUrl=".$back_url.
         $json_Charging = $this->_exec(self::API_OTP_URL.'/request', $data);
@@ -179,18 +179,20 @@ class OnePayClient
         $data = "access_key=".self::ACCESS_KEY."&amount=".$amount."&content=".$content."&msisdn=".$msisdn."&requestId=".$txn_id;
         $signature = hash_hmac("sha256", $data, self::SECRET_KEY);
         $data.= "&signature=" . $signature;
-        $json_bankCharging = $this->_exec(self::API_OTP_URL.'/request', $data);
-        $decode_bankCharging=json_decode($json_bankCharging,true);		// decode json
-        $errorMessage = $decode_bankCharging["errorMessage"];
-        $requestId_back = $decode_bankCharging["requestId"];
-        $transId = $decode_bankCharging["transId"];
-        $errorCode = $decode_bankCharging["errorCode"];
+        $json_Charging = $this->_exec(self::API_OTP_URL.'/request', $data);
+        $decode_Charging=json_decode($json_Charging,true);		// decode json
+        $errorMessage = $decode_Charging["errorMessage"];
+        $requestId_back = $decode_Charging["requestId"];
+        $transId = $decode_Charging["transId"];
+        $errorCode = $decode_Charging["errorCode"];
+        $redirect_url = isset($decode_Charging["redirectUrl"]) ? $decode_Charging["redirectUrl"] : '';
         return array(
             'code' => $this->_mapCodeOtp($errorCode),
             'message' => $errorMessage,
             'id' =>$requestId_back,
             'transId' => $transId,
-            'provider_code' => $errorCode
+            'provider_code' => $errorCode,
+            'redirect_url' => $redirect_url
         );
     }
 

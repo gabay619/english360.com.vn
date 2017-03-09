@@ -652,9 +652,9 @@ class UsersController extends \BaseController {
                     return Redirect::to('/user/package?step=4')->with('success', $mess);
                     break;
                 case Constant::OTP_METHOD_NAME:
-                    $listCardType = array(''=>'--Chọn nhà mạng--')+Common::getCardType();
+//                    $listCardType = array(''=>'--Chọn nhà mạng--')+Common::getCardType();
                     return View::make('users.package_otp',array(
-                        'listCardType' => $listCardType,
+//                        'listCardType' => $listCardType,
                         'selectPkg' => $selectPkg
                     ));
                     break;
@@ -674,11 +674,11 @@ class UsersController extends \BaseController {
             return Redirect::to('/user/package?step=4')->with('error', 'Gói cước không tồn tại');
         }
 
-        $card_type = Input::get('card_type');
+//        $card_type = Input::get('card_type');
         $msisdn = Input::get('msisdn');
-        if(empty($card_type)){
-            return Redirect::back()->with('error', 'Vui lòng chọn nhà mạng.')->withInput();
-        }
+//        if(empty($card_type)){
+//            return Redirect::back()->with('error', 'Vui lòng chọn nhà mạng.')->withInput();
+//        }
         if(!Common::isPhoneNumber($msisdn)){
             return Redirect::back()->with('error', 'Số điện thoại không hợp lệ')->withInput();
         }
@@ -687,7 +687,7 @@ class UsersController extends \BaseController {
         $txn->_id = strval(time());
         $txn->datecreate = time();
         $txn->uid = Auth::user()->id;
-        $txn->card_type = $card_type;
+//        $txn->card_type = $card_type;
         $txn->msisdn = $msisdn;
         $txn->pkg_id = $selectPkg->_id;
         $txn->pkg_price = $selectPkg->price;
@@ -697,11 +697,12 @@ class UsersController extends \BaseController {
         
         require_once app_path('../../sdk/1pay/OnePayClient.php');
         $mpc = new OnePayClient();
-        if($card_type == 'VNP'){
+//        if($card_type == 'VNP'){
 //            $param = $mpc->requestOtpVnp($txn->_id, $selectPkg->price, $msisdn, Auth::user()->email.' thanh toan '.$selectPkg->price);
-            return Redirect::back()->with('error','Chưa hỗ trợ.');
-        }
+//            return Redirect::back()->with('error','Chưa hỗ trợ.');
+//        }
         $param = $mpc->requestOtp($txn->_id, $selectPkg->price, $msisdn, Auth::user()->email.' thanh toan '.$selectPkg->price);
+//        print_r($param);die;
         //Luu log
         LogTxn::insert($param);
         //Cap nhat trang thai
@@ -709,6 +710,11 @@ class UsersController extends \BaseController {
         $txn->response_message = Common::getTxnOtpMss($param['code']);
         $txn->transId = $param['transId'];
         $txn->save();
+        //Vinaphone
+        if(!empty($param['redirect_url'])){
+            return Redirect::back()->with('error', 'Hiện chưa hỗ trợ mạng Vinaphone');
+            return Redirect::to($param['redirect_url']);
+        }
         if(empty($param['id'])){
             return Redirect::back()->with('error','Có lỗi xảy ra, vui lòng thử lại');
         }
