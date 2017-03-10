@@ -50,6 +50,15 @@ $topUser = $usercl->aggregate(array(
 ));
 $topUser = isset($topUser['result']) ? $topUser['result'] : array();
 
+$topRevenue = $aff_txncl->aggregate(array(
+    array('$match' => $cond),
+    array('$group' => array('_id'=>'$uid', 'sum_discount'=>array('$sum'=>'$discount'),'count'=>array('$sum'=>1))),
+    array('$sort' => array('sum_discount'=>-1)),
+    array('$group' => array('_id'=>null,'total'=>array('$sum'=>1),'data'=>array('$push'=>'$$ROOT'))),
+    array('$project' => array('total' => 1, 'data'=>array('$slice'=>array('$data',$cp,$limit))  )),
+));
+
+$topRevenue = isset($topRevenue['result'][0]['data']) ? $topRevenue['result'][0]['data'] : array();
 //$list = $aff_txncl->aggregate(array(
 //    array('$match' => $cond),
 //    array('$group' => array('_id'=>'$uid', 'sum_discount'=>array('$sum'=>'$discount'),'count'=>array('$sum'=>1))),
@@ -78,58 +87,69 @@ $topUser = isset($topUser['result']) ? $topUser['result'] : array();
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-4">
+        <h2>Top Doanh thu</h2>
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>Publisher</th>
+                <th>Doanh thu</th>
+                <th>Thao tác</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($topRevenue as $item):
+                $user = $usercl->findOne(array('_id'=>$item['_id']));
+                ?>
+                <tr>
+                    <td><?php echo $user['email']?></td>
+                    <td><?php echo number_format($item['sum_discount'])?></td>
+                    <td><button type="button" class="btn btn-sm btn-primary" onclick="getDetail('<?php echo $item['_id'] ?>','<?php echo $user['email']; ?>')">Chi tiết</button></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-sm-4">
         <h2>Top Click</h2>
         <table class="table table-hover table-bordered">
             <thead>
             <tr>
                 <th>Publisher</th>
-                <th>Số Click</th>
-                <th>Chiết khấu</th>
+                <th>Click</th>
                 <th>Thao tác</th>
             </tr>
             </thead>
             <tbody>
             <?php foreach ($topClick as $item):
                 $user = $usercl->findOne(array('_id'=>$item['_id']));
-                $discount = isset($user['aff_discount']) ? $user['aff_discount'] : Constant::AFF_RATE_CARD;
                 ?>
             <tr>
                 <td><?php echo $user['email']?></td>
                 <td><?php echo $item['numclick']?></td>
-                <td>
-                    <?php echo number_format($discount*100); ?>%
-                    <button type="button" class="btn btn-sm btn-default" onclick="changeDiscount('<?php echo $item['_id'] ?>')"><i class="glyphicon glyphicon-edit"></i></button>
-                </td>
                 <td><button type="button" class="btn btn-sm btn-primary" onclick="getDetail('<?php echo $item['_id'] ?>','<?php echo $user['email']; ?>')">Chi tiết</button></td>
             </tr>
             <?php endforeach; ?>
             </tbody>
         </table>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-4">
         <h2>Top User</h2>
         <table class="table table-hover table-bordered">
             <thead>
             <tr>
                 <th>Publisher</th>
-                <th>Số User</th>
-                <th>Chiết khấu</th>
+                <th>User</th>
                 <th>Thao tác</th>
             </tr>
             </thead>
             <tbody>
             <?php foreach ($topUser as $item):
                 $user = $usercl->findOne(array('_id'=>$item['_id']));
-                $discount = isset($user['aff_discount']) ? $user['aff_discount'] : Constant::AFF_RATE_CARD;
                 ?>
                 <tr>
                     <td><?php echo $user['email']?></td>
                     <td><?php echo $item['num_user']?></td>
-                    <td>
-                        <?php echo number_format($discount*100); ?>%
-                        <button type="button" class="btn btn-sm btn-default" onclick="changeDiscount('<?php echo $item['_id'] ?>')"><i class="glyphicon glyphicon-edit"></i></button>
-                    </td>
                     <td><button type="button" class="btn btn-sm btn-primary" onclick="getDetail('<?php echo $item['_id'] ?>','<?php echo $user['email']; ?>')">Chi tiết</button></td>
                 </tr>
             <?php endforeach; ?>
@@ -191,7 +211,7 @@ $topUser = isset($topUser['result']) ? $topUser['result'] : array();
             $('#myModal .rate').html(re.rate);
             $('#myModal .revenue').html(re.revenue);
             $('#myModal .count-user').html(re.user);
-            $('#myModal .discount').html(re.discount);
+            $('#myModal .discount').html(re.discount+'<button type="button" class="btn btn-sm btn-default" onclick="changeDiscount('+id+')"><i class="glyphicon glyphicon-edit"></i></button>');
             $('#myModal .balance').html(re.balance);
 //            alert(JSON.stringify(re, null, 4));
         });

@@ -60,6 +60,7 @@ $list = $usercl->find($cond)->sort($sort)->limit($limit)->skip($cp);
     <tr>
         <th>Email</th>
         <th>Số dư</th>
+        <th>Đóng băng</th>
         <th>Chiết khấu</th>
         <th>Trạng thái</th>
         <th>Thao tác</th>
@@ -74,6 +75,7 @@ $list = $usercl->find($cond)->sort($sort)->limit($limit)->skip($cp);
         <tr>
             <td><?php echo $item['email']; ?></td>
             <td><?php echo number_format($item['account_balance']); ?></td>
+            <td><?php echo number_format($item['account_seal_balance']); ?></td>
             <td>
                 <?php echo number_format($discount*100); ?>%
                 <button type="button" class="btn btn-sm btn-default" onclick="changeDiscount('<?php echo $item['_id'] ?>')"><i class="glyphicon glyphicon-edit"></i></button>
@@ -93,7 +95,7 @@ $list = $usercl->find($cond)->sort($sort)->limit($limit)->skip($cp);
                 <?php endif; ?>
                 <button type="button" class="btn btn-sm btn-primary" onclick="getDetail('<?php echo $item['_id'] ?>','<?php echo $item['email']; ?>')">Chi tiết</button>
                 <?php if($item['account_balance'] >= Constant::WITHDRAW_MIN_PAY): ?>
-                <button type="button" class="btn btn-sm btn-info" onclick="withdraw('<?php echo $item['_id'] ?>',<?php echo $item['account_balance'] ?>)">Tạo lệnh rút tiền</button>
+                <button type="button" class="btn btn-sm btn-info" onclick="withdraw('<?php echo $item['_id'] ?>',<?php echo $item['account_balance'] ?>)">Rút tiền</button>
                 <?php endif; ?>
             </td>
         </tr>
@@ -154,7 +156,7 @@ $list = $usercl->find($cond)->sort($sort)->limit($limit)->skip($cp);
             $('#myModal .rate').html(re.rate);
             $('#myModal .revenue').html(re.revenue);
             $('#myModal .count-user').html(re.user);
-            $('#myModal .discount').html(re.discount);
+            $('#myModal .discount').html(re.discount+'<button type="button" class="btn btn-sm btn-default" onclick="changeDiscount('+id+')"><i class="glyphicon glyphicon-edit"></i></button>');
             $('#myModal .balance').html(re.balance);
 //            alert(JSON.stringify(re, null, 4));
         });

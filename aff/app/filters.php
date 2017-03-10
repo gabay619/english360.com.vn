@@ -52,6 +52,18 @@ Route::filter('auth', function()
             return Redirect::guest('/user/login');
 		}
 	}
+	if(Auth::user()->aff_status == Constant::STATUS_DISABLE){
+		Auth::logout();
+		if (Request::ajax())
+		{
+			return Response::json(array('success'=>false, 'message'=> 'Tài khoản của bạn bị khóa, vui lòng liên hệ bộ phận CSKH'));
+		}
+		else
+		{
+
+			return Redirect::to('/thong-bao.html')->with('error','Tài khoản của bạn bị khóa, vui lòng liên hệ bộ phận CSKH');
+		}
+	}
 });
 
 
