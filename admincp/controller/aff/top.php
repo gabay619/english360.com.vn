@@ -31,8 +31,9 @@ $topClick = $affclickcl->aggregate(array(
     array('$group' => array('_id'=>null,'total'=>array('$sum'=>1),'data'=>array('$push'=>'$$ROOT'))),
     array('$project' => array('total' => 1, 'data'=>array('$slice'=>array('$data',$cp,$limit))  )),
 ));
-$topClick = isset($topClick['result'][0]['data']) ? $topClick['result'][0]['data'] : array();
 $rowcount = isset($topClick['result'][0]['total']) ? $topClick['result'][0]['total'] : 0;
+$topClick = isset($topClick['result'][0]['data']) ? $topClick['result'][0]['data'] : array();
+//print_r($rowcount);
 
 $condUser = array(
     'aff.datecreate' => $cond['datecreate'],

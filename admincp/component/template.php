@@ -14,6 +14,7 @@
     <link href="asset/lib/bootstrap-tagsinput/dist/bootstrap-tagsinput.css" rel="stylesheet">
     <link href="asset/lib/bootstrap-select/bootstrap-select.min.css" rel="stylesheet">
     <link href="asset/lib/timepicker/jquery.timepicker.css" rel="stylesheet">
+    <link href="/assets/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="asset/css/custom.css" rel="stylesheet">

@@ -100,7 +100,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 //        return isset($this->aff);
 //        return $this->belongsTo('User','aff.uid');
         if(isset($this->aff)){
-            return static::find($this->aff['uid']);
+            return static::where(array('_id'=>$this->aff['uid'],'aff_status'=>array('$ne'=>Constant::STATUS_DISABLE)))->first();
         }
         return false;
     }

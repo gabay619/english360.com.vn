@@ -181,6 +181,8 @@
         });
         $( ".showTab" ).click(function() {
             $('.tabItem').hide();
+            $('.showTab').attr('style','');
+            $(this).attr('style','border: 1px solid red;');
             $($(this).attr('data-target')).toggle();
         });
     });

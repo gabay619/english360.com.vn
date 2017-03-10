@@ -199,6 +199,12 @@ class UsersController extends \BaseController {
                     else
                         return Redirect::back()->with('error', 'Vui lòng xác thực email. <a style="text-decoration:underline" href="'.$reVerify.'">Gửi lại link xác thực</a>')->withInput();
                 }
+                if($user->aff_status == Constant::STATUS_DISABLE){
+                    if(Request::ajax())
+                        return Response::json(array('success' => false, 'message' => 'Tài khoản của bạn hiện bị khóa, vui lòng liên hệ với CSKH.'));
+                    else
+                        return Redirect::back()->with('error', 'Tài khoản của bạn hiện bị khóa, vui lòng liên hệ với CSKH.')->withInput();
+                }
 				Auth::login($user);
                 return Redirect::to('/dashboard');
 			}else{

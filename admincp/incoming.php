@@ -56,6 +56,8 @@ switch($act){
     case 'withdraw':withdraw(); break;
     case 'cancelWithdraw':cancelWithdraw(); break;
     case 'completeWithdraw':completeWithdraw(); break;
+    case 'lockPub':lockPub(); break;
+    case 'unlockPub':unlockPub(); break;
 }
 function sport_getteam(){
     global $dbmg;
@@ -997,6 +999,34 @@ function cancelWithdraw(){
     $withdrawcl->update(array('_id'=>"$id"),array('$set'=>$setWithdraw));
     $dtr['success'] = true;
     $dtr['mss'] = 'Thành công!';
+    echo json_encode($dtr);exit;
+}
+
+function lockPub(){
+    global $dbmg;
+    $usercl = $dbmg->user;
+    $dtr['success'] = false;
+    if(!acceptpermiss("aff_pub")){
+        $dtr['mss'] = 'Bạn không có quyền thực hiện thao tác này';
+        echo json_encode($dtr);exit;
+    }
+    $id = $_POST['id'];
+    $usercl->update(array('_id'=>"$id"), array('$set'=>array('aff_status'=>Constant::STATUS_DISABLE)));
+    $dtr['success'] = true;
+    echo json_encode($dtr);exit;
+}
+
+function unlockPub(){
+    global $dbmg;
+    $usercl = $dbmg->user;
+    $dtr['success'] = false;
+    if(!acceptpermiss("aff_pub")){
+        $dtr['mss'] = 'Bạn không có quyền thực hiện thao tác này';
+        echo json_encode($dtr);exit;
+    }
+    $id = $_POST['id'];
+    $usercl->update(array('_id'=>"$id"), array('$set'=>array('aff_status'=>Constant::STATUS_ENABLE)));
+    $dtr['success'] = true;
     echo json_encode($dtr);exit;
 }
 

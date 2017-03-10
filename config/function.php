@@ -491,6 +491,15 @@ function shuffle_assoc($list) {
 
 function getSmsLink($to,$body){
     $char = stripos($_SERVER['HTTP_USER_AGENT'],"iPhone") ? '&' : '?';
+    if(stripos($_SERVER['HTTP_USER_AGENT'],"iPhone")){
+        $version = preg_replace("/(.*) OS ([0-9]*)_(.*)/","$2", $_SERVER['HTTP_USER_AGENT']);
+        if($version > 7)
+            return 'sms:'.$to.'&body='.$body;
+        else
+            return 'sms:'.$to.';body='.$body;
+    }elseif(stripos($_SERVER['HTTP_USER_AGENT'],"Windows Phone")){
+        return 'sms://'.$to.'&body='.$body;
+    }
     return 'sms:'.$to.$char.'body='.$body;
 }
 
