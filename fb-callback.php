@@ -88,7 +88,8 @@ if($checkEmail){
     }
     //Nếu có user đk cùng mail trước đó thì gộp làm 1
     $updateUser = array(
-        'fbid' => $fb_uid
+        'fbid' => $fb_uid,
+        'ssid' => session_id()
     );
     if(!empty($checkEmail['displayname'])) $updateUser['displayname'] = $fb_name;
     $usercl->update(array('_id'=>$checkEmail['_id']), array('$set'=>$updateUser));
@@ -110,8 +111,6 @@ if(!$checkUser){
         'displayname' => $fb_name,
         'fullname' => $fb_name,
         'fbid' => $fb_uid,
-//        'un_password'=>$password,
-//        'password' => Common::encryptpassword($password),
         'datecreate' => time(),
         'status'=>Constant::STATUS_ENABLE,
         'email'=>$email,
@@ -120,6 +119,7 @@ if(!$checkUser){
         'cmnd_noicap'=>'',
         'cmnd_ngaycap'=>'',
         'birthday'=>'',
+        'ssid' => session_id(),
         'thong_bao' => array(
             'noti' => "1",
             'email' => "1",
@@ -136,7 +136,10 @@ if(!$checkUser){
         );
     }
     $usercl->insert($o);
-}else
+}else{
+    $usercl->update(array('_id'=>$checkUser['_id']), array('$set'=>array('ssid'=>session_id())));
     $o = $checkUser;
+}
 $_SESSION['uinfo'] = $o;
+//$_SESSION['uinfo']['ssid'] = session_id();
 header('Location: index.php');exit;

@@ -57,6 +57,7 @@ if(!empty($_POST)){
                 $mes1 = array('mss'=>'Vui lòng xác thực email. <a style="text-decoration:underline" href="'.$reVerify.'">Gửi lại link xác thực</a>',"class"=>"none");
             }else{
                 $_SESSION['uinfo'] = $o;
+                $usercl->update(array('_id'=>$_SESSION['uinfo']['_id']),array('$set'=>array('ssid'=>session_id())));
                 $newHistoryLog = array(
                     '_id' => strval(time().rand(10,99)),
                     'datecreate' => time(),

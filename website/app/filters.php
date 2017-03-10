@@ -48,6 +48,10 @@ Route::filter('auth', function()
             return Redirect::guest('/user/login');
 		}
 	}
+    if(Auth::user()->ssid != Session::getId()){
+        Auth::logout();
+        return Redirect::to('/user/login')->with('error', 'Tài khoản của bạn được đăng nhập từ nơi khác.');
+    }
 });
 
 Route::filter('package', function(){
@@ -90,6 +94,10 @@ Route::filter('count_view', function(){
 //            return Redirect::to('/user/quick-package?return_url='.Request::url())->with('error', 'Hãy đăng ký gói cước để tiếp tục sử dụng dịch vụ.');
             return Redirect::to('/user/login')->with('error', 'Bạn đã sử dụng hết 10 nội dung miễn phí. Hãy đăng nhập để tiếp tục sử dụng dịch vụ.');
         }else{
+            if(Auth::user()->ssid != Session::getId()){
+                Auth::logout();
+                return Redirect::to('/user/login')->with('error', 'Tài khoản của bạn được đăng nhập từ nơi khác.');
+            }
             if(!Auth::user()->registedPackage()){
                 return Redirect::to('/user/package')->with('error', 'Bạn đã sử dụng hết 10 nội dung miễn phí.');
             }

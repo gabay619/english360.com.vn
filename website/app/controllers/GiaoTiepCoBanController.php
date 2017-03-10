@@ -70,30 +70,21 @@ class GiaoTiepCoBanController extends \BaseController {
         if(!$item){
             return 'Bài học không tồn tại.';
         }
-        //Đếm số lượt xem
-//        if(!Session::has('count_view_gtcb')){
-//            Session::put('count_view_gtcb',0);
-//        }
-//        if(Session::get('count_view_gtcb') >= Constant::MAX_CONTENT_CATE_FREE || !isset($item->free) || $item->free!='1') {
         if(!isset($item->free) || $item->free!='1') {
             Session::put('return_url', Request::url());
             Session::put('count_view', Session::get('count_view')-1);
-
             if (!Auth::user()) {
-//				Session::put('popreg_require_login', 1);
                 return Redirect::to('/user/register')->with('error', 'Hãy đăng ký để tiếp tục sử dụng dịch vụ.');
-//                return Redirect::to('/user/quick-package?return_url='.Request::url())->with('error', 'Hãy đăng ký gói cước để tiếp tục sử dụng dịch vụ.');
-
             } else {
+                if(Auth::user()->ssid != Session::getId()){
+                    Auth::logout();
+                    return Redirect::to('/user/login')->with('error', 'Tài khoản của bạn được đăng nhập từ nơi khác.');
+                }
                 if (!Auth::user()->registedPackage()) {
-//					return Redirect::to('/user/package')->with('error', 'Bạn đã sử dụng hết 10 nội dung miễn phí.');
                     return Redirect::to('/user/package')->with('error', 'Hãy đăng ký gói cước để tiếp tục sử dụng dịch vụ.');
                 }
-//                else
-//                    Session::remove('count_view_gtcb');
             }
         }
-//        Session::put('count_view_gtcb', Session::get('count_view_gtcb')+1);
 
         //Log
         $newHistoryLog = array(

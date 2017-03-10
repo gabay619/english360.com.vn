@@ -3,6 +3,7 @@ $usercl = $dbmg->user;
 $gtcbcl = $dbmg->gtcb;
 $tvcl = $dbmg->thuvien;
 $categorycl = $dbmg->category;
+$usercl = $dbmg->user;
 
 $showCl = $dbmg->showcl;
 $categorycl = $dbmg->category;
@@ -16,33 +17,26 @@ if(isset($id)) {
     //Đếm số lượt xem chuyên mục
     $o = (array)$gtcbcl->findOne( array("_id" => $id));
 
-//    if(!isset($_SESSION['CountView'.$type])){
-//        $_SESSION['CountView'.$type] = 0;
-//    }
-//    $countView = $_SESSION['CountView'.$type];
-//    if($countView >= Constant::MAX_CONTENT_CATE_FREE || !isset($o['free']) || $o['free']!='1'){
     if(!isset($o['free']) || $o['free']!='1'){
-//        $_SESSION['CountView']--;
         if(!isset($_SESSION['uinfo'])){
-//            header("Location: /login.php");exit();
+            header("Location: /login.php");exit();
 //            header("Location: /register.php");exit();
-            header("Location: /quick-package.php?link=".urlencode(Constant::BASE_URL.$_SERVER['REQUEST_URI']));exit();
+//            header("Location: /quick-package.php?link=".urlencode(Constant::BASE_URL.$_SERVER['REQUEST_URI']));exit();
         }
         else{
-            $result = Network::getUserInfo($_SESSION['uinfo']['phone'],'E',$_SESSION['uinfo']['_id']);
-            if($result != 1){
-//                if(Network::is3g() && Network::is3gmobifone() && Network::OPEN_REG){
-//                    $link_callback = Constant::BASE_URL . "/wapportal.php?params=" . base64_encode('E' . '&WAP');
-//                    $linkVms = Network::genLinkConfirmVms("E",$link_callback);
-//                    header("Location: ".$linkVms);exit();
-//                }else{
-                    $_SESSION['flash_mss'] = 'Hãy đăng ký gói cước để tiếp tục sử dụng dịch vụ.';
-                    header("Location: /regispack.php");exit();
-//                }
+            $user = $usercl->findOne(array('_id'=>$_SESSION['uinfo']['_id']));
+            if($user['ssid'] != session_id()){
+                unset($_SESSION['uinfo']);
+                $_SESSION['flash_mss'] = 'Tài khoản của bạn được đăng nhập từ nơi khác.';
+                header("Location: /login.php");exit();
+            }
+            $result = Common::isRegPackage($_SESSION['uinfo']['_id']);
+            if($result){
+                $_SESSION['flash_mss'] = 'Hãy đăng ký gói cước để tiếp tục sử dụng dịch vụ.';
+                header("Location: /regispack.php");exit();
             }
         }
     }
-//    $_SESSION['CountView'.$type]++;
     include "/countView.php";
 
     include "controller/component/emailbox.php";

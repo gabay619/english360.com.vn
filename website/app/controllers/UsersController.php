@@ -205,26 +205,16 @@ class UsersController extends \BaseController {
 			if($user->password == Common::encryptpassword($password)){
                 //Nếu user chưa xác thực
                 if($user->status != Constant::STATUS_ENABLE){
-                    //Gửi email xác nhận
-//                    $content = '<p>Xin chào,</p>'.
-//                        '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào đường link bên dưới:</p>'.
-//                        '<p><a href="'.Common::getVerifyEmailUrl($user->_id,$user->email).'">'.Common::getVerifyEmailUrl($user->_id,$user->email).'</a></p>'.
-//                        '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
-//                    $mail = new \helpers\Mail($user->email,'Xác nhận tài khoản English360.com.vn',$content);
-//                    $mail->send();
                     $reVerify = Constant::BASE_URL.'/user/send-verify-email?token='.base64_encode($email.'+'.time());
                     if(Request::ajax())
                         return Response::json(array('success' => false, 'message' => 'Vui lòng xác thực email. <a style="text-decoration:underline" href="'.$reVerify.'">Gửi lại link xác thực</a>'));
                     else
                         return Redirect::back()->with('error', 'Vui lòng xác thực email. <a style="text-decoration:underline" href="'.$reVerify.'">Gửi lại link xác thực</a>')->withInput();
                 }
+                $user->ssid = Session::getId();
+                $user->save();
 				Auth::login($user);
-                ##Gui tin hang ngay
-//                if(Session::has('popreg_phone') && !empty(Session::get('popreg_phone'))){
-////                    print_r(Session::get('popreg_phone'));
-//                    Network::sendToDaily(Session::get('popreg_phone'));
-//                    Session::forget('popreg_phone');
-//                }
+
                 //Log
                 $newHistoryLog = array(
                         '_id' => strval(time().rand(10,99)),
@@ -235,30 +225,13 @@ class UsersController extends \BaseController {
                         'uid' => Auth::user()->_id,
                         'url' => Request::ajax() ? Constant::BASE_URL : Request::url(),
                         'status' => Constant::STATUS_ENABLE,
-//                        'phone' => Auth::user()->phone,
                         'price' => 0
                 );
                 HisLog::insert($newHistoryLog);
 				if(Request::ajax())
 					return Response::json(array('success' => true, 'message' => 'Đăng nhập thành công.'));
 				else{
-                    //Nếu đang có yêu cầu xác thực email
-//                    if(Session::has('required_verify_email')){
-//                        $verifyEmail = Session::get('required_verify_email');
-//                        $bodyEmail = '<p>Xin chào,</p>'.
-//                            '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào link bên dưới</p>'.
-//                            '<p><a href="'.Common::getVerifyEmailUrl($user->_id,$verifyEmail).'">'.Common::getVerifyEmailUrl($user->_id,$verifyEmail).'</a></p>'.
-//                            '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
-//                        $mail = new \helpers\Mail($verifyEmail, 'Xác thực email English360.vn', $bodyEmail);
-//                        $mail->send();
-//                        Session::remove('required_verify_email');
-//                        return Redirect::to('/thong-bao.html')->with('success','Chúng tôi đã gửi 1 email xác nhận về địa chỉ '.$verifyEmail.', vui lòng xác nhận địa chỉ email này là của bạn.');
-//                    }
-//                    return Session::get('return_url','/');
-//                    if(Session::has('return_url'))
                     return Redirect::to(Session::get('return_url','/'));
-//                    else
-//                        return Redirect::to('/');
                 }
 			}else{
 				if(Request::ajax())
@@ -418,10 +391,10 @@ class UsersController extends \BaseController {
 
 	public function getProfile(){
         $user = Auth::user();
-        $checkTCSMS = Network::checkTCSMS($user->phone);
+//        $checkTCSMS = Network::checkTCSMS($user->phone);
         $user->thong_bao = array(
                 'noti' => $user->thong_bao['noti'],
-                'sms' => $checkTCSMS==0 ? '1' : '0',
+//                'sms' => $checkTCSMS==0 ? '1' : '0',
                 'email' => $user->thong_bao['email'],
         );
         $user->save();
@@ -1154,6 +1127,7 @@ class UsersController extends \BaseController {
                 $checkEmail->status = Constant::STATUS_ENABLE;
                 if(empty($checkEmail->displayname)) $checkEmail->displayname = $fb_name;
                 if(empty($checkEmail->fullname)) $checkEmail->fullname = $fb_name;
+                $checkEmail->ssid = Session::getId();
                 $checkEmail->save();
                 Auth::login($checkEmail);
                 return Redirect::to(Session::get('return_url','/user/package'));
@@ -1176,6 +1150,7 @@ class UsersController extends \BaseController {
                 'noti' => '1',
                 'email' => '1',
             );
+            $user->ssid = Session::getId();
             //Nếu có aff
             if(isset($_COOKIE[Constant::AFF_COOKIE_NAME])){
                 $cookie_value = Common::decodeAffCookie($_COOKIE[Constant::AFF_COOKIE_NAME]);
@@ -1190,6 +1165,8 @@ class UsersController extends \BaseController {
 
             Auth::login($user);
         }else{
+            $checkUser->ssid = Session::getId();
+            $checkUser->save();
             Auth::login($checkUser);
         }
 
