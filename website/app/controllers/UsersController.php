@@ -211,9 +211,10 @@ class UsersController extends \BaseController {
                     else
                         return Redirect::back()->with('error', 'Vui lòng xác thực email. <a style="text-decoration:underline" href="'.$reVerify.'">Gửi lại link xác thực</a>')->withInput();
                 }
+
+				Auth::login($user);
                 $user->ssid = Session::getId();
                 $user->save();
-				Auth::login($user);
 
                 //Log
                 $newHistoryLog = array(
@@ -1127,9 +1128,9 @@ class UsersController extends \BaseController {
                 $checkEmail->status = Constant::STATUS_ENABLE;
                 if(empty($checkEmail->displayname)) $checkEmail->displayname = $fb_name;
                 if(empty($checkEmail->fullname)) $checkEmail->fullname = $fb_name;
+                Auth::login($checkEmail);
                 $checkEmail->ssid = Session::getId();
                 $checkEmail->save();
-                Auth::login($checkEmail);
                 return Redirect::to(Session::get('return_url','/user/package'));
             }
         }
@@ -1150,7 +1151,6 @@ class UsersController extends \BaseController {
                 'noti' => '1',
                 'email' => '1',
             );
-            $user->ssid = Session::getId();
             //Nếu có aff
             if(isset($_COOKIE[Constant::AFF_COOKIE_NAME])){
                 $cookie_value = Common::decodeAffCookie($_COOKIE[Constant::AFF_COOKIE_NAME]);
@@ -1161,13 +1161,14 @@ class UsersController extends \BaseController {
                     'datecreate' => time()
                 );
             }
-            $user->save();
 
             Auth::login($user);
+            $user->ssid = Session::getId();
+            $user->save();
         }else{
+            Auth::login($checkUser);
             $checkUser->ssid = Session::getId();
             $checkUser->save();
-            Auth::login($checkUser);
         }
 
         return Redirect::to(Session::get('return_url','/user/package'));

@@ -187,8 +187,8 @@ class TestController extends \BaseController {
     }
 
     public function getSession(){
-        print_r($_SESSION);
-        print_r(Session::all());
+//        print_r($_SESSION);
+        print_r(Session::getId());
     }
 
     public function getFreeUser(){

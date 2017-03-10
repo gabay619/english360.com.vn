@@ -13,13 +13,18 @@
 
 App::before(function($request)
 {
-    Input::merge(Common::array_strip_tags(Input::all()));
+//    Input::merge(Common::array_strip_tags(Input::all()));
+    if(Auth::user()){
+        if(Auth::user()->ssid != Session::getId()){
+            Auth::logout();
+        }
+    }
 });
 
 
 App::after(function($request, $response)
 {
-	//
+
 });
 
 /*
