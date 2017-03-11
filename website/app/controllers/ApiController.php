@@ -84,7 +84,7 @@ class ApiController extends \BaseController
         $txn = new TxnSms();
         $txn->_id = strval(time());
         $txn->datecreate = time();
-        $txn->amount = Input::get('amount','');
+        $txn->amount = intval(Input::get('amount',''));
         $txn->command_code = Input::get('command_code','');
         $txn->response_code = Input::get('error_code','');
         $txn->response_message = Input::get('error_message','');
@@ -118,7 +118,7 @@ class ApiController extends \BaseController
                     'method' => Constant::SMS_METHOD_NAME,
                     'discount' => $aff_discount,
                     'rate' => $aff_rate,
-                    'amount' => $txn->amount
+                    'amount' => intval($txn->amount)
                 ));
 //                $account = $aff->account();
                 $aff->account_balance += $aff_discount;

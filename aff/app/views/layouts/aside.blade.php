@@ -16,7 +16,10 @@
                     <a href="/report/user">Khách hàng</a>
                 </li>
                 <li>
-                    <a href="/report/txn">Doanh thu</a>
+                    <a href="/report/txn">Lịch sử giao dịch</a>
+                </li>
+                <li>
+                    <a href="/report/summarize">Sản lượng</a>
                 </li>
             </ul>
         </li>

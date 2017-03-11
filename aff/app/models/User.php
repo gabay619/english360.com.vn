@@ -84,8 +84,11 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
     }
 
     public function registedPackage(){
-        $checkPackage = Network::getUserInfo($this->phone,'E',$this->_id);
-        return $checkPackage == 1;
+        return isset($this->pkg_expired) && $this->pkg_expired > time();
+    }
+
+    public function getPackageTime(){
+        return self::registedPackage() ? $this->pkg_expired : false;
     }
 
     public function isAllowEmail(){

@@ -14,6 +14,7 @@ if (isset($_POST['acpt'])) {
     $redirect = $_POST['redirect'];
     unset($_POST['redirect']);
     unset($_POST['acpt']);
+    $_POST['price'] = intval($_POST['price']);
     if ($tact == "package_insert") {
         $_POST['_id'] = (string)strtotime("now");
         $_POST['datecreate'] = time();

@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-                Báo cáo giao dịch
+                Lịch sử giao dịch
             </h1>
         </div>
     </div>

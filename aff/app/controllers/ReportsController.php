@@ -166,4 +166,35 @@ class ReportsController extends \BaseController {
             'user' => $user
         ));
     }
+
+    public function getSummarize(){
+        $cond = array(
+            'uid' => Auth::user()->_id,
+        );
+        $start = date('01/m/Y');
+        $end = date('d/m/Y');
+        if(!empty(Input::get('start'))){
+            $start = Input::get('start');
+        }
+        if(!empty(Input::get('end'))){
+            $end = Input::get('end');
+        }
+        $convertStartdate = DateTime::createFromFormat('d/m/Y', $start)->format('Y-m-d');
+        $convertEnddate = DateTime::createFromFormat('d/m/Y', $end)->format('Y-m-d');
+        $cond['datecreate'] = array(
+            '$gte' => (int)strtotime($convertStartdate. ' 00:00:00'),
+            '$lte' => (int)strtotime($convertEnddate. ' 23:59:59')
+        );
+        $summarize = AffTxn::raw()->aggregate(array(
+            array('$match' => $cond),
+            array('$group' => array('_id'=>'$method', 'count'=>array('$sum'=>1),'sum_discount'=>array('$sum'=>'$discount'),'sum_amount'=>array('$sum'=>'$amount'))),
+        ));
+
+        return View::make('report.summarize', array(
+            'summarize' => isset($summarize['result']) ? $summarize['result'] : array(),
+            'start' => $start,
+            'end' => $end
+        ));
+
+    }
 }
