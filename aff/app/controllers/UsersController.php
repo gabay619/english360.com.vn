@@ -12,7 +12,8 @@ class UsersController extends \BaseController {
             'getRegister',
             'postRegister',
             'facebookCallback',
-            'getVerifyEmail'
+            'getVerifyEmail',
+            'getSendVerifyEmail'
 		)));
 
 		$this->beforeFilter('guest', array('only' => array(
