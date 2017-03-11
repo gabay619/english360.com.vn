@@ -58,6 +58,7 @@ switch($act){
     case 'completeWithdraw':completeWithdraw(); break;
     case 'lockPub':lockPub(); break;
     case 'unlockPub':unlockPub(); break;
+    case 'approvePub':approvePub(); break;
 }
 function sport_getteam(){
     global $dbmg;
@@ -1017,6 +1018,20 @@ function lockPub(){
 }
 
 function unlockPub(){
+    global $dbmg;
+    $usercl = $dbmg->user;
+    $dtr['success'] = false;
+    if(!acceptpermiss("aff_pub")){
+        $dtr['mss'] = 'Bạn không có quyền thực hiện thao tác này';
+        echo json_encode($dtr);exit;
+    }
+    $id = $_POST['id'];
+    $usercl->update(array('_id'=>"$id"), array('$set'=>array('aff_status'=>null)));
+    $dtr['success'] = true;
+    echo json_encode($dtr);exit;
+}
+
+function approvePub(){
     global $dbmg;
     $usercl = $dbmg->user;
     $dtr['success'] = false;

@@ -37,6 +37,15 @@ Route::filter('payment', function (){
 		return Redirect::to('/payment/setting')->with('error','Bạn cần cập nhật thông tin thanh toán');
 });
 
+Route::filter('approve', function (){
+	if(Auth::user()->aff_status != Constant::STATUS_ENABLE){
+		if (Request::ajax()){
+			return Response::json(array('success'=>false, 'message'=>'Tài khoản của bạn chưa được duyệt, vui lòng liên hệ bộ phận CSKH'));
+		}else
+			return Redirect::to('/thong-bao.html')->with('error', 'Tài khoản của bạn chưa được duyệt, vui lòng liên hệ bộ phận CSKH');
+	}
+});
+
 Route::filter('auth', function()
 {
 	if (Auth::guest())

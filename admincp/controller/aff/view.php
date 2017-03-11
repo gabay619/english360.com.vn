@@ -81,18 +81,18 @@ $list = $usercl->find($cond)->sort($sort)->limit($limit)->skip($cp);
                 <button type="button" class="btn btn-sm btn-default" onclick="changeDiscount('<?php echo $item['_id'] ?>')"><i class="glyphicon glyphicon-edit"></i></button>
             </td>
             <td>
-                <?php if($item['aff_status'] == Constant::STATUS_DISABLE): ?>
+                <?php if($item['aff_status'] == Constant::STATUS_DISABLE){ ?>
                     <b class="text-danger">Bị khóa</b>
-                <?php  else:  ?>
+                    <button type="button" class="btn btn-sm btn-success" onclick="unlock('<?php echo $item['_id'] ?>')"><i class="fa fa-unlock-alt"></i></button>
+                <?php  }elseif($item['aff_status'] == Constant::STATUS_ENABLE){  ?>
                     <b class="text-success">Hoạt động</b>
-                <?php endif; ?>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="lock('<?php echo $item['_id'] ?>')"><i class="fa fa-lock"></i></button>
+                <?php }else{ ?>
+                    <b class="text-info">Chưa duyệt</b>
+                    <button type="button" class="btn btn-sm btn-info" onclick="approve('<?php echo $item['_id'] ?>')"><i class="fa fa-check"></i></button>
+                <?php } ?>
             </td>
             <td>
-                <?php if($item['aff_status'] == Constant::STATUS_DISABLE): ?>
-                    <button type="button" class="btn btn-sm btn-success" onclick="unlock('<?php echo $item['_id'] ?>')"><i class="fa fa-unlock-alt"></i></button>
-                <?php  else:  ?>
-                    <button type="button" class="btn btn-sm btn-danger" onclick="lock('<?php echo $item['_id'] ?>')"><i class="fa fa-lock"></i></button>
-                <?php endif; ?>
                 <button type="button" class="btn btn-sm btn-primary" onclick="getDetail('<?php echo $item['_id'] ?>','<?php echo $item['email']; ?>')">Chi tiết</button>
                 <?php if($item['account_balance'] >= Constant::WITHDRAW_MIN_PAY): ?>
                 <button type="button" class="btn btn-sm btn-info" onclick="withdraw('<?php echo $item['_id'] ?>',<?php echo $item['account_balance'] ?>)">Rút tiền</button>
@@ -217,6 +217,21 @@ $list = $usercl->find($cond)->sort($sort)->limit($limit)->skip($cp);
             }, function (re) {
                 if(re.success){
                     alert('Mở thành công');
+                    location.reload();
+                }else{
+                    alert(re.mss);
+                }
+            })
+        }
+    }
+
+    function approve(id) {
+        if(confirm('Duyệt publisher này?')) {
+            $.post('incoming.php?act=approvePub', {
+                id:id
+            }, function (re) {
+                if(re.success){
+                    alert('Duyệt thành công');
                     location.reload();
                 }else{
                     alert(re.mss);

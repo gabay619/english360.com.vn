@@ -40,7 +40,7 @@ if($rs['code'] == Constant::TXN_BANK_SUCCESS){
     $user = $usercl->findOne(array('_id'=>$txn['uid']));
     //Tinh tien aff
     if(isset($user['aff']['uid'])){
-        $aff = $usercl->findOne(array('_id'=>$user['aff']['uid'], 'aff_status'=>array('$ne'=>Constant::STATUS_DISABLE)));
+        $aff = $usercl->findOne(array('_id'=>$user['aff']['uid'], 'aff_status'=>Constant::STATUS_ENABLE));
         $aff_rate = isset($aff['aff_discount']) ? $aff['aff_discount'] : Constant::AFF_RATE_BANK;
         $aff_discount = $aff_rate*$txn['amount'];
         //Luu log aff

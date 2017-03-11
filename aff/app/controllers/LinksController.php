@@ -1,6 +1,16 @@
 <?php
 
 class LinksController extends \BaseController {
+    
+    public function __construct()
+    {
+        $this->beforeFilter('auth', array('except' => array(
+
+        )));
+        $this->beforeFilter('approve', array('except' => array(
+
+        )));
+    }
 
     public function getNew(){
         return View::make('link.new');
