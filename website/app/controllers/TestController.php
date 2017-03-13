@@ -139,10 +139,9 @@ class TestController extends \BaseController {
     }
 
     public function getSendMail2(){
-        $rs = Mail::send('emails.welcome', array('key' => 'value'), function($message)
-        {
-            $message->to('congchinh.619@gmail.com', 'John Smith')->subject('Welcome!');
-        });
+        print_r(URL::to('/'));die;
+        $mail = new \helpers\Mail('congchinh.619@gmail.com','','');
+        $rs = $mail->sendVerifyEmail('http://trumhack.com/abc','http://trumhack.com','Chính');
 
         var_dump($rs);
     }

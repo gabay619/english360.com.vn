@@ -102,12 +102,12 @@ class UsersController extends \BaseController {
 
 
         //Gửi email xác nhận
-        $content = '<p>Xin chào,</p>'.
-            '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào đường link bên dưới:</p>'.
-            '<p><a href="'.Common::getVerifyEmailUrl($user->_id,$user->email).'">'.Common::getVerifyEmailUrl($user->_id,$user->email).'</a></p>'.
-            '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
-        $mail = new \helpers\Mail($user->email,'Xác nhận tài khoản English360.com.vn',$content);
-        if(!$mail->send()){
+//        $content = '<p>Xin chào,</p>'.
+//            '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào đường link bên dưới:</p>'.
+//            '<p><a href="'.Common::getVerifyEmailUrl($user->_id,$user->email).'">'.Common::getVerifyEmailUrl($user->_id,$user->email).'</a></p>'.
+//            '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
+        $mail = new \helpers\Mail($user->email);
+        if(!$mail->sendVerifyEmail(Common::getVerifyEmailUrl($user->_id,$user->email))){
             if(Request::ajax())
                 return Response::json(array('success'=>false, 'message'=>'Không thể gửi thư xác nhận đến địa chỉ email của bạn, vui lòng thử lại sau.'));
             else
@@ -168,12 +168,12 @@ class UsersController extends \BaseController {
         if(!$user){
             return Redirect::to('/thong-bao.html')->with('error', 'Thao tác không hợp lệ.');
         }
-        $content = '<p>Xin chào,</p>'.
-            '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào đường link bên dưới:</p>'.
-            '<p><a href="'.Common::getVerifyEmailUrl($user->_id,$user->email).'">'.Common::getVerifyEmailUrl($user->_id,$user->email).'</a></p>'.
-            '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
-        $mail = new \helpers\Mail($user->email,'Xác nhận tài khoản English360.com.vn',$content);
-        if($mail->send()){
+//        $content = '<p>Xin chào,</p>'.
+//            '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào đường link bên dưới:</p>'.
+//            '<p><a href="'.Common::getVerifyEmailUrl($user->_id,$user->email).'">'.Common::getVerifyEmailUrl($user->_id,$user->email).'</a></p>'.
+//            '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
+        $mail = new \helpers\Mail($user->email);
+        if($mail->sendVerifyEmail(Common::getVerifyEmailUrl($user->_id,$user->email))){
             return Redirect::to('/thong-bao.html')->with('success', 'Vui lòng kiểm tra email và kích hoạt tài khoản.');
         }
         return Redirect::to('/thong-bao.html')->with('error', 'Không thể gửi email cho bạn, vui lòng thử lại sau.');

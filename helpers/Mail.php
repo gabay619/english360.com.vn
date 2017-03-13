@@ -19,7 +19,7 @@ class Mail
     private $to, $subject, $body;
 
 
-    public function __construct($to, $subject, $body){
+    public function __construct($to, $subject='', $body=''){
         $this->to = $to;
         $this->subject = $subject;
         $this->body = $body;
@@ -156,4 +156,16 @@ class Mail
             return true;
     }
 
+    public function sendVerifyEmail($verifyUrl, $base_url = \Constant::BASE_URL, $name=''){
+        $this->subject = 'Xác nhận tài khoản English360.com.vn';
+        $this->body = '<p>Xin chào '.$name.'</p>'.
+        '<p>Cảm ơn bạn đã đăng ký tài khoản tại '.$base_url.'. Để hoàn thành việc kích hoạt tài khoản, bạn vui lòng click vào đường dẫn dưới đây:</p>'.
+        '<p><a href="'.$verifyUrl.'">'.$verifyUrl.'</a></p>'.
+        '<p>Tài khoản của bạn có thể sử dụng tất cả các dịch vụ của English360.</p>'.
+        '<p>Cảm ơn bạn đã đồng hành cùng chúng tôi.</p>'.
+        '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>'.
+        '<p>Ban quản trị English360</p>'.
+        '<p>Hotline: '.\Constant::SUPPORT_PHONE.'; Email: cskh@english360.com.vn</p>';
+        return self::send();
+    }
 }

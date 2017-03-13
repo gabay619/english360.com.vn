@@ -400,12 +400,12 @@ function register(){
     $usercl->insert($newAccount);
 
     //Gửi email xác nhận
-    $content = '<p>Xin chào,</p>'.
-        '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào đường link bên dưới:</p>'.
-        '<p><a href="'.Common::getVerifyEmailUrl($newAccount['_id'],$email).'">'.Common::getVerifyEmailUrl($newAccount['_id'],$email).'</a></p>'.
-        '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
-    $mail = new \helpers\Mail($email,'Xác nhận tài khoản English360.com.vn',$content);
-    if(!$mail->send()){
+//    $content = '<p>Xin chào,</p>'.
+//        '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào đường link bên dưới:</p>'.
+//        '<p><a href="'.Common::getVerifyEmailUrl($newAccount['_id'],$email).'">'.Common::getVerifyEmailUrl($newAccount['_id'],$email).'</a></p>'.
+//        '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
+    $mail = new \helpers\Mail($email);
+    if(!$mail->sendVerifyEmail(Common::getVerifyEmailUrl($newAccount['_id'],$email))){
         $dtr['status'] = 201;
         $dtr['mss'] = 'Không thể gửi thư xác nhận đến địa chỉ email của bạn, vui lòng thử lại sau.';
         echo json_encode($dtr);exit;
