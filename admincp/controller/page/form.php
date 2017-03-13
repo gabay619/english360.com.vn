@@ -8,6 +8,10 @@ $typeArr = array(
     Constant::TYPE_CONTACT => 'Liên hệ',
     Constant::TYPE_DOWNLOAD => 'Tải ứng dụng'
 );
+$onArr = array(
+    Constant::ON_WEB => 'Web',
+    Constant::ON_AFF => 'Aff'
+);
 ?>
 <script type="text/javascript" src="plugin/tinymce/jquery.tinymce.js"></script>
 <title><?php echo $title ?></title>
@@ -20,6 +24,7 @@ if (isset($_POST['acpt'])) {
     $redirect = $_POST['redirect'];
     unset($_POST['redirect']);
     unset($_POST['acpt']);
+    $_POST['slug'] = Common::utf8_to_url($_POST['name']);
     if ($tact == "page_insert") {
         $_POST['_id'] = (string)strtotime("now");
         $_POST['datecreate'] = time();
@@ -48,15 +53,33 @@ if ($tact != "page_insert") $_POST = (array)$pagecl->findOne(array("_id" => "$id
         <div class="tab-pane active" id="info">
             <p>&nbsp;</p>
             <input type="hidden" name="acpt" value="1" />
-
             <div class="form-group">
-                <label class="col-sm-2 control-label">Loại</label>
+                <label class="col-sm-2 control-label">Tên trang</label>
+
                 <div class="col-sm-10">
-                    <select class="form-control" name="type">
+                    <input type="text" name="name" class="form-control" value="<?php echo $_POST['name'] ?>" placeholder="Tên trang">
+                </div>
+            </div>
+<!--            <div class="form-group">-->
+<!--                <label class="col-sm-2 control-label">Loại</label>-->
+<!--                <div class="col-sm-10">-->
+<!--                    <select class="form-control" name="type">-->
+<!--                        --><?php
+//                        foreach ($typeArr as $key=>$type) {
+//                            ?>
+<!--                            <option --><?php //echo $_POST['type']== $key?"selected":"" ?><!-- value="--><?php //echo $key ?><!--">--><?php //echo $type ?><!--</option>-->
+<!--                        --><?php //} ?>
+<!--                    </select>-->
+<!--                </div>-->
+<!--            </div>-->
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Nơi hiển thị</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="on">
                         <?php
-                        foreach ($typeArr as $key=>$type) {
+                        foreach ($onArr as $key=>$on) {
                             ?>
-                            <option <?php echo $_POST['type']== $key?"selected":"" ?> value="<?php echo $key ?>"><?php echo $type ?></option>
+                            <option <?php echo $_POST['on']== $key?"selected":"" ?> value="<?php echo $key ?>"><?php echo $on ?></option>
                         <?php } ?>
                     </select>
                 </div>

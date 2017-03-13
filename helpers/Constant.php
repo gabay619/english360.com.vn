@@ -58,6 +58,8 @@ class Constant
     const GOOGLE_APP_SECRET = 'M2yzirHAhLJexKk-Fk-_Ztd2';
     const GOOLE_APP_KEY = 'AIzaSyAn7B6h2yxxCSAx3mb-6ZcnlWKvCKuDWTI';
     const CASH_NAME = 'Số dư';
+    const ON_WEB = 'web';
+    const ON_AFF = 'aff';
     
     //Txn Card
     const TXN_CARD_SUCCESS = 1;

@@ -40,12 +40,11 @@
         <li>
             <a href="javascript:;" data-toggle="collapse" data-target="#sup"><i class="fa fa-fw fa-question-circle"></i> Hỗ trợ <i class="fa fa-fw fa-caret-down"></i></a>
             <ul id="sup" class="collapse">
+                @foreach($allPages as $aPage)
                 <li>
-                    <a href="#">Hướng dẫn</a>
+                    <a href="/trang/{{$aPage->slug}}.html">{{$aPage->name}}</a>
                 </li>
-                <li>
-                    <a href="#">Quy định/Chính sách</a>
-                </li>
+                @endforeach
             </ul>
         </li>
     </ul>

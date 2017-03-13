@@ -32,7 +32,7 @@
     <!--<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>-->
     {{--<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>--}}
 
-    <![endif]-->
+    <!--[endif]-->
 
     <script src="{{ asset('/jquery/jquery-2.1.0.min.js') }}"></script>
     <script src="{{ asset('/bootstrap/js/bootstrap.min.js') }}"></script>
@@ -93,7 +93,7 @@
             </li>
         </ul>
         <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
-    @include('layouts.aside')
+    @aside()
         <!-- /.navbar-collapse -->
     </nav>
 

@@ -29,7 +29,7 @@ if($checkEmail){
     header('Location: thong-bao.html');exit;
 }
 //$usercl->update(array('email'=>$email), array('$set'=>array('email'=>'')));
-$usercl->update(array('_id'=>$uid), array('$set'=>array('email'=>$email, 'status'=>Constant::STATUS_ENABLE)));
+$usercl->update(array('_id'=>$uid), array('$set'=>array('email'=>$email, 'status'=>Constant::STATUS_ENABLE,'ssid'=>session_id())));
 $o = $usercl->findOne(array('_id'=>$uid));
 $_SESSION['uinfo'] = $o;
 $_SESSION['flash_mss'] = 'Chúc mừng bạn trở thành thành viên của English360.';

@@ -14,7 +14,7 @@
     <link href='https://fonts.googleapis.com/css?family=Baloo' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 
-    <title>Admin</title>
+    <title>{{isset($title)?$title:'English360 - Hệ thống tiếp thị liên kết'}}</title>
 </head>
 <body>
 <style>

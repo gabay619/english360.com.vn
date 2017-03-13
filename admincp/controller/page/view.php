@@ -8,7 +8,12 @@ $list = $pageCl->find($cond)->sort($sort);
 $typeArr = array(
     Constant::TYPE_INFO => 'Giới thiệu',
     Constant::TYPE_TERM => 'Điều khoản',
-    Constant::TYPE_CONTACT => 'Liên hệ'
+    Constant::TYPE_CONTACT => 'Liên hệ',
+    Constant::TYPE_DOWNLOAD => 'Tải ứng dụng'
+);
+$onArr = array(
+    Constant::ON_WEB => 'Web',
+    Constant::ON_AFF => 'Aff'
 );
 ?>
     <title><?php echo $title ?></title>
@@ -27,6 +32,7 @@ $typeArr = array(
                 <th class="col-md-1"><input type="checkbox" id="checkall" />&nbsp;<button type="submit" class="btn btn-sm btn-danger">Xóa</button></th>
                 <th>ID</th>
                 <th>Tên trang</th>
+                <th>Nơi hiển thị</th>
                 <th>Ngày tạo</th>
                 <th>Thao tác</th>
             </tr>
@@ -37,7 +43,8 @@ $typeArr = array(
                 <tr>
                     <td><input type="checkbox" class="checkitem" name="id[]" value="<?php echo $item['_id'] ?>" /></td>
                     <td><?php echo $item['_id'] ?></td>
-                    <td><?php echo $typeArr[$item['type']]?></td>
+                    <td><?php echo $item['name']?></td>
+                    <td><?php echo $onArr[$item['on']]?></td>
                     <td><?php echo date("d-m-Y H:i:s", $item['_id']) ?></td>
                     <td>
                         <?php if(acceptpermiss("page_update")) { ?><a href="<?php echo cpagerparm("tact,status,id") ?>tact=page_update&id=<?php echo $item['_id'] ?>">Sửa</a> |<?php }?>
