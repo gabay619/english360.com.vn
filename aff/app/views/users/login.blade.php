@@ -37,7 +37,7 @@
             </div>
             <div class="login-register">
                 <a href="/user/register">Đăng ký</a> -
-                <a href="#">Quên mật khẩu</a>
+                <a href="/user/forget-pass">Quên mật khẩu</a>
             </div>
             {{Form::close()}}
         </div>

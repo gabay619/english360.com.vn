@@ -12,8 +12,10 @@ class UsersController extends \BaseController {
             'getRegister',
             'postRegister',
             'facebookCallback',
-            'getVerifyEmail',
-            'getSendVerifyEmail'
+            'verifyEmail',
+            'getSendVerifyEmail',
+            'getForgetPass',
+            'postForgetPass'
 		)));
 
 		$this->beforeFilter('guest', array('only' => array(
@@ -92,7 +94,7 @@ class UsersController extends \BaseController {
         return Redirect::to('/thong-bao.html')->with('success', 'Vui lòng kiểm tra email để xác thực tài khoản của bạn.');
     }
     
-    public function getVerifyEmail(){
+    public function verifyEmail(){
         $key = Input::get('key');
         $email = Input::get('email');
         try{
@@ -118,6 +120,47 @@ class UsersController extends \BaseController {
         $user->save();
         Auth::login($user);
         return Redirect::to('/thong-bao.html')->with('success','Chúc mừng bạn trở thành thành viên của English360');
+    }
+
+    public function getForgetPass(){
+        return View::make('users.forget-pass');
+    }
+
+    public function postForgetPass(){
+        $email = Input::get('email');
+        if(empty($email))
+            return Redirect::back()->with('error', 'Bạn chưa nhập email.')->withInput();
+
+        $user = User::where('email', $email)
+            ->first();
+
+        if(!$user)
+            return Redirect::back()->with('error', 'Email này hiện chưa đăng ký tài khoản.')->withInput();
+        if(isset($user->fbid) && !isset($user->un_password))
+            return Redirect::back()->with('error', 'Tài khoản quý khách được đăng ký qua Facebook, vui lòng đăng nhập bằng Facebook.')->withInput();
+
+        $sendPassCount = isset($user->send_pass['count']) ? $user->send_pass['count'] : 0;
+        $sendPassTime = isset($user->send_pass['time']) ? $user->send_pass['time'] : time();
+        if(time() - $sendPassTime > 60*60)
+            $sendPassCount = 0;
+        if($sendPassCount >= 5)
+            return Redirect::back()->with('error', 'Quý khách đã lấy mật khẩu 5 lần. Vui lòng chờ sau 60 phút để lấy lại mật khẩu.')->withInput();
+
+        $user->send_pass = array(
+            'count' => $sendPassCount +1,
+            'time' => time()
+        );
+        $user->save();
+        //Gửi email xác nhận
+        $password = isset($user->un_password) ? $user->un_password : $user->password;
+        $content = '<p>Xin chào,</p>'.
+            '<p>Mật khẩu để sử dụng dịch vụ English360 của quý khách là: '.$password.'</p>';
+        $mail = new \helpers\Mail($email,'Lấy lại mật khẩu tài khoản English360.com.vn',$content);
+        if($mail->send()){
+            return Redirect::to('/user/login')->with('success', 'Mật khẩu đã được gửi về email của bạn. Vui lòng kiểm tra lại.')->withInput();
+        }else{
+            return Redirect::back()->with('error', 'Không thể gửi mật khẩu đến email của bạn, vui lòng thử lại sau.')->withInput();
+        }
     }
 
 	public function getLogin()

@@ -159,7 +159,7 @@ class Mail
     public function sendVerifyEmail($verifyUrl, $base_url = \Constant::BASE_URL, $name=''){
         $this->subject = 'Xác nhận tài khoản English360.com.vn';
         $this->body = '<p>Xin chào '.$name.'</p>'.
-        '<p>Cảm ơn bạn đã đăng ký tài khoản tại '.$base_url.'. Để hoàn thành việc kích hoạt tài khoản, bạn vui lòng click vào đường dẫn dưới đây:</p>'.
+        '<p>Để hoàn thành việc kích hoạt tài khoản, bạn vui lòng click vào đường link xác thực dưới đây:</p>'.
         '<p><a href="'.$verifyUrl.'">'.$verifyUrl.'</a></p>'.
         '<p>Tài khoản của bạn có thể sử dụng tất cả các dịch vụ của English360.</p>'.
         '<p>Cảm ơn bạn đã đồng hành cùng chúng tôi.</p>'.

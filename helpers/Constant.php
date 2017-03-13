@@ -44,7 +44,7 @@ class Constant
     const LEVEL_EASY = 'easy';
     const MAX_CONTENT_FREE = 10;
     const MAX_CONTENT_CATE_FREE = 2;
-    const SUPPORT_PHONE = '0432474175';
+    const SUPPORT_PHONE = '0903275310';
     const CONFIG_AUTH = 'AUTH_ADMIN';
     const CONFIG_1TOUCH = '1TOUCH';
     const CONFIG_1_5TOUCH = '1_5TOUCH';
