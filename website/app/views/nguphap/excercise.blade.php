@@ -28,11 +28,13 @@
                             @if(!empty($chontu->ex))
                                 <div style="border: 1px dashed #ccc; padding: 5px; margin-bottom: 10px">{{$chontu->ex}}</div>
                             @endif
-                            <div class="list_tu_goi_y block">
-                                @foreach(explode('|',$chontu->list) as $aWord)
-                                    <span>{{$aWord}}</span>
-                                @endforeach
-                            </div>
+                            @if(!empty($chontu->list))
+                                <div class="list_tu_goi_y block">
+                                    @foreach(explode('|',$chontu->list) as $aWord)
+                                        <span>{{$aWord}}</span>
+                                    @endforeach
+                                </div>
+                            @endif
                             @foreach($chontu->question as $key=>$aDientu)
                                 <div class="item_ql6">
                                     <div style="display: inline-block">
@@ -67,42 +69,42 @@
 
                     @endif
                     @if($dientu)
-                    <div class="question_label_8 block dientu baitap" style="display: none">
-                        <h4 class="title_1" style="text-transform: initial; padding-top: 5px">{{Common::numberToRoman($countTitle++)}}. {{$dientu->name}}</h4>
-                        @if(!empty($dientu->ex))
-                            <div style="border: 1px dashed #ccc; padding: 5px; margin-bottom: 10px">{{$dientu->ex}}</div>
-                        @endif
-                        @foreach($dientu->question as $key=>$aDientu)
-                            <div class="item_ql6">
-                                <div style="display: inline-block">
-                                    <p>
-                                        <b>{{$key+1}}. </b>
-                                        <a class="dientuSpeaker" href="javascript:void(0)" data-audio="{{$aDientu['audio']}}">
-                                            <i class="fa fa-volume-off fa-2x fa-disable"></i>
-                                        </a>
+                        <div class="question_label_8 block dientu baitap" style="display: none">
+                            <h4 class="title_1" style="text-transform: initial; padding-top: 5px">{{Common::numberToRoman($countTitle++)}}. {{$dientu->name}}</h4>
+                            @if(!empty($dientu->ex))
+                                <div style="border: 1px dashed #ccc; padding: 5px; margin-bottom: 10px">{{$dientu->ex}}</div>
+                            @endif
+                            @foreach($dientu->question as $key=>$aDientu)
+                                <div class="item_ql6">
+                                    <div style="display: inline-block">
+                                        <p>
+                                            <b>{{$key+1}}. </b>
+                                            <a class="dientuSpeaker" href="javascript:void(0)" data-audio="{{$aDientu['audio']}}">
+                                                <i class="fa fa-volume-off fa-2x fa-disable"></i>
+                                            </a>
                                         <span class="sp_get_input">
                                             {{str_replace('_','<input class="input_2 w150" data-aw="'.$aDientu['word'].'" data-full="'.$aDientu['word'].'" type="text">',$aDientu['sentence'])}}
                                         </span>
-                                        <i></i>
-                                    </p>
-                                </div>
-                                <div style="margin-left: 45px">
-                                    <p>
+                                            <i></i>
+                                        </p>
+                                    </div>
+                                    <div style="margin-left: 45px">
+                                        <p>
                                         <span class="dientu_dapan" style="display: none">
                                             {{str_replace('_','<span class="result">'.explode('|',$aDientu['word'])[0].'</span>',$aDientu['sentence'])}}
                                         </span>
-                                    </p>
+                                        </p>
+                                    </div>
                                 </div>
+                            @endforeach
+                            <div class="btn_bottom_dentail_default center">
+                                <a class="btn_x btn_blue btn_luubaihoc" href="javascript:checkDientu()" id="btnCheckDientu">Kiểm tra</a>
+                                <a class="btn_x btn_blue btn_luubaihoc btn_disable" href="javascript:void(0)" id="btnComDientu">Hoàn thành</a>
+                                <a class="btn_x btn_blue btn_luubaihoc btn_disable" href="javascript:void(0)" id="btnRsDientu">Đáp án</a>
+                                <a class="btn_x btn_blue btn_luubaihoc btn_disable" href="javascript:void(0)" id="btnRwDientu">Làm lại</a>
+                                <a class="btn_x btn_blue btn_luubaihoc baitiep" href="javascript:toNext()">Bài tiếp</a>
                             </div>
-                        @endforeach
-                        <div class="btn_bottom_dentail_default center">
-                            <a class="btn_x btn_blue btn_luubaihoc" href="javascript:checkDientu()" id="btnCheckDientu">Kiểm tra</a>
-                            <a class="btn_x btn_blue btn_luubaihoc btn_disable" href="javascript:void(0)" id="btnComDientu">Hoàn thành</a>
-                            <a class="btn_x btn_blue btn_luubaihoc btn_disable" href="javascript:void(0)" id="btnRsDientu">Đáp án</a>
-                            <a class="btn_x btn_blue btn_luubaihoc btn_disable" href="javascript:void(0)" id="btnRwDientu">Làm lại</a>
-                            <a class="btn_x btn_blue btn_luubaihoc baitiep" href="javascript:toNext()">Bài tiếp</a>
                         </div>
-                    </div>
                     @endif
                     @if($diencumtu)
                         <div class="question_label_8 block diencumtu baitap" style="display: none">
@@ -111,11 +113,11 @@
                                 <div style="border: 1px dashed #ccc; padding: 5px; margin-bottom: 10px">{{$diencumtu->ex}}</div>
                             @endif
                             @if(!empty($diencumtu->list))
-                            <div class="list_tu_goi_y block">
-                                @foreach(explode('|',$diencumtu->list) as $aPhrase)
-                                    <span>{{$aPhrase}}</span>
-                                @endforeach
-                            </div>
+                                <div class="list_tu_goi_y block">
+                                    @foreach(explode('|',$diencumtu->list) as $aPhrase)
+                                        <span>{{$aPhrase}}</span>
+                                    @endforeach
+                                </div>
                             @endif
                             @foreach($diencumtu->question as $key=>$aDientu)
                                 <div class="item_ql6">
@@ -175,22 +177,22 @@
                                             $audioArr = explode(PHP_EOL,$aDientu['awaudio']);
                                             $awAudio = isset($audioArr[$k]) ? $audioArr[$k] : '';
                                             ?>
-                                        <p style="margin-top: 10px">{{strtolower(Common::numtoalpha($k))}}.
-                                            <a class="dientuSpeaker" href="javascript:void(0)" data-audio="{{$awAudio}}"><i class="fa fa-volume-off fa-2x fa-disable"></i></a>
-                                            <span style="font-style: italic">{{$awArr[0]}}</span>
-                                        </p>
-                                                <?php unset($awArr[0]);
-                                                    $dataAw = implode('|',$awArr);
-                                                ?>
-                                        <p>
+                                            <p style="margin-top: 10px">{{strtolower(Common::numtoalpha($k))}}.
+                                                <a class="dientuSpeaker" href="javascript:void(0)" data-audio="{{$awAudio}}"><i class="fa fa-volume-off fa-2x fa-disable"></i></a>
+                                                <span style="font-style: italic">{{$awArr[0]}}</span>
+                                            </p>
+                                            <?php unset($awArr[0]);
+                                            $dataAw = implode('|',$awArr);
+                                            ?>
+                                            <p>
                                             <span class="sp_get_input">
                                                 <input type="text" class="input_2" style="width: 95%; text-align:left; border-bottom-style: dashed" data-aw="{{$dataAw}}">
                                             </span>
-                                            <i></i>
-                                        </p>
-                                        <p class="dientu_dapan" style="display: none;">
-                                            <b>Đáp án: </b>{{explode('|',$dataAw)[0]}}
-                                        </p>
+                                                <i></i>
+                                            </p>
+                                            <p class="dientu_dapan" style="display: none;">
+                                                <b>Đáp án: </b>{{explode('|',$dataAw)[0]}}
+                                            </p>
                                         @endforeach
                                     </div>
 
@@ -547,11 +549,21 @@
                 ans = $(this).val().toLowerCase();
                 trueans = $(this).attr('data-aw');
                 trueansArr = trueans.split('|');
-                if($.inArray(ans,trueansArr)>=0){
-                    iclass = 'i_anw_true';
-                }else{
-                    iclass = 'i_anw_false';
+                iclass = 'i_anw_false';
+                for(i=0;i<trueansArr.length;i++){
+                    if(checkPhrase(ans,trueansArr[i])){
+                        iclass = 'i_anw_true';
+                    }
                 }
+
+//                ans = $(this).val().toLowerCase();
+//                trueans = $(this).attr('data-aw');
+//                trueansArr = trueans.split('|');
+//                if($.inArray(ans,trueansArr)>=0){
+//                    iclass = 'i_anw_true';
+//                }else{
+//                    iclass = 'i_anw_false';
+//                }
                 $(this).parent().parent().find('>i').removeClass().addClass(iclass);
             })
             $('#btnComDientu').removeClass('btn_disable').attr('href', 'javascript:completeDientu()');
@@ -562,10 +574,17 @@
                 ans = $(this).val().toLowerCase();
                 trueans = $(this).attr('data-aw');
                 trueansArr = trueans.split('|');
-                if($.inArray(ans,trueansArr)>=0){
-                    html = '<span class="result true" data-aw="'+trueans+'">'+
-                            ans+ '</span>';
+                rs = false;
+                for(i=0;i<trueansArr.length;i++){
+                    if(checkPhrase(ans,trueansArr[i])){
+                        rs = true;
+                    }
+                }
+
+                if(rs){
                     iclass = 'i_anw_true';
+                    html = '<span class="result true" data-aw="'+trueans+'">'+
+                            ans + '</span>';
                     $(this).after(html);
                     $(this).parent().parent().find('>i').removeClass().addClass(iclass);
                     $(this).remove();
@@ -573,6 +592,21 @@
                     iclass = 'i_anw_false';
                     $(this).parent().parent().find('>i').removeClass().addClass(iclass);
                 }
+
+//                ans = $(this).val().toLowerCase();
+//                trueans = $(this).attr('data-aw');
+//                trueansArr = trueans.split('|');
+//                if($.inArray(ans,trueansArr)>=0){
+//                    html = '<span class="result true" data-aw="'+trueans+'">'+
+//                            ans+ '</span>';
+//                    iclass = 'i_anw_true';
+//                    $(this).after(html);
+//                    $(this).parent().parent().find('>i').removeClass().addClass(iclass);
+//                    $(this).remove();
+//                }else{
+//                    iclass = 'i_anw_false';
+//                    $(this).parent().parent().find('>i').removeClass().addClass(iclass);
+//                }
             })
             $('.dientu .dientuSpeaker i').removeClass().addClass('fa fa-volume-up fa-2x');
             $('.dientu .dientuSpeaker').each(function(){
@@ -590,7 +624,14 @@
                 ans = $(this).val().toLowerCase();
                 trueans = $(this).attr('data-aw');
                 trueansArr = trueans.split('|');
-                if($.inArray(ans,trueansArr)>=0){
+                rs = false;
+                for(i=0;i<trueansArr.length;i++){
+                    if(checkPhrase(ans,trueansArr[i])){
+                        rs = true;
+                    }
+                }
+
+                if(rs){
                     html = '<span class="result true" data-aw="'+trueans+'">'+
                             ans+ '</span>';
                     iclass = 'i_anw_true';
@@ -605,6 +646,25 @@
                     $(this).parent().parent().find('>i').removeClass().addClass(iclass);
                     $(this).remove();
                 }
+
+//                ans = $(this).val().toLowerCase();
+//                trueans = $(this).attr('data-aw');
+//                trueansArr = trueans.split('|');
+//                if($.inArray(ans,trueansArr)>=0){
+//                    html = '<span class="result true" data-aw="'+trueans+'">'+
+//                            ans+ '</span>';
+//                    iclass = 'i_anw_true';
+//                    $(this).after(html);
+//                    $(this).parent().parent().find('>i').removeClass().addClass(iclass);
+//                    $(this).remove();
+//                }else{
+//                    html = '<span class="result false" data-aw="'+trueans+'">'+
+//                            ans+ '</span>';
+//                    iclass = 'i_anw_false';
+//                    $(this).after(html);
+//                    $(this).parent().parent().find('>i').removeClass().addClass(iclass);
+//                    $(this).remove();
+//                }
             })
             $('.dientu .dientu_dapan').fadeIn();
             $('#btnRsDientu').addClass('btn_disable').attr('href', 'javascript:void(0)');
@@ -632,11 +692,21 @@
                 ans = $(this).val().toLowerCase();
                 trueans = $(this).attr('data-aw');
                 trueansArr = trueans.split('|');
-                if($.inArray(ans,trueansArr)>=0){
-                    iclass = 'i_anw_true';
-                }else{
-                    iclass = 'i_anw_false';
+                iclass = 'i_anw_false';
+                for(i=0;i<trueansArr.length;i++){
+                    if(checkPhrase(ans,trueansArr[i])){
+                        iclass = 'i_anw_true';
+                    }
                 }
+//
+//                ans = $(this).val().toLowerCase();
+//                trueans = $(this).attr('data-aw');
+//                trueansArr = trueans.split('|');
+//                if($.inArray(ans,trueansArr)>=0){
+//                    iclass = 'i_anw_true';
+//                }else{
+//                    iclass = 'i_anw_false';
+//                }
                 $(this).parent().parent().find('>i').removeClass().addClass(iclass);
             })
             $('#btnComChontu').removeClass('btn_disable').attr('href', 'javascript:completeChontu()');
@@ -647,10 +717,17 @@
                 ans = $(this).val().toLowerCase();
                 trueans = $(this).attr('data-aw');
                 trueansArr = trueans.split('|');
-                if($.inArray(ans,trueansArr)>=0){
-                    html = '<span class="result true" data-aw="'+trueans+'">'+
-                            ans+ '</span>';
+                rs = false;
+                for(i=0;i<trueansArr.length;i++){
+                    if(checkPhrase(ans,trueansArr[i])){
+                        rs = true;
+                    }
+                }
+
+                if(rs){
                     iclass = 'i_anw_true';
+                    html = '<span class="result true" data-aw="'+trueans+'">'+
+                            ans + '</span>';
                     $(this).after(html);
                     $(this).parent().parent().find('>i').removeClass().addClass(iclass);
                     $(this).remove();
@@ -658,6 +735,21 @@
                     iclass = 'i_anw_false';
                     $(this).parent().parent().find('>i').removeClass().addClass(iclass);
                 }
+
+//                ans = $(this).val().toLowerCase();
+//                trueans = $(this).attr('data-aw');
+//                trueansArr = trueans.split('|');
+//                if($.inArray(ans,trueansArr)>=0){
+//                    html = '<span class="result true" data-aw="'+trueans+'">'+
+//                            ans+ '</span>';
+//                    iclass = 'i_anw_true';
+//                    $(this).after(html);
+//                    $(this).parent().parent().find('>i').removeClass().addClass(iclass);
+//                    $(this).remove();
+//                }else{
+//                    iclass = 'i_anw_false';
+//                    $(this).parent().parent().find('>i').removeClass().addClass(iclass);
+//                }
             })
             $('.chontu .dientuSpeaker i').removeClass().addClass('fa fa-volume-up fa-2x');
             $('.chontu .dientuSpeaker').each(function(){
@@ -675,7 +767,14 @@
                 ans = $(this).val().toLowerCase();
                 trueans = $(this).attr('data-aw');
                 trueansArr = trueans.split('|');
-                if($.inArray(ans,trueansArr)>=0){
+                rs = false;
+                for(i=0;i<trueansArr.length;i++){
+                    if(checkPhrase(ans,trueansArr[i])){
+                        rs = true;
+                    }
+                }
+
+                if(rs){
                     html = '<span class="result true" data-aw="'+trueans+'">'+
                             ans+ '</span>';
                     iclass = 'i_anw_true';
@@ -690,6 +789,25 @@
                     $(this).parent().parent().find('>i').removeClass().addClass(iclass);
                     $(this).remove();
                 }
+
+//                ans = $(this).val().toLowerCase();
+//                trueans = $(this).attr('data-aw');
+//                trueansArr = trueans.split('|');
+//                if($.inArray(ans,trueansArr)>=0){
+//                    html = '<span class="result true" data-aw="'+trueans+'">'+
+//                            ans+ '</span>';
+//                    iclass = 'i_anw_true';
+//                    $(this).after(html);
+//                    $(this).parent().parent().find('>i').removeClass().addClass(iclass);
+//                    $(this).remove();
+//                }else{
+//                    html = '<span class="result false" data-aw="'+trueans+'">'+
+//                            ans+ '</span>';
+//                    iclass = 'i_anw_false';
+//                    $(this).after(html);
+//                    $(this).parent().parent().find('>i').removeClass().addClass(iclass);
+//                    $(this).remove();
+//                }
             })
             $('.chontu .dientu_dapan').fadeIn();
             $('#btnRsChontu').addClass('btn_disable').attr('href', 'javascript:void(0)');
