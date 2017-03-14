@@ -20,8 +20,12 @@
                             <p><input type="checkbox" checked> Ghi nhớ đăng nhập</p>
                             <p>
                                 {{Form::submit('Đăng nhập', array('class' => 'btn_x btn_blue btn_padding bold'))}}
-                                 hoặc
-                                <a href="{{$fb_login}}" class="btn_x btn_padding bold btn_blue" style="background-color: rgb(64,93,155) !important;">Đăng nhập bằng Facebook</a>
+{{--                                <a href="{{$fb_login}}" class="btn_x btn_padding bold btn_blue" style="background-color: rgb(64,93,155) !important;">Đăng nhập bằng Facebook</a>--}}
+                            </p>
+                            <p>Hoặc đăng nhập bằng</p>
+                            <p>
+                                <a href="/user/login?redirect=1" class="social-icon fb"></a>
+                                <a href="/gg-callback.html" class="social-icon gg"></a>
                             </p>
                         {{Form::close()}}
                         <p><a style="text-decoration: underline" href="/user/forget-pass">Quên mật khẩu?</a> - <a style="text-decoration: underline" data-featherlight="#fl1" href="/user/register">Tạo tài khoản mới</a></p>

@@ -15,7 +15,8 @@ class UsersController extends \BaseController {
             'verifyEmail',
             'getSendVerifyEmail',
             'getForgetPass',
-            'postForgetPass'
+            'postForgetPass',
+            'googleCallback'
 		)));
 
 		$this->beforeFilter('guest', array('only' => array(
@@ -394,7 +395,7 @@ class UsersController extends \BaseController {
         $fb_name = $userNode->getField('name');
 //        echo $fb_email;exit;
         if(empty($fb_email)){
-            return Redirect::to('/thong-bao.html')->with('error', 'Bạn vui lòng cho English360 quyền truy cập vào địa chỉ email Facebook của bạn.');
+            return Redirect::to('/thong-bao.html')->with('error', 'English360 không nhận được địa chỉ email Facebook của bạn.');
         }
         $checkEmail = User::where(array('email'=>$fb_email,'fbid'=>array('$ne'=>$fb_uid)))->first();
         if($checkEmail){
@@ -408,7 +409,7 @@ class UsersController extends \BaseController {
                 if(empty($checkEmail->fullname)) $checkEmail->fullname = $fb_name;
                 $checkEmail->save();
                 Auth::login($checkEmail);
-                return Redirect::to(Session::get('return_url','/user/package'));
+                return Redirect::to('/dashboard');
             }
         }
         $checkUser = User::where('fbid',$fb_uid)->first();
@@ -430,6 +431,93 @@ class UsersController extends \BaseController {
             );
             $user->save();
 
+            Auth::login($user);
+        }else{
+            Auth::login($checkUser);
+        }
+
+        return Redirect::to('/dashboard');
+    }
+
+    public function googleCallback(){
+        $client = new Google_Client();
+        $client->setClientId(Constant::GOOGLE_APP_ID);
+        $client->setClientSecret(Constant::GOOGLE_APP_SECRET);
+        $client->setDeveloperKey(Constant::GOOLE_APP_KEY);
+
+        $client->setIncludeGrantedScopes(true);   // incremental auth
+        $client->addScope(Google_Service_Oauth2::USERINFO_EMAIL);
+        $client->addScope(Google_Service_Oauth2::USERINFO_PROFILE);
+        $client->setRedirectUri(Request::url());
+        if(Input::has('code')){
+            $client->authenticate(Input::get('code'));
+            $access_token = $client->getAccessToken();
+            Session::put('access_token',$access_token);
+        }
+        if(!Session::has('access_token')){
+            $auth_url = $client->createAuthUrl();
+            return Redirect::to($auth_url);
+        }
+        try{
+            $client->setAccessToken(Session::get('access_token'));
+
+            $service = new Google_Service_Oauth2($client);
+            $uinfo = $service->userinfo->get();
+            $gg_email = $uinfo->email;
+            $gg_name = $uinfo->name;
+            $gg_id = $uinfo->id;
+        }catch (Exception $e){
+            $auth_url = $client->createAuthUrl();
+            return Redirect::to($auth_url);
+        }
+
+        if(empty($gg_email)){
+            return Redirect::to('/thong-bao.html')->with('error', 'English360 không nhận được địa chỉ email Google của bạn.');
+        }
+
+        $checkEmail = User::where(array('email'=>$gg_email,'ggid'=>array('$ne'=>$gg_id)))->first();
+        if($checkEmail){
+            if(isset($checkEmail->ggid) && !empty($checkEmail->ggid))
+                return Redirect::to('/thong-bao.html')->with('error', 'Email đã được sử dụng');
+            else{
+                //Nếu có user đk cùng mail trước đó thì gộp làm 1
+                $checkEmail->ggid = $gg_id;
+                $checkEmail->status = Constant::STATUS_ENABLE;
+                if(empty($checkEmail->displayname)) $checkEmail->displayname = $gg_name;
+                if(empty($checkEmail->fullname)) $checkEmail->fullname = $gg_name;
+                $checkEmail->save();
+                Auth::login($checkEmail);
+                return Redirect::to('/dashboard');
+            }
+        }
+        $checkUser = User::where('ggid',$gg_id)->first();
+        if(!$checkUser){
+            $user = new User();
+            $user->_id = strval(time());
+            $user->datecreate = time();
+            $user->email = $gg_email;
+            $user->cmnd = '';
+            $user->cmnd_ngaycap = '';
+            $user->cmnd_noicap = '';
+            $user->fullname = $gg_name;
+            $user->displayname = $gg_name;
+            $user->ggid = $gg_id;
+            $user->priavatar = '';
+            $user->thong_bao = array(
+                'noti' => '1',
+                'email' => '1',
+            );
+            //Nếu có aff
+            if(isset($_COOKIE[Constant::AFF_COOKIE_NAME])){
+                $cookie_value = Common::decodeAffCookie($_COOKIE[Constant::AFF_COOKIE_NAME]);
+                $cookieArr = explode('&',$cookie_value);
+                $user->aff = array(
+                    'uid' => $cookieArr[0],
+                    'sub_id' => isset($cookieArr[1]) ? $cookieArr[1] : '',
+                    'datecreate' => time()
+                );
+            }
+            $user->save();
             Auth::login($user);
         }else{
             Auth::login($checkUser);

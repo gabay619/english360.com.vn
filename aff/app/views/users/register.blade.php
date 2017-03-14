@@ -65,8 +65,9 @@
 
             <div class="form-group ">
                 {{Form::submit('Đăng ký', array('class'=>'btn btn-primary btn-lg btn-block login-button'))}}
-                <p class="text-center">hoặc</p>
-                <a href="/user/login?redirect=1" class="btn btn-primary btn-lg btn-block" style="background-color: rgb(64,93,155) !important;">Đăng ký bằng Facebook</a>
+                <p class="text-center" style="margin-top: 10px">Hoặc đăng ký bằng</p>
+                <a href="/user/login?redirect=1" class="social-icon fb"></a>
+                <a href="/gg-callback.html" class="social-icon gg"></a>
             </div>
             <div class="login-register">
                 <a href="/user/login">Đăng nhập</a>

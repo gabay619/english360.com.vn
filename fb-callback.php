@@ -5,8 +5,8 @@
  * Date: 20/02/2017
  * Time: 9:49 AM
  */
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+//error_reporting(E_ALL);
+//ini_set('display_errors', 1);
 //session_start();
 //$onWap =1;
 include "config/init.php";
@@ -74,7 +74,7 @@ $userNode = $response->getGraphUser();
 $fb_email = $userNode->getField('email');
 $fb_name = $userNode->getField('name');
 if(empty($fb_email)){
-    $_SESSION['flass_mss'] = 'Bạn vui lòng cho English360 quyền truy cập vào địa chỉ email Facebook của bạn';
+    $_SESSION['flass_mss'] = 'English360 không nhận được địa chỉ email Facebook của bạn.';
     header('Location: /thong-bao.html');exit;
 }
 $checkEmail = $usercl->findOne(array(
@@ -91,7 +91,8 @@ if($checkEmail){
         'fbid' => $fb_uid,
         'ssid' => session_id()
     );
-    if(!empty($checkEmail['displayname'])) $updateUser['displayname'] = $fb_name;
+    if(empty($checkEmail['displayname'])) $updateUser['displayname'] = $fb_name;
+    if(empty($checkEmail['fullname'])) $updateUser['fullname'] = $fb_name;
     $usercl->update(array('_id'=>$checkEmail['_id']), array('$set'=>$updateUser));
     $o = $usercl->findOne(array('_id'=>$checkEmail['_id']));
     $_SESSION['uinfo'] = $o;
@@ -103,7 +104,7 @@ if(!$checkUser){
 //    $avatar = 'uploads/avatar/'.$fb_uid.'.jpg';
 //    copy($img, $avatar);
     $uid = strval(time());
-    $email = $usercl->findOne(array('email'=>$fb_email)) ? '' : $fb_email;
+    $email = $fb_email;
 //    $password = Common::generateRandomPassword();
     $o = array(
         '_id' => $uid,

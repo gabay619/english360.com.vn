@@ -15,6 +15,7 @@ Route::get('/', 'HomeController@getIndex');
 Route::get('/search', 'HomeController@getSearch');
 Route::get('/disable-email.html', 'UsersController@disableEmail');
 Route::get('/fb-callback.html', 'UsersController@facebookCallback');
+Route::get('/gg-callback.html', 'UsersController@googleCallback');
 Route::get('/verify-email.html', 'UsersController@verifyEmail');
 Route::get('/thong-bao.html', 'HomeController@showMessage');
 Route::get('/bai-hoc-free.html', 'FreeLessionController@index');

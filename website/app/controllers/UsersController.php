@@ -234,6 +234,8 @@ class UsersController extends \BaseController {
             return Redirect::back()->with('error', 'Email này hiện chưa đăng ký tài khoản.')->withInput();
         if(isset($user->fbid) && !isset($user->un_password))
             return Redirect::back()->with('error', 'Tài khoản quý khách được đăng ký qua Facebook, vui lòng đăng nhập bằng Facebook.')->withInput();
+        if(isset($user->ggid) && !isset($user->un_password))
+            return Redirect::back()->with('error', 'Tài khoản quý khách được đăng ký qua Google, vui lòng đăng nhập bằng Facebook.')->withInput();
 
         $sendPassCount = isset($user->send_pass['count']) ? $user->send_pass['count'] : 0;
         $sendPassTime = isset($user->send_pass['time']) ? $user->send_pass['time'] : time();
@@ -937,6 +939,21 @@ class UsersController extends \BaseController {
 	}
 
 	public function getTest(){
+        $clientId = Constant::GOOGLE_APP_ID;
+        $clientSecret = Constant::GOOGLE_APP_SECRET;
+        $client = new Google_Client();
+        $client->setClientId($clientId);
+        $client->setClientSecret($clientSecret);
+        $client->setDeveloperKey(Constant::GOOLE_APP_KEY);
+//        $client->setAccessType("offline");
+        $client->setIncludeGrantedScopes(true);   // incremental auth
+//        $client->addScope(Google_Service_Drive::DRIVE_METADATA_READONLY);
+        $client->addScope(Google_Service_Oauth2::USERINFO_EMAIL);
+//        $client->addScope(Google_Service_Oauth2::USERINFO_PROFILE);
+        $client->setRedirectUri('http://' . $_SERVER['HTTP_HOST'] . '/gg-callback.html');
+        $auth_url = $client->createAuthUrl();
+//        header('Location: ' . filter_var($auth_url, FILTER_SANITIZE_URL));exit;
+        echo $auth_url;exit;
         print_r(Session::get('return_url'));
 	}
 
@@ -1000,6 +1017,98 @@ class UsersController extends \BaseController {
         ));
     }
 
+    public function googleCallback(){
+        $client = new Google_Client();
+        $client->setClientId(Constant::GOOGLE_APP_ID);
+        $client->setClientSecret(Constant::GOOGLE_APP_SECRET);
+        $client->setDeveloperKey(Constant::GOOLE_APP_KEY);
+
+        $client->setIncludeGrantedScopes(true);   // incremental auth
+        $client->addScope(Google_Service_Oauth2::USERINFO_EMAIL);
+        $client->addScope(Google_Service_Oauth2::USERINFO_PROFILE);
+        $client->setRedirectUri(Request::url());
+        if(Input::has('code')){
+            $client->authenticate(Input::get('code'));
+            $access_token = $client->getAccessToken();
+            Session::put('access_token',$access_token);
+        }
+        if(!Session::has('access_token')){
+            $auth_url = $client->createAuthUrl();
+            return Redirect::to($auth_url);
+        }
+        try{
+            $client->setAccessToken(Session::get('access_token'));
+
+            $service = new Google_Service_Oauth2($client);
+            $uinfo = $service->userinfo->get();
+            $gg_email = $uinfo->email;
+            $gg_name = $uinfo->name;
+            $gg_id = $uinfo->id;
+        }catch (Exception $e){
+            $auth_url = $client->createAuthUrl();
+            return Redirect::to($auth_url);
+        }
+
+        if(empty($gg_email)){
+            return Redirect::to('/thong-bao.html')->with('error', 'English360 không nhận được địa chỉ email Google của bạn.');
+        }
+
+        $checkEmail = User::where(array('email'=>$gg_email,'ggid'=>array('$ne'=>$gg_id)))->first();
+        if($checkEmail){
+            if(isset($checkEmail->ggid) && !empty($checkEmail->ggid))
+                return Redirect::to('/thong-bao.html')->with('error', 'Email đã được sử dụng');
+            else{
+                //Nếu có user đk cùng mail trước đó thì gộp làm 1
+                $checkEmail->ggid = $gg_id;
+                $checkEmail->status = Constant::STATUS_ENABLE;
+                if(empty($checkEmail->displayname)) $checkEmail->displayname = $gg_name;
+                if(empty($checkEmail->fullname)) $checkEmail->fullname = $gg_name;
+                Auth::login($checkEmail);
+                $checkEmail->ssid = Session::getId();
+                $checkEmail->save();
+                return Redirect::to(Session::get('return_url','/user/package'));
+            }
+        }
+        $checkUser = User::where('ggid',$gg_id)->first();
+        if(!$checkUser){
+            $user = new User();
+            $user->_id = strval(time());
+            $user->datecreate = time();
+            $user->email = $gg_email;
+            $user->cmnd = '';
+            $user->cmnd_ngaycap = '';
+            $user->cmnd_noicap = '';
+            $user->fullname = $gg_name;
+            $user->displayname = $gg_name;
+            $user->ggid = $gg_id;
+            $user->priavatar = '';
+            $user->thong_bao = array(
+                'noti' => '1',
+                'email' => '1',
+            );
+            //Nếu có aff
+            if(isset($_COOKIE[Constant::AFF_COOKIE_NAME])){
+                $cookie_value = Common::decodeAffCookie($_COOKIE[Constant::AFF_COOKIE_NAME]);
+                $cookieArr = explode('&',$cookie_value);
+                $user->aff = array(
+                    'uid' => $cookieArr[0],
+                    'sub_id' => isset($cookieArr[1]) ? $cookieArr[1] : '',
+                    'datecreate' => time()
+                );
+            }
+
+            Auth::login($user);
+            $user->ssid = Session::getId();
+            $user->save();
+        }else{
+            Auth::login($checkUser);
+            $checkUser->ssid = Session::getId();
+            $checkUser->save();
+        }
+
+        return Redirect::to(Session::get('return_url','/user/package'));
+    }
+
     public function facebookCallback(){
         $fb = new Facebook\Facebook([
             'app_id' => Constant::FACEBOOK_APP_ID, // Replace {app-id} with your app id
@@ -1050,7 +1159,7 @@ class UsersController extends \BaseController {
         $fb_email = $userNode->getField('email');
         $fb_name = $userNode->getField('name');
         if(empty($fb_email)){
-            return Redirect::to('/thong-bao.html')->with('error', 'Bạn vui lòng cho English360 quyền truy cập vào địa chỉ email Facebook của bạn.');
+            return Redirect::to('/thong-bao.html')->with('error', 'English360 không nhận được địa chỉ email Facebook của bạn.');
         }
         $checkEmail = User::where(array('email'=>$fb_email,'fbid'=>array('$ne'=>$fb_uid)))->first();
         if($checkEmail){

@@ -2787,3 +2787,17 @@ ul.list2 li {
 #noel .footer { background:#fff url(../images/bg_noel_2.png) top left repeat; border-top:none;}
 #noel .border_noel { width:100%; height:34px; background:url(../images/border_noel.png) top left repeat-x; float:left;  margin-bottom:70px;}
 
+/* social icon */
+.social-icon{
+	display: inline-block;
+	margin: 3px;
+	width: 60px;
+	height: 60px;
+}
+.social-icon.fb{
+	 background: url(../../images/socials-icon.png) no-repeat;
+}
+.social-icon.gg{
+	background: url(../../images/socials-icon.png) no-repeat;
+	background-position: 0 -59px;
+}

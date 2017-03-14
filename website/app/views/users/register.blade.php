@@ -20,8 +20,13 @@
                         <p>{{Form::password('password_confirmation', array('class'=>'input_3', 'placeholder'=>'Xác nhận mật khẩu','id'=>'txtRegPasswordConfirmation'))}}</p>
                         <p>
                             <button type="submit" class="btn_x btn_blue btn_padding bold">Đăng ký</button>
-                            hoặc
-                            <a href="/user/login?redirect=1" class="btn_x btn_padding bold btn_blue" style="background-color: rgb(64,93,155) !important;">Đăng ký bằng Facebook</a>
+
+                            {{--<a href="/user/login?redirect=1" class="btn_x btn_padding bold btn_blue" style="background-color: rgb(64,93,155) !important;">Đăng ký bằng Facebook</a>--}}
+                        </p>
+                        <p>Hoặc đăng ký bằng</p>
+                        <p>
+                            <a href="/user/login?redirect=1" class="social-icon fb"></a>
+                            <a href="/gg-callback.html" class="social-icon gg"></a>
                         </p>
 {{--                        <p>{{Form::submit('Đăng ký', array('class' => 'btn_x btn_blue btn_padding bold'))}}</p>--}}
                         {{Form::close()}}

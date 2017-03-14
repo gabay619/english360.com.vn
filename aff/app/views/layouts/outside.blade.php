@@ -76,7 +76,7 @@
 
 </div>
 <!-- /#wrapper -->
-
+@chatbox()
 <script src="{{ asset('lib/bootstrap-select/bootstrap-select.min.js') }}"></script>
 <script src="{{ asset('js/jquery.tagsinput.min.js') }}"></script>
 <script src="{{ asset('js/redactor.min.js') }}"></script>

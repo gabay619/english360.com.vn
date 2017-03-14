@@ -37,7 +37,7 @@
                 </p>
 
                 <br />
-                @if(!isset(Auth::user()->fbid))
+                @if(!empty(Auth::user()->un_password))
                 <p><strong class="notice_1 uppercase color_red mgb10 mgt20">Thay đổi mật khẩu</strong></p>
                 <label for="old_pass">Mật khẩu cũ:</label>
                 <p>

@@ -78,13 +78,28 @@
         font-size: 11px;
         text-align: center;
     }
+
+    /* social icon */
+    .social-icon{
+        display: inline-block;
+        margin: 3px;
+        width: 60px;
+        height: 60px;
+    }
+    .social-icon.fb{
+        background: url(http://english360.com.vn/assets/images/socials-icon.png) no-repeat;
+    }
+    .social-icon.gg{
+        background: url(http://english360.com.vn/assets/images/socials-icon.png) no-repeat;
+        background-position: 0 -59px;
+    }
 </style>
 <div class="container">
     <div class="row main">
         @yield('content')
     </div>
 </div>
-
+@chatbox()
 <script src="{{ asset('/bootstrap/js/bootstrap.min.js') }}"></script>
 </body>
 </html>

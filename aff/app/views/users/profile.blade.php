@@ -44,7 +44,7 @@
                 </div>
                 {{Form::submit('Cập nhật', array('class'=>'btn btn-primary'))}}
             {{Form::close()}}
-            @if(!isset(Auth::user()->fbid))
+            @if(!empty(Auth::user()->password))
                 <p style="margin-top: 10px"><a style="text-decoration: underline" href="/user/change-password">Đổi mật khẩu</a></p>
             @endif
         </div>

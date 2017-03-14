@@ -24,7 +24,7 @@
             </div>
             <div class="form-group">
                 <label>Xác nhận mật khẩu mới</label>
-                {{Form::password('password-confirmation', array('class'=>'form-control'))}}
+                {{Form::password('password_confirmation', array('class'=>'form-control'))}}
             </div>
             {{Form::submit('Cập nhật', array('class'=>'btn btn-primary'))}}
             {{Form::close()}}
