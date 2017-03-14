@@ -34,8 +34,8 @@ class Song extends Eloquent
                 ->where($cond)
                 ->limit($limit)
                 ->orderBy('datecreate', 'desc')
-                ->get()
-                ->toArray();
+                ->get();
+//                ->toArray();
         return $allPost;
     }
 }

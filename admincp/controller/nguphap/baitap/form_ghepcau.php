@@ -19,7 +19,7 @@ if (isset($_POST['acpt'])) {
     $_POST['namenonutf'] = convert_vi_to_en($_POST['name']);
     if ($tact == "np_gc_insert") {
         $_POST['_id'] = (string)strtotime("now");
-        $_POST['datecreate'] = (string)strtotime("now");
+        $_POST['datecreate'] = time();
         $_POST['type'] = "nguphap_ghepcau";
         $uinfo = $_SESSION['uinfo'];if(!isset($uinfo)) $uinfo["_id"] = "0";
         $_POST['usercreate'] = $uinfo["_id"];

@@ -29,8 +29,8 @@ class GiaoTiepCoBan extends Eloquent
         if($free) $allPost->where('free','1');
         $allPost = $allPost->limit($limit)
                 ->orderBy('datecreate', 'asc')
-                ->get()
-                ->toArray();
+                ->get();
+//                ->toArray();
         return $allPost;
     }
 }
