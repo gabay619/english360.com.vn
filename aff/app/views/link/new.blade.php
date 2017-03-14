@@ -18,7 +18,7 @@
                     <div class="form-group">
                         <label class="control-label col-sm-3" for="redirectLink">Link đích:</label>
                         <div class="col-sm-9">
-                            <input class="form-control" id="redirectLink" placeholder="VD: http://english360.com.vn/giao-tiep-co-ban.html">
+                            <input class="form-control" id="redirectLink" placeholder="VD: http://english360.com.vn/giao-tiep-co-ban.html, bỏ trống sẽ chuyển về trang chủ">
                             <p class="help-block"><i>Người dùng sẽ được chuyển đến đây sau khi lưu cookie</i></p>
                         </div>
                     </div>

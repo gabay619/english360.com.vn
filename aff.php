@@ -9,7 +9,7 @@
 $onWap = 1;
 include "config/init.php";
 include "config/connect.php";
-$redirect = isset($_GET['redirect']) ? $_GET['redirect'] : '/';
+$redirect = isset($_GET['redirect']) && !empty($_GET['redirect']) ? $_GET['redirect'] : Constant::BASE_URL;
 if(empty($_GET['uid'])){
     header('Location: '.$redirect);exit;
 }
@@ -22,7 +22,9 @@ $newclick = $clickcl->insert(array(
     'uid' => $uid,
     'sub_id' => $sub_id,
     'redirect' => $redirect,
-    'ip' => Network::ip()
+    'ip' => Network::ip(),
+    'user_agent' => $_SERVER['HTTP_USER_AGENT'],
+    'get' => $_GET
 ));
 //Luư cookie
 $cookie_value = Common::encodeAffCookie($uid.'&'.$sub_id);

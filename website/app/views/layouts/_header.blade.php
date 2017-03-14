@@ -85,7 +85,7 @@
         <div class="top_header">
             <div class="top_logo">
                 <a href="/" title="">
-                    <img alt="english360.vn" src="/assets/web/images/logo_top_noel.png"  />
+                    <img alt="english360.vn" src="/assets/web/images/logo_top.png"  />
                 </a>
                 {{--<img src="/assets/web/images/bg_noel_1.png" alt="" class="bg_noel_1">--}}
             </div>
