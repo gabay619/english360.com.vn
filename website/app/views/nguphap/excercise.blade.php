@@ -149,6 +149,25 @@
                             </div>
                         </div>
                     @endif
+                    @if($diennhieutu)
+                        <div class="question_label_8 block diennhieutu baitap" style="display: none">
+                            <h4 class="title_1" style="text-transform: initial; padding-top: 5px">{{Common::numberToRoman($countTitle++)}}. {{$diennhieutu->name}}</h4>
+                            @if($diennhieutu->content)
+                                <div class="question_label_8 block">
+                                    <div class="doanvan">
+                                        {{$diennhieutu->content}}
+                                    </div>
+                                </div>
+                            @endif
+                            <div class="btn_bottom_dentail_default center">
+                                <a class="btn_x btn_blue btn_luubaihoc" href="javascript:checkDiennhieutu()" id="btnCheckDiennhieutu">Kiểm tra</a>
+                                <a class="btn_x btn_blue btn_luubaihoc btn_disable" href="javascript:void(0)" id="btnComDiennhieutu">Hoàn thành</a>
+                                <a class="btn_x btn_blue btn_luubaihoc btn_disable" href="javascript:void(0)" id="btnRsDiennhieutu">Đáp án</a>
+                                <a class="btn_x btn_blue btn_luubaihoc btn_disable" href="javascript:void(0)" id="btnRwDiennhieutu">Làm lại</a>
+                                <a class="btn_x btn_blue btn_luubaihoc baitiep" href="javascript:toNext()">Bài tiếp</a>
+                            </div>
+                        </div>
+                    @endif
                     @if($vietlaicau)
                         <div class="question_label_8 block vietlaicau baitap" style="display: none">
                             <h4 class="title_1" style="text-transform: initial; padding-top: 5px">{{Common::numberToRoman($countTitle++)}}. {{$vietlaicau->name}}</h4>
@@ -177,10 +196,14 @@
                                             $audioArr = explode(PHP_EOL,$aDientu['awaudio']);
                                             $awAudio = isset($audioArr[$k]) ? $audioArr[$k] : '';
                                             ?>
+                                            @if($awArr[0])
                                             <p style="margin-top: 10px">{{strtolower(Common::numtoalpha($k))}}.
                                                 <a class="dientuSpeaker" href="javascript:void(0)" data-audio="{{$awAudio}}"><i class="fa fa-volume-off fa-2x fa-disable"></i></a>
+
                                                 <span style="font-style: italic">{{$awArr[0]}}</span>
+
                                             </p>
+                                            @endif
                                             <?php unset($awArr[0]);
                                             $dataAw = implode('|',$awArr);
                                             ?>
@@ -478,6 +501,15 @@
         }
     </style>
     <script>
+        $('.Loa').each(function(){
+            var src = $(this).attr('alt');
+//                html = '<a href="javascript:playAudio(\''+src+'\')"><i class="fa fa-fw"></i></a>';
+            html = '<a class="dientuSpeaker" href="javascript:void(0)" data-audio="'+src+'">'+
+                    '<i class="fa fa-volume-off fa-2x fa-disable"></i>'+
+                    '</a>';
+            $(this).after(html);
+            $(this).remove();
+        });
         var baitapIndex = 0;
 
         function toNext(){
@@ -507,6 +539,15 @@
                     $(this).parent().parent().find('input[type=text]').hide();
                 }
             })
+
+            $('.diennhieutu img.InputQuestion').each(function () {
+                var kq = $(this).attr('alt');
+                $(this).after('<span><input class="input_2 w150" data-aw="' + kq.toLowerCase() + '" data-full="' + kq + '" type="text"><i></i></span>');
+                $(this).hide();
+            })
+
+
+
         });
 
         function shuffle(array) {
@@ -593,20 +634,6 @@
                     $(this).parent().parent().find('>i').removeClass().addClass(iclass);
                 }
 
-//                ans = $(this).val().toLowerCase();
-//                trueans = $(this).attr('data-aw');
-//                trueansArr = trueans.split('|');
-//                if($.inArray(ans,trueansArr)>=0){
-//                    html = '<span class="result true" data-aw="'+trueans+'">'+
-//                            ans+ '</span>';
-//                    iclass = 'i_anw_true';
-//                    $(this).after(html);
-//                    $(this).parent().parent().find('>i').removeClass().addClass(iclass);
-//                    $(this).remove();
-//                }else{
-//                    iclass = 'i_anw_false';
-//                    $(this).parent().parent().find('>i').removeClass().addClass(iclass);
-//                }
             })
             $('.dientu .dientuSpeaker i').removeClass().addClass('fa fa-volume-up fa-2x');
             $('.dientu .dientuSpeaker').each(function(){
@@ -647,24 +674,6 @@
                     $(this).remove();
                 }
 
-//                ans = $(this).val().toLowerCase();
-//                trueans = $(this).attr('data-aw');
-//                trueansArr = trueans.split('|');
-//                if($.inArray(ans,trueansArr)>=0){
-//                    html = '<span class="result true" data-aw="'+trueans+'">'+
-//                            ans+ '</span>';
-//                    iclass = 'i_anw_true';
-//                    $(this).after(html);
-//                    $(this).parent().parent().find('>i').removeClass().addClass(iclass);
-//                    $(this).remove();
-//                }else{
-//                    html = '<span class="result false" data-aw="'+trueans+'">'+
-//                            ans+ '</span>';
-//                    iclass = 'i_anw_false';
-//                    $(this).after(html);
-//                    $(this).parent().parent().find('>i').removeClass().addClass(iclass);
-//                    $(this).remove();
-//                }
             })
             $('.dientu .dientu_dapan').fadeIn();
             $('#btnRsDientu').addClass('btn_disable').attr('href', 'javascript:void(0)');
@@ -698,15 +707,7 @@
                         iclass = 'i_anw_true';
                     }
                 }
-//
-//                ans = $(this).val().toLowerCase();
-//                trueans = $(this).attr('data-aw');
-//                trueansArr = trueans.split('|');
-//                if($.inArray(ans,trueansArr)>=0){
-//                    iclass = 'i_anw_true';
-//                }else{
-//                    iclass = 'i_anw_false';
-//                }
+
                 $(this).parent().parent().find('>i').removeClass().addClass(iclass);
             })
             $('#btnComChontu').removeClass('btn_disable').attr('href', 'javascript:completeChontu()');
@@ -736,20 +737,7 @@
                     $(this).parent().parent().find('>i').removeClass().addClass(iclass);
                 }
 
-//                ans = $(this).val().toLowerCase();
-//                trueans = $(this).attr('data-aw');
-//                trueansArr = trueans.split('|');
-//                if($.inArray(ans,trueansArr)>=0){
-//                    html = '<span class="result true" data-aw="'+trueans+'">'+
-//                            ans+ '</span>';
-//                    iclass = 'i_anw_true';
-//                    $(this).after(html);
-//                    $(this).parent().parent().find('>i').removeClass().addClass(iclass);
-//                    $(this).remove();
-//                }else{
-//                    iclass = 'i_anw_false';
-//                    $(this).parent().parent().find('>i').removeClass().addClass(iclass);
-//                }
+
             })
             $('.chontu .dientuSpeaker i').removeClass().addClass('fa fa-volume-up fa-2x');
             $('.chontu .dientuSpeaker').each(function(){
@@ -790,24 +778,6 @@
                     $(this).remove();
                 }
 
-//                ans = $(this).val().toLowerCase();
-//                trueans = $(this).attr('data-aw');
-//                trueansArr = trueans.split('|');
-//                if($.inArray(ans,trueansArr)>=0){
-//                    html = '<span class="result true" data-aw="'+trueans+'">'+
-//                            ans+ '</span>';
-//                    iclass = 'i_anw_true';
-//                    $(this).after(html);
-//                    $(this).parent().parent().find('>i').removeClass().addClass(iclass);
-//                    $(this).remove();
-//                }else{
-//                    html = '<span class="result false" data-aw="'+trueans+'">'+
-//                            ans+ '</span>';
-//                    iclass = 'i_anw_false';
-//                    $(this).after(html);
-//                    $(this).parent().parent().find('>i').removeClass().addClass(iclass);
-//                    $(this).remove();
-//                }
             })
             $('.chontu .dientu_dapan').fadeIn();
             $('#btnRsChontu').addClass('btn_disable').attr('href', 'javascript:void(0)');
@@ -927,6 +897,109 @@
             });
             $('#btnRwDiencumtu').addClass('btn_disable').attr('href', 'javascript:void(0)');
             $('#btnCheckDiencumtu').removeClass('btn_disable').attr('href', 'javascript:checkDiencumtu()');
+        }
+
+        //Điền nhiều từ
+        function checkDiennhieutu() {
+            $('.diennhieutu input').each(function(){
+                ans = $(this).val().toLowerCase();
+                trueans = $(this).attr('data-aw');
+                trueansArr = trueans.split('|');
+                iclass = 'i_anw_false';
+                for(i=0;i<trueansArr.length;i++){
+                    if(checkPhrase(ans,trueansArr[i])){
+                        iclass = 'i_anw_true';
+                    }
+                }
+                $(this).parent().find('>i').removeClass().addClass(iclass);
+            })
+            $('#btnComDiennhieutu').removeClass('btn_disable').attr('href', 'javascript:completeDiennhieutu()');
+        }
+
+        function completeDiennhieutu() {
+            $('.diennhieutu input').each(function(){
+                ans = $(this).val().toLowerCase();
+                trueans = $(this).attr('data-aw');
+                trueansArr = trueans.split('|');
+                rs = false;
+                for(i=0;i<trueansArr.length;i++){
+                    if(checkPhrase(ans,trueansArr[i])){
+                        rs = true;
+                    }
+                }
+
+                if(rs){
+                    iclass = 'i_anw_true';
+                    html = '<span class="result true" data-aw="'+trueans+'">'+
+                            ans + '</span>';
+                    $(this).after(html);
+                    $(this).parent().find('>i').removeClass().addClass(iclass);
+                    $(this).remove();
+                }else{
+                    iclass = 'i_anw_false';
+                    $(this).parent().find('>i').removeClass().addClass(iclass);
+                }
+            })
+            $('.diennhieutu .dientuSpeaker i').removeClass().addClass('fa fa-volume-up fa-2x');
+            $('.diennhieutu .dientuSpeaker').each(function(){
+                audio = $(this).attr('data-audio');
+                href = 'javascript:playAudio(\''+audio+'\')';
+                $(this).attr('href',href);
+            })
+            $('#btnCheckDiencumtu').addClass('btn_disable').attr('href', 'javascript:void(0)');
+            $('#btnComDiennhieutu').addClass('btn_disable').attr('href', 'javascript:void(0)');
+            $('#btnRsDiennhieutu').removeClass('btn_disable').attr('href', 'javascript:resultDiennhieutu()');
+        }
+
+        function resultDiennhieutu() {
+            $('.diennhieutu input').each(function(){
+                ans = $(this).val().toLowerCase();
+                trueans = $(this).attr('data-aw');
+                trueansArr = trueans.split('|');
+                rs = false;
+                for(i=0;i<trueansArr.length;i++){
+                    if(checkPhrase(ans,trueansArr[i])){
+                        rs = true;
+                    }
+                }
+
+                if(rs){
+                    html = '<span class="result true" data-aw="'+trueans+'">'+
+                            ans+ '</span>';
+                    iclass = 'i_anw_true';
+                    $(this).after(html);
+                    $(this).parent().find('>i').removeClass().addClass(iclass);
+                    $(this).remove();
+                }else{
+                    html = '<span class="result false" data-aw="'+trueans+'">'+
+                            ans+ '</span>'+
+                            '<span class="result true" data-aw="'+trueans+'">'+
+                            trueans+ '</span>';
+                    iclass = 'i_anw_false';
+                    $(this).after(html);
+                    $(this).parent().find('>i').removeClass().addClass(iclass);
+                    $(this).remove();
+                }
+            })
+//            $('.diencumtu .dientu_dapan').fadeIn();
+            $('#btnRsDiennhieutu').addClass('btn_disable').attr('href', 'javascript:void(0)');
+            $('#btnRwDiennhieutu').removeClass('btn_disable').attr('href', 'javascript:reworkDiennhieutu()');
+        }
+
+        function reworkDiennhieutu() {
+            $('.diennhieutu .dientuSpeaker i').removeClass().addClass('fa fa-volume-off fa-2x fa-disable');
+            $('.diennhieutu .dientuSpeaker').attr('href','javascript:void(0)');
+//            $('.diennhieutu .dientu_dapan').hide();
+            $('.diennhieutu span.result.true').each(function(){
+                $(this).parent().find('>i').removeClass();
+                aw = $(this).attr('data-aw')
+                html = '<input class="input_2 w150" data-aw="'+aw+'" data-full="'+aw+'" type="text" placeholder="">';
+                $(this).after(html);
+//                $(this).remove();
+            });
+            $('.diennhieutu span.result').remove();
+            $('#btnRwDiennhieutu').addClass('btn_disable').attr('href', 'javascript:void(0)');
+            $('#btnCheckDiennhieutu').removeClass('btn_disable').attr('href', 'javascript:checkDiennhieutu()');
         }
 
         //Viết lại câu

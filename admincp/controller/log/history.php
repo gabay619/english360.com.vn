@@ -3,8 +3,10 @@ $title = "Lịch sử sử dụng";
 $logcl = $dbmg->history_log;
 $usercl = $dbmg->user;
 $cond = array();
-if(!empty($_GET['phone'])){
-    $cond['phone'] = new MongoRegex('/'.$_GET['phone'].'/iu');
+if(!empty($_GET['email'])){
+    $user = $usercl->findOne(array('email' => $_GET['email']));
+    if($user)
+        $cond['uid'] = $user['_id'];
 }
 if(!empty($_GET['ip'])){
     $cond['ip'] = $_GET['ip'];
@@ -56,7 +58,7 @@ $exportUrl = 'incoming.php?act=exportHistory&'.http_build_query($param);
         <form class="form-inline" role="form" action="" method="get">
             <?php foreach($_GET as $key=>$val) if(!in_array($key,array("q","status","id","p"))) {?> <input type="hidden" name="<?php echo $key ?>" value="<?php echo $val ?>" /> <?php } ?>
             <div class="form-group" style="margin-bottom: 5px">
-                <input type="text" name="phone" class="form-control" placeholder="Số điện thoại" value="<?php echo $_GET['phone'] ?>">
+                <input type="text" name="email" class="form-control" placeholder="Email" value="<?php echo $_GET['email'] ?>">
                 <input type="text" name="ip" class="form-control" placeholder="IP" value="<?php echo $_GET['ip'] ?>">
                 <input type="text" placeholder="Từ ngày:" name="from" class="form-control datepicker" value="<?php echo $_GET['from'] ?>">
                 <input type="text" placeholder="Đến ngày:" name="to" class="form-control datepicker" value="<?php echo $_GET['to'] ?>">
@@ -85,8 +87,8 @@ $exportUrl = 'incoming.php?act=exportHistory&'.http_build_query($param);
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>Số điện thoại</th>
-                    <th>Username</th>
+                    <th>Email</th>
+<!--                    <th>Username</th>-->
                     <th>Hành động</th>
                     <th>URL</th>
                     <th>IP</th>
@@ -102,8 +104,8 @@ $exportUrl = 'incoming.php?act=exportHistory&'.http_build_query($param);
                     $user = $item['uid'] ? $usercl->findOne(array('_id'=>$item['uid'])) : false;
                     ?>
                     <tr>
-                        <td><?php echo $item['phone'] ?></td>
-                        <td><?php echo $user ? $user['username'] : '' ?></td>
+                        <td><?php echo $user ? $user['email'] : '' ?></td>
+<!--                        <td>--><?php //echo $user ? $user['username'] : '' ?><!--</td>-->
                         <td><?php echo HistoryLog::getArr()[$item['action']] ?></td>
                         <td><a href="<?php echo $item['url'] ?>" target="_blank">LINK</a></td>
                         <td><?php echo $item['ip'] ?></td>

@@ -59,7 +59,7 @@ if ($tact != "np_vlc_insert") $_POST = (array)$newscl->findOne(array("_id" => "$
             <div class="form-group">
                 <label class="col-sm-2 control-label">Đáp án để chọn</label>
                 <div class="col-sm-10">
-                    <input type="text" name="list" class="form-control" value="<?php echo $_POST['list'] ?>" placeholder="Cách nhau bởi dấu phẩy">
+                    <input type="text" name="list" class="form-control" value="<?php echo $_POST['list'] ?>" placeholder="Cách nhau bởi dấu |">
                 </div>
             </div>
             <div class="form-group">

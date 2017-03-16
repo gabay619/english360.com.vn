@@ -1,5 +1,5 @@
 <?php
-$title = "Thông tin bài tập điền cụm từ - ngữ pháp";
+$title = "Thông tin bài tập điền nhiều từ - ngữ pháp";
 $newscl = $dbmg->nguphap_baitap;
 $id = $_GET['id'];
 ?>
@@ -8,7 +8,7 @@ $id = $_GET['id'];
 <script type="text/javascript" src="plugin/tinymce/jquery.tinymce.js"></script>
 <title><?php echo $title ?></title>
 <h5 class="text-center"><?php echo $title ?></h5>
-<div class="text-left"><a href="<?php echo cpagerparm("tact,id") ?>tact=np_dct_view ">Trở về danh sách bài tập</a></div>
+<div class="text-left"><a href="<?php echo cpagerparm("tact,id") ?>tact=np_dnt_view ">Trở về danh sách bài tập</a></div>
 <?php include("component/message.php"); ?>
 <?php
 #Post Process
@@ -17,10 +17,10 @@ if (isset($_POST['acpt'])) {
     unset($_POST['redirect']);
     unset($_POST['acpt']);
     $_POST['namenonutf'] = convert_vi_to_en($_POST['name']);
-    if ($tact == "np_dct_insert") {
+    if ($tact == "np_dnt_insert") {
         $_POST['_id'] = (string)strtotime("now");
         $_POST['datecreate'] = time();
-        $_POST['type'] = "nguphap_diencumtu";
+        $_POST['type'] = "nguphap_diennhieutu";
         $uinfo = $_SESSION['uinfo'];if(!isset($uinfo)) $uinfo["_id"] = "0";
         $_POST['usercreate'] = $uinfo["_id"];
         $result = $newscl->insert($_POST);
@@ -32,11 +32,11 @@ if (isset($_POST['acpt'])) {
     exit();
 }
 ##Get Data
-if ($tact != "np_dct_insert") $_POST = (array)$newscl->findOne(array("_id" => "$id"));
+if ($tact != "np_dnt_insert") $_POST = (array)$newscl->findOne(array("_id" => "$id"));
 ?>
 <form class="form-horizontal" role="form" action="" method="post">
     <ul class="nav nav-tabs" role="tablist" id="myTab">
-        <li class="active"><a href="#info" role="tab" data-toggle="tab">Thông tin bài tập điền cụm từ</a></li>
+        <li class="active"><a href="#info" role="tab" data-toggle="tab">Thông tin bài tập điền nhiều từ</a></li>
     </ul>
 
     <div class="tab-content">
@@ -51,41 +51,11 @@ if ($tact != "np_dct_insert") $_POST = (array)$newscl->findOne(array("_id" => "$
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">Ví dụ</label>
+                <label class="col-sm-2 control-label">Nội dung</label>
                 <div class="col-sm-10">
-                    <textarea name="ex" class="form-control" id="ex"><?php echo $_POST['ex'] ?></textarea>
+                    <textarea name="content" class="form-control" id="content"><?php echo $_POST['content'] ?></textarea>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label">Đáp án để chọn</label>
-                <div class="col-sm-10">
-                    <input type="text" name="list" class="form-control" value="<?php echo $_POST['list'] ?>" placeholder="Cách nhau bởi dấu |">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label"></label>
-                <div class="col-sm-10"><a href="javascript:void(0)" onclick="addQuestion()">Thêm câu hỏi</a></div>
-            </div>
-            <div class="listaw">
-                <?php
-                foreach($_POST['question'] as $key=>$item){
-                    ?>
-                    <div class="form-group" data-order="<?php echo $key?>">
-                        <label class="col-sm-2 control-label txtaw">Câu hỏi <?php echo $key+1 ?></label>
-                        <div class="col-sm-3">
-                            <input type="text" placeholder="Câu" name="question[<?php echo $key?>][sentence]" class="form-control" value="<?php echo $item['sentence'] ?>">
-                        </div>
-                        <div class="col-sm-3">
-                            <input type="text" class="form-control" name="question[<?php echo $key?>][phrase]" placeholder="Các cụm từ cách nhau bởi dấu |" value="<?php echo $item['phrase'] ?>" />
-                        </div>
-                        <div class="col-sm-3">
-                            <input type="text" placeholder="Link audio" name="question[<?php echo $key?>][audio]" class="form-control" value="<?php echo $item['audio'] ?>">
-                        </div>
-                        <div class="col-sm-1">
-                            <a href="javascript:void(0)" onclick="$(this).parent().parent().remove()">Xóa</a>
-                        </div>
-                    </div>
-                <?php } ?>
+                <p class="help-block text-right"><i>Một ô trống có thể nhiều đáp án, cách nhau bởi dấu |</i></p>
             </div>
         </div>
     </div>
@@ -94,7 +64,7 @@ if ($tact != "np_dct_insert") $_POST = (array)$newscl->findOne(array("_id" => "$
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" class="btn btn-default">Chấp nhận</button>
-            hoặc <a href="<?php echo cpagerparm("tact,id") ?>tact=np_dct_view">Thoát</a> |
+            hoặc <a href="<?php echo cpagerparm("tact,id") ?>tact=np_dnt_view">Thoát</a> |
             <label><input type="checkbox" checked="checked" value="1" name="redirect" />&nbsp; Không chuyển hướng sau
                 khi nhập xong</label>
         </div>
@@ -102,30 +72,11 @@ if ($tact != "np_dct_insert") $_POST = (array)$newscl->findOne(array("_id" => "$
 </form>
 <div>
     <button class="btn btn-info" onclick="$(this).parent().find('img').toggle()">Hướng dẫn</button>
-    <img src="/admincp/asset/images/nguphap/nguphap_diencumtu.png" alt="" style="display: none; border: 1px dashed #ccc" >
+    <img src="/admincp/asset/images/nguphap/nguphap_diennhieutu.png" alt="" style="display: none; border: 1px dashed #ccc" >
 </div>
 <script>
-    $(function () {
-        $('#file_upload').uploadify({
-            'swf': 'plugin/uploadify/uploadify.swf',
-            'uploader': 'plugin/uploadify/uploadify.php',
-            'onUploadSuccess': function (file, data, response) {
-                var obj = JSON.parse(data);
-                if (obj.status == 200) {
-                    $('#avatar').val(obj.file.path);
-                    $('#previewavatar').attr('src', obj.file.path);
-                    $('#previewavatar').fadeIn();
-
-                } else {
-                    alert(obj.mss);
-                }
-            }
-        });
-    });
-</script>
-<script>
     $(document).ready(function () {
-        $('#ex').tinymce({
+        $('#content').tinymce({
             script_url: 'plugin/tinymce/tiny_mce.js',
             elements: "ajaxfilemanager",
             theme: "advanced",
@@ -176,34 +127,34 @@ if ($tact != "np_dct_insert") $_POST = (array)$newscl->findOne(array("_id" => "$
         });
     }
 
-    function addQuestion(){
-        lastOrder = $('.listaw .form-group:last-child').attr('data-order');
-        if(lastOrder == undefined)
-            lastOrder = -1;
-        next = parseInt(lastOrder)+1;
-//        console.log(lastOrder);return false;
-        html = '<div class="form-group" data-order="'+next+'">'+
-            '<label class="col-sm-2 control-label txtaw">xxx</label>'+
-            '<div class="col-sm-3">'+
-            '<input type="text" placeholder="Câu, bỏ trống bằng dấu gạch dưới" name="question['+next+'][sentence]" class="form-control">'+
-            '</div>'+
-            '<div class="col-sm-3">'+
-            '<input type="text" class="form-control" name="question['+next+'][phrase]" placeholder="Các cụm từ cách nhau bởi dấu |" />'+
-            '</div>'+
-            '<div class="col-sm-3">'+
-            '<input type="text" placeholder="Link audio" name="question['+next+'][audio]" class="form-control">'+
-            '</div>'+
-            '<div class="col-sm-1">'+
-            '<a href="javascript:void(0)" onclick="$(this).parent().parent().remove()">Xóa</a>'+
-            '</div>'+
-            '</div>';
-        $('.listaw').append(html);
-        reindexlabel();
-    }
-    function reindexlabel(){
-        var a = $('.listaw .txtaw');
-        $.each(a,function(i,v){
-            $(this).text("Câu hỏi "+(i+1));
-        })
-    }
+//    function addQuestion(){
+//        lastOrder = $('.listaw .form-group:last-child').attr('data-order');
+//        if(lastOrder == undefined)
+//            lastOrder = -1;
+//        next = parseInt(lastOrder)+1;
+////        console.log(lastOrder);return false;
+//        html = '<div class="form-group" data-order="'+next+'">'+
+//            '<label class="col-sm-2 control-label txtaw">xxx</label>'+
+//            '<div class="col-sm-3">'+
+//            '<input type="text" placeholder="Câu, bỏ trống bằng dấu gạch dưới" name="question['+next+'][sentence]" class="form-control">'+
+//            '</div>'+
+//            '<div class="col-sm-3">'+
+//            '<input type="text" placeholder="Từ cần điền, cách nhau bởi dấu |" name="question['+next+'][word]" class="form-control">'+
+//            '</div>'+
+//            '<div class="col-sm-3">'+
+//            '<input type="text" placeholder="Link audio" name="question['+next+'][audio]" class="form-control">'+
+//            '</div>'+
+//            '<div class="col-sm-1">'+
+//            '<a href="javascript:void(0)" onclick="$(this).parent().parent().remove()">Xóa</a>'+
+//            '</div>'+
+//            '</div>';
+//        $('.listaw').append(html);
+//        reindexlabel();
+//    }
+//    function reindexlabel(){
+//        var a = $('.listaw .txtaw');
+//        $.each(a,function(i,v){
+//            $(this).text("Câu hỏi "+(i+1));
+//        })
+//    }
 </script>

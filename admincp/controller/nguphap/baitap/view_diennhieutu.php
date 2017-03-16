@@ -1,11 +1,11 @@
 <?php
-$title = "Quản lý bài tập điền từ - ngữ pháp";
+$title = "Quản lý bài tập điền nhiều từ - ngữ pháp";
 $newscl = $dbmg->nguphap_baitap;
 $npid = $_GET['npid'];
 //$type = $_GET['type'];
 #condition
 $limit = 25;
-$cond = array('npid'=>$npid,'type'=>'nguphap_dientu');
+$cond = array('npid'=>$npid,'type'=>'nguphap_diennhieutu');
 //$cond['type'] = $type;
 $sort = array("_id" => -1);
 $listnews = $newscl->find($cond)->sort($sort);
@@ -24,7 +24,7 @@ $listnews = $newscl->find($cond)->sort($sort);
 <div class="text-right row">
     <div class="col-xs-3 text-left">
         <!--<a href="<?php /*echo cpagerparm("tact,id,status") */?>">< Thoát</a> |-->
-        <?php if(acceptpermiss("nguphap_test_insert")) { ?><a href="<?php echo cpagerparm("tact,id,status") ?>tact=np_dt_insert"> | Thêm bài tập điền từ</a><?php }?>
+        <?php if(acceptpermiss("nguphap_test_insert")) { ?><a href="<?php echo cpagerparm("tact,id,status") ?>tact=np_dnt_insert"> | Thêm bài tập điền nhiều từ</a><?php }?>
     </div>
     <div class="col-xs-4 right">
         <form action="" method="get">
@@ -57,7 +57,7 @@ $listnews = $newscl->find($cond)->sort($sort);
                 </td>
                 <td><?php echo date("d-m-Y H:i:s", $item['_id']) ?></td>
                 <td>
-                    <?php if(acceptpermiss("nguphap_test_update")) { ?><a href="<?php echo cpagerparm("tact,status,id") ?>tact=np_dt_update&id=<?php echo $item['_id'] ?>">Sửa</a> |<?php }?>
+                    <?php if(acceptpermiss("nguphap_test_update")) { ?><a href="<?php echo cpagerparm("tact,status,id") ?>tact=np_dnt_update&id=<?php echo $item['_id'] ?>">Sửa</a> |<?php }?>
                     <?php if(acceptpermiss("nguphap_test_del")) { ?><a onclick="return confirm('Bạn chắc chắn chứ?')" href="<?php echo cpagerparm("tact,status,id") ?>tact=np_del&id=<?php echo $item['_id'] ?>">Xóa</a><?php }?>
                 </td>
             </tr>

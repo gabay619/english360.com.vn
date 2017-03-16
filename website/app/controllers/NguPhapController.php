@@ -68,7 +68,7 @@ class NguPhapController extends \BaseController {
         ));
     }
 
-    //Chi tiết bài học ngữ âm
+    //Chi tiết bài học ngữ pháp
     public function getDetail($slug){
         $id = CommonHelpers::getIdFromSlug($slug);
         $item = NguPhap::where('status', Constant::STATUS_ENABLE)->where('_id', $id)->first();
@@ -76,35 +76,25 @@ class NguPhapController extends \BaseController {
             return 'Bài học không tồn tại.';
         }
         //Đếm số lượt xem
-//        if(!Session::has('count_view_lna')){
-//            Session::put('count_view_lna',0);
-//        }
-//        if(Session::get('count_view_lna') >= Constant::MAX_CONTENT_CATE_FREE  || !isset($item->free) || $item->free!='1') {
         if(!isset($item->free) || $item->free!='1') {
             Session::put('return_url', Request::url());
             Session::put('count_view', Session::get('count_view')-1);
 
             if (!Auth::user()) {
-//				Session::put('popreg_require_login', 1);
                 return Redirect::to('/user/register')->with('error', 'Hãy đăng ký để tiếp tục sử dụng dịch vụ.');
-//                return Redirect::to('/user/quick-package?return_url='.Request::url())->with('error', 'Hãy đăng ký gói cước để tiếp tục sử dụng dịch vụ.');
 
             } else {
                 if (!Auth::user()->registedPackage()) {
-//					return Redirect::to('/user/package')->with('error', 'Bạn đã sử dụng hết 10 nội dung miễn phí.');
                     return Redirect::to('/user/package')->with('error', 'Hãy đăng ký gói cước để tiếp tục sử dụng dịch vụ.');
                 }
-//                else
-//                    Session::remove('count_view_lna');
             }
         }
-//        Session::put('count_view_lna', Session::get('count_view_lna')+1);
 
         //Log
         $newHistoryLog = array(
             '_id' => strval(time().rand(10,99)),
             'datecreate' => time(),
-            'action' => HistoryLog::LOG_XEM_BAI_HOC_NGU_AM,
+            'action' => HistoryLog::LOG_XEM_BAI_HOC_NGU_PHAP,
             'chanel' => HistoryLog::CHANEL_WEB,
             'ip' => Network::ip(),
             'uid' => Auth::user() ? Auth::user()->_id : '',
@@ -127,6 +117,7 @@ class NguPhapController extends \BaseController {
 
         $chontu = NguPhapBaiTap::where('npid', $id)->where('type', 'nguphap_chontu')->first();
         $dientu = NguPhapBaiTap::where('npid', $id)->where('type', 'nguphap_dientu')->first();
+        $diennhieutu = NguPhapBaiTap::where('npid', $id)->where('type', 'nguphap_diennhieutu')->first();
         $diencumtu = NguPhapBaiTap::where('npid', $id)->where('type', 'nguphap_diencumtu')->first();
         $vietlaicau = NguPhapBaiTap::where('npid', $id)->where('type', 'nguphap_vietlaicau')->first();
         $dungsai = NguPhapBaiTap::where('npid', $id)->where('type', 'nguphap_dungsai')->first();
@@ -141,6 +132,7 @@ class NguPhapController extends \BaseController {
             'tracnghiemtranh' => $tracnghiemtranh,
             'chontu' => $chontu,
             'dientu' => $dientu,
+            'diennhieutu' => $diennhieutu,
             'dientutranh' => $dientutranh,
             'diencumtu' => $diencumtu,
             'vietlaicau' => $vietlaicau,

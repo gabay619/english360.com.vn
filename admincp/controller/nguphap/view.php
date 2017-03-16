@@ -134,6 +134,7 @@ $listnews = $cursor->skip($cp)->limit($limit);
                 <?php if(acceptpermiss("nguphap_test_view")) { ?><a href="<?php echo cpagerparm("tact,status,id,p") ?>tact=np_ct_view&npid=<?php echo $item['_id'] ?>">BT chọn từ</a> |<?php } ?>
                 <?php if(acceptpermiss("nguphap_test_view")) { ?><a href="<?php echo cpagerparm("tact,status,id,p") ?>tact=np_dt_view&npid=<?php echo $item['_id'] ?>">BT điền từ</a> |<?php } ?>
                 <?php if(acceptpermiss("nguphap_test_view")) { ?><a href="<?php echo cpagerparm("tact,status,id,p") ?>tact=np_dct_view&npid=<?php echo $item['_id'] ?>">BT điền cụm từ</a> |<?php } ?>
+                <?php if(acceptpermiss("nguphap_test_view")) { ?><a href="<?php echo cpagerparm("tact,status,id,p") ?>tact=np_dnt_view&npid=<?php echo $item['_id'] ?>">BT điền nhiều từ</a> |<?php } ?>
                 <?php if(acceptpermiss("nguphap_test_view")) { ?><a href="<?php echo cpagerparm("tact,status,id,p") ?>tact=np_vlc_view&npid=<?php echo $item['_id'] ?>">BT viết lại câu</a> |<?php } ?>
                 <?php if(acceptpermiss("nguphap_test_view")) { ?><a href="<?php echo cpagerparm("tact,status,id,p") ?>tact=np_ds_view&npid=<?php echo $item['_id'] ?>">BT Đúng/Sai</a> |<?php } ?>
                 <?php if(acceptpermiss("nguphap_test_view")) { ?><a href="<?php echo cpagerparm("tact,status,id,p") ?>tact=np_vlct_view&npid=<?php echo $item['_id'] ?>">BT viết lại câu theo tranh</a> |<?php } ?>
