@@ -156,7 +156,55 @@ class ApiController extends \BaseController
     }
 
     public function getOtpConfirmVnp(){
-        LogTxn::insert(Input::all());
-        return Response::json(array('status'=>0,'type'=>'text','sms'=>'test'));
+        LogTxn::insert(array('datecreate'=>time())+Input::all());
+        require_once app_path('../../sdk/1pay/OnePayClient.php');
+        $mpc = new OnePayClient();
+        $param = $mpc->confirmOtpVnp(Input::all());
+        $txn_id = $param['id'];
+        if(!empty($txn_id)){
+            $txn = TxnOtp::where('_id',$txn_id)->first();
+            if($txn){
+                $txn->response_code = $param['code'];
+                $txn->response_message = Common::getTxnOtpMss($param['code']);
+                $txn->save();
+                $user = User::where('_id',$txn->uid)->first();
+
+                if($param['code'] == Constant::TXN_OTP_SUCCESS) {
+                    //Tính tiền cho aff
+                    $aff = $user->getAff();
+                    if ($aff) {
+                        $aff_discount_rate = isset($aff->aff_discount) ? $aff->aff_discount : Constant::AFF_RATE_OTP;
+                        $aff_discount = $aff_discount_rate * $txn->pkg_price;
+                        AffTxn::insert(array(
+                            '_id' => strval(time()),
+                            'datecreate' => time(),
+                            'uid' => $aff->_id,
+                            'txn_id' => $txn->_id,
+                            'ref_id' => $user->_id,
+                            'method' => Constant::OTP_METHOD_NAME,
+                            'discount' => $aff_discount,
+                            'rate' => $aff_discount_rate,
+                            'amount' => intval($txn->pkg_price)
+                        ));
+                        $aff->account_balance += $aff_discount;
+                        $aff->save();
+                    }
+
+                    $package = Package::where('_id', $txn->pkg_id)->first();
+                    $time = $package->time * 86400;
+                    $user->pkg_expired = $user->getPackageTime() ? $user->getPackageTime() + $time : time() + $time;
+                    $user->save();
+                    $arResponse['status'] = 1;
+                    $arResponse['sms'] = 'Ban da dang ky thanh cong khoa hoc '.Common::vietnameseToEnglish($package->name).'. Thoi han su dung den '.date('d/m/Y',$user->pkg_expired).'. Truy cap '.Constant::BASE_URL.' de su dung. Chi tiet lien he: '.Constant::SUPPORT_PHONE.'.';
+                    $arResponse['type'] = "text";
+                    return Response::json($arResponse);
+                }
+            }
+        }
+
+        $arResponse['status'] = 0;
+        $arResponse['sms'] = "Thanh toan that bai";
+        $arResponse['type'] = "text";
+        return Response::json($arResponse);
     }
 }

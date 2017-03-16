@@ -14,6 +14,9 @@ $data = json_decode(file_get_contents($url),true);
 foreach ($data as $item){
     if(!$collection->findOne(array('_id'=>$item['_id']))){
         $collection->insert($item);
-        echo 'Insert '.$item['name'].'<br>';
+        echo 'Insert '.$item['_id'].'<br>';
+    }else{
+        $collection->update(array('_id'=>$item['_id']), array('$set'=>$item));
+        echo 'Update '.$item['_id'].'<br>';
     }
 }

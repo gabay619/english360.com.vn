@@ -24,7 +24,7 @@ $newclick = $clickcl->insert(array(
     'redirect' => $redirect,
     'ip' => Network::ip(),
     'user_agent' => $_SERVER['HTTP_USER_AGENT'],
-    'get' => $_GET
+//    'get' => $_GET
 ));
 //Luư cookie
 $cookie_value = Common::encodeAffCookie($uid.'&'.$sub_id);

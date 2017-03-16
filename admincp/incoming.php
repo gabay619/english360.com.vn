@@ -798,7 +798,10 @@ function getLogOtp(){
     global $dbmg;
     $logcl = $dbmg->log_txn;
     $id = $_POST['id'];
-    $log = iterator_to_array($logcl->find(array('id'=>$id)));
+    $log = iterator_to_array($logcl->find(array('$or'=>array(
+        array('id'=>$id),
+        array('requestId'=>$id)
+    ))));
 //    $dtr['mss'] = json_encode($log);
     echo json_encode($log);exit;
 }

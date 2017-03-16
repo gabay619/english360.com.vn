@@ -10,7 +10,7 @@
             {{Form::open(array('url' => '/user/package-otp'))}}
             {{Form::hidden('pkg',$selectPkg->_id)}}
 {{--            <p>{{Form::select('card_type', $listCardType, null, array('class'=>'input_3','required'))}}</p>--}}
-            <p>{{Form::text('msisdn', Input::get('msisdn'), array('class'=>'input_3', 'placeholder'=>'Số điện thoại (Viettel, Mobifone)', 'required','value'=>Input::get('msisdn')))}}</p>
+            <p>{{Form::text('msisdn', Input::get('msisdn'), array('class'=>'input_3', 'placeholder'=>'Số điện thoại (Viettel, Mobifone, Vinaphone)', 'required','value'=>Input::get('msisdn')))}}</p>
             <p>
                 {{Form::submit('Nhận mã xác thực (OTP)', array('class' => 'btn_x btn_blue btn_padding bold'))}}
             </p>

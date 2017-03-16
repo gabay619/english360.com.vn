@@ -192,7 +192,8 @@ class OnePayClient
             'id' =>$requestId_back,
             'transId' => $transId,
             'provider_code' => $errorCode,
-            'redirect_url' => $redirect_url
+            'redirect_url' => $redirect_url,
+            'data' => $data
         );
     }
 
@@ -213,6 +214,39 @@ class OnePayClient
             'id' =>$requestId_back,
             'transId' => $transId,
             'provider_code' => $errorCode
+        );
+    }
+
+    public function confirmOtpVnp($input){
+        if(!isset($input['access_key'])) $input['access_key'] = '';
+        if(!isset($input['amount'])) $input['amount'] = '';
+        if(!isset($input['errorCode'])) $input['errorCode'] = '';
+        if(!isset($input['errorMessage'])) $input['errorMessage'] = '';
+        if(!isset($input['msisdn'])) $input['msisdn'] = '';
+        if(!isset($input['requestId'])) $input['requestId'] = '';
+        if(!isset($input['request_time'])) $input['request_time'] = '';
+        if(!isset($input['transId'])) $input['transId'] = '';
+        if(!isset($input['signature'])) $input['signature'] = '';
+        $data = "access_key=".$input['access_key']."&amount=".$input['amount']."&errorCode=".$input['errorCode'].
+            "&errorMessage=".$input['errorMessage']."&msisdn=".$input['msisdn']."&requestId=".$input['requestId'].
+            "&request_time=".$input['request_time']."&transId=".$input['transId'];
+        $signature = hash_hmac("sha256", $data, self::SECRET_KEY);
+        if($signature == $input['signature']){
+            if($input['errorCode'] == '18') $input['errorCode'] = '00';
+            return array(
+                'code' => $this->_mapCodeOtp($input['errorCode']),
+                'message' => $input['errorMessage'],
+                'id' => $input['requestId'],
+                'transId' => $input['transId'],
+                'provider_code' => $input['errorCode']
+            );
+        }
+        return array(
+            'code' => 04,
+            'message' => 'Chữ ký xác thực E360 nhận được không chính xác',
+            'id' => $input['requestId'],
+            'transId' => $input['transId'],
+            'provider_code' => $input['errorCode']
         );
     }
 

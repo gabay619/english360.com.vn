@@ -621,7 +621,7 @@ class UsersController extends \BaseController {
         require_once app_path('../../sdk/1pay/OnePayClient.php');
         $mpc = new OnePayClient();
 
-        $param = $mpc->requestOtp($txn->_id, $selectPkg->price, $msisdn, Auth::user()->email.' thanh toan '.$selectPkg->price);
+        $param = $mpc->requestOtp($txn->_id, $selectPkg->price, $msisdn, 'Thanh toan '.$selectPkg->price);
         //Luu log
         LogTxn::insert($param);
         //Cap nhat trang thai
@@ -631,18 +631,32 @@ class UsersController extends \BaseController {
         $txn->save();
         //Vinaphone
         if(!empty($param['redirect_url'])){
-            return Redirect::back()->with('error', 'Hiện chưa hỗ trợ mạng Vinaphone <a href="'.$param['redirect_url'].'">LINK</a>');
+            return View::make('home.iframe', array(
+               'url' =>  $param['redirect_url']
+            ));
+            return '<script>window.location.href="'.$param['redirect_url'].'"</script>';
+//            return Redirect::back()->with('error', 'Hiện chưa hỗ trợ mạng Vinaphone <a href="'.$param['redirect_url'].'">LINK</a>');
             return Redirect::to($param['redirect_url']);
         }
         if(empty($param['id'])){
             return Redirect::back()->with('error','Có lỗi xảy ra, vui lòng thử lại');
         }
         if($param['code'] != Constant::TXN_OTP_SENT_SUCCESS){
-            return Redirect::back()->with('error',Common::getTxnOtpMss($param['code']));
+            return Redirect::back()->with('error',$param['message']);
         }
         return View::make('users.package_otp_2', array(
             'txn' => $txn,
         ));
+    }
+
+    public function getGenerateVnpOtp(){
+        require_once app_path('../../sdk/1pay/OnePayClient.php');
+        $mpc = new OnePayClient();
+        $msisdn = Input::get('msisdn');
+
+        $param = $mpc->requestOtp(time(), 1000, $msisdn, 'OTP');
+        echo '<a href="'.$param['redirect_url'].'">LINK</a><br>';
+        echo '<p>DATA: '.$param['data'].'</p>';
     }
 
     public function postPackageOtpConfirm(){
