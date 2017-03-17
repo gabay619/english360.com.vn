@@ -195,11 +195,11 @@ function getroundchampion(){
 function changestatus() {
     global $dbmg;
     $videoCl = $dbmg->thuvien;
-    if ($_SESSION['uinfo']['_id']) {
+    if ($_SESSION['uinfoadmin']['_id']) {
         $atid = $_POST['atid'];
             $videoObj = $videoCl->findOne(array("_id"=> $atid), array("usercreate"));
         if ($videoObj['usercreate']) {
-            if ($videoObj['usercreate'] !== $_SESSION['uinfo']['_id'] && !isacceptpermission("thuvien_status")) {
+            if ($videoObj['usercreate'] !== $_SESSION['uinfoadmin']['_id'] && !isacceptpermission("thuvien_status")) {
                 $dtr['status'] = 403;
                 $dtr['mss'] = "Bạn không có quyền thực hiện chức năng này";
             } else{
@@ -226,7 +226,7 @@ function changestatus() {
 }
 function changefree() {
     global $dbmg;
-    if ($_SESSION['uinfo']['_id']) {
+    if ($_SESSION['uinfoadmin']['_id']) {
         $atid = $_POST['atid'];
         $type = $_POST['type'];
         $colection = Common::getClFromType($type);
@@ -253,11 +253,11 @@ function changefree() {
 function changestatusnguphap() {
     global $dbmg;
     $videoCl = $dbmg->nguphap;
-    if ($_SESSION['uinfo']['_id']) {
+    if ($_SESSION['uinfoadmin']['_id']) {
         $atid = $_POST['atid'];
         $videoObj = $videoCl->findOne(array("_id"=> $atid), array("usercreate"));
         if ($videoObj['usercreate']) {
-            if ($videoObj['usercreate'] !== $_SESSION['uinfo']['_id'] && !isacceptpermission("nguphap_update")) {
+            if ($videoObj['usercreate'] !== $_SESSION['uinfoadmin']['_id'] && !isacceptpermission("nguphap_update")) {
                 $dtr['status'] = 403;
                 $dtr['mss'] = "Bạn không có quyền thực hiện chức năng này";
             } else{
@@ -285,11 +285,11 @@ function changestatusnguphap() {
 function changestatuslna() {
     global $dbmg;
     $videoCl = $dbmg->luyennguam;
-    if ($_SESSION['uinfo']['_id']) {
+    if ($_SESSION['uinfoadmin']['_id']) {
         $atid = $_POST['atid'];
         $videoObj = $videoCl->findOne(array("_id"=> $atid), array("usercreate"));
         if ($videoObj['usercreate']) {
-            if ($videoObj['usercreate'] !== $_SESSION['uinfo']['_id'] && !isacceptpermission("luyennguam_update")) {
+            if ($videoObj['usercreate'] !== $_SESSION['uinfoadmin']['_id'] && !isacceptpermission("luyennguam_update")) {
                 $dtr['status'] = 403;
                 $dtr['mss'] = "Bạn không có quyền thực hiện chức năng này";
             } else{
@@ -317,11 +317,11 @@ function changestatuslna() {
 function changestatusgtcb() {
     global $dbmg;
     $videoCl = $dbmg->gtcb;
-    if ($_SESSION['uinfo']['_id']) {
+    if ($_SESSION['uinfoadmin']['_id']) {
         $atid = $_POST['atid'];
         $videoObj = $videoCl->findOne(array("_id"=> $atid), array("usercreate"));
         if ($videoObj['usercreate']) {
-            if ($videoObj['usercreate'] !== $_SESSION['uinfo']['_id'] && !isacceptpermission("gtcb_update")) {
+            if ($videoObj['usercreate'] !== $_SESSION['uinfoadmin']['_id'] && !isacceptpermission("gtcb_update")) {
                 $dtr['status'] = 403;
                 $dtr['mss'] = "Bạn không có quyền thực hiện chức năng này";
             } else{
@@ -350,11 +350,11 @@ function changestatusgtcb() {
 function changestatusaudio(){
     global $dbmg;
     $videoCl = $dbmg->hmcaudio;
-    if ($_SESSION['uinfo']['_id']) {
+    if ($_SESSION['uinfoadmin']['_id']) {
         $atid = $_POST['atid'];
         $videoObj = $videoCl->findOne(array("_id"=> $atid), array("usercreate"));
         if ($videoObj['usercreate']) {
-            if ($videoObj['usercreate'] !== $_SESSION['uinfo']['_id'] && !isacceptpermission("gtcb_update")) {
+            if ($videoObj['usercreate'] !== $_SESSION['uinfoadmin']['_id'] && !isacceptpermission("gtcb_update")) {
                 $dtr['status'] = 403;
                 $dtr['mss'] = "Bạn không có quyền thực hiện chức năng này";
             } else{
@@ -906,7 +906,7 @@ function withdraw(){
         '_id' => strval(time()),
         'datecreate' => time(),
         'uid' => $id,
-        'u_create' => $_SESSION['uinfo']['_id'],
+        'u_create' => $_SESSION['uinfoadmin']['_id'],
         'amount' => $amount,
         'status' => Constant::WITHDRAW_STATUS_NEW,
         'bank' => $user['bank']
@@ -952,7 +952,7 @@ function completeWithdraw(){
     $usercl->update(array('_id'=>$user['_id']), array('$set'=>array('account_seal_balance' => $seal_balance)));
     //update giao dich
     $setWithdraw = array(
-        'u_update' => $_SESSION['uinfo']['_id'],
+        'u_update' => $_SESSION['uinfoadmin']['_id'],
         'dateupdate' => time(),
         'status' => Constant::WITHDRAW_STATUS_COMPLETE,
     );
@@ -996,7 +996,7 @@ function cancelWithdraw(){
     $usercl->update(array('_id'=>$user['_id']), array('$set'=>$setUser));
     //update giao dich
     $setWithdraw = array(
-        'u_update' => $_SESSION['uinfo']['_id'],
+        'u_update' => $_SESSION['uinfoadmin']['_id'],
         'dateupdate' => time(),
         'status' => Constant::WITHDRAW_STATUS_CANCEL,
     );
