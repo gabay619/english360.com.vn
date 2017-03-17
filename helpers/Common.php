@@ -634,7 +634,7 @@ class Common
         global $dbmg;
         $usercl = $dbmg->user;
         $user = $usercl->findOne(array('_id'=>$uid));
-        return isset($user->pkg_expired) && $user->pkg_expired>time();
+        return isset($user['pkg_expired']) && $user['pkg_expired']>time();
     }
 
     public static function isFreeUser($phone){

@@ -22,7 +22,7 @@
         height: 100%;
         background-repeat: no-repeat;
         background-color: #d3d3d3;
-        font-family: 'Oxygen', sans-serif;
+        /*font-family: 'Oxygen', sans-serif;*/
     }
 
     h1.title {
@@ -95,11 +95,20 @@
     }
 </style>
 <div class="container">
+    <!-- Navigation -->
+    @outsidemenu()
     <div class="row main">
         @yield('content')
     </div>
+    <div class="footer" style="text-align: center; padding: 20px">
+        <p>Cơ quan chủ quản: Công ty TNHH Truyền thông IQ Việt Nam</p>
+        <p>Địa chỉ: Tầng 2 tòa nhà Dinhle, 123B Trần Đăng Ninh, Dịch Vọng, Cầu Giấy, Hà Nội</p>
+        <p>Email: <a href="mailto:cskh@english360.com.vn">cskh@english360.com.vn</a> - CSKH: (04) 32474175</p>
+    </div>
 </div>
 @chatbox()
+<script src="{{ asset('/jquery/jquery-2.1.0.min.js') }}"></script>
+
 <script src="{{ asset('/bootstrap/js/bootstrap.min.js') }}"></script>
 </body>
 </html>

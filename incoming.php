@@ -468,7 +468,7 @@ function saveexam(){
     }
 
     $checkPackage= Common::isRegPackage($uinfo['_id']);
-    if($checkPackage != 1){
+    if(!$checkPackage){
         $dtr = array("status"=>400,"mss"=>"Bạn cần đăng ký gói cước để thực hiện tính năng này");
         $_SESSION['return_url'] = isset($_POST['return_url']) ? $_POST['return_url'] : '/';
         echo json_encode($dtr);exit;
@@ -540,7 +540,8 @@ function savecomment(){
         echo json_encode($dtr);exit;
     }
     $checkPackage= Common::isRegPackage($uinfo['_id']);
-    if($checkPackage != 1){
+//    var_dump($checkPackage);die;
+    if(!$checkPackage){
         $dtr = array("status"=>400,"mss"=>"Bạn cần đăng ký gói cước để thực hiện tính năng này");
         $_SESSION['return_url'] = isset($_POST['return_url']) ? $_POST['return_url'] : '/';
         echo json_encode($dtr);exit;
@@ -561,8 +562,8 @@ function savecomment(){
             "status"=>"1"
         );
         $commentcl->insert($record); // Inssert vào DB trước
-        $record['userinfo'] = array("displayname"=>$_SESSION['uinfo']['displayname']);
-        $record['userinfo'] = array("avatar"=>$_SESSION['uinfo']['avatar']);
+        $record['userinfo'] = array("displayname"=>getDisplayName($_SESSION['uinfo']),"avatar"=>$_SESSION['uinfo']['avatar']);
+//        $record['userinfo'] = array("avatar"=>$_SESSION['uinfo']['avatar']);
         $record['datecreate'] = date("d-m-Y", $record['datecreate']);
         $dtr = array("status"=>200,"mss"=>"Gửi bình luận thành công","data"=>$record);
     }

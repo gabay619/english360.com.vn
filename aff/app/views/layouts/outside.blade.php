@@ -46,58 +46,11 @@
 <body>
 
 <div>
-    <!-- Navigation -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">English360 Affiliate</a>
-        </div>
-        <!-- Top Menu Items -->
-        <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
-    {{--@include('layouts.aside')--}}
-    <!-- /.navbar-collapse -->
-    </nav>
+
+    @outsidemenu()
 
     <div id="page-wrapper">
 
         <div class="container-fluid">
 @yield('content')
-        </div>
-        <!-- /.container-fluid -->
-
-    </div>
-    <!-- /#page-wrapper -->
-
-</div>
-<!-- /#wrapper -->
-@chatbox()
-<script src="{{ asset('lib/bootstrap-select/bootstrap-select.min.js') }}"></script>
-<script src="{{ asset('js/jquery.tagsinput.min.js') }}"></script>
-<script src="{{ asset('js/redactor.min.js') }}"></script>
-<script src="{{ asset('js/bootbox.js') }}"></script>
-<script src="{{ asset('js/toastr.min.js') }}"></script>
-<script src="{{ asset('js/blockUI.js') }}"></script>
-<script src="{{ asset('lib/bootstrap-select/bootstrap-select.min.js') }}"></script>
-<script src="{{ asset('lib/ckfinder/ckfinder.js') }}"></script>
-
-<script>
-    $(function() {
-        $("#start_time" ).datepicker({ dateFormat: 'yy-mm-dd' }).val();
-        $("#end_time").datepicker({ dateFormat: 'yy-mm-dd' }).val();
-        $('.selectpicker').selectpicker();
-    });
-</script>
-
-<!-- Morris Charts JavaScript -->
-<script src="/media/admin-theme/js/plugins/morris/raphael.min.js"></script>
-<script src="/media/admin-theme/js/plugins/morris/morris.min.js"></script>
-<script src="/media/admin-theme/js/plugins/morris/morris-data.js"></script>
-</body>
-
-</html>
+@include('layouts._footer')

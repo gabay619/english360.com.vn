@@ -8,7 +8,11 @@ $id = $_GET['id'];
 $type = $_GET['type'];
 $listcat = iterator_to_array($categorycl->find(array("type"=>"nguphap"),array("_id","name","namenoneutf"))->sort(array("key"=>-1)));
 $tpl->assign("listcat", $listcat);
-if(isset($id)) {
+if(isset($_GET['act']) && $_GET['act']=='luyentap'){
+    include "controller/nguphap/luyentap.php";
+//    exit;
+}
+elseif(isset($id)) {
     $o = (array)$npCl->findOne(array("_id" => $id));
     //bài học liên quan
     $refcond['status'] = "1";
@@ -42,12 +46,15 @@ if(isset($id)) {
                 header("Location: /login.php");exit();
             }
             $result = Common::isRegPackage($_SESSION['uinfo']['_id']);
-            if($result){
+//            var_dump($result);die;
+
+            if(!$result){
                 $_SESSION['flash_mss'] = 'Hãy đăng ký gói cước để tiếp tục sử dụng dịch vụ.';
                 header("Location: /regispack.php");exit();
             }
         }
     }
+
     include "/countView.php";
 
     $o['datecreate'] = date("d/m/Y h:s",$o['datecreate']);

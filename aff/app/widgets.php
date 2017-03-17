@@ -48,3 +48,13 @@ Widget::register('aside', function (){
         'allPages' => $allPages
     ));
 });
+
+Widget::register('outsidemenu', function (){
+    $allPages = Page::where(array(
+        'status' => Constant::STATUS_ENABLE,
+        'on' => Constant::ON_AFF
+    ))->get();
+    return View::make('widgets.outsidemenu', array(
+        'allPages' => $allPages
+    ));
+});

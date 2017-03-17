@@ -2,117 +2,33 @@
 <div class="content_cate p5">
     <div class="item_cate">
         <div class="title_cate">
-            <a href="/luyennguam.php"><i class="icon-noitieng"></i>Ngữ âm</a>
+            <a href="/nguphap.php"><i class="icon-noitieng"></i>Ngữ pháp</a>
             <span class="btn_more_cate"><label></label><label></label><label></label></span>
         </div>
     <div class="content_item">
         <div class="dentail_chanel">
             <h3 class="title_style_1">
-                {$link=makelink::makelna($obj._id,$obj.name)}
+                {$link=makelink::makenp($obj._id,$obj.name)}
                 <a href="{$link}">{$obj.name}</a>
             </h3>
             <div class="date_view"><label>{$obj.date}</label></div>
             <div class="clearfix"></div>
-            {if condition="$dienchu"}
-            <div class="baitap" id="bt-dienchu">
-                <div class="title_bt">{$dienchu.name}</div>
-                <div class="view_bt dientu">
-                    {loop="$dienchu.question"}
+            {if condition="$chontu"}
+            <div class="baitap" id="bt-dientu">
+                <div class="title_bt">{$chontu.name}</div>
+                <div class="view_bt">
+                    {loop="$chontu.question"}
                     <div class="c" data-aw="{$value.aw}">
-                        <b class="stt">{$key+1}</b><span class="has-answer">{$value.short} </span>
+                        <b class="stt">{$key+1}</b>
+                        <span class="has-answer">
+                            {function="str_replace('_','<input class="dt tocheck" data-aw="'.$value.word.'" data-full="'.$value.word.'" type="text">',$value.sentence)"}
+                        </span>
                         <img class="Loa" src="../resource/images/icon_audio.png" alt="{$value.audio}">
                     </div>
                     {/loop}
                 </div>
                 <div class="center"><button class="ht hoanthanh" onclick="completeDienchu()">Hoàn thành</button></div>
                 <div class="center"><button class="ht baitiep" onclick="toNext()" type="button" style="display: none">Bài tiếp</button>
-                </div>
-            </div>
-            {/if}
-            {if condition="$showXemtranh"}
-            <div class="baitap" id="bt-xemtranh">
-                <div class="title_bt">Nghe và xem tranh gợi ý để điền từ thích hợp vào chỗ trống</div>
-                <div class="clearfix"></div>
-                <div class="view_bt dientu mgb10">
-                    <div class="content_item hmc_trochoi hmc_c">
-                        <ul>
-                            {loop="xemtranh"}
-                            <li>
-                                <span class="game_pic">
-                                    <img src="{$value.avatar}">
-                                </span>
-                                <span class="view_tranh">
-                                    <span>{$key+1}.</span>
-                                    <input class="dt" type="text" placeholder="" data-aw="{$value.aw}" style="width: 100px; max-width: none">
-                                </span>
-                                <img class="Loa" src="../resource/images/icon_audio.png" alt="{$value.medialink}">
-                            </li>
-                            {/loop}
-                        </ul>
-                    </div>
-                </div>
-                <div class="center"><button class="ht hoanthanh" onclick="completeXemtranh()">Hoàn thành</button></div>
-                <div class="center"><button class="ht baitiep" onclick="toNext()" type="button" style="display: none">Bài tiếp</button></div>
-            </div>
-            {/if}
-            {if condition="$showTracnghiem"}
-            <div class="baitap" id="bt-tracnghiem">
-                <div class="title_bt">{$tracnghiem.0.name}</div>
-                <div class="view_bt bt_noanswer">
-                    {loop="tracnghiem"}
-                    <div class="c" data-aw="{$value.trueaw}">
-                        <div class="title_bt">{$key+1}. </div>
-                        <div class="radio">
-                            {loop="$value.aw"}
-                            <div>
-                                <input type="radio" name="kq_{$value._id}" class="kq">
-                                <span>{function="numtoalpha($key)"}: {$value} </span>
-                            </div>
-                            {/loop}
-                        </div>
-                    </div>
-                    {/loop}
-                </div>
-                <div class="center"><button class="ht hoanthanh" onclick="completeTracnghiem()">Hoàn thành</button></div>
-                <div class="center"><button class="ht baitiep" onclick="toNext()" type="button" style="display: none">Bài tiếp</button></div>
-            </div>
-            {/if}
-            {if condition="$phatam"}
-            <div class="baitap" id="bt-phatam">
-                <div class="title_bt">{$phatam.name}</div>
-                <div class="view_bt goiy_dientu dientu">
-                    {loop="$phatam.question"}
-                    <div class="c">
-                        <span>
-                            <b class="stt">{$key+1}</b>{$value.spelling}
-                            <input class="dt" type="text" placeholder="" data-aw="{$value.word}" style="width: 100px;max-width: none;">
-                            <img class="Loa" src="../resource/images/icon_audio.png" alt="{$value.audio}">
-                        </span>
-                    </div>
-                    {/loop}
-                </div>
-                <div class="center"><button class="ht hoanthanh" onclick="completePhatam()">Hoàn thành</button></div>
-                <div class="center"><button class="ht baitiep" onclick="toNext()" type="button" style="display: none">Bài tiếp</button></div>
-            </div>
-            {/if}
-            {if condition="$dientu"}
-            <div class="baitap" id="bt-dientu">
-                <div class="title_bt">{$dientu.name}</div>
-                <div class="audio center">
-                    <audio src="{$dientu.medialink}" controls></audio>
-                </div>
-                <div class="clearfix"></div>
-                <div class="show_ketqua center" >
-
-                </div>
-                <div class="clearfix"></div>
-                <div class="content_dientu">
-                    {$dientu.contents}
-                </div>
-
-                <div class="center">
-                    <button class="ht hoanthanh" onclick="completeDientu()" type="button">Hoàn thành</button>
-                    <button class="ht baitiep" onclick="toBegin()" type="button" style="display: none">Làm lại</button>
                 </div>
             </div>
             {/if}

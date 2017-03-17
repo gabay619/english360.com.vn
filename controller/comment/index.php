@@ -16,7 +16,7 @@ $cond['type'] = $type;
 $comment = iterator_to_array($commentcl->find($cond,array("_id","objid","uid","content","parentid","type","datecreate", "like"))->sort(array("_id"=>-1))->limit(20),false);
 foreach($comment as $key=>$item){
     $comment[$key]['datecreate'] = date("d-m-Y H:i",$item['datecreate']);
-    $comment[$key]["userinfo"] = (array)$usercl->findOne(array("_id"=>$item["uid"]), array("_id","phone", "displayname", "priavatar"));
+    $comment[$key]["userinfo"] = (array)$usercl->findOne(array("_id"=>$item["uid"]), array("_id","email", "displayname", "priavatar"));
 //    print_r($comment[$key]["userinfo"]);
     $comment[$key]['countlike'] = isset($item['like']) ? count($item['like']) : 0;
     $comment[$key]['islike'] = isset($_SESSION['uinfo']) ? (isset($item['like']) ? in_array($_SESSION['uinfo']['_id'], $item['like']) : false) : false;

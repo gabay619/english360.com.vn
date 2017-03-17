@@ -31,7 +31,7 @@ if(isset($id)) {
                 header("Location: /login.php");exit();
             }
             $result = Common::isRegPackage($_SESSION['uinfo']['_id']);
-            if($result){
+            if(!$result){
                 $_SESSION['flash_mss'] = 'Hãy đăng ký gói cước để tiếp tục sử dụng dịch vụ.';
                 header("Location: /regispack.php");exit();
             }

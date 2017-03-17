@@ -1,28 +1,39 @@
 <?php
-$nguamcl = $dbmg->luyennguam;
-$lnabt = $dbmg->luyennguam_baitap;
+//error_reporting(E_ALL);
+//ini_set('display_errors', 1);
+$nguphapcl = $dbmg->nguphap;
+$npbt = $dbmg->nguphap_baitap;
 $id= $_GET['id'];
-$obj = (array)$nguamcl->findOne(array("_id"=>$id));
+$obj = (array)$nguphapcl->findOne(array("_id"=>$id));
 $obj['date'] = date('d/m/Y H:i', $obj['datecreate']);
-$dienchu = $lnabt->findOne(array('lnaid'=> $id, 'type' => 'lna_dienchu'));
-$dientu = $lnabt->findOne(array('lnaid' => $id, 'type' => 'lna_dientu'));
-$tracnghiem = iterator_to_array($lnabt->find(array('lnaid' => $id, 'type' => 'lna_tracnghiem'))->sort(array('_id'=>1)), false);
-$xemtranh = iterator_to_array($lnabt->find(array('lnaid' => $id, 'type' => 'lna_xemtranh')), false);
-$phatam = $lnabt->findOne(array('lnaid' => $id, 'type' => 'lna_phatam'));
-$showXemtranh = count($xemtranh) > 0;
-$showTracnghiem = count($tracnghiem) > 0;
-foreach($dienchu['question'] as $key=>$val){
-    $dienchu['question'][$key]['short'] = str_replace('_','<input style="width:20px" class="dt" type="text" placeholder="" maxlength="1">',$val['short']);
-}
+//print_r($obj);
+//$dienchu = $npbt->findOne(array('npid'=> $id, 'type' => 'np_dienchu'));
+$chontu = $npbt->findOne(array('npid' => $id, 'type' => 'nguphap_chontu'));
+$dientu = $npbt->findOne(array('npid' => $id, 'type' => 'np_dientu'));
+$diennhieutu = $npbt->findOne(array('npid' => $id, 'type' => 'nguphap_diennhieutu'));
+$diencumtu = $npbt->findOne(array('npid' => $id, 'type' => 'nguphap_diencumtu'));
+$vietlaicau = $npbt->findOne(array('npid' => $id, 'type' => 'nguphap_vietlaicau'));
+$dungsai = $npbt->findOne(array('npid' => $id, 'type' => 'nguphap_dungsai'));
+$vietlaicautranh = $npbt->findOne(array('npid' => $id, 'type' => 'nguphap_vietlaicautranh'));
+$tracnghiem = $npbt->findOne(array('npid' => $id, 'type' => 'nguphap_tracnghiem'));
+$tracnghiemtranh = $npbt->findOne(array('npid' => $id, 'type' => 'nguphap_tracnghiemtranh'));
+$dientutranh = $npbt->findOne(array('npid' => $id, 'type' => 'nguphap_dientutranh'));
+$ghepcau = $npbt->findOne(array('npid' => $id, 'type' => 'nguphap_ghepcau'));
 
 $tpl->assign("obj",$obj);
-$tpl->assign("dienchu",$dienchu);
+
+$tpl->assign("chontu",$chontu);
 $tpl->assign("dientu",$dientu);
+$tpl->assign("diennhieutu",$diennhieutu);
+$tpl->assign("diencumtu",$diencumtu);
+$tpl->assign("vietlaicau",$vietlaicau);
+$tpl->assign("dungsai",$dungsai);
+$tpl->assign("vietlaicautranh",$vietlaicautranh);
 $tpl->assign("tracnghiem",$tracnghiem);
-$tpl->assign("xemtranh",$xemtranh);
-$tpl->assign("phatam",$phatam);
-$tpl->assign("showXemtranh",$showXemtranh);
-$tpl->assign("showTracnghiem",$showTracnghiem);
-$tpl->assign("pagefile","luyennguam/luyentap");
-include "controller/hmc/index.php";
+$tpl->assign("tracnghiemtranh",$tracnghiemtranh);
+$tpl->assign("dientutranh",$dientutranh);
+$tpl->assign("ghepcau",$ghepcau);
+
+$tpl->assign("pagefile","nguphap/luyentap");
+//include "controller/hmc/index.php";
 ?>

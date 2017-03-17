@@ -155,7 +155,7 @@
                             @if($diennhieutu->content)
                                 <div class="question_label_8 block">
                                     <div class="doanvan">
-                                        {{$diennhieutu->content}}
+                                        {{urldecode($diennhieutu->content)}}
                                     </div>
                                 </div>
                             @endif
@@ -191,28 +191,32 @@
                                                 {{$aDientu['sentence']}}
                                             </b>
                                         </p>
-                                        @foreach(explode(PHP_EOL,$aDientu['aw']) as $k=>$aw)
+                                        <?php $vietlaicauArr = explode(PHP_EOL,$aDientu['aw']); ?>
+                                        @foreach($vietlaicauArr as $k=>$aw)
                                             <?php $awArr = explode('|',$aw);
                                             $audioArr = explode(PHP_EOL,$aDientu['awaudio']);
                                             $awAudio = isset($audioArr[$k]) ? $audioArr[$k] : '';
                                             ?>
-                                            @if($awArr[0])
-                                            <p style="margin-top: 10px">{{strtolower(Common::numtoalpha($k))}}.
+
+                                            <p style="margin-top: 10px">@if(count($vietlaicauArr) > 1 ){{strtolower(Common::numtoalpha($k))}}.@endif
+                                                @if($awAudio)
                                                 <a class="dientuSpeaker" href="javascript:void(0)" data-audio="{{$awAudio}}"><i class="fa fa-volume-off fa-2x fa-disable"></i></a>
-
+                                                @endif
+                                                @if($awArr[0])
                                                 <span style="font-style: italic">{{$awArr[0]}}</span>
-
-                                            </p>
-                                            @endif
-                                            <?php unset($awArr[0]);
-                                            $dataAw = implode('|',$awArr);
-                                            ?>
-                                            <p>
-                                            <span class="sp_get_input">
+                                                @endif
+                                                <?php unset($awArr[0]);
+                                                $dataAw = implode('|',$awArr);
+                                                ?>
+                                                <span class="sp_get_input">
                                                 <input type="text" class="input_2" style="width: 95%; text-align:left; border-bottom-style: dashed" data-aw="{{$dataAw}}">
                                             </span>
                                                 <i></i>
                                             </p>
+
+                                            {{--<p>--}}
+                                            {{----}}
+                                            {{--</p>--}}
                                             <p class="dientu_dapan" style="display: none;">
                                                 <b>Đáp án: </b>{{explode('|',$dataAw)[0]}}
                                             </p>
@@ -545,9 +549,13 @@
                 $(this).after('<span><input class="input_2 w150" data-aw="' + kq.toLowerCase() + '" data-full="' + kq + '" type="text"><i></i></span>');
                 $(this).hide();
             })
-
-
-
+            $('.input_2').keyup(function(){
+                textWidth = $(this).val().length * 7;
+                if(textWidth > $(this).width()){
+                    $(this).width(textWidth)
+                }
+                console.log(textWidth)
+            })
         });
 
         function shuffle(array) {
@@ -946,7 +954,7 @@
                 href = 'javascript:playAudio(\''+audio+'\')';
                 $(this).attr('href',href);
             })
-            $('#btnCheckDiencumtu').addClass('btn_disable').attr('href', 'javascript:void(0)');
+            $('#btnCheckDiennhieutu').addClass('btn_disable').attr('href', 'javascript:void(0)');
             $('#btnComDiennhieutu').addClass('btn_disable').attr('href', 'javascript:void(0)');
             $('#btnRsDiennhieutu').removeClass('btn_disable').attr('href', 'javascript:resultDiennhieutu()');
         }
