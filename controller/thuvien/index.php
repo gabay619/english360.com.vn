@@ -74,14 +74,14 @@ if(isset($id)){
     include "/countView.php";
 
     include "controller/comment/index.php";
-    include "controller/component/emailbox.php";
+//    include "controller/component/emailbox.php";
 
     if(in_array($type, array(Constant::TYPE_DAILY, Constant::TYPE_EXP, Constant::TYPE_IDIOM))) $fix = 12;
     $showMedia = !empty($obj['medialink']);
     $showAV = !empty($obj['content']['eng']) && !empty($obj['content']['vie']) ;
     $showLession = in_array($type, array(Constant::TYPE_IDIOM))|| empty($obj['lession']) ? false : true;
     $showCautruc = !in_array($type, array(Constant::TYPE_DAILY, Constant::TYPE_EXP));
-    $emailboxTop = in_array($type,array(Constant::TYPE_VIDEO, Constant::TYPE_RADIO, Constant::TYPE_FILM, Constant::TYPE_FAMOUS, Constant::TYPE_IDIOM));
+//    $emailboxTop = in_array($type,array(Constant::TYPE_VIDEO, Constant::TYPE_RADIO, Constant::TYPE_FILM, Constant::TYPE_FAMOUS, Constant::TYPE_IDIOM));
 //    var_dump($emailboxTop);die;
 //    print_r($obj['lession']);
 //    if(in_array($type, array(Constant::TYPE_IDIOM, Constant::TYPE_FILM))) $fixThanhngu = 1;
@@ -90,7 +90,7 @@ if(isset($id)){
     $tpl->assign("showAV", $showAV);
     $tpl->assign("showLession", $showLession);
     $tpl->assign("showCautruc", $showCautruc);
-    $tpl->assign("emailboxTop", $emailboxTop);
+//    $tpl->assign("emailboxTop", $emailboxTop);
     $listcat = iterator_to_array($categorycl->find(array('status'=>Constant::STATUS_ENABLE, 'parentid'=>$catname['_id']),array("_id","namenoneutf","type", "name"))->sort(array("_id"=>1)),false);
     $tpl->assign("catname", $catname);
     $tpl->assign("listcat", $listcat);

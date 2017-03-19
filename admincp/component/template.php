@@ -136,7 +136,7 @@
                         <?php if(acceptpermiss("popup")) { ?><li class="<?php echo $act=="popup"?"active":"" ?>"><a href="?act=popup">Quản lý popup</a></li><?php } ?>
                         <?php if(acceptpermiss("banner")) { ?><li class="<?php echo $act=="banner"?"active":"" ?>"><a href="?act=banner">Quản lý banner</a></li><?php } ?>
                         <?php if(acceptpermiss("filemanager")) { ?><li class=""><a target="_blank" href="/fm/index.php">Quản lý File</a></li><?php } ?>
-                        <li class=""><a href="logout.php">Thoát (<b><?php echo $_SESSION['uinfo']['username']?></b>)</a></li>
+                        <li class=""><a href="logout.php">Thoát (<b><?php echo $_SESSION['uinfoadmin']['username']?></b>)</a></li>
                     </ul>
                 </li>
             </ul>

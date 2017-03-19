@@ -118,7 +118,7 @@ else{ // Lấy chi tiết bài hát
     }
     include "/countView.php";
 
-    include "controller/component/emailbox.php";
+//    include "controller/component/emailbox.php";
     $usercl = $dbmg->user;
     $uploadCl = $dbmg->upload;
     if(isset($_FILES['file_upload'])){

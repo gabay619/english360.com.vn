@@ -130,6 +130,7 @@
                 <div class="btn_bottom_dentail_default center">
                     <a class="btn_x btn_blue btn_luubaihoc" href="javascript:complete()" id="btnComplete">Hoàn thành</a>
                     <a class="btn_x btn_red btn_luubaihoc" href="{{$post->getDetailUrl()}}" id="btnContinue" style="display: none">Quay lại bài học</a>
+                    <h2 id="textComplete" style="display: none; margin-top: 10px"></h2>
                 </div>
             </div>
         </div>
@@ -171,6 +172,8 @@
         }
     </style>
     <script>
+        var diem = 0;
+        var tong = 0;
         $(function(){
             $('.item_anws_item_ql1 input').change(function(){
                 $(this).parent().parent().find('input').not($(this)).prop('checked', false);
@@ -201,6 +204,8 @@
             dientuResult();
             $('#btnComplete').remove();
             $('#btnContinue').show();
+            $('#textComplete').show().html('Điểm của bạn là: '+diem+'/'+tong)
+            console.log(diem+'/'+tong)
         }
 
         function validateTracNghiem(){
@@ -257,10 +262,14 @@
                id = $(this).attr('data-id');
                 trueans = $('#sapxepThread span[data-id='+id+']').attr('data-answer').toLowerCase();
                 ans = $(this).val().toLowerCase();
+                tong++;
+
                 if(trueans == ans){
                     html = '<span class="result">'+
                             '<i class="i_anw_true"></i>'+
                             '</span>';
+                    diem++;
+
                 }else{
                     html = '<span class="result">'+
                             '<i class="i_anw_false"></i>'+
@@ -276,8 +285,11 @@
                trueans = $(this).attr('data-true');
                 $(this).find('.item_anws_item_ql1').each(function(e){
                     index = parseInt(e)+1;
+                    tong++;
                     if(index == trueans){
                         $(this).find('label').addClass('lb_anw_true');
+                        if($(this).find('input').is(':checked'))
+                            diem++;
                     }else if($(this).find('input').is(':checked') && index != trueans){
                         $(this).find('label').addClass('lb_anw_false');
                     }
@@ -289,10 +301,14 @@
         function ghepcauResult(){
             $('#ghepcauResult').show();
             $('#ghepcauAns input').each(function(){
+                tong++;
+
                 if($(this).attr('data-answer').toLowerCase() == $(this).val().toLowerCase()){
                     html = '<span class="result">'+
                             '<i class="i_anw_true"></i>'+
                             '</span>';
+                    diem++;
+
                 }else{
                     html = '<span class="result">'+
                             '<i class="i_anw_false"></i>'+
@@ -305,12 +321,16 @@
 
         function dientuResult(){
             $('input.tocheck').each(function(){
+                tong++;
+
                 ans = $(this).val().toLowerCase();
                 trueans = $(this).attr('data-aw');
                 if(ans == trueans){
                     html = '<span class="result true">'+
                             '<i class="i_anw_true"></i>'+ trueans+
                             '</span>';
+                    diem++;
+
 
                 }else{
                     html = '<span class="result false">'+ans+

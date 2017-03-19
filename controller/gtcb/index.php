@@ -39,7 +39,7 @@ if(isset($id)) {
     }
     include "/countView.php";
 
-    include "controller/component/emailbox.php";
+//    include "controller/component/emailbox.php";
     $o['datecreate'] = date('h/m/Y, H:s',$o['datecreate']);
     $tpl->assign("obj", $o);
 
