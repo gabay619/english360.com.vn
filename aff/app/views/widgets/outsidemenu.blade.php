@@ -23,8 +23,3 @@
 {{--@include('layouts.aside')--}}
 <!-- /.navbar-collapse -->
 </nav>
-<style>
-    body{
-        margin-top: 50px;
-    }
-</style>

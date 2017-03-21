@@ -1,13 +1,9 @@
 @extends('layouts.outform')
 
 @section('content')
-        <div class="panel-heading">
-            <div class="panel-title text-center">
-                <h1 class="title">Đăng nhập</h1>
-                <hr />
-            </div>
-        </div>
-        <div class="main-login main-center">
+    <div class="container">
+        <div class="row">
+            <div class="user-form">
             {{Form::open(array('url'=>'/user/login', 'class'=>'form-horizontal', 'method'=>'post'))}}
             @include('layouts._messages')
             <div class="form-group">
@@ -29,17 +25,20 @@
                     </div>
                 </div>
             </div>
-
-            <div class="form-group ">
-                {{Form::submit('Đăng nhập', array('class'=>'btn btn-primary btn-lg btn-block login-button'))}}
+            <div class="form-group">
+                {{Form::submit('Đăng nhập', array('class'=>'btn btn-primary btn-lg btn-block login-button mgt10 mgb10'))}}
                 <p class="text-center" style="margin-top: 10px">Hoặc đăng nhập bằng</p>
-                <a href="{{$fb_login}}" class="social-icon fb"></a>
-                <a href="/gg-callback.html" class="social-icon gg"></a>
+                <div class="text-center">
+                    <a href="{{$fb_login}}" class="social-icon fb"><i class="fa fa-fw" aria-hidden="true"></i></a>
+                    <a href="/gg-callback.html" class="social-icon gg"><i class="fa fa-fw" aria-hidden="true"></i></a>
+                </div>
             </div>
-            <div class="login-register">
+            <div class="login-register text-center mgt20">
                 <a href="/user/register">Đăng ký</a> -
                 <a href="/user/forget-pass">Quên mật khẩu</a>
             </div>
             {{Form::close()}}
         </div>
+    </div>
+    </div>
 @endsection

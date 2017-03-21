@@ -1,114 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/media/admin-theme/css/bootstrap.min.css" rel="stylesheet">
+    <title>English360 - Hệ thống tiếp thị liên kết </title>
 
-    <!-- Website CSS style -->
-{{--<link rel="stylesheet" type="text/css" href="assets/css/main.css">--}}
+    <!-- Bootstrap -->
+    <link href="{{asset('media/aff/css/bootstrap.css')}}" rel="stylesheet">
 
-<!-- Website Font style -->
-    <link href="/media/admin-theme/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- Page -->
+    <link href="{{asset('media/aff/css/style.css')}}" rel="stylesheet">
 
-    <!-- Google Fonts -->
-    <link href='https://fonts.googleapis.com/css?family=Baloo' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+    <!-- FontAwesome -->
+    <link href="{{asset('media/aff/css/font-awesome.css')}}" rel="stylesheet">
 
-    <title>{{isset($title)?$title:'English360 - Hệ thống tiếp thị liên kết'}}</title>
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto+Slab" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
-<body>
-<style>
-    body, html{
-        height: 100%;
-        background-repeat: no-repeat;
-        background-color: #d3d3d3;
-        /*font-family: 'Oxygen', sans-serif;*/
-    }
+<body class="user">
+<!--Navbar-->
+@outsidemenu()
 
-    h1.title {
-        font-size: 50px;
-        font-family: 'Baloo', cursive;
-        font-weight: 400;
-    }
+<!--Content-->
+@yield('content')
 
-    hr{
-        width: 10%;
-        color: #fff;
-    }
-
-    .form-group{
-        margin-bottom: 15px;
-    }
-
-    label{
-        margin-bottom: 15px;
-    }
-
-    input,
-    input::-webkit-input-placeholder {
-        font-size: 11px;
-        padding-top: 3px;
-    }
-
-    .main-login{
-        background-color: #fff;
-        /* shadows and rounded borders */
-        -moz-border-radius: 2px;
-        -webkit-border-radius: 2px;
-        border-radius: 2px;
-        -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-        -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-
-    }
-
-    .main-center{
-        margin-top: 30px;
-        margin: 0 auto;
-        max-width: 330px;
-        padding: 40px 40px;
-
-    }
-
-    .login-button{
-        margin-top: 5px;
-    }
-
-    .login-register{
-        font-size: 11px;
-        text-align: center;
-    }
-
-    /* social icon */
-    .social-icon{
-        display: inline-block;
-        margin: 3px;
-        width: 60px;
-        height: 60px;
-    }
-    .social-icon.fb{
-        background: url(http://english360.com.vn/assets/images/socials-icon.png) no-repeat;
-    }
-    .social-icon.gg{
-        background: url(http://english360.com.vn/assets/images/socials-icon.png) no-repeat;
-        background-position: 0 -59px;
-    }
-</style>
-<div class="container">
-    <!-- Navigation -->
-    @outsidemenu()
-    <div class="row main">
-        @yield('content')
-    </div>
-    <div class="footer" style="text-align: center; padding: 20px">
+<div class="container-fluid footer">
+    <div class="row text-center">
         <p>Cơ quan chủ quản: Công ty TNHH Truyền thông IQ Việt Nam</p>
         <p>Địa chỉ: Tầng 2 tòa nhà Dinhle, 123B Trần Đăng Ninh, Dịch Vọng, Cầu Giấy, Hà Nội</p>
         <p>Email: <a href="mailto:cskh@english360.com.vn">cskh@english360.com.vn</a> - CSKH: (04) 32474175</p>
     </div>
 </div>
-@chatbox()
-<script src="{{ asset('/jquery/jquery-2.1.0.min.js') }}"></script>
 
-<script src="{{ asset('/bootstrap/js/bootstrap.min.js') }}"></script>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+{{--<script src="js/jquery-1.11.2.min.js"></script>--}}
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+{{--<script src="js/bootstrap.js"></script>--}}
 </body>
 </html>
