@@ -351,59 +351,41 @@ function register(){
         }
         $usercl->update(array('_id'=>$checkUser['_id']),array('$set'=>array('un_password'=>$unpassword, 'password'=>Common::encryptpassword($unpassword))));
         $newAccount = $checkUser;
-//        $sendPassCount = isset($checkUser['send_pass']['count']) ? $checkUser['send_pass']['count'] : 0;
-//        $sendPassTime = isset($checkUser['send_pass']['time']) ? $checkUser['send_pass']['time'] : time();
-//        if(time() - $sendPassTime > 60*60){
-//            $sendPassCount = 0;
-//        }
-//        if($sendPassCount >= 5){
-//            $dtr['mss'] = 'Quý khách đã lấy mật khẩu 5 lần. Vui lòng chờ sau 60 phút để lấy lại mật khẩu.';
-//            echo json_encode($dtr);exit;
-//        }
-//        $info = 'Mật khẩu để sử dụng dịch vụ English360 của Quý khách là: '.$checkUser['un_password'];
-//        Network::sentMT($phone, 'MK', $info);
-//        $usercl->update(array('phone' => $phone), array('$set'=>array('send_pass'=>array('count'=>$sendPassCount + 1, 'time'=>time()))));
-    }
-    $timeNow = time();
-//    $unpassword = Common::generateRandomPassword();
-    $password = Common::encryptpassword($unpassword);
+    }else{
+        $timeNow = time();
+        $password = Common::encryptpassword($unpassword);
 
-    $newAccount = array(
-        '_id' => strval($timeNow),
-        'email'=>$email,
-//        'phone' => $phone,
-        'un_password'=>$unpassword,
-        'password' => $password,
-        'datecreate' => $timeNow,
-        'status'=>Constant::STATUS_DISABLE,
-        'priavatar'=>'',
-        'cmd'=>'',
-        'cmnd_noicap'=>'',
-        'cmnd_ngaycap'=>'',
-        'birthday'=>'',
-        'thong_bao' => array(
-            'noti' => "1",
-            'email' => "1",
-        )
-    );
-    //if aff
-    if(isset($_COOKIE[Constant::AFF_COOKIE_NAME])){
-        $cookie_value = Common::decodeAffCookie($_COOKIE[Constant::AFF_COOKIE_NAME]);
-        $cookieArr = explode('&',$cookie_value);
-        $newAccount['aff'] = array(
-            'uid' => $cookieArr[0],
-            'sub_id' => isset($cookieArr[1]) ? $cookieArr[1] : '',
-            'datecreate' => time()
+        $newAccount = array(
+            '_id' => strval($timeNow),
+            'email'=>$email,
+            'un_password'=>$unpassword,
+            'password' => $password,
+            'datecreate' => $timeNow,
+            'status'=>Constant::STATUS_DISABLE,
+            'priavatar'=>'',
+            'cmd'=>'',
+            'cmnd_noicap'=>'',
+            'cmnd_ngaycap'=>'',
+            'birthday'=>'',
+            'thong_bao' => array(
+                'noti' => "1",
+                'email' => "1",
+            )
         );
+        //if aff
+        if(isset($_COOKIE[Constant::AFF_COOKIE_NAME])){
+            $cookie_value = Common::decodeAffCookie($_COOKIE[Constant::AFF_COOKIE_NAME]);
+            $cookieArr = explode('&',$cookie_value);
+            $newAccount['aff'] = array(
+                'uid' => $cookieArr[0],
+                'sub_id' => isset($cookieArr[1]) ? $cookieArr[1] : '',
+                'datecreate' => time()
+            );
+        }
+        $usercl->insert($newAccount);
     }
-//    $info = 'Mật khẩu để sử dụng dịch vụ English360 của Quý khách là: '.$unpassword;
-    $usercl->insert($newAccount);
 
     //Gửi email xác nhận
-//    $content = '<p>Xin chào,</p>'.
-//        '<p>Để xác thực email cho tài khoản English360, bạn vui lòng click vào đường link bên dưới:</p>'.
-//        '<p><a href="'.Common::getVerifyEmailUrl($newAccount['_id'],$email).'">'.Common::getVerifyEmailUrl($newAccount['_id'],$email).'</a></p>'.
-//        '<p>Nếu đây là một sự nhầm lẫn, vui lòng bỏ qua email này.</p>';
     $mail = new \helpers\Mail($email);
     if(!$mail->sendVerifyEmail(Common::getVerifyEmailUrl($newAccount['_id'],$email))){
         $dtr['status'] = 201;
@@ -421,11 +403,9 @@ function register(){
             'action' => HistoryLog::LOG_DANG_KY,
             'chanel' => HistoryLog::CHANEL_WAP,
             'ip' => Network::ip(),
-            'uid' => $checkUser['_id'],
+            'uid' => $newAccount['_id'],
             'url' => Constant::BASE_URL.'/register.php',
             'status' => Constant::STATUS_ENABLE,
-//            'phone' => '',
-//            'username'=>$username,
             'price' => 0
     );
     if(!isset($_SESSION['notsave_log']))

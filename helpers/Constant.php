@@ -14,7 +14,7 @@ class Constant
     const PLAYER_SUB_CONFIG =   'color: "#FFF",
                                 backgroundOpacity: 75,
                                 edgeStyle : "raised"';
-    const FACEBOOK_URL = 'https://www.facebook.com/english360.vn';
+    const FACEBOOK_URL = 'https://www.facebook.com/english360.com.vn';
     const STATUS_ENABLE = '1';
     const STATUS_DISABLE = '0';
     const TYPE_NONE = 'none';

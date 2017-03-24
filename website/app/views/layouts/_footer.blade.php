@@ -186,8 +186,12 @@
             <p><input type="password" class="input_1 input_uf txtPassword"  placeholder="Nhập mật khẩu"/></p>
             <p><input type="password" class="input_1 input_uf txtPasswordConfirmation"  placeholder="Xác nhận mật khẩu"/></p>
             <p class="center"><a href="javascript:void(0);" class="btn_x btn_blue btn_register">Đăng ký</a></p>
-            <p style="text-align: center">hoặc</p>
-            <p class="center"><a href="/user/login?redirect=1" class="btn_x btn_blue" style="background-color: rgb(64,93,155) !important;">Đăng ký bằng Facebook</a></p>
+            <p style="text-align: center">hoặc đăng ký bằng</p>
+            <p class="center">
+                <a href="/user/login?redirect=1" class="social-icon fb"></a>
+                <a href="/gg-callback.html" class="social-icon gg"></a>
+                {{--<a href="/user/login?redirect=1" class="btn_x btn_blue" style="background-color: rgb(64,93,155) !important;">Đăng ký bằng Facebook</a>--}}
+            </p>
             {{--<p class="send-authKey-mss">Để xác thực số điện thoại trên là của bạn, vui lòng <strong><a href="javascript:void(0);" class="text-link-3 send-authKey-btn">Click vào đây</a></strong> để nhận mật khẩu mà chúng tôi gửi qua SMS.</p>--}}
             {{--<div class="authkeyInfo" style="display: none">--}}
                 {{--<p><span style="color: green">Vui lòng nhập mật khẩu vào ô bên dưới</span></p>--}}

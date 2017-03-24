@@ -546,10 +546,10 @@
 
             $('.diennhieutu img.InputQuestion').each(function () {
                 var kq = $(this).attr('alt');
-                $(this).after('<span><input class="input_2 w150" data-aw="' + kq.toLowerCase() + '" data-full="' + kq + '" type="text"><i></i></span>');
+                $(this).after('<span><input class="input_2 w150" data-aw="' + kq + '" data-full="' + kq + '" type="text"><i></i></span>');
                 $(this).hide();
             })
-            $('.input_2').keyup(function(){
+            $('.baitap .input_2').keyup(function(){
                 textWidth = $(this).val().length * 7;
                 if(textWidth > $(this).width()){
                     $(this).width(textWidth)
@@ -913,6 +913,7 @@
                 ans = $(this).val().toLowerCase();
                 trueans = $(this).attr('data-aw');
                 trueansArr = trueans.split('|');
+                console.log(trueansArr)
                 iclass = 'i_anw_false';
                 for(i=0;i<trueansArr.length;i++){
                     if(checkPhrase(ans,trueansArr[i])){
@@ -982,7 +983,7 @@
                     html = '<span class="result false" data-aw="'+trueans+'">'+
                             ans+ '</span>'+
                             '<span class="result true" data-aw="'+trueans+'">'+
-                            trueans+ '</span>';
+                            trueansArr[0]+ '</span>';
                     iclass = 'i_anw_false';
                     $(this).after(html);
                     $(this).parent().find('>i').removeClass().addClass(iclass);

@@ -37,6 +37,11 @@ Route::filter('payment', function (){
 		return Redirect::to('/payment/setting')->with('error','Bạn cần cập nhật thông tin thanh toán');
 });
 
+Route::filter('profile', function(){
+	if(empty(Auth::user()->fullname) || empty(Auth::user()->cmnd) || empty(Auth::user()->cmnd_ngaycap) || empty(Auth::user()->cmnd_noicap) || empty(Auth::user()->phone))
+		return Redirect::to('/user/profile')->with('error','Bạn cần cập nhật thông tin cá nhân');
+});
+
 Route::filter('approve', function (){
 	if(Auth::user()->aff_status != Constant::STATUS_ENABLE){
 		if (Request::ajax()){

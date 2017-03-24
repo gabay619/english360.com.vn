@@ -104,7 +104,7 @@ class UsersController extends \BaseController {
                 'action' => HistoryLog::LOG_DANG_KY,
                 'chanel' => HistoryLog::CHANEL_WEB,
                 'ip' => Network::ip(),
-                'uid' => Auth::user() ? Auth::user()->_id : '',
+                'uid' => $user->_id,
                 'url' => Request::url(),
                 'status' => Constant::STATUS_ENABLE,
                 'price' => 0
