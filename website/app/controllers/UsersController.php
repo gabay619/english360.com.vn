@@ -46,7 +46,10 @@ class UsersController extends \BaseController {
 		}
 
         //kiểm tra email đã đăng ký chưa
-        $checkEmail = User::where('email',$input['email'])->first();
+        $checkEmail = User::where(array('$or'=> array(
+            array('email'=> $input['email']),
+            array('email'=> strtolower($input['email'])),
+        )))->first();
         if($checkEmail){
             if($checkEmail->status == Constant::STATUS_ENABLE){
                 return Response::json(array('success'=>false, 'message'=>'Địa chỉ Email đã được sử dụng'));
@@ -61,7 +64,7 @@ class UsersController extends \BaseController {
             $user->datecreate = time();
             $user->status = Constant::STATUS_DISABLE;
             $user->un_password = $input['password'];
-            $user->email = $input['email'];
+            $user->email = strtolower($input['email']);
             $user->password = Common::encryptpassword($user->un_password);
             $user->cmnd = '';
             $user->cmnd_ngaycap = '';
@@ -156,7 +159,7 @@ class UsersController extends \BaseController {
 
 	public function postLogin(){
         $email = Input::get('email', Session::get('popreg_phone'));
-        $email = strtolower($email);
+//        $email = strtolower($email);
 		$password = Input::get('password');
         if(empty($email) || empty($password)){
             if(Request::ajax())
@@ -168,6 +171,7 @@ class UsersController extends \BaseController {
 		$user = User::where(array(
             '$or'=> array(
                 array('email'=> $email),
+                array('email'=> strtolower($email)),
 //                array('username' => $phone)
             )
         ))->first();

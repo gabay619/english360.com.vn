@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="user-form">
-            {{Form::open(array('url'=>'/user/register', 'class'=>'form-horizontal', 'method'=>'post'))}}
+            {{Form::open(array('url'=>'/user/register', 'class'=>'form-horizontal col-sm-12', 'method'=>'post'))}}
             @include('layouts._messages')
 
             <div class="form-group">
@@ -19,8 +19,8 @@
 
 
             <div class="form-group">
-                <label for="email" class="cols-sm-2 control-label">Email</label>
-                <div class="cols-sm-10">
+                <label for="email" class="control-label">Email</label>
+                <div class="">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
                         {{Form::text('email', Input::get('email'), array('id'=>'email','class'=>'form-control', 'placeholder'=>'Nhập Email'))}}
@@ -29,8 +29,8 @@
             </div>
 
             <div class="form-group">
-                <label for="email" class="cols-sm-2 control-label">Số điện thoại</label>
-                <div class="cols-sm-10">
+                <label for="email" class="control-label">Số điện thoại</label>
+                <div class="">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-mobile fa" aria-hidden="true"></i></span>
                         {{Form::text('phone', Input::get('phone'), array('id'=>'phone','class'=>'form-control', 'placeholder'=>'Nhập SĐT'))}}

@@ -50,8 +50,7 @@ $cpage = $cp;
     <tr>
         <th class="col-md-1"><input type="checkbox" id="checkall" />&nbsp;<button type="submit" class="btn btn-sm btn-danger">Xóa</button></th>
         <th>Ảnh</th>
-        <th>Username</th>
-        <th>Phone</th>
+        <th>Email</th>
         <th>Ngày tạo</th>
         <th>Thao tác</th>
     </tr>
@@ -61,10 +60,9 @@ $cpage = $cp;
         <tr>
             <td><input type="checkbox" class="checkitem" name="id[]" value="<?php echo $item['_id'] ?>" /></td>
             <td class="col-md-2"><img src="<?php echo $item['priavatar'] ?>" class="img-thumbnail" style="max-width: 120px;" /></td>
-            <td><?php echo $item['username'] ?>
+            <td><?php echo $item['email'] ?>
                 <p class="text-muted"><?php echo $item['_id'] ?></p>
             </td>
-            <td><?php echo $item['phone'] ?></td>
             <td><?php echo date("d-m-Y H:i:s", $item['datecreate']) ?></td>
             <td>
                 <?php if(acceptpermiss("user_sendmail")) { ?><a href="<?php echo cpagerparm("tact,status,id") ?>tact=user_sendmail&id=<?php echo $item['_id'] ?>">Gửi thư</a> |<?php } ?>

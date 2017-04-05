@@ -16,13 +16,14 @@ class Mail
     private $username = 'thongbao@english360.com.vn';
     private $password = 'Thongbao@123';
 //    private $from = array('address'=>'thongbao@english360.vn', 'name'=>'English360');
-    private $to, $subject, $body;
+    private $to, $subject, $body, $bcc;
 
 
-    public function __construct($to, $subject='', $body=''){
+    public function __construct($to, $subject='', $body='', $bcc=''){
         $this->to = $to;
         $this->subject = $subject;
         $this->body = $body;
+        $this->bcc = $bcc;
         if(!$this->_checkLogin()){
             $this->_login();
         }
@@ -131,7 +132,7 @@ class Mail
             '_from' => 417,
             '_to' => $this->to,
             '_cc' => '',
-            '_bcc' => '',
+            '_bcc' => $this->bcc,
             '_replyto' => '',
             '_followupto' => '',
             '_subject' => $this->subject,

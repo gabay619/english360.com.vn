@@ -8,16 +8,27 @@
 //error_reporting(E_ALL);
 //ini_set('display_errors',1);
 //echo 1;die;
-$title = "Quản lý User đăng ký bài học";
+$title = "Gửi email cho user";
 //$emailCl = $dbmg->email_log;
 //print_r($_GET['lession']);
 $userCl = $dbmg->user;
 $cond = array();
-$cond['reg_lession'] = array('$ne'=>'','$exists'=>true);
-$cond['email'] = array('$ne'=>'','$exists'=>true);
-if(isset($_GET['lession']) && !empty($_GET['lession'])){
-    $cond['reg_lession'] = $_GET['lession'];
+$listmail = array();
+//$cond['reg_lession'] = array('$ne'=>'','$exists'=>true);
+$cond['email'] = array('$nin'=>array(null,''),'$exists'=>true);
+$startdate = $_GET['start'];
+$enddate = $_GET['end'];
+if(isset($startdate) && !empty($startdate)){
+    $convertStartdate = DateTime::createFromFormat('d/m/Y', $startdate)->format('Y-m-d');
+    $cond['datecreate']['$gte'] = (int)strtotime($convertStartdate. ' 00:00:00');
 }
+if(isset($enddate) && !empty($enddate)){
+    $convertEnddate = DateTime::createFromFormat('d/m/Y', $enddate)->format('Y-m-d');
+    $cond['datecreate']['$lte'] = (int)strtotime($convertEnddate. ' 23:59:59');
+}
+//if(isset($_GET['lession']) && !empty($_GET['lession'])){
+//    $cond['reg_lession'] = $_GET['lession'];
+//}
 if(isset($_GET['email']) && !empty($_GET['email'])){
     $cond['email'] = $_GET['email'];
 }
@@ -26,8 +37,15 @@ $limit = 25;
 $p = $_GET['p'];if($p<=1) $p=1;$cp = ($p-1)*$limit; $stpage = $p;
 $sort = array("datecreate" => -1);
 $cursor = $userCl->find($cond)->sort($sort);
+//$allRecord = $cursor;
+
+//print_r(implode(',',$listmail));
 $rowcount = $cursor->count();
-$list = $cursor->skip($cp)->limit($limit);
+foreach ($cursor as $aUser){
+    $listmail[] = $aUser['email'];
+}
+//print_r($listmail);
+$list = $userCl->find($cond)->sort($sort)->skip($cp)->limit($limit);
 
 #Post Process
 if (isset($_POST['acpt'])) {
@@ -43,24 +61,26 @@ if (isset($_POST['acpt'])) {
 <div class="text-left"><a href="<?php echo cpagerparm("tact,id") ?>">Thoát</a></div>
 <?php include("component/flash_mss.php"); ?>
 <ul class="nav nav-tabs" role="tablist" id="myTab">
-    <li><a href="<?php echo cpagerparm("tact,id") ?>">Lịch sử Email</a></li>
-    <li class="active"><a href="#list" role="tab" data-toggle="tab">User đăng ký nhận email</a></li>
+<!--    <li><a href="--><?php //echo cpagerparm("tact,id") ?><!--">Lịch sử Email</a></li>-->
+    <li class="active"><a href="#list" role="tab" data-toggle="tab">Danh sách user</a></li>
     <li><a href="#send" role="tab" data-toggle="tab">Gửi email cho tập user này</a></li>
 </ul>
 
 <div class="tab-content">
     <div class="tab-pane active" id="list">
         <p>&nbsp;</p>
-        <form class="form-inline col-sm-5" role="form" action="" method="get">
+        <form class="form-inline" role="form" action="" method="get">
             <?php foreach($_GET as $key=>$val) if(!in_array($key,array("lession","status","id","p"))) {?> <input type="hidden" name="<?php echo $key ?>" value="<?php echo $val ?>" /> <?php } ?>
             <div class="form-group">
-                <select name="lession" class="form-control" id="chkLession">
-                    <option value="">-- Chọn danh mục --</option>
-                    <?php foreach (Common::getAllLessionType() as $k=>$aType): ?>
-                        <option value="<?php echo $k ?>" <?php if($k == $_GET['lession']) echo 'selected' ?>><?php echo $aType ?></option>
-                    <?php endforeach; ?>
-                </select>
                 <input type="text" name="email" class="form-control" placeholder="Email" value="<?php echo $_GET['email'] ?>">
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Từ ngày:" name="start" class="form-control datepicker" value="<?php echo $_GET['start'] ?>">
+            </div>
+            <div class="form-group">
+                <input type="text" placeholder="Đến ngày:" name="end" class="form-control datepicker" value="<?php echo $_GET['end'] ?>">
+            </div>
+            <div class="form-group">
                 <input type="submit" class="btn btn-success" value="Tìm kiếm">
             </div>
         </form>
@@ -70,8 +90,7 @@ if (isset($_POST['acpt'])) {
                 <tr>
                     <!--                    <th class="col-md-1"><input type="checkbox" id="checkall" />&nbsp;<button type="submit" class="btn btn-sm btn-danger">Xóa</button></th>-->
                     <th>Email</th>
-                    <th>Username</th>
-                    <th>Phone</th>
+                    <th>Ngày đăng ký</th>
                     <th>Hành động</th>
                 </tr>
                 </thead>
@@ -89,8 +108,7 @@ if (isset($_POST['acpt'])) {
                     ?>
                     <tr>
                         <td><?php echo isset($item['email']) ? $item['email'] : '' ?></td>
-                        <td><?php echo isset($item['username']) ? $item['username'] : '' ?></td>
-                        <td><?php echo isset($item['phone']) ? $item['phone'] : '' ?></td>
+                        <td><?php echo date('d/m/Y H:i', $item['datecreate']) ?></td>
                         <td><a href="<?php echo cpagerparm("tact,id,lession") ?>tact=email_new&email=<?php echo isset($item['email']) ? $item['email'] : '' ?>">Gửi mail</a></td>
                     </tr>
                 <?php } ?>
@@ -119,20 +137,14 @@ if (isset($_POST['acpt'])) {
                 </div>
             </div>
         </form>
-        <div style="clear: both"></div>
-        <div id="percentBar" style="border: 1px solid #000; margin: 0 auto; width: 500px; border-radius: 2px; display: none">
-            <div id="process" style="background: green; height: 10px; width: 0;"></div>
-        </div>
-        <div class="text-center">
-            <span id="percent"></span>
-        </div>
+<!--        <div style="clear: both"></div>-->
+<!--        <div id="percentBar" style="border: 1px solid #000; margin: 0 auto; width: 500px; border-radius: 2px; display: none">-->
+<!--            <div id="process" style="background: green; height: 10px; width: 0;"></div>-->
+<!--        </div>-->
+<!--        <div class="text-center">-->
+<!--            <span id="percent"></span>-->
+<!--        </div>-->
     </div>
-</div>
-<div id="allUid" style="display: none">
-<?php foreach ($cursor as $item) {
-?>
-<span><?php echo $item['email'] ?></span>
-<?php } ?>
 </div>
 <script>
     $(document).ready(function () {
@@ -158,12 +170,12 @@ if (isset($_POST['acpt'])) {
             external_image_list_url : "plugin/tinymce/myexternallist.js"
         });
     });
-
-    max = $('#allUid span').size();
-    index = 0;
-    console.log(max);
+//
+//    max = $('#allUid span').size();
+//    index = 0;
+//    console.log(max);
     function sendMail() {
-        email = [<?php foreach ($cursor as $k=>$item) echo "'".$item['email']."'," ?>];
+        email = '<?php echo implode(',',$listmail)  ?>';
         title = $('#txtTitle').val();
         content = $('#content').val();
 
@@ -171,47 +183,47 @@ if (isset($_POST['acpt'])) {
         $.post('incoming.php?act=sendMail', {
             email:email, title: title, content: content
         }, function (re) {
-            alert('Thanh cong')
-        })
+            alert(re.mss)
+        });
 //        $('#submitBtn').hide();
 //        $('#percentBar').show();
 //        $('#percent').show();
 //        send();
     }
     
-    function send() {
-        if(index >= max){
-            $('#submitBtn').show();
-            index = 0;
-            return false;
-        }
-        email = $('#allUid span').eq(index).html();
-        title = $('#txtTitle').val();
-        content = $('#content').val();
-        action = $('#chkLession').val();
-        console.log(email+'-'+title+'-'+content);
-        $.post('incoming.php?act=sendmail', {
-            email: email, content: content, title: title, action: action
-        }, function (re) {
-            console.log(re);
-            if(re.success){
-
-            }else{
-
-            }
-            var percent = (parseInt(index)+1)*100/max;
-            showPercent(Math.ceil(percent));
-            index++;
-            setTimeout(function(){
-                send();
-            },100);
-        }, 'json')
-    }
-
-    function showPercent(number){
-        $('#process').css('width', number+'%');
-        $('#percent').html(number+'%');
-    }
+//    function send() {
+//        if(index >= max){
+//            $('#submitBtn').show();
+//            index = 0;
+//            return false;
+//        }
+//        email = $('#allUid span').eq(index).html();
+//        title = $('#txtTitle').val();
+//        content = $('#content').val();
+//        action = $('#chkLession').val();
+//        console.log(email+'-'+title+'-'+content);
+//        $.post('incoming.php?act=sendmail', {
+//            email: email, content: content, title: title, action: action
+//        }, function (re) {
+//            console.log(re);
+//            if(re.success){
+//
+//            }else{
+//
+//            }
+//            var percent = (parseInt(index)+1)*100/max;
+//            showPercent(Math.ceil(percent));
+//            index++;
+//            setTimeout(function(){
+//                send();
+//            },100);
+//        }, 'json')
+//    }
+//
+//    function showPercent(number){
+//        $('#process').css('width', number+'%');
+//        $('#percent').html(number+'%');
+//    }
 </script>
 
 

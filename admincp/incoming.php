@@ -861,6 +861,10 @@ function changeDiscount(){
     global $dbmg;
     $usercl = $dbmg->user;
     $dtr['success'] = false;
+    if(!acceptpermiss("aff_discount")){
+        $dtr['mss'] = 'Bạn không có quyền thực hiện thao tác này';
+        echo json_encode($dtr);exit;
+    }
     $id = $_POST['id'];
     $discount = intval($_POST['discount'])/100;
     $usercl->update(array('_id'=>"$id"), array('$set'=>array('aff_discount'=>$discount)));
@@ -2013,30 +2017,35 @@ function exportWithdraw(){
 
 function sendMail(){
     global $dbmg;
-    $emailCl = $dbmg->email_log;
-    $userCl = $dbmg->user;
-    $emailQueue = $dbmg->email_queue;
+//    $emailCl = $dbmg->email_log;
+//    $userCl = $dbmg->user;
+//    $emailQueue = $dbmg->email_queue;
 
     $email = $_POST['email'];
     $title = $_POST['title'];
 //    $action = $_POST['action'];
     $content = $_POST['content'];
+    $mail = new \helpers\Mail('', $title, $content, $email);
+    if(!$mail->send()){
+        echo json_encode(array('success'=>false, 'mss'=>'Thất bại'));exit;
+    }
+
 //    $user = $userCl->findOne(array('email'=>$email));
 //    $mail = new \helpers\Mail($email,$title,$content);
 //    @$mail->send();
-    $sent = array();
-    foreach ($email as $aEmail){
-        if(filter_var($aEmail, FILTER_VALIDATE_EMAIL)){
-            $emailQueue->insert(array(
-                'to' => $aEmail,
-                'subject' => $title,
-                'content' => $content,
-            ));
-            $sent[] = $aEmail;
-        }
-
-    }
-    echo json_encode(array('success'=>true, 'sent'=>$sent));exit;
+//    $sent = array();
+//    foreach ($email as $aEmail){
+//        if(filter_var($aEmail, FILTER_VALIDATE_EMAIL)){
+//            $emailQueue->insert(array(
+//                'to' => $aEmail,
+//                'subject' => $title,
+//                'content' => $content,
+//            ));
+//            $sent[] = $aEmail;
+//        }
+//
+//    }
+    echo json_encode(array('success'=>true, 'mss'=>'Thành công'));exit;
 }
 
 function createTag(){

@@ -1,18 +1,21 @@
 @extends('layouts.outside')
 
 @section('content')
-    <div class="container-fluid c1 middleDiv">
+    <div class="container-fluid c1">
         <div class="row text-center">
             <h2>Cơ hội làm việc với English360</h2>
             <h3>Kiếm từ 20.000.000 đồng/tháng bằng cách chia sẻ đến cộng đồng chương trình học tiếng Anh giao tiếp chất lượng</h3>
             <a class="action-button shadow animate red btn-dangkyngay btn" href="/user/register">Đăng ký ngay</a>
+            <div class="text-center">
+                <p>Đã có tài khoản, vui lòng <a href="/user/login">Đăng nhập</a></p>
+            </div>
         </div>
     </div>
 
     <div class="container c2">
-        <div class="row">
+        <div class="">
             <div class="col-md-6 c2-cover">
-                <img src="{{asset('media/aff/images/c2-cover.png')}}" alt="">
+                <img src="{{asset('media/aff/images/c2-cover.png')}}" alt="" style="width: 100%">
             </div>
             <div class="col-md-6 c2-content c-content">
                 <div class="title mgt50 mgb30">Về chúng tôi</div>

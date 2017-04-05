@@ -2,5 +2,5 @@
 if($tact=='email_new') include("new.php");
 else if($tact=='email_user') include("list.php");
 else
-    include("view.php");
+    include("list.php");
 ?>

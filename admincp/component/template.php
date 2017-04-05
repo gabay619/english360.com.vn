@@ -48,6 +48,7 @@
                 <li class="dropdown <?php echo in_array($act,array("gtcb","luyennguam","hmcaudio"))?"active":"" ?>">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">Luyện tập <span class="caret"></span></a>
                     <ul role="menu" class="dropdown-menu">
+                        <?php if(acceptpermiss("test")) { ?><li class="<?php echo $act=="test"?"active":"" ?>"><a href="?act=test">Kiểm tra trình độ</a></li><?php } ?>
                         <?php if(acceptpermiss("gtcb")) { ?><li class="<?php echo $act=="gtcb"?"active":"" ?>"><a href="?act=gtcb">Giao tiếp cơ bản</a></li><?php } ?>
                         <?php if(acceptpermiss("hmcaudio")) { ?><li class="<?php echo $act=="hmcaudio"?"active":"" ?>"><a href="?act=hmcaudio">Bài hát tiếng Anh</a></li><?php } ?>
                         <?php if(acceptpermiss("luyennguam")) { ?><li class="<?php echo $act=="luyennguam"?"active":"" ?>"><a href="?act=luyennguam">Luyện ngữ âm</a></li><?php } ?>

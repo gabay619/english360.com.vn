@@ -339,7 +339,7 @@ function register(){
 //        $dtr['mss'] = 'Vui lòng nhập số điện thoại MobiFone';
 //        echo json_encode($dtr);exit;
 //    }
-    $email = $_POST['email'];
+    $email = strtolower($_POST['email']);
 //    $phone = $_POST['phone'];
     $unpassword = $_POST['password'];
     $checkUser = $usercl->findOne(array('email' => $email));

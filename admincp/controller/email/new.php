@@ -20,12 +20,16 @@ if (isset($_POST['acpt'])) {
     $title = $_POST['title'];
 //    $lession = $_POST['lession'];
     $content = $_POST['content'];
-    $emailQueue->insert(array(
-        'to' => $email,
-        'subject' => $title,
-        'content' => $content,
-    ));
+    $mail = new \helpers\Mail($email, $title, $content);
+    if($mail->send())
+//    $emailQueue->insert(array(
+//        'to' => $email,
+//        'subject' => $title,
+//        'content' => $content,
+//    ));
     $_SESSION['status'] = 'success';
+    else
+        $_SESSION['status'] = 'error';
 //    $user = $userCl->findOne(array('email'=>$email));
 //    $mail = new \helpers\Mail($email,$title,$content);
 //    if($mail->send()){

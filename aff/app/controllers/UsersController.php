@@ -41,7 +41,10 @@ class UsersController extends \BaseController {
             return Redirect::back()->with('error', 'Số điện thoại không hợp lệ.')->withInput();
         }
 
-        $checkEmail = User::where('email',Input::get('email'))->first();
+        $checkEmail = User::where(array('$or'=> array(
+            array('email'=> Input::get('email')),
+            array('email'=> strtolower(Input::get('email'))),
+        )))->first();
         if($checkEmail){
             if($checkEmail->status == Constant::STATUS_ENABLE){
                 return Redirect::back()->with('error', 'Địa chỉ Email đã được sử dụng.')->withInput();
@@ -56,7 +59,7 @@ class UsersController extends \BaseController {
             $user->datecreate = time();
             $user->status = Constant::STATUS_DISABLE;
             $user->phone = Input::get('phone');
-            $user->email = Input::get('email');
+            $user->email = strtolower(Input::get('email'));
             $user->un_password = Input::get('password');
             $user->fullname = Input::get('fullname');
             $user->password = Common::encryptpassword($user->un_password);
@@ -221,12 +224,17 @@ class UsersController extends \BaseController {
 
 	public function postLogin(){
         $email = Input::get('email', Session::get('popreg_phone'));
-        $email = strtolower($email);
+//        $email = strtolower($email);
 		$password = Input::get('password');
         if(empty($email) || empty($password)){
             return Redirect::back()->with('error', 'Vui lòng nhập đầy đủ Email và Mật khẩu.')->withInput();
         }
-		$user = User::where(array('email'=> $email))->first();
+        $user = User::where(array(
+            '$or'=> array(
+                array('email'=> $email),
+                array('email'=> strtolower($email)),
+            )
+        ))->first();
 		if($user){
 			if($user->password == Common::encryptpassword($password)){
                 //Nếu user chưa xác thực
@@ -339,6 +347,17 @@ class UsersController extends \BaseController {
 //		$send = Network::cancelpack('0903275310');
         print_r(Session::get('return_url'));
 	}
+
+    public function postEditPubDescription(){
+        $id = Input::get('id');
+        $user = User::where(array('_id'=>$id, 'aff.uid'=>Auth::user()->_id))->first();
+        if(!$user){
+            return Response::json(array('success'=>false, 'message' => 'User không tồn tại.'));
+        }
+        $user->pub_description = Input::get('content');
+        $user->save();
+        return Response::json(array('success'=>true,'message' => 'Thành công'));
+    }
 
     public function facebookCallback(){
         session_start();

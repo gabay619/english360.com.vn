@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="user-form">
-            {{Form::open(array('url'=>'/user/login', 'class'=>'form-horizontal', 'method'=>'post'))}}
+            {{Form::open(array('url'=>'/user/login', 'class'=>'form-horizontal col-sm-12', 'method'=>'post'))}}
             @include('layouts._messages')
             <div class="form-group">
                 <label for="email" class="cols-sm-2 control-label">Email</label>

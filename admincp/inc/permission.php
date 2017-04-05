@@ -123,6 +123,14 @@ $module[] = array("name"=>"Ngữ pháp","key"=>"nguphap","controller"=>"controll
         array("name"=>"Xóa bài tập","key"=>"nguphap_test_del")
     )
 );
+$module[] = array("name"=>"Kiểm tra trình độ","key"=>"test","controller"=>"controller/test/index.php","permission"=>
+    array(
+        array("name"=>"Xem danh sách bài kiểm tra","key"=>"test_view"),
+        array("name"=>"Sửa bài kiểm tra","key"=>"test_update"),
+        array("name"=>"Xóa bài kiểm tra","key"=>"test_delete"),
+        array("name"=>"Thêm bài kiểm tra","key"=>"test_insert"),
+    )
+);
 $module[] = array("name"=>"Từ điển","key"=>"tudien","controller"=>"controller/tudien/index.php","permission"=>
     array(
         array("name"=>"Xem danh sách bài viết","key"=>"tudien_view"),

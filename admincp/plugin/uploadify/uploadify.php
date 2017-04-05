@@ -3,6 +3,7 @@
     $targetFolder = "/uploads/".date("d-m-Y")."/";
     $tempFile = $_FILES['Filedata']['tmp_name'];
     $fileParts = pathinfo($_FILES['Filedata']['name']);
+//    print_r($tempFile);
     $folder_name = '/';
     if($_POST['create_folder_type'] == 'true'){
         $folder_name = '/general/';

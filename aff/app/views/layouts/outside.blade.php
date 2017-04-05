@@ -10,19 +10,21 @@
     <link href="{{asset('media/aff/css/bootstrap.css')}}" rel="stylesheet">
 
     <!-- Page -->
-    <link href="{{asset('media/aff/css/style.css')}}" rel="stylesheet">
+    <link href="{{asset('media/aff/css/style.css?v=2')}}" rel="stylesheet">
 
     <!-- FontAwesome -->
     <link href="{{asset('media/aff/css/font-awesome.css')}}" rel="stylesheet">
 
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto+Slab" rel="stylesheet">
+    <script src="{{ asset('/jquery/jquery-2.1.0.min.js') }}"></script>
+    <script src="{{ asset('/bootstrap/js/bootstrap.min.js') }}"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <!--<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>-->
+    <!--<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>-->
     <![endif]-->
 </head>
 <body>
