@@ -20,6 +20,8 @@ if (isset($_POST['acpt'])) {
     unset($_POST['redirect']);
     unset($_POST['acpt']);
     $_POST['namenonutf'] = convert_vi_to_en($_POST['name']);
+    if(!isset($_POST['status'])) $_POST['status'] = '0';
+
     $calendar = $_POST['calendar_date'].' '.$_POST['calendar_time'];
     $convertCalendar = DateTime::createFromFormat('d/m/Y H:i', $calendar)->format('Y-m-d H:i');
     $_POST['calendar'] = (int)strtotime($convertCalendar);

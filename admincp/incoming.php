@@ -199,7 +199,7 @@ function changestatus() {
         $atid = $_POST['atid'];
             $videoObj = $videoCl->findOne(array("_id"=> $atid), array("usercreate"));
         if ($videoObj['usercreate']) {
-            if ($videoObj['usercreate'] !== $_SESSION['uinfoadmin']['_id'] && !isacceptpermission("thuvien_status")) {
+            if (!acceptpermiss("thuvien_status")) {
                 $dtr['status'] = 403;
                 $dtr['mss'] = "Bạn không có quyền thực hiện chức năng này";
             } else{
@@ -257,7 +257,7 @@ function changestatusnguphap() {
         $atid = $_POST['atid'];
         $videoObj = $videoCl->findOne(array("_id"=> $atid), array("usercreate"));
         if ($videoObj['usercreate']) {
-            if ($videoObj['usercreate'] !== $_SESSION['uinfoadmin']['_id'] && !isacceptpermission("nguphap_update")) {
+            if (!acceptpermiss("nguphap_status")) {
                 $dtr['status'] = 403;
                 $dtr['mss'] = "Bạn không có quyền thực hiện chức năng này";
             } else{
@@ -289,7 +289,7 @@ function changestatuslna() {
         $atid = $_POST['atid'];
         $videoObj = $videoCl->findOne(array("_id"=> $atid), array("usercreate"));
         if ($videoObj['usercreate']) {
-            if ($videoObj['usercreate'] !== $_SESSION['uinfoadmin']['_id'] && !isacceptpermission("luyennguam_update")) {
+            if (!acceptpermiss("luyennguam_status")) {
                 $dtr['status'] = 403;
                 $dtr['mss'] = "Bạn không có quyền thực hiện chức năng này";
             } else{
@@ -321,7 +321,7 @@ function changestatusgtcb() {
         $atid = $_POST['atid'];
         $videoObj = $videoCl->findOne(array("_id"=> $atid), array("usercreate"));
         if ($videoObj['usercreate']) {
-            if ($videoObj['usercreate'] !== $_SESSION['uinfoadmin']['_id'] && !isacceptpermission("gtcb_update")) {
+            if (!acceptpermiss("gtcb_status")) {
                 $dtr['status'] = 403;
                 $dtr['mss'] = "Bạn không có quyền thực hiện chức năng này";
             } else{
@@ -354,7 +354,7 @@ function changestatusaudio(){
         $atid = $_POST['atid'];
         $videoObj = $videoCl->findOne(array("_id"=> $atid), array("usercreate"));
         if ($videoObj['usercreate']) {
-            if ($videoObj['usercreate'] !== $_SESSION['uinfoadmin']['_id'] && !isacceptpermission("gtcb_update")) {
+            if (!acceptpermiss("hmcaudio_status")) {
                 $dtr['status'] = 403;
                 $dtr['mss'] = "Bạn không có quyền thực hiện chức năng này";
             } else{

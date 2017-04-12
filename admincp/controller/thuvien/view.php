@@ -155,7 +155,7 @@ $listnews = $cursor->skip($cp)->limit($limit);
                     $("#box_change_"+atid).hide();
                     $("#item_status_"+atid).html(res.statusString);
                 } else
-                    res.alert(res.mss);
+                    alert(res.mss);
             });
         }
         function tooggleChangeStatus(obj) {

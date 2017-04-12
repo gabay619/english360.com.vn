@@ -20,6 +20,7 @@ if (isset($_POST['acpt'])) {
     unset($_POST['redirect']);
     unset($_POST['acpt']);
     $_POST['namenonutf'] = convert_vi_to_en($_POST['name']);
+    if(!isset($_POST['status'])) $_POST['status'] = '0';
     if ($tact == "gtcb_insert") {
         $_POST['_id'] = strval(time());
         $_POST['datecreate'] = time();

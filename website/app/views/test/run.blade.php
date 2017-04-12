@@ -124,6 +124,14 @@
                     complete('Thời gian làm bài của bạn đã hết.');
                 }
             });
+
+            $(document).on('keyup','#loadContent .input_2',function(){
+                textWidth = $(this).val().length * 7;
+                if(textWidth > $(this).width()){
+                    $(this).width(textWidth)
+                }
+                console.log(textWidth)
+            });
             replaceResource();
         });
 

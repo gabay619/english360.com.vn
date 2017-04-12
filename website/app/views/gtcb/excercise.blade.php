@@ -282,10 +282,11 @@
 
         function tracnghiemResult(){
             $('.tracnghiemAns').each(function(){
+                tong++;
                trueans = $(this).attr('data-true');
                 $(this).find('.item_anws_item_ql1').each(function(e){
                     index = parseInt(e)+1;
-                    tong++;
+
                     if(index == trueans){
                         $(this).find('label').addClass('lb_anw_true');
                         if($(this).find('input').is(':checked'))
