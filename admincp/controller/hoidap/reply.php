@@ -16,7 +16,7 @@ if (isset($_POST['acpt'])) {
     $redirect = $_POST['redirect'];
     unset($_POST['redirect']);
     unset($_POST['acpt']);
-    $uinfo = $_SESSION['uinfo'];
+    $uinfo = $_SESSION['uinfoadmin'];
     $obj = array("_id" => (string)strtotime("now"), "name"=>$_POST['name'],"content" => $_POST['content'], "status" => "1", "parentid" => $id, "usercreate" => $uinfo['_id'], "datecreate" => strtotime("now"));
     //$result = $newscl->update(array("_id" => "$id"), array('$set' => $_POST), array("upsert" => false));
     $result = $newscl->insert($obj);
@@ -25,7 +25,7 @@ if (isset($_POST['acpt'])) {
     $ntobj['_id'] = strval(time());
     $ntobj['uid'] = $o['usercreate'];
     $ntobj['status'] = Constant::STATUS_ENABLE;
-    $ntobj['usercreate'] = $_SESSION['uinfo']['_id'];
+    $ntobj['usercreate'] = $_SESSION['uinfoadmin']['_id'];
     $ntobj['datecreate'] = time();
     $ntobj['type'] = Constant::TYPE_NOTIFY;
     $ntobj['to'] = array(
@@ -33,7 +33,7 @@ if (isset($_POST['acpt'])) {
         'id' => $id
     );
 //    $ntobj['pid'] = "$id";
-    $ntobj['mss'] = $_SESSION['uinfo']['displayname']." đã trả lời câu hỏi của bạn";
+    $ntobj['mss'] = $_SESSION['uinfoadmin']['displayname']." đã trả lời câu hỏi của bạn";
     $notifycl = $dbmg->notify;
     $notifycl->insert($ntobj);
     if ($redirect != 1) header("Location: " . cpagerparm("status,id,tact") . "status=success");

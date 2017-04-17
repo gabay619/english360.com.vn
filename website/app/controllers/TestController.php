@@ -25,6 +25,14 @@ class TestController extends \BaseController {
         ));
     }
 
+    public function getView(){
+        $id = Input::get('id');
+        $question = Test::where('_id',$id)->first();
+        return View::make('test.view', array(
+           'firstTest' => $question
+        ));
+    }
+
     public function postQuestion(){
         $number = intval(Input::get('number'));
         $level = intval(Input::get('level'));
@@ -98,5 +106,11 @@ class TestController extends \BaseController {
             'testLevel' => $testLevel,
             'allLevel' => $allLevel
         ));
+    }
+
+    public function getReset(){
+        $rs = TestUser::where(array('uid'=>Auth::user()->_id))->first();
+        if($rs) $rs->delete();
+        echo 'ok';
     }
 }

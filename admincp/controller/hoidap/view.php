@@ -52,7 +52,7 @@ $listnews = $cursor->skip($cp)->limit($limit);
     </thead>
     <tbody>    
     <?php foreach ($listnews as $item) {
-        $user = $usercl->findOne(array('_id'=>$item['usercreate']),array('phone'));
+        $user = $usercl->findOne(array('_id'=>$item['usercreate']),array('email'));
         ?>
         <tr>
             <td><input type="checkbox" class="checkitem" name="id[]" value="<?php echo $item['_id'] ?>" /></td>
@@ -60,7 +60,7 @@ $listnews = $cursor->skip($cp)->limit($limit);
                <!-- <p class="text-muted">Mã: <?php /*echo $item['_id'] */?></p>-->
             </td>
             <td><?php echo date("d-m-Y", $item['_id']) ?></td>
-            <td><?php echo $user['phone'];?></td>
+            <td><?php echo $user['email'];?></td>
             <td>
                 <?php if(acceptpermiss("hoidap_update")) { ?><a href="<?php echo cpagerparm("tact,status,id") ?>tact=hoidap_update&id=<?php echo $item['_id'] ?>">Sửa</a> |<?php }?>
                 <?php if(acceptpermiss("hoidap_reply")) { ?><a href="<?php echo cpagerparm("tact,status,id") ?>tact=hoidap_reply&id=<?php echo $item['_id'] ?>">Trả lời</a> |<?php }?>

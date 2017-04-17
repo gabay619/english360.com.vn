@@ -13,7 +13,8 @@ if(!empty($q)){
     $cond = array(
         '$or'=>array(
             array('namenonutf'=>new MongoRegex("/$q/iu")),
-            array('_id'=>"$q")
+            array('content'=>new MongoRegex("/$q/iu")),
+            array('_id'=>"$q"),
         )
     );
 }
@@ -91,6 +92,7 @@ $typeArr = array(
             <td>
                 <?php if(acceptpermiss("test_update")) { ?><a class="btn btn-sm btn-primary" href="<?php echo cpagerparm("tact,status,id") ?>tact=test_update&id=<?php echo $item['_id'] ?>">Sửa</a><?php }?>
                 <?php if(acceptpermiss("test_delete")) { ?><a class="btn btn-sm btn-danger" onclick="return confirm('Bạn chắc chắn chứ?')" href="<?php echo cpagerparm("tact,status,id") ?>tact=test_delete&id=<?php echo $item['_id'] ?>">Xóa</a><?php }?>
+                <a class="btn btn-sm btn-info" href="/test/view?id=<?php echo $item['_id'] ?>" target="_blank">Test</a>
             </td>
         </tr>
     <?php } ?>

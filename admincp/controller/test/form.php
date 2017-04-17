@@ -30,7 +30,7 @@ if (isset($_POST['acpt'])) {
     if ($tact == "test_insert") {
         $_POST['_id'] = strval(time());
         $_POST['datecreate'] = time();
-        $uinfo = $_SESSION['uinfo'];if(!isset($uinfo)) $uinfo["_id"] = "0";
+        $uinfo = $_SESSION['uinfoadmin'];if(!isset($uinfo)) $uinfo["_id"] = "0";
         $_POST['usercreate'] = $uinfo["_id"];
         $result = $testcl->insert($_POST);
     }

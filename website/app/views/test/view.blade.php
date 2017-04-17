@@ -7,27 +7,10 @@
     <div class="test-content">
         <h4 class="title_1" id="loadTitle">{{$firstTest->name}}</h4>
         <div id="loadContent" style="padding-bottom: 30px">
-           {{urldecode($firstTest->content)}}
-        </div>
-        <div class="clock">
-            <div class="timer" data-minutes-left=24></div>
+            {{urldecode($firstTest->content)}}
         </div>
         <div class="text-center">
-            <button type="button" class="btn_x btn_blue btn_padding bold" onclick="toNext()" id="nextBtn">Tiếp theo</button>
-        </div>
-    </div>
-    <div class="modal fade" id="completeModal" tabindex="-1" role="dialog" aria-labelledby="completeModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title text-center"></h4>
-                </div>
-                <div class="modal-body" style="overflow: hidden">
-                    <div class="text-center">
-                        <button type="button" class="btn btn-danger" onclick="getResult()">Xem kết quả</button>
-                    </div>
-                </div>
-            </div>
+            <button type="button" class="btn_x btn_blue btn_padding bold" onclick="toNext()" id="nextBtn">OK</button>
         </div>
     </div>
     <style>
@@ -62,9 +45,9 @@
 
         /*.checkbox label:after,*/
         /*.radio label:after {*/
-            /*content: '';*/
-            /*display: table;*/
-            /*clear: both;*/
+        /*content: '';*/
+        /*display: table;*/
+        /*clear: both;*/
         /*}*/
 
         .tracnghiem .cr{
@@ -114,27 +97,14 @@
         }
     </style>
     <script>
-        // Tổng điểm hiện tại
+        var currentLvl = 1;
         var currentPoint = 0;
-        // Tông điểm theo dạng bài hiện tại
-        var typePoint = 0;
-        // Số thứ tự câu hỏi hiện tại
         var currentNumberQuestion = 1;
-        // Id câu hỏi hiện tại
         var currentQuestionId = '{{$firstTest->_id}}';
-        // Tổng số câu hỏi
         var numQuestion = 0;
-        // Level hiện tại
-        var level = 1;
 
         $(function () {
 //            complete('Test message');
-            $('.timer').startTimer({
-                onComplete: function(element){
-                    complete('Thời gian làm bài của bạn đã hết.');
-                }
-            });
-
             $(document).on('keyup','#loadContent .input_2',function(){
                 textWidth = $(this).val().length * 7;
                 if(textWidth > $(this).width()){
@@ -144,16 +114,6 @@
             });
             replaceResource();
         });
-
-        function getResult() {
-            $.post('/test/result', {
-                point:currentPoint, num: numQuestion
-            }, function (re) {
-                if(re.success){
-                    window.location.href = re.url;
-                }
-            })
-        }
 
         function replaceResource() {
 //            $('#loadContent .Loa').each(function(){
@@ -181,16 +141,6 @@
             });
         }
 
-        function complete(message) {
-            $('#completeModal h4').html(message);
-
-            $('#completeModal').modal({
-                backdrop: 'static',
-                keyboard: false,
-                show: true
-            });
-        }
-
         function resultTracnghiem() {
             $('#loadContent .tracnghiem').each(function(){
                 rs = true;
@@ -201,9 +151,7 @@
                 });
                 if(rs){
                     currentPoint++;
-                    typePoint++;
-                    level++;
-                }else level--;
+                }
                 numQuestion++;
             });
         }
@@ -221,9 +169,7 @@
                 }
                 if(rs){
                     currentPoint++;
-                    typePoint++;
-                    level++;
-                }else level--;
+                }
                 numQuestion++;
             })
         }
@@ -235,33 +181,7 @@
         function toNext() {
             resultTracnghiem();
             resultDientu();
-            currentNumberQuestion++;
-            // Nếu chuyển dạng bài thì chuyển dạng và reset điểm dạng
-            if(currentNumberQuestion ==7 || currentNumberQuestion==13 || currentNumberQuestion==14){
-                level = typePoint > 0 ? typePoint : 1;
-                typePoint = 0;
-            }
-
-            if(level < 1) level = 1;
-            else if(level > 6) level = 6;
-
-            $.post('/test/question', {
-                number:currentNumberQuestion, level:level, id: currentQuestionId
-            }, function (re) {
-                if(re.success){
-                    $('#loadContent').html(re.content);
-                    $('#loadTitle').html(re.title);
-                    currentQuestionId = re.id
-                    replaceResource();
-//                    if(currentNumberQuestion==9){
-//                    }
-                }else{
-                    complete(re.message);
-//                    $('#nextBtn').attr('onclick','complete()').html('Hoàn thành');
-//                    alert(re.message);
-                }
-            });
-            console.log('point:'+currentPoint+'- level:'+level)
+            alert('Point: '+currentPoint);
         }
 
     </script>
