@@ -3,9 +3,12 @@
 //ini_set('display_errors', 1);
 $title = "Lịch sử sử dụng";
 $logcl = $dbmg->history_log;
+$usercl = $dbmg->user;
 $cond = array();
-if(!empty($_GET['phone'])){
-    $cond['phone'] = new MongoRegex('/'.$_GET['phone'].'/iu');
+if(!empty($_GET['email'])){
+    $user = $usercl->findOne(array('email' => $_GET['email']));
+    if($user)
+        $cond['uid'] = $user['_id'];
 }
 if(!empty($_GET['ip'])){
     $cond['ip'] = $_GET['ip'];
@@ -122,7 +125,7 @@ if($_GET['type'] == 'd'){
                 <label for="type_dt" style="font-weight: normal"><input type="radio" name="type" value="dt" id="type_dt" <?php echo $_GET['type'] == 'dt' ? 'checked' : ''?>> Theo số liệu</label>
             </div>
             <div class="form-group" style="margin-bottom: 5px">
-                <input type="text" name="phone" class="form-control" placeholder="Số điện thoại" value="<?php echo $_GET['phone'] ?>">
+                <input type="text" name="email" class="form-control" placeholder="Email" value="<?php echo $_GET['email'] ?>">
                 <input type="text" name="ip" class="form-control" placeholder="IP" value="<?php echo $_GET['ip'] ?>">
                 <input type="text" placeholder="Từ ngày:" name="from" class="form-control datepicker" value="<?php echo $_GET['from'] ?>">
                 <input type="text" placeholder="Đến ngày:" name="to" class="form-control datepicker" value="<?php echo $_GET['to'] ?>">

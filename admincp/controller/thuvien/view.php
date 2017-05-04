@@ -16,7 +16,7 @@ $cond = array();
 if(isset($q)){
     $cond = array(
         '$or'=>array(
-                array('namenonutf'=>new MongoRegex("/$q/iu")),
+                array('namenonutf'=>new MongoRegex("/".Common::vietnameseToEnglish($q)."/iu")),
                 array('_id'=>"$q")
         )
     );

@@ -10,7 +10,7 @@
            {{urldecode($firstTest->content)}}
         </div>
         <div class="clock">
-            <div class="timer" data-minutes-left=24></div>
+            <div class="timer" data-minutes-left=25></div>
         </div>
         <div class="text-center">
             <button type="button" class="btn_x btn_blue btn_padding bold" onclick="toNext()" id="nextBtn">Tiếp theo</button>

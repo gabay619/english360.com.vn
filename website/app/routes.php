@@ -12,6 +12,9 @@
 */
 
 Route::get('/', 'HomeController@getIndex');
+Route::get('/google94972e56f8311718.html', function (){
+    echo 'google-site-verification: google94972e56f8311718.html';
+});
 Route::get('/search', 'HomeController@getSearch');
 Route::get('/disable-email.html', 'UsersController@disableEmail');
 Route::get('/fb-callback.html', 'UsersController@facebookCallback');

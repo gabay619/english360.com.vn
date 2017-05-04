@@ -87,29 +87,27 @@ Route::filter('package', function(){
 });
 
 Route::filter('count_view', function(){
-    if(!Session::has('count_view')){
-        Session::put('count_view',1);
-    }else{
-        Session::put('count_view', Session::get('count_view')+1);
-    }
-    if(Session::get('count_view') > Constant::MAX_CONTENT_FREE){
-        Session::put('return_url', Request::url());
-        if(!Auth::user()){
-//            Session::put('popreg_require_login',1);
-//            return Redirect::to('/user/quick-package?return_url='.Request::url())->with('error', 'Hãy đăng ký gói cước để tiếp tục sử dụng dịch vụ.');
-            return Redirect::to('/user/login')->with('error', 'Bạn đã sử dụng hết 10 nội dung miễn phí. Hãy đăng nhập để tiếp tục sử dụng dịch vụ.');
-        }else{
-            if(Auth::user()->ssid != Session::getId()){
-                Auth::logout();
-                return Redirect::to('/user/login')->with('error', 'Tài khoản của bạn được đăng nhập từ nơi khác.');
-            }
-            if(!Auth::user()->registedPackage()){
-                return Redirect::to('/user/package')->with('error', 'Bạn đã sử dụng hết 10 nội dung miễn phí.');
-            }
-            else
-                Session::remove('count_view');
-        }
-    }
+//    if(!Session::has('count_view')){
+//        Session::put('count_view',1);
+//    }else{
+//        Session::put('count_view', Session::get('count_view')+1);
+//    }
+//    if(Session::get('count_view') > Constant::MAX_CONTENT_FREE){
+//        Session::put('return_url', Request::url());
+//        if(!Auth::user()){
+//            return Redirect::to('/user/login')->with('error', 'Bạn đã sử dụng hết 10 nội dung miễn phí. Hãy đăng nhập để tiếp tục sử dụng dịch vụ.');
+//        }else{
+//            if(Auth::user()->ssid != Session::getId()){
+//                Auth::logout();
+//                return Redirect::to('/user/login')->with('error', 'Tài khoản của bạn được đăng nhập từ nơi khác.');
+//            }
+//            if(!Auth::user()->registedPackage()){
+//                return Redirect::to('/user/package')->with('error', 'Bạn đã sử dụng hết 10 nội dung miễn phí.');
+//            }
+//            else
+//                Session::remove('count_view');
+//        }
+//    }
 });
 
 Route::filter('auth.basic', function()

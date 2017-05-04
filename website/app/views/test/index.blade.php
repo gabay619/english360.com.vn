@@ -5,8 +5,8 @@
 @section('content')
     <div class="content_tab_text">
         <h4 class="title_1">Cấu trúc bài kiểm tra</h4>
-        <p> - Thời gian làm bài: 20 phút</p>
-        <p> - Số lượng: 20 câu hỏi trắc nghiệm, viết lại câu, điền từ</p>
+        <p> - Thời gian làm bài: 25 phút</p>
+        <p> - Số lượng: 24 câu hỏi trắc nghiệm, viết lại câu, điền từ</p>
         <p> - Gồm 4 phần</p>
         <p> 1. Ngữ pháp</p>
         <p> 2. Từ vựng</p>

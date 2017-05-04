@@ -3,7 +3,9 @@
 class TestController extends \BaseController {
 
     public function __construct(){
-        $this->beforeFilter('auth');
+        $this->beforeFilter('auth', array('except'=> array(
+            'getSound'
+        )));
     }
 
 	public function getIndex(){
@@ -112,5 +114,9 @@ class TestController extends \BaseController {
         $rs = TestUser::where(array('uid'=>Auth::user()->_id))->first();
         if($rs) $rs->delete();
         echo 'ok';
+    }
+
+    public function getSound(){
+        return View::make('test.sound');
     }
 }
