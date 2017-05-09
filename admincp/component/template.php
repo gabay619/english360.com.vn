@@ -96,7 +96,7 @@
                     <ul role="menu" class="dropdown-menu">
                         <?php if(acceptpermiss("event")) { ?><li class="<?php echo $act=="event"?"active":"" ?>"><a href="?act=event">Danh sách sự kiện</a></li><?php } ?>
                         <?php if(acceptpermiss("event")) { ?><li class="<?php echo $tact=="event1"?"active":"" ?>"><a href="?act=event&tact=event1">Miễn phí 30 ngày</a></li><?php } ?>
-                        <?php if(acceptpermiss("import_hssv_view")) { ?><li class="<?php echo $act=="import"?"active":"" ?>"><a href="?act=import&tact=hssv_view">Đồng hành cùng HSSV</a></li><?php } ?>
+<!--                        --><?php //if(acceptpermiss("import_hssv_view")) { ?><!--<li class="--><?php //echo $act=="import"?"active":"" ?><!--"><a href="?act=import&tact=hssv_view">Đồng hành cùng HSSV</a></li>--><?php //} ?>
                     </ul>
                 </li>
                 <?php if(acceptpermiss("email")) { ?><li class="<?php echo $act=="email"?"active":"" ?>"><a href="?act=email">Email</a></li><?php } ?>

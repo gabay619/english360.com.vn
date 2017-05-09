@@ -166,6 +166,9 @@ if (isset($_POST['acpt'])) {
             theme_advanced_statusbar_location: "bottom",
             theme_advanced_resizing: true,
             apply_source_formatting: true,
+            relative_urls : false,
+            remove_script_host : false,
+            convert_urls : true,
             content_css: "plugin/tinymce/tinymce.css",
             external_image_list_url : "plugin/tinymce/myexternallist.js"
         });

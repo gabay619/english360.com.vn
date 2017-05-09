@@ -1,0 +1,83 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="assets/jquery/jquery-2.1.0.min.js"></script>
+    <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+    <link rel="stylesheet" href="assets/lib/font-awesome/css/font-awesome.min.css">
+</head>
+<body>
+    <div id="qArea">
+        <h3>1. <a class="listen" href="javascript:void(0)">Do you mind if I turn on the fan?</a></h3>
+        <ul style="list-style: none">
+            <li>A. <a class="listen" href="javascript:void(0)">Not for me</a></li>
+            <li>B. <a class="listen" href="javascript:void(0)">Not at all</a></li>
+            <li>C. <a class="listen" href="javascript:void(0)">You're welcome</a></li>
+            <li>D. <a class="listen" href="javascript:void(0)">Not enough</a></li>
+        </ul>
+    </div>
+    <button id="btnStart" onclick="startRecord()">Speak!<i></i></button>
+</body>
+</html>
+<script>
+    $(function(){
+        $('.listen').click(function () {
+            responsiveVoice.speak($(this).html())
+        })
+    });
+
+    function checkPhrase(ph1,ph2){
+        return ph1.toLowerCase().replace(/[^a-zA-Z]/g, "") == ph2.toLowerCase().replace(/[^a-zA-Z]/g, "");
+    }
+    var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+    var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
+    var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
+    var recognition = new SpeechRecognition();
+    var speechRecognitionList = new SpeechGrammarList();
+    //    speechRecognitionList.addFromString(grammar, 1);
+    //    recognition.grammars = speechRecognitionList;
+    //recognition.continuous = false;
+    recognition.lang = 'en-US';
+    //    recognition.interimResults = false;
+    //    recognition.maxAlternatives = 1;
+    startRecord = function() {
+        recognition.start();
+        $('#btnStart i').addClass('fa fa-volume-up');
+//        $('#recordBtn').prop('disabled',true);
+//        $('#mss').html('Nói vào micro...')
+//        console.log('Ready to receive a color command.');
+    }
+    recognition.onresult = function(event) {
+        // The SpeechRecognitionEvent results property returns a SpeechRecognitionResultList object
+        // The SpeechRecognitionResultList object contains SpeechRecognitionResult objects.
+        // It has a getter so it can be accessed like an array
+        // The [last] returns the SpeechRecognitionResult at the last position.
+        // Each SpeechRecognitionResult object contains SpeechRecognitionAlternative objects that contain individual results.
+        // These also have getters so they can be accessed like arrays.
+        // The [0] returns the SpeechRecognitionAlternative at position 0.
+        // We then return the transcript property of the SpeechRecognitionAlternative object
+        var last = event.results.length - 1;
+        alert(event.results[last][0].transcript);
+//        $('#recordBtn').prop('disabled',false);
+//        $('#mss').html('')
+
+//        var last = event.results.length - 1;
+//        var color = event.results[last][0].transcript;
+//
+//        diagnostic.textContent = 'Result received: ' + color + '.';
+//        bg.style.backgroundColor = color;
+//        console.log('Confidence: ' + event.results[0][0].confidence);
+    }
+
+    recognition.onspeechend = function() {
+        recognition.stop();
+        $('#btnStart i').removeClass();
+    }
+
+    //    recognition.onnomatch = function(event) {
+    //        diagnostic.textContent = "I didn't recognise that color.";
+    //    }
+
+    recognition.onerror = function(event) {
+        alert(event.error);
+    }
+</script>

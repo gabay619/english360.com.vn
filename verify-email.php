@@ -16,7 +16,7 @@ try{
     header('Location: thong-bao.html');exit;
 }
 
-if($emailC != $email || time() - $time > 30*60){
+if($emailC != $email){
     $_SESSION['flash_mss'] = 'Thao tác không hợp lệ.';
     header('Location: thong-bao.html');exit;
 }

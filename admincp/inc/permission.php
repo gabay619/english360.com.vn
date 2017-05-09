@@ -15,12 +15,23 @@ $module[] = array("name"=>"Category","key"=>"category","controller"=>"controller
 
 $module[] = array("name"=>"Import","key"=>"import","controller"=>"controller/import/index.php","permission"=>
     array(
+        array("name"=>"Import bài học","key"=>"import_insert"),
         array("name"=>"Import account event HSSV","key"=>"import_hssv"),
         array("name"=>"Xem account event HSSV","key"=>"import_hssv_view"),
         array("name"=>"Thêm account event HSSV","key"=>"import_hssv_insert"),
         array("name"=>"Gửi MT event HSSV","key"=>"import_hssv_mt"),
     )
 );
+
+//$module[] = array("name"=>"Import bài học","key"=>"import","controller"=>"controller/import/index.php","permission"=>
+//    array(
+//        array("name"=>"Import bài học","key"=>"import_hssv"),
+//        array("name"=>"Xem account event HSSV","key"=>"import_hssv_view"),
+//        array("name"=>"Thêm account event HSSV","key"=>"import_hssv_insert"),
+//        array("name"=>"Gửi MT event HSSV","key"=>"import_hssv_mt"),
+//    )
+//);
+
 
 
 $module[] = array("name"=>"Email","key"=>"email","controller"=>"controller/email/index.php","permission"=>

@@ -85,11 +85,11 @@ return array(
 
 		'mongodb' => array(
 			'driver'   => 'mongodb',
-			'host'     => 'friendclub.vn',
+			'host'     => 'localhost',
 			'port'     => 27017,
 			'database' => 'tagt',
 			'username' => 'root',
-			'password' => '123456$',
+			'password' => '',
 			'options' => array(
 				'db' => 'admin' // sets the authentication database required by mongo 3
 			)

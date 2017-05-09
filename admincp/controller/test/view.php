@@ -37,6 +37,10 @@ $typeArr = array(
     'test_doc' => 'Đọc hiểu'
 );
 ?>
+    <script src="/assets/lib/jquery-upload/js/vendor/jquery.ui.widget.js"></script>
+    <script src="/assets/lib/jquery-upload/js/jquery.iframe-transport.js"></script>
+    <script src="/assets/lib/jquery-upload/js/jquery.fileupload.js"></script>
+    <link rel="stylesheet" href="/assets/lib/jquery-upload/css/jquery.fileupload.css">
 <title><?php echo $title ?></title>
 <h5 class="text-center"><?php echo $title ?></h5>
 <div class="clearfix"></div>
@@ -61,6 +65,14 @@ $typeArr = array(
             <?php endforeach; ?>
         </select>
         <input type="submit" class="btn btn-primary" value="Tìm">
+    </div>
+    <div class="form-group">
+        <span class="btn btn-success fileinput-button">
+            <i class="glyphicon glyphicon-plus"></i>
+            <span>Import</span>
+            <!-- The file input field used as target for the file upload widget -->
+            <input id="fileupload" type="file" name="Filedata" data-url="incoming.php?act=uploadTest" />
+        </span>
     </div>
 </form>
 
@@ -99,4 +111,32 @@ $typeArr = array(
     </tbody>
 </table>
 </form>
+    <script>
+        $(document).ready(function() {
+            $('#fileupload').fileupload({
+                dataType: 'json',
+                done: function (e, data) {
+//                    console.log(data.result);return false;
+                    obj = data.result;
+                    if (obj.status == 200) {
+                        location.reload();
+//                        max = obj.rs.length;
+//                        for (i = 0; i <= obj.rs.length; i++) {
+//                            stt = parseInt(i) + 1;
+//                            htmlx = '<tr>' +
+//                                '<td>' + stt + '</td>' +
+//                                '<td class="ten-casi">' + obj.rs[i]['ca_si'] + '</td>' +
+//                                '</tr>';
+//                            $('#tableSong tbody').append(htmlx);
+//                        }
+                    } else {
+                        alert(obj.mss);
+                    }
+//                $.each(data.result.files, function (index, file) {
+//                    $('<p/>').text(file.name).appendTo(document.body);
+//                });
+                }
+            });
+        })
+    </script>
 <?php include("component/paging.php") ?>

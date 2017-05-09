@@ -75,6 +75,11 @@ if (isset($_POST['acpt'])) {
         $_POST['password'] = encryptpassword($_POST['password']);
     }
     else unset($_POST['password']);
+    if(!empty($_POST['pkg_expired'])){
+        $convertDate = DateTime::createFromFormat('d/m/Y', $_POST['pkg_expired'])->format('Y-m-d');
+//        $cond['datecreate']['$lte'] = (int)strtotime($convertEnddate. ' 23:59:59');
+        $_POST['pkg_expired'] = (int)strtotime($convertDate. ' 23:59:59');;
+    }else unset($_POST['pkg_expired']);
     if ($tact == "user_insert") {
         $userObject = (object) $userCl->findOne(array("username"=>$_POST['username']));
         if (!$userObject->_id) {
@@ -164,6 +169,14 @@ if ($tact != "user_insert") $_POST = (array)$userCl->findOne(array("_id" => "$id
 
         <div class="col-sm-10">
             <input type="text" name="email" class="form-control" value="<?php echo $_POST['email'] ?>">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Thời hạn khóa học</label>
+
+        <div class="col-sm-10">
+            <input type="text" name="pkg_expired" class="form-control datepicker" value="<?php echo isset($_POST['pkg_expired']) ? date('d/m/Y', $_POST['pkg_expired']) : '' ?>">
         </div>
     </div>
 

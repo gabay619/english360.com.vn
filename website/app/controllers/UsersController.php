@@ -142,11 +142,11 @@ class UsersController extends \BaseController {
         $token = Input::get('token');
         $arr = explode('+', base64_decode($token));
         //Expired after 10min
-        if(!isset($arr[1]) || time() - $arr[1] >= 600){
-            return Redirect::to('/thong-bao.html')->with('error', 'Thao tác không hợp lệ.');
-        }
+//        if(!isset($arr[1]) || time() - $arr[1] >= 600){
+//            return Redirect::to('/thong-bao.html')->with('error', 'Thao tác không hợp lệ.');
+//        }
         $email = $arr[0];
-        $user = User::where(array('email'=>$email, 'status'=>Constant::STATUS_DISABLE))->first();
+        $user = User::where(array('email'=>$email, 'status'=>array('$ne'=>Constant::STATUS_ENABLE)))->first();
         if(!$user){
             return Redirect::to('/thong-bao.html')->with('error', 'Thao tác không hợp lệ.');
         }
@@ -1005,7 +1005,7 @@ class UsersController extends \BaseController {
             $uid = $dataArr[0];
             $emailC = $dataArr[1];
             $time = $dataArr[2];
-            if($emailC != $email || time() - $time > 30*60){
+            if($emailC != $email){
                 throw new Exception('Thao tác không hợp lệ.');
             }
         }catch (Exception $e){

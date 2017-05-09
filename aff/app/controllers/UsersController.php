@@ -107,7 +107,7 @@ class UsersController extends \BaseController {
             $uid = $dataArr[0];
             $emailC = $dataArr[1];
             $time = $dataArr[2];
-            if($emailC != $email || time() - $time > 30*60){
+            if($emailC != $email){
                 throw new Exception('Thao tác không hợp lệ.');
             }
         }catch (Exception $e){

@@ -46,6 +46,8 @@ switch($act){
 	case 'exportWithdraw': exportWithdraw(); break;
 	case 'sendMail': sendMail(); break;
     case 'uploadExcel': uploadExcel(); break;
+    case 'uploadLession': uploadLession(); break;
+    case 'uploadTest': uploadTest(); break;
     case 'sendSMS': sendSMS(); break;
     case 'recheckCard': recheckCard(); break;
     case 'getLogBank': getLogBank(); break;
@@ -256,7 +258,7 @@ function changestatusnguphap() {
     if ($_SESSION['uinfoadmin']['_id']) {
         $atid = $_POST['atid'];
         $videoObj = $videoCl->findOne(array("_id"=> $atid), array("usercreate"));
-        if ($videoObj['usercreate']) {
+        if ($videoObj) {
             if (!acceptpermiss("nguphap_status")) {
                 $dtr['status'] = 403;
                 $dtr['mss'] = "Bạn không có quyền thực hiện chức năng này";
@@ -658,6 +660,148 @@ function sendSMS(){
     }
     $dtr['success'] = true;
     echo json_encode($dtr);exit;
+}
+
+function uploadTest(){
+    if(isset($_FILES["Filedata"])){
+        $ret = array();
+        $error = $_FILES["Filedata"]["error"];
+        include "../plugin/Classes/PHPExcel.php";
+//        $objPHPExcel = PHPExcel_IOFactory::load($_SERVER['DOCUMENT_ROOT']."/uploads/listphone.xlsx");
+//        print_r($objPHPExcel);die;
+
+        if(!is_array($_FILES["Filedata"]["name"])) //single file
+        {
+            $ext = pathinfo($_FILES["Filedata"]["name"], PATHINFO_EXTENSION);
+            if(in_array($ext,array('xls','xlsx'))){
+                $file_location = $_SERVER['DOCUMENT_ROOT'];
+                /*$excel_file = $_FILES["myfile"]["tmp_name"];*/
+                $filePart = "/uploads/" . $_FILES["Filedata"]["name"];
+                $excel_file = $file_location.$filePart;
+//                $excel_file = $_FILES["Filedata"]["tmp_name"];
+
+                try {
+                    $rs = move_uploaded_file($_FILES["Filedata"]["tmp_name"],$excel_file);
+//                    var_dump($rs);die;
+//                    print_r(file_exists($excel_file));die;
+                    $objPHPExcel = PHPExcel_IOFactory::load($excel_file);
+                } catch (Exception $e) {
+                    die($e->getMessage());
+                }
+//                print_r($excel_file);die;
+//                $objPHPExcel = PHPExcel_IOFactory::load($excel_file);
+                $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+                foreach ($sheetData as $k=>$aData){
+                    if($k>1){
+                        _importTest($aData, $k);
+                    }
+                }
+                unlink($excel_file);
+                $ret= array('status'=>200,'mss'=>'Import thành công');
+            }else{
+                $ret= array('status'=>500,'mss'=>'File không đúng định dạng');
+            }
+        }
+    }else{
+        $ret= array('status'=>500,'mss'=>'File không tồn tại');
+    }
+    echo json_encode($ret);exit;
+}
+
+function _importTest($data, $k){
+    global $dbmg;
+    $testcl = $dbmg->test;
+    $title = $data['A'];
+    if(empty($title)) return;
+    $category = $data['F'];
+    $level = intval($data['E']);
+    $content = $data['B'];
+    $key = $data['C'];
+    $type = $data['D'];
+    $showContent = '';
+    if($type == 'tracnghiem'){
+        $contentArr = explode('A.',$content);
+        $showContent .= '<p>'.$contentArr[0].'</p>';
+        $showContent .= '<table class="tracnghiem" style="width: 100%;" border="0">
+                            <tbody>
+                            <tr>';
+        if(isset($contentArr[1])){
+            $aArr = explode('B. ', $contentArr[1]);
+            $alt = $key == 'A' ? '1' : '0';
+            $showContent .= '<td>A. <img class="CheckBox" src="../resource/images/icon_checkbox.png" alt="'.$alt.'" />'.$aArr[0].'</td>';
+            if(isset($aArr[1])){
+                $bArr = explode('C. ', $aArr[1]);
+                $alt = $key == 'B' ? '1' : '0';
+                $showContent .= '<td>B. <img class="CheckBox" src="../resource/images/icon_checkbox.png" alt="'.$alt.'" />'.$bArr[0].'</td></tr>';
+                if(isset($bArr[1])){
+                    $cArr = explode('D. ', $bArr[1]);
+                    $alt = $key == 'C' ? '1' : '0';
+                    $showContent .= '<tr><td>C. <img class="CheckBox" src="../resource/images/icon_checkbox.png" alt="'.$alt.'" />'.$cArr[0].'</td>';
+                    if(isset($cArr[1])){
+                        $alt = $key == 'D' ? '1' : '0';
+                        $showContent .= '<td>D. <img class="CheckBox" src="../resource/images/icon_checkbox.png" alt="'.$alt.'" />'.$cArr[1].'</td>';
+                    }
+                }
+            }
+        }
+        $showContent .= '</tr>
+                            </tbody>
+                        </table>';
+    }elseif($type == 'dientu'){
+        $showContent = str_replace('_','<img class="InputQuestion" src="../resource/images/icon_input.png" alt="'.$key.'" />',$content);
+    }
+    $testcl->insert(array(
+        '_id' => strval(time()).$k,
+        'name' => $title,
+        'level' => $level,
+        'datecreate'=> time(),
+        'usercreate' => isset($_SESSION['uinfoadmin']) ? $_SESSION['uinfoadmin']['_id'] : '0',
+        'type' => 'test_'.$category,
+        'content' => $showContent,
+    ));
+}
+
+function uploadLession(){
+    if(isset($_FILES["Filedata"])){
+        $ret = array();
+        $error = $_FILES["Filedata"]["error"];
+        include "../plugin/Classes/PHPExcel.php";
+//        $objPHPExcel = PHPExcel_IOFactory::load($_SERVER['DOCUMENT_ROOT']."/uploads/listphone.xlsx");
+//        print_r($objPHPExcel);die;
+
+        if(!is_array($_FILES["Filedata"]["name"])) //single file
+        {
+            $ext = pathinfo($_FILES["Filedata"]["name"], PATHINFO_EXTENSION);
+            if(in_array($ext,array('xls','xlsx'))){
+                $file_location = $_SERVER['DOCUMENT_ROOT'];
+                /*$excel_file = $_FILES["myfile"]["tmp_name"];*/
+                $filePart = "/uploads/" . $_FILES["Filedata"]["name"];
+                $excel_file = $file_location.$filePart;
+//                $excel_file = $_FILES["Filedata"]["tmp_name"];
+
+                try {
+                    $rs = move_uploaded_file($_FILES["Filedata"]["tmp_name"],$excel_file);
+//                    var_dump($rs);die;
+//                    print_r(file_exists($excel_file));die;
+                    $objPHPExcel = PHPExcel_IOFactory::load($excel_file);
+                } catch (Exception $e) {
+                    die($e->getMessage());
+                }
+//                print_r($excel_file);die;
+//                $objPHPExcel = PHPExcel_IOFactory::load($excel_file);
+                $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+
+//                print_r($sheetData);die;
+//                unlink($excel_file);
+                $ret= array('status'=>200,'mss'=>'Import thành công', 'data' => $sheetData);
+            }else{
+                $ret= array('status'=>500,'mss'=>'File không đúng định dạng');
+            }
+        }
+    }else{
+        $ret= array('status'=>500,'mss'=>'File không tồn tại');
+    }
+    echo json_encode($ret);exit;
 }
 
 function uploadExcel(){
