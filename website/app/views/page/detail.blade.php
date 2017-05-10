@@ -7,13 +7,13 @@
                 <div class="breadcrum">
                     <ul class="ul_breadcrum">
                         <li><a href="/">Trang chủ</a></li>
-                        <li><a href="">{{$item ? $item->getName() : 'Lỗi'}}</a></li>
+                        <li><a href="">{{$item ? $item->name : 'Lỗi'}}</a></li>
                     </ul>
                 </div>
                 <div class="detail_default">
                     @if($item)
                     <h2 class="heading4 heading_detail">
-                        {{$item->getName()}}
+                        {{$item->name}}
                     </h2>
                     <div class="table_detail row" style="margin-top: 25px">
                         {{$item->content}}

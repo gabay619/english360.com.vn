@@ -688,14 +688,23 @@ function uploadTest(){
                 } catch (Exception $e) {
                     die($e->getMessage());
                 }
-//                print_r($excel_file);die;
-//                $objPHPExcel = PHPExcel_IOFactory::load($excel_file);
-                $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-                foreach ($sheetData as $k=>$aData){
-                    if($k>1){
-                        _importTest($aData, $k);
+                $num = $objPHPExcel->getSheetCount();
+//                $count = 0;
+                for($i=0; $i<$num; $i++){
+                    $objPHPExcel->setActiveSheetIndex($i);
+                    $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+//                    print_r($sheetData);
+                    foreach ($sheetData as $k=>$aData){
+                        if($k>1){
+//                            echo $aData['B'].PHP_EOL;
+                            _importTest($aData, $i.$k);
+//                            echo $count++.':'.$aData['D'];
+                        }
                     }
+//                    die;
                 }
+//                die;
+//                echo $count;
                 unlink($excel_file);
                 $ret= array('status'=>200,'mss'=>'Import thành công');
             }else{
@@ -712,16 +721,17 @@ function _importTest($data, $k){
     global $dbmg;
     $testcl = $dbmg->test;
     $title = $data['A'];
-    if(empty($title)) return;
+    if(empty($title)){ echo $k; return;}
     $category = $data['F'];
     $level = intval($data['E']);
     $content = $data['B'];
     $key = $data['C'];
     $type = $data['D'];
     $showContent = '';
+//    echo str_replace("\n",'<br>',$content);exit;
     if($type == 'tracnghiem'){
         $contentArr = explode('A.',$content);
-        $showContent .= '<p>'.$contentArr[0].'</p>';
+        $showContent .= '<p>'.str_replace(array("_","\n"),array(".....","<br>"),$contentArr[0]).'</p>';
         $showContent .= '<table class="tracnghiem" style="width: 100%;" border="0">
                             <tbody>
                             <tr>';
@@ -748,7 +758,9 @@ function _importTest($data, $k){
                             </tbody>
                         </table>';
     }elseif($type == 'dientu'){
-        $showContent = str_replace('_','<img class="InputQuestion" src="../resource/images/icon_input.png" alt="'.$key.'" />',$content);
+        $key = str_replace('/','|',$key);
+        $showContent = str_replace(array("_","\n"),array('<img class="InputQuestion" src="../resource/images/icon_input.png" alt="'.$key.'" />','<br>'),$content);
+//        echo $showContent.PHP_EOL;
     }
     $testcl->insert(array(
         '_id' => strval(time()).$k,

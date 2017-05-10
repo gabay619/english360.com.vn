@@ -2,7 +2,7 @@
 $title = "Quản lý Trang";
 $pageCl = $dbmg->page;
 #condition
-$cond = array('status' => Constant::STATUS_ENABLE);
+$cond = array();
 $sort = array("_id" => -1);
 $list = $pageCl->find($cond)->sort($sort);
 $typeArr = array(
@@ -34,6 +34,7 @@ $onArr = array(
                 <th>Tên trang</th>
                 <th>Nơi hiển thị</th>
                 <th>Ngày tạo</th>
+                <th>Trạng thái</th>
                 <th>Thao tác</th>
             </tr>
             </thead>
@@ -46,6 +47,7 @@ $onArr = array(
                     <td><?php echo $item['name']?></td>
                     <td><?php echo $onArr[$item['on']]?></td>
                     <td><?php echo date("d-m-Y H:i:s", $item['_id']) ?></td>
+                    <td><?php echo $item['status'] === "0" ?  "Ẩn": "Hiện"; ?></td>
                     <td>
                         <?php if(acceptpermiss("page_update")) { ?><a href="<?php echo cpagerparm("tact,status,id") ?>tact=page_update&id=<?php echo $item['_id'] ?>">Sửa</a> |<?php }?>
                         <?php if(acceptpermiss("page_delete")) { ?><a onclick="return confirm('Bạn chắc chắn chứ?')" href="<?php echo cpagerparm("tact,status,id") ?>tact=page_delete&id=<?php echo $item['_id'] ?>">Xóa</a><?php }?>

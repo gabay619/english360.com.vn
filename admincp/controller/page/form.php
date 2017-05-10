@@ -24,7 +24,9 @@ if (isset($_POST['acpt'])) {
     $redirect = $_POST['redirect'];
     unset($_POST['redirect']);
     unset($_POST['acpt']);
-    $_POST['slug'] = Common::utf8_to_url($_POST['name']);
+    if(empty($_POST['slug'])){
+        $_POST['slug'] = Common::utf8_to_url($_POST['name']);
+    }
     if ($tact == "page_insert") {
         $_POST['_id'] = (string)strtotime("now");
         $_POST['datecreate'] = time();
@@ -58,6 +60,13 @@ if ($tact != "page_insert") $_POST = (array)$pagecl->findOne(array("_id" => "$id
 
                 <div class="col-sm-10">
                     <input type="text" name="name" class="form-control" value="<?php echo $_POST['name'] ?>" placeholder="Tên trang">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Tham số URL</label>
+
+                <div class="col-sm-10">
+                    <input type="text" name="slug" class="form-control" value="<?php echo $_POST['slug'] ?>" placeholder="VD: gioi-thieu, dieu-khoan">
                 </div>
             </div>
 <!--            <div class="form-group">-->
