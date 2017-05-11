@@ -3,6 +3,7 @@ $title = "Thông tin user";
 $userCl = $dbmg->user;
 $notifycl = $dbmg->notify;
 $id = $_GET['id'];
+//print_r($_SESSION['uinfoadmin'])
 ?>
 <title><?php echo $title ?></title>
 <h5 class="text-center"><?php echo $title ?></h5>
@@ -16,9 +17,10 @@ if (isset($_POST['acpt'])) {
     $_POST['_id'] = "" . strtotime("now");
     $_POST['uid'] = $id;
     $_POST['status'] = "1";
-    $_POST['usercreate'] = $_SESSION['uinfo']['_id'];
-    $_POST['datecreate'] = strtotime("now");
-    $_POST['type'] = "notify";
+    $_POST['usercreate'] = $_SESSION['uinfoadmin']['_id'];
+    $_POST['datecreate'] = time();
+    $_POST['type'] = Constant::TYPE_NOTIFY;
+    $_POST['mss'] = $_SESSION['uinfoadmin']['displayname'].': '.$_POST['mss'];
     $notifycl->insert($_POST);
     // Send Notify
     /*include_once ('plugin/socketio/socket.io.php');

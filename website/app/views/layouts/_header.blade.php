@@ -166,12 +166,12 @@
             }
         });
         @if(Auth::user())
-        {{--$('.userlink_btn').click(function(){--}}
-                {{--$.post('/user/load-unread-notify', {--}}
-                    {{--_token : '{{ csrf_token() }}'--}}
-                {{--}, function(result){--}}
-                    {{--$('.user_notification strong').html('('+result+')');--}}
-                {{--});--}}
+        $('.userlink_btn').click(function(){
+                $.post('/user/load-unread-notify', {
+                    _token : '{{ csrf_token() }}'
+                }, function(result){
+                    $('.user_notification strong').html('('+result+')');
+                });
 
                 {{--$.post('/user/check-package', {--}}
                     {{--_token : '{{ csrf_token() }}'--}}
@@ -179,7 +179,7 @@
                     {{--if(result.success)--}}
                         {{--$('.user_control_link a:first-child').html('Thông tin gói cước');--}}
                 {{--});--}}
-        {{--});--}}
+        });
 
 
         @endif

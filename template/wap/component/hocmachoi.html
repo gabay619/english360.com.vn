@@ -88,27 +88,27 @@
 
     function checkCookieForPopup() {
         var now = Date.now();
-        var popup_count = getCookie("popup_{{$popup->_id}}");
-        var popup_time = getCookie("popup_time_{{$popup->_id}}");
+        var popup_count = getCookie("popup_{$popup._id}");
+        var popup_time = getCookie("popup_time_{$popup._id}");
         popup_time = popup_time == "" ? 0 : popup_time;
         timeout = {$popup.timeout};
-    if((now - popup_time)/1000 < {$popup.distance_time}){
-        timeout = timeout + {$popup.distance_time} - (now - popup_time)/1000;
-    }
+        if((now - popup_time)/1000 < {$popup.distance_time}){
+            timeout = timeout + {$popup.distance_time} - (now - popup_time)/1000;
+        }
 
-    console.log(timeout);
-    if(popup_count == "")
-        popup_count = 0;
-    if(popup_count < {$popup.count_on_day}){
-        setTimeout(function () {
-            showPopup();
-            setCookie("popup_{$popup._id}", parseInt(popup_count)+1, 1);
-            setCookie("popup_time_{$popup._id}", now , 1);
-//            setCookie("popup_timeout_{$popup.id}", "" , 1);
-        }, timeout * 1000)
-    }
-    console.log((now - popup_time)/1000);
-    console.log(popup_count);
+        console.log(timeout);
+        if(popup_count == "")
+            popup_count = 0;
+        if(popup_count < {$popup.count_on_day}){
+            setTimeout(function () {
+                showPopup();
+                setCookie("popup_{$popup._id}", parseInt(popup_count)+1, 1);
+                setCookie("popup_time_{$popup._id}", now , 1);
+    //            setCookie("popup_timeout_{$popup.id}", "" , 1);
+            }, timeout * 1000)
+        }
+        console.log((now - popup_time)/1000);
+        console.log(popup_count);
     }
 
     function showPopup(){

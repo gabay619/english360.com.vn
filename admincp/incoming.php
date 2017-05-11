@@ -41,6 +41,7 @@ switch($act){
     case 'exportAds': exportAds(); break;
     case 'exportHssv': exportHssv(); break;
 	case 'exportHistory': exportHistory(); break;
+	case 'exportEmail': exportEmail(); break;
 	case 'exportEventUser': exportEventUser(); break;
 	case 'exportLog3g': exportLog3g(); break;
 	case 'exportWithdraw': exportWithdraw(); break;
@@ -1826,6 +1827,73 @@ function exportEventUser(){
 // Redirect output to a client’s web browser (Excel2007)
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     header('Content-Disposition: attachment;filename="ExportHistory.xlsx"');
+    header('Cache-Control: max-age=0');
+// If you're serving to IE 9, then the following may be needed
+    header('Cache-Control: max-age=1');
+
+// If you're serving to IE over SSL, then the following may be needed
+    header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+    header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+    header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+    header ('Pragma: public'); // HTTP/1.0
+
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    $objWriter->save('php://output');die;
+}
+
+function exportEmail(){
+    global $dbmg;
+    ini_set('memory_limit', '2048M');
+    $usercl = $dbmg->user;
+    $cond['email'] = array('$nin'=>array(null,''),'$exists'=>true);
+    $startdate = $_GET['start'];
+    $enddate = $_GET['end'];
+    if(isset($startdate) && !empty($startdate)){
+        $convertStartdate = DateTime::createFromFormat('d/m/Y', $startdate)->format('Y-m-d');
+        $cond['datecreate']['$gte'] = (int)strtotime($convertStartdate. ' 00:00:00');
+    }
+    if(isset($enddate) && !empty($enddate)){
+        $convertEnddate = DateTime::createFromFormat('d/m/Y', $enddate)->format('Y-m-d');
+        $cond['datecreate']['$lte'] = (int)strtotime($convertEnddate. ' 23:59:59');
+    }
+    if(isset($_GET['email']) && !empty($_GET['email'])){
+        $cond['email'] = $_GET['email'];
+    }
+
+    $sort = array("datecreate" => -1);
+    $cursor = $usercl->find($cond)->sort($sort);
+    require_once __DIR__.'/plugin/phpexcel/Classes/PHPExcel.php';
+    $objPHPExcel = new PHPExcel();
+
+    $objPHPExcel->getProperties()->setCreator("Nguyen Cong Chinh")
+        ->setLastModifiedBy("Nguyen Cong Chinh")
+        ->setTitle("Export Email")
+        ->setSubject("Export Email")
+        ->setDescription("Export Email")
+        ->setKeywords("Export Email")
+        ->setCategory("Export Email");
+//    echo '<table>';
+    $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue('A1', 'Email')
+        ->setCellValue('B1', 'Date');
+    $column = 2;
+    foreach ($cursor as $k=>$val){
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A'.$column, $val['email'])
+            ->setCellValue('B'.$column, date('d/m/Y', $val['datecreate']));
+        $column++;
+    }
+
+    $objPHPExcel->getActiveSheet()->setTitle('Simple');
+    $objPHPExcel->setActiveSheetIndex(0);
+
+// Set active sheet index to the first sheet, so Excel opens this as the first sheet
+    $objPHPExcel->setActiveSheetIndex(0);
+//    print_r($objPHPExcel);die;
+
+// Redirect output to a client’s web browser (Excel2007)
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="ExportEmail.xlsx"');
     header('Cache-Control: max-age=0');
 // If you're serving to IE 9, then the following may be needed
     header('Cache-Control: max-age=1');

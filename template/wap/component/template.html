@@ -25,9 +25,42 @@
     <script type="text/javascript">jwplayer.key="sP/q5QP+35gezFLCM/h47ykgSjaKjE0jUjCEfQ==";</script>
     <script src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/blockUI.js"></script>
+    <script src="http://connect.facebook.net/en_US/all.js"></script>
 </head>
 
 <body>
+<div id="fb-root"></div>
+<script>
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : '1539737363001576',
+            xfbml      : true,
+            version    : 'v2.7'
+        });
+    };
+
+    //    (function(d, s, id) {
+    //        var js, fjs = d.getElementsByTagName(s)[0];
+    //        if (d.getElementById(id)) return;
+    //        js = d.createElement(s); js.id = id;
+    //        js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.4&appId=1539737363001576";
+    //        fjs.parentNode.insertBefore(js, fjs);
+    //    }(document, 'script', 'facebook-jssdk'));
+
+    FB.api('/me/likes?fields=id', function(response) {
+        console.log(response);
+        var our_page_id = '986816931397636';
+        var user_is_fan = false;
+        var likes_count = response.data.length;
+        for(i = 0; i < likes_count; i++) {
+            if(response.data[i].id === our_page_id) {
+                user_is_fan = true;
+                break;
+            }
+        }
+        console.log(user_is_fan)
+    });
+</script>
 <div class="wrapper">
 {include="component/sidebar"}
 <div class="carea">

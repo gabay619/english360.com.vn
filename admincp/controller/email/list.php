@@ -52,6 +52,10 @@ if (isset($_POST['acpt'])) {
     $title = $_POST['title'];
     echo $title;
 }
+
+parse_str($_SERVER['QUERY_STRING'], $param);
+unset($param['act']);
+$exportUrl = 'incoming.php?act=exportEmail&'.http_build_query($param);
 ?>
 <script type="text/javascript" src="plugin/uploadify/jquery.uploadify.min.js?v=<?php echo strtotime("now") ?>"></script>
 <link rel="stylesheet" type="text/css" href="plugin/uploadify/uploadify.css" />
@@ -82,6 +86,9 @@ if (isset($_POST['acpt'])) {
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-success" value="Tìm kiếm">
+            </div>
+            <div class="form-group">
+                <a class="btn btn-primary" href="<?php echo $exportUrl ?>"><i class="glyphicon glyphicon-export"></i> Export</a>
             </div>
         </form>
         <form action="<?php echo cpagerparm("tact,id,status") ?>tact=bl_delete&tab=partner" method="post">

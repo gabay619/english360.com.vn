@@ -67,7 +67,7 @@ $cpage = $cp;
             <td><?php echo date("d-m-Y H:i:s", $item['datecreate']) ?></td>
             <td><?php echo isset($item['pkg_expired']) ? ($item['pkg_expired'] > time() ? date("d-m-Y", $item['pkg_expired']) : 'Hết hạn') : 'Chưa đăng ký' ?></td>
             <td>
-                <?php if(acceptpermiss("user_sendmail")) { ?><a href="<?php echo cpagerparm("tact,status,id") ?>tact=user_sendmail&id=<?php echo $item['_id'] ?>">Gửi thư</a> |<?php } ?>
+                <?php if(acceptpermiss("user_sendmail")) { ?><a href="<?php echo cpagerparm("act,tact,status,id") ?>act=email&tact=email_new&email=<?php echo $item['email'] ?>">Gửi email</a> |<?php } ?>
                 <?php if(acceptpermiss("user_sendnotify")) { ?><a href="<?php echo cpagerparm("tact,status,id") ?>tact=user_sendnotify&id=<?php echo $item['_id'] ?>">Gửi thông báo</a> |<?php } ?>
                 <?php if(acceptpermiss("user_rolegroup_insert")) { ?><a href="<?php echo cpagerparm("tact,status,id") ?>tact=user_rolegroup_insert&id=<?php echo $item['_id'] ?>">Nhóm quyền</a> |<?php } ?>
                 <?php if(acceptpermiss("user_rolegroup_permission")) { ?><a href="<?php echo cpagerparm("tact,status,id") ?>tact=user_rolegroup_permission&id=<?php echo $item['_id'] ?>">Quyền riêng</a> |<?php } ?>
