@@ -4,7 +4,8 @@ class TestController extends \BaseController {
 
     public function __construct(){
         $this->beforeFilter('auth', array('except'=> array(
-            'getSound'
+            'getSound',
+            'getSound2'
         )));
     }
 
@@ -118,5 +119,9 @@ class TestController extends \BaseController {
 
     public function getSound(){
         return View::make('test.sound');
+    }
+
+    public function getSound2(){
+        return View::make('test.sound2');
     }
 }

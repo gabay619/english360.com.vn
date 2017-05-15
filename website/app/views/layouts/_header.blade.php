@@ -24,6 +24,7 @@
     <script type="text/javascript" src="/assets/lib/jwplayer-7.4.2/jwplayer.js"></script>
     <script type="text/javascript">jwplayer.key="sP/q5QP+35gezFLCM/h47ykgSjaKjE0jUjCEfQ==";</script>
     <script src="/assets/js/jquery.min.js"></script>
+    {{--<script src="/wapsite/as"></script>--}}
     <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="/assets/lib/jquery-ui/jquery-ui.min.js"></script>
     <script src="http://connect.facebook.net/en_US/all.js"></script>
@@ -45,7 +46,7 @@
     <!-- End Facebook Pixel Code -->
 </head>
 <body>
-@if(!Network::is3g() || !Network::is3gmobifone())
+
     @include("layouts.ga")
 <div id="fb-root"></div>
 <script>
@@ -79,7 +80,6 @@
         console.log(user_is_fan)
     });
 </script>
-@endif
 <div class="header">
     <div class="w1170">
         <div class="top_header">
