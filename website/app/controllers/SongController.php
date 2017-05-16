@@ -128,8 +128,7 @@ class SongController extends BaseController
                 'uid' => Auth::user() ? Auth::user()->_id : '',
                 'url' => Request::url(),
                 'status' => Constant::STATUS_ENABLE,
-                'phone' => Auth::user() ? Auth::user()->phone : '',
-                'price' => 0,
+                'email' => Auth::user() ? Auth::user()->email : '',
                 'ref' => Input::get('ref','')
         );
         HisLog::insert($newHistoryLog);

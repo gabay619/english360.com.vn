@@ -23,6 +23,20 @@ class TestController extends \BaseController {
         $firstTest = $testUser->getNewQuestion(1,'test_nguphap');
         if(!$firstTest)
             return Redirect::to('/thong-bao.html')->with('error', 'Bạn đã trả lời hết câu hỏi trong kho dữ liệu, vui lòng trở lại sau.');
+        //Log
+        $newHistoryLog = array(
+            '_id' => strval(time().rand(10,99)),
+            'datecreate' => time(),
+            'action' => HistoryLog::LOG_TEST,
+            'chanel' => HistoryLog::CHANEL_WEB,
+            'ip' => Network::ip(),
+            'uid' => Auth::user() ? Auth::user()->_id : '',
+            'url' => Request::url(),
+            'status' => Constant::STATUS_ENABLE,
+            'email' => Auth::user() ? Auth::user()->email : '',
+            'ref' => Input::get('ref','')
+        );
+        HisLog::insert($newHistoryLog);
         return View::make('test.run', array(
             'firstTest' => $firstTest
         ));

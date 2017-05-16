@@ -30,6 +30,7 @@ class HistoryLog
     const LOG_HUY_GOI_CUOC = 'canpack';
     const LOG_EDIT_PROFILE = 'e_profile';
     const LOG_HOI_DAP = 'hoidap';
+    const LOG_TEST = 'test';
 
     //log chanel
     const CHANEL_WEB = 'WEB';
@@ -58,7 +59,8 @@ class HistoryLog
             self::LOG_XEM_BAI_HOC_VIDEO => 'Xem bài học: Video',
             self::LOG_XEM_BAI_HOC_RADIO => 'Xem bài học: Radio',
             self::LOG_DANG_XUAT => 'Đăng xuất',
-            self::LOG_TU_DIEN => 'Tra từ điển'
+            self::LOG_TU_DIEN => 'Tra từ điển',
+            self::LOG_TEST => 'Test trình độ'
         );
     }
 

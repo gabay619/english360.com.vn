@@ -92,7 +92,7 @@ class ThuvienController extends \BaseController {
                 'uid' => Auth::user() ? Auth::user()->_id : '',
                 'url' => Request::url(),
                 'status' => Constant::STATUS_ENABLE,
-                'phone' => Auth::user() ? Auth::user()->phone : '',
+                'email' => Auth::user() ? Auth::user()->email : '',
                 'price' => 0,
 				'ref' => Input::get('ref','')
         );
