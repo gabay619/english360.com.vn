@@ -11,7 +11,10 @@
                 <a href="/userprofile.php" class="btn btnlogin_sb"><i class="icon_logo"></i>
                     <div class="clearfix"></div>
                     <span>Xin chào, <?php echo getFullDisplayName($SESSION["uinfo"]); ?> </span>
+                    <span>Số dư của bạn: <b style="color: #f4333c" class="check_cash">0đ</b></span>
+                    <span class="check_package"></span>
                 </a>
+                <a href="/charge.php"></a>
 
             <?php } ?>
 
@@ -25,13 +28,13 @@
             <li><a href="/category.php?catid=1427344702"><i class="icon-hocaudio"></i>Radio</a></li>
             <li><a href="/category.php?catid=1427183137"><i class="icon-hocthanhngu"></i>Thành ngữ</a></li>
             <li><a href="/category.php?catid=1428995217"><i class="icon-hangngay"></i>Tiếng Anh hàng ngày</a></li>
-            <li><a href="/category.php?catid=1425608584"><i class="icon-tudien"></i>Từ điển</a></li>
+            <li><a href="/category.php?catid=1495419459"><i class="icon-tudien"></i>Chia sẻ</a></li>
             <li><a href="/luyennguam.php"><i class="icon-nguam"></i>Ngữ âm</a></li>
             <li><a href="/category.php?catid=1427344743"><i class="icon-kinhnghiem"></i>Kinh nghiệm</a></li>
             <li><a href="/hoidap.php"><i class="icon-hmc"></i>Hỏi đáp</a></li>
             <li><a href="/page.php?slug=gioi-thieu"><i class="icon-gioithieu"></i>Giới thiệu dịch vụ</a></li>
-            <li><a href="https://itunes.apple.com/us/app/english360/id1128662378" target="_blank"><i class="icon-gioithieu"></i>Tải app iOS</a></li>
-            <li><a href="http://english360.vn/uploads/app/English360_309.apk" target="_blank"><i class="icon-gioithieu"></i>Tải app Android</a></li>
+            <!--<li><a href="https://itunes.apple.com/us/app/english360/id1128662378" target="_blank"><i class="icon-gioithieu"></i>Tải app iOS</a></li>-->
+            <!--<li><a href="http://english360.vn/uploads/app/English360_309.apk" target="_blank"><i class="icon-gioithieu"></i>Tải app Android</a></li>-->
             <li><a href="/page.php?slug=dieu-khoan"><i class="icon-dieukhoan"></i>Điều khoản sử dụng </a></li>
             <!--<?php if( isset($SESSION["uinfo"]) ){ ?>-->
             <!--<li><a href="/logout.php">Thoát </a></li>-->

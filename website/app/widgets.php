@@ -50,6 +50,8 @@ Widget::register('header_nav', function(){
     $dailyParent = Category::where('parentid', $thuvienId)->where('type', Constant::TYPE_DAILY)->first();
     //Thành ngữ
     $idiomParent = Category::where('parentid', $thuvienId)->where('type', Constant::TYPE_IDIOM)->first();
+    //Chia sẻ
+    $shareParent = Category::where('parentid', $thuvienId)->where('type', Constant::TYPE_SHARE)->first();
 
     //Giao tiếp cơ bản
     $gtcbParent = Category::whereIn('parentid', array('0',0))->where('type', Constant::TYPE_GTCB)->first();
@@ -72,7 +74,8 @@ Widget::register('header_nav', function(){
             'famousParent' => $famousParent,
             'expParent' => $expParent,
             'dailyParent' => $dailyParent,
-            'idiomParent' => $idiomParent
+            'idiomParent' => $idiomParent,
+            'shareParent' => $shareParent,
     ));
 });
 

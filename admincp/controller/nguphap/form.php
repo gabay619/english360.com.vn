@@ -342,14 +342,56 @@ else{
             file_browser_callback: "ajaxfilemanager",
             theme_advanced_buttons1: "video,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,outdent,indent,blockquote,formatselect,fontselect,fontsizeselect",
             theme_advanced_buttons2: "pastetext,pasteword,|,bullist,numlist,|,undo,redo,|,link,unlink,image,help,code,|,preview,|,forecolor,backcolor,removeformat,|,charmap,media,|,fullscreen",
-            theme_advanced_buttons3: "tablecontrols",
+            theme_advanced_buttons3: "tablecontrols,|,template",
             theme_advanced_toolbar_location: "top",
             theme_advanced_toolbar_align: "left",
             theme_advanced_statusbar_location: "bottom",
             theme_advanced_resizing: true,
             apply_source_formatting: true,
             content_css: "plugin/tinymce/tinymce.css",
-            external_image_list_url : "plugin/tinymce/myexternallist.js"
+            external_image_list_url : "plugin/tinymce/myexternallist.js",
+            template_external_list_url : "plugin/tinymce/myexternallist.js",
+            advlink_styles: 'voice',
+            advlist_bullet_styles: [{
+                title: 'Red Hand',
+                styles: {
+                    listStyleImage: "url('/assets/icon/hand.png')"
+                }
+            }, {
+                title: 'Red Star',
+                styles: {
+                    listStyleImage: "url('/assets/icon/star.png')"
+                }
+            },{
+                title: 'Red Tick',
+                styles: {
+                    listStyleImage: "url('/assets/icon/check.png')"
+                }
+            },{
+                title: 'Default',
+                styles: {
+                    listStyleType: '',
+                    listStyleImage: ""
+                }
+            }, {
+                title: 'Circle',
+                styles: {
+                    listStyleType: 'circle',
+                    listStyleImage: ""
+                }
+            }, {
+                title: 'Disc',
+                styles: {
+                    listStyleType: 'disc',
+                    listStyleImage: ""
+                }
+            }, {
+                title: 'Square',
+                styles: {
+                    listStyleType: 'square',
+                    listStyleImage: ""
+                }
+            }]
         });
     });
     function ajaxfilemanager(field_name, url, type, win) {

@@ -26,6 +26,7 @@ class Common
         $categorytype[] = array("name" => "Thư viện", "key" => Constant::TYPE_THUVIEN);
         $categorytype[] = array("name" => "Học mà chơi", "key" => Constant::TYPE_HOCMACHOI);
         $categorytype[] = array("name" => "Hỏi đáp", "key" => Constant::TYPE_HOIDAP);
+        $categorytype[] = array("name" => "Chia sẻ", "key" => Constant::TYPE_SHARE);
         return $categorytype;
     }
 

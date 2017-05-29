@@ -15,6 +15,20 @@
     <script src="/assets/lib/jquery-ui/jquery-ui.min.js"></script>
 </head>
 <body>
+<button id="example" type="button" class="btn btn-default">
+    Popover on bottom
+</button>
+<script>
+    $('#example').popover({
+        content: '<strong style="color:red">TEST</strong>',
+        placement: 'bottom',
+        html: true
+//        trigger: 'focus'
+    }).popover('toggle');
+//    $('#example')
+
+</script>
+
 <div class="container">
     <div class="detail_default">
         <div class="url_video_area center row">

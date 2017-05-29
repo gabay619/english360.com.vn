@@ -68,10 +68,12 @@ class HomeController extends BaseController {
 
         $list = array();
         $cond = array(
-            'namenonutf' => $keywordRegex,
+//            'namenonutf' => $keywordRegex,
+            'calendar' => array('$lte'=> time()),
             '$or' => array(
-                array('calendar' => array('$exists'=>false)),
-                array('calendar' => array('$lte'=> time()))
+                array('namenonutf' => $keywordRegex),
+                array('avatar' => $keywordRegex),
+                array('lession' => $keywordRegex),
             ),
             'status' => Constant::STATUS_ENABLE
         );

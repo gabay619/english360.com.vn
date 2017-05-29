@@ -23,10 +23,44 @@
     <script type="text/javascript" src="/assets/lib/jwplayer-7.4.2/polyfills.base64.js"></script>
     <script type="text/javascript" src="/assets/lib/jwplayer-7.4.2/polyfills.promise.js"></script>
     <script type="text/javascript">jwplayer.key="sP/q5QP+35gezFLCM/h47ykgSjaKjE0jUjCEfQ==";</script>
-    <script src="/template/wap/asset/js/jquery-1.10.1.min.js"></script>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/blockUI.js"></script>
+    <script src="http://connect.facebook.net/en_US/all.js"></script>
 </head>
 
 <body>
+<div id="fb-root"></div>
+<script>
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : '1539737363001576',
+            xfbml      : true,
+            version    : 'v2.7'
+        });
+    };
+
+    //    (function(d, s, id) {
+    //        var js, fjs = d.getElementsByTagName(s)[0];
+    //        if (d.getElementById(id)) return;
+    //        js = d.createElement(s); js.id = id;
+    //        js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.4&appId=1539737363001576";
+    //        fjs.parentNode.insertBefore(js, fjs);
+    //    }(document, 'script', 'facebook-jssdk'));
+
+    FB.api('/me/likes?fields=id', function(response) {
+        console.log(response);
+        var our_page_id = '986816931397636';
+        var user_is_fan = false;
+        var likes_count = response.data.length;
+        for(i = 0; i < likes_count; i++) {
+            if(response.data[i].id === our_page_id) {
+                user_is_fan = true;
+                break;
+            }
+        }
+        console.log(user_is_fan)
+    });
+</script>
 <div class="wrapper">
 <?php $tpl = new RainTPL;$tpl_dir_temp = self::$tpl_dir;$tpl->assign( $this->var );$tpl->draw( dirname("component/sidebar") . ( substr("component/sidebar",-1,1) != "/" ? "/" : "" ) . basename("component/sidebar") );?>
 <div class="carea">
@@ -37,20 +71,6 @@
     <div id="dialog-trans" title="Tra từ">
         <div id="content_result"></div>
     </div>
-    <script>
-//        $(function(){
-//            $( "#dialog-trans" ).dialog({
-//                autoOpen: false,
-//                modal:true,
-//                closeOnEscape: true,
-//                draggable: false,
-//                width:450,
-//                create: function() {
-//                    $(this).css("maxHeight", 600);
-//                }
-//            });
-//        });
-    </script>
 <div class="header">
     <ul>
         <li class="left sidebar"><a id="sib_btn" href="javascript:void(0)" title=""></a></li>
@@ -63,6 +83,7 @@
         </li>
         <li> <a class="btn_search"></a> </li>
     </ul>
+    <div class="bg_noel_1"></div>
 </div>
 <div class="search_type" id="ulglobal2">
     <div class="search_type_box">
@@ -80,7 +101,7 @@
     <?php if( !isset($SESSION["uinfo"]) ){ ?>
     <div class="tk_box">
         <a class="tk_box_link" href="/register.php" title="">Đăng ký</a>
-        <a class="tk_box_link" href="login.php" title="">Đăng nhập</a>
+        <a class="tk_box_link" href="/login.php" title="">Đăng nhập</a>
     </div>
     <?php }else{ ?>
     <div class="tk_box">
@@ -97,8 +118,10 @@
 <div class="footer">
     <div class="footer_info">
         <div class="logo"></div>
-        <p>Copyright © 2014 by IQVN </p>
-        <p>All rights reserved</p>
+        <p>Cơ quan chủ quản: Công ty TNHH Truyền thông IQ Việt Nam</p>
+        <p>Địa chỉ: Tầng 2 tòa nhà Dinhle, 123B Trần Đăng Ninh, Dịch Vọng, Cầu Giấy, Hà Nội</p>
+        <p>Email: cskh@english360.com.vn CSKH: (04) 32474175</p>
+        <p>Quản lý nội dung: Bà Lê Thị Lan Anh</p>
         <p><a href="/version.php?v=web" style="text-decoration: underline">Chuyển sang phiên bản WEB</a></p>
     </div>
     <audio style="display: none;width: 0;height: 0;" id="mainaudio" controls></audio>
@@ -122,10 +145,14 @@
 <script src="/template/wap/asset/js/giaitri.ui.js"></script>
 <script src="/template/wap/asset/js/tytabs.jquery.min.js"></script>
 <script src="/template/wap/asset/js/featherlight.min.js"></script>
+<script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+
 <!--<script src="../src/jquery.backTop.min.js"></script>-->
 <script>
     $(function(){
         countNotify();
+        checkCash();
+        checkPackage();
     })
 
     function countNotify(){
@@ -140,6 +167,23 @@
         })
     }
 
+    function checkCash() {
+        $.post('incoming.php?act=check_cash', {}, function(res){
+            if(res.status==200){
+                $('.check_cash').html(res.info);
+            }
+
+        })
+    }
+
+    function checkPackage() {
+        $.post('incoming.php?act=check_package', {}, function(res){
+            if(res.status==200){
+                $('.check_package').html(res.info);
+            }
+        })
+    }
+
 </script>
 
 <script>
@@ -150,7 +194,113 @@
             $('#txtTratu').focus();
             $('#txtTratu').val('');
         });
+
+
     });
+    $(document).ready(function(){
+        if (window.hasOwnProperty('webkitSpeechRecognition')) {
+            $('a.voice').each(function () {
+                text = $(this).html();
+                html = '<div style="display: inline-block;position: relative">' +
+                        '<span class="voice">' + text + '</span> ' +
+                        '<span class="result"></span>' +
+                        '<button class="ht btnMicro"><span class="fa fa-microphone"></span></button>' +
+                        '<div class="popover" style="display: none"></div>' +
+                        '</div>';
+                $(this).after(html);
+                $(this).remove();
+            });
+        }else{
+            $('a.voice').each(function () {
+                text = $(this).html();
+                html = '<span class="voice">' + text + '</span>';
+                $(this).after(html);
+                $(this).remove();
+            });
+        }
+        $('.voice').click(function () {
+            responsiveVoice.speak($(this).html())
+        })
+    });
+
+    function checkPhrase(ph1,ph2){
+        return ph1.toLowerCase().replace(/[^a-zA-Z1-9]/g, "") == ph2.toLowerCase().replace(/[^a-zA-Z1-9]/g, "");
+    }
+    //    if (window.hasOwnProperty('webkitSpeechRecognition') || window.hasOwnProperty('SpeechRecognition')){
+    //        alert('not supported!');
+    //    }
+
+    var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+    var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
+    var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
+    var recognition = new SpeechRecognition();
+    var speechRecognitionList = new SpeechGrammarList();
+    //    speechRecognitionList.addFromString(grammar, 1);
+    //    recognition.grammars = speechRecognitionList;
+    //recognition.continuous = false;
+    recognition.lang = 'en-US';
+    var currentAns;
+    var $currentBtn;
+
+    $(function () {
+        $(document).on('click', '.btnMicro',function () {
+            recognition.start();
+            currentAns = $(this).parent().find('.voice').html();
+//            alert(currentAns);return false;
+//            $('.btnMicro').popover('destroy');
+            //            $(this).parent().find('>i').remove();
+            $currentBtn = $(this);
+//            $(this).removeClass('btn-primary').addClass('btn-success')
+        });
+        $(document).on('click', function (e) {
+            //did not click a popover toggle, or icon in popover toggle, or popover
+            $('.popover').hide();
+        });
+    })
+
+    function showPopover(ele,mss) {
+        ele.parent().find('.popover').show().html(mss);
+    }
+
+    function checkAns(ans) {
+        if(checkPhrase(currentAns,ans)){
+            $currentBtn.parent().find('.voice').removeClass('text-danger').addClass('text-success');
+            $currentBtn.parent().find('span.result').addClass('kq_t');
+            $currentBtn.remove();
+        }else{
+            $currentBtn.parent().find('.voice').addClass('text-danger');
+//            $currentBtn.parent().find('span.result').addClass('kq_f');
+            showPopover($currentBtn,'<span class="kq_f"></span> '+ans);
+            console.log(ans.toLowerCase().replace(/[^a-zA-Z1-9]/g, "")+'-'+currentAns.toLowerCase().replace(/[^a-zA-Z1-9]/g, ""))
+        }
+    }
+
+    recognition.onresult = function(event) {
+        var last = event.results.length - 1;
+        ans = event.results[last][0].transcript;
+        console.log(ans)
+        checkAns(ans);
+    }
+
+    recognition.onspeechend = function() {
+        recognition.stop();
+        $currentBtn.removeClass('btn-success').addClass('btn-primary');
+    }
+
+    recognition.onnomatch = function(event) {
+//        $('#voiceMss').show().html('Không bắt được âm thanh');
+        alert('Không bắt được âm thanh');
+//        $currentBtn.removeClass('btn-success').addClass('btn-primary');
+    }
+
+    recognition.onerror = function(event) {
+        alert('Không bắt được âm thanh!');
+//        $('#voiceMss').show().html(event.error);
+//        $currentBtn.removeClass('btn-success').addClass('btn-primary');
+        //        alert(event.error);
+    }
+
+    //End voice
 </script>
 <script>
 
@@ -172,6 +322,8 @@
         });
         $( ".showTab" ).click(function() {
             $('.tabItem').hide();
+            $('.showTab').attr('style','');
+            $(this).attr('style','border: 1px solid red;');
             $($(this).attr('data-target')).toggle();
         });
     });
@@ -187,6 +339,44 @@
 
 
 </script>
-
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/577dfd36dd7fc0d375f2409c/default';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+    })();
+</script>
+<!--End of Tawk.to Script-->
+<style>
+    .voice{
+        text-decoration: underline;
+        font-weight: bold;
+    }
+    .text-success{
+        color: #24C179
+    }
+    .text-danger{
+        color: #FE5252
+    }
+    .btnMicro{
+        width: 25px;
+    }
+    .popover{
+        position: absolute;
+        bottom: -36px;
+        left: 0;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 0 5px;
+        color: #FE5252;
+        z-index: 10;
+    }
+</style>
 </body>
 </html>

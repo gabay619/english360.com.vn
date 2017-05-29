@@ -33,22 +33,22 @@
                     <div class="url_video_area center row">
                         <div id="myElement">Loading the player...</div>
                     </div>
-                    <div class="table_detail row table-scroll">
-                        <table class="table_1" style="width: 100%">
-                            <thead>
-                            <tr>
-                                <td style="color: red; text-align: center; text-transform: uppercase"><b>Tiếng Anh</b></td>
-                                <td style="color: red; text-align: center; text-transform: uppercase"><b>Tiếng Việt</b></td>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {{Common::formatTranslatecontent($item->content['eng'],$item->content['vie'])}}
-                            </tbody>
-                        </table>
-                    </div>
-                    <h4 class="title_1">
-                        Từ vựng
-                    </h4>
+                    {{--<div class="table_detail row table-scroll">--}}
+                        {{--<table class="table_1" style="width: 100%">--}}
+                            {{--<thead>--}}
+                            {{--<tr>--}}
+                                {{--<td style="color: red; text-align: center; text-transform: uppercase"><b>Tiếng Anh</b></td>--}}
+                                {{--<td style="color: red; text-align: center; text-transform: uppercase"><b>Tiếng Việt</b></td>--}}
+                            {{--</tr>--}}
+                            {{--</thead>--}}
+                            {{--<tbody>--}}
+                            {{--{{Common::formatTranslatecontent($item->content['eng'],$item->content['vie'])}}--}}
+                            {{--</tbody>--}}
+                        {{--</table>--}}
+                    {{--</div>--}}
+                    {{--<h4 class="title_1">--}}
+                        {{--Từ vựng--}}
+                    {{--</h4>--}}
                     <div class="table_detail row">
                         {{$item->tuvung}}
                     </div>

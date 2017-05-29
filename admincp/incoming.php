@@ -200,8 +200,8 @@ function changestatus() {
     $videoCl = $dbmg->thuvien;
     if ($_SESSION['uinfoadmin']['_id']) {
         $atid = $_POST['atid'];
-            $videoObj = $videoCl->findOne(array("_id"=> $atid), array("usercreate"));
-        if ($videoObj['usercreate']) {
+//            $videoObj = $videoCl->findOne(array("_id"=> $atid), array("usercreate"));
+//        if ($videoObj['usercreate']) {
             if (!acceptpermiss("thuvien_status")) {
                 $dtr['status'] = 403;
                 $dtr['mss'] = "Bạn không có quyền thực hiện chức năng này";
@@ -217,10 +217,10 @@ function changestatus() {
                 else $dtr['statusString'] = "Hiện";
                 $dtr['isUpdateTime'] = $_POST['isUpdateTime'];
             }
-        } else {
-            $dtr['status'] = 404;
-            $dtr['mss'] = "Không có bài đăng này";
-        }
+//        } else {
+//            $dtr['status'] = 404;
+//            $dtr['mss'] = "Không có bài đăng này";
+//        }
     } else {
         $dtr['status'] = 401;
         $dtr['mss'] = "Bạn cần đăng nhập để thực hiện chức năng này";

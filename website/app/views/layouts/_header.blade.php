@@ -12,7 +12,7 @@
     <meta property="og:image" content="{{Constant::BASE_URL}}{{isset($avatar)?$avatar:'/uploads/og_fb.png'}}"/>
     <meta property="article:author" content="{{Constant::FACEBOOK_URL}}" />
     <meta property="article:publisher" content="{{Constant::FACEBOOK_URL}}" />
-    <link href="/assets/web/css/normalize.css" type="text/css" rel="stylesheet" media="all" />
+    <link href="/assets/web/css/normalize.css?v=29517" type="text/css" rel="stylesheet" media="all" />
     <link href="/assets/web/css/style.css" type="text/css" rel="stylesheet" media="all" />
     <link href="/assets/web/css/font-awesome.min.css" type="text/css" rel="stylesheet" media="all" />
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
@@ -29,6 +29,7 @@
     <script src="/assets/lib/jquery-ui/jquery-ui.min.js"></script>
     <script src="http://connect.facebook.net/en_US/all.js"></script>
     <script src="/assets/js/blockUI.js"></script>
+    <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
 
     <!-- Facebook Pixel Code -->
     <script>

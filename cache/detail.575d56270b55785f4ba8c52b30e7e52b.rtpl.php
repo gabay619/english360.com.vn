@@ -20,22 +20,17 @@
     <div class="content_item">
         <div class="dentail_channel">
             <h3 class="title_style_1"><?php echo $obj["name"];?></h3>
-
             <div class="date_view"><label><?php echo $obj["datecreate"];?></label></div>
             <div class="social_view">
             </div>
             <div id="myElement">Loading the player...</div>
             <div class="four_function">
                 <div class="item_four_function">
-                    <a class="showTab" data-target="#eng">Tiếng Anh</a>
-                    <a class="showTab" data-target="#vie">Tiếng Việt</a>
-                    <a class="showTab" data-target="#tuvung">Từ vựng</a>
+                    <!--<a class="showTab" data-target="#eng">Tiếng Anh</a>-->
+                    <!--<a class="showTab" data-target="#vie">Tiếng Việt</a>-->
+                    <!--<a class="showTab" data-target="#tuvung">Từ vựng</a>-->
                     <a class="" href="javascript:void(0)" onclick="savearticle('<?php echo $obj["_id"];?>')">Lưu bài</a>
-                    <div class="all_ct_display">
-                        <div class="tabItem" style="display: none;" id="eng"><?php echo $obj["content"]["eng"];?></div>
-                        <div class="tabItem" style="display: none;" id="vie"><?php echo $obj["content"]["vie"];?></div>
-                        <div class="tabItem" style="display: none;" id="tuvung"><?php echo $obj["tuvung"];?></div>
-                    </div>
+
                 </div>
             </div>
             <div class="text_component">

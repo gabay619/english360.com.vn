@@ -34,6 +34,7 @@ class Constant
     const TYPE_THUVIEN = 'thuvien';
     const TYPE_HOCMACHOI = 'hocmachoi';
     const TYPE_HOIDAP = 'hoidap';
+    const TYPE_SHARE = 'share';
     const TYPE_COMMENT = 'comment';
     const TYPE_NOTIFY = 'notify';
     const TYPE_INFO = 'info';

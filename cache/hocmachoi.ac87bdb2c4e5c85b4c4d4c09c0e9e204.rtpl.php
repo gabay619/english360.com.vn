@@ -88,27 +88,27 @@
 
     function checkCookieForPopup() {
         var now = Date.now();
-        var popup_count = getCookie("popup_{<?php echo $popup->_id;?>}");
-        var popup_time = getCookie("popup_time_{<?php echo $popup->_id;?>}");
+        var popup_count = getCookie("popup_<?php echo $popup["_id"];?>");
+        var popup_time = getCookie("popup_time_<?php echo $popup["_id"];?>");
         popup_time = popup_time == "" ? 0 : popup_time;
         timeout = <?php echo $popup["timeout"];?>;
-    if((now - popup_time)/1000 < <?php echo $popup["distance_time"];?>){
-        timeout = timeout + <?php echo $popup["distance_time"];?> - (now - popup_time)/1000;
-    }
+        if((now - popup_time)/1000 < <?php echo $popup["distance_time"];?>){
+            timeout = timeout + <?php echo $popup["distance_time"];?> - (now - popup_time)/1000;
+        }
 
-    console.log(timeout);
-    if(popup_count == "")
-        popup_count = 0;
-    if(popup_count < <?php echo $popup["count_on_day"];?>){
-        setTimeout(function () {
-            showPopup();
-            setCookie("popup_<?php echo $popup["_id"];?>", parseInt(popup_count)+1, 1);
-            setCookie("popup_time_<?php echo $popup["_id"];?>", now , 1);
-//            setCookie("popup_timeout_<?php echo $popup["id"];?>", "" , 1);
-        }, timeout * 1000)
-    }
-    console.log((now - popup_time)/1000);
-    console.log(popup_count);
+        console.log(timeout);
+        if(popup_count == "")
+            popup_count = 0;
+        if(popup_count < <?php echo $popup["count_on_day"];?>){
+            setTimeout(function () {
+                showPopup();
+                setCookie("popup_<?php echo $popup["_id"];?>", parseInt(popup_count)+1, 1);
+                setCookie("popup_time_<?php echo $popup["_id"];?>", now , 1);
+    //            setCookie("popup_timeout_<?php echo $popup["id"];?>", "" , 1);
+            }, timeout * 1000)
+        }
+        console.log((now - popup_time)/1000);
+        console.log(popup_count);
     }
 
     function showPopup(){
@@ -168,12 +168,17 @@
                         regPackageAds();
                     }
                 },
+            <?php }else{ ?>
+            afterClose: function() {
+                cancelPackageAds();
+            },
             <?php } ?>
             afterShow: function () {
                 setTimeout(function(){
                     $.fancybox.close()
                 }, <?php echo $timeoutPopAds;?>)
-            }
+            },
+            closeBtn: false
             }).trigger('click');
         },<?php echo $waittimePopAds;?>);
 
@@ -200,9 +205,12 @@
     <div style="text-align: center">
         <p><?php echo $contentPopAds;?></p>
         <p style="margin-top: 10px">
-            <a class="ht_1" href="<?php echo $linkCancelPopAds;?>">Hủy</a>
-            <a class="ht_1" href="javascript:regPackageAds()" >Trải nghiệm ngay</a>
+            <a class="ht_1" href="javascript:cancelPackageAds()">Từ chối</a>
+            <a class="ht_1" href="javascript:regPackageAds()" >Đồng ý</a>
         </p>
+        <?php if( $pricePopAds ){ ?>
+        <p><?php echo $pricePopAds;?></p>
+        <?php } ?>
     </div>
 </div>
 <?php } ?>
@@ -221,3 +229,92 @@
         })
     }
 </script>
+<?php if( $showEvent ){ ?>
+<a href="#popEvent" class="fancybox" id="showPopEvent" style="display:none;">Open</a>
+<?php if( $hasPhone ){ ?>
+<div id="popEvent" style="display: none">
+    <div style="text-align: center; position: relative">
+        <p><img src="<?php echo $event["bgWap"];?>" alt=""></p>
+        <p style="position: absolute; margin: 0 auto; top: 60%; left: 0; right: 0">
+            <a class="ht_1" href="javascript:regEvent('<?php echo $event["_id"];?>')">Đồng ý</a>
+        </p>
+    </div>
+</div>
+<?php }else{ ?>
+<div id="popEvent" style="display: none">
+    <div style="text-align: center; position: relative">
+        <p><img src="<?php echo $event["bgWap"];?>" alt=""></p>
+        <p style="position: absolute; margin: 0 auto; top: 68%; left: 0; right: 0">
+            <input type="text" width="50%" placeholder="Nhập email" class="input1" id="emailEvent" style="margin-bottom: 5px"><br>
+            <a class="ht_1" href="javascript:regEvent('<?php echo $event["_id"];?>')">Đồng ý</a>
+        </p>
+    </div>
+</div>
+<?php } ?>
+<a href="#successEvent" class="fancybox" id="showSuccessEvent" style="display:none;">Open</a>
+<div id="successEvent" style="display: none">
+    <div style="text-align: center;">
+        <p>Bạn đang được English360 miễn phí <?php echo $event["free_day"];?> ngày không giới hạn các khoá học tiếng Anh giao tiếp.</p>
+        <!--<p>Tài khoản miễn phí đã được gửi về số điện thoại của bạn.</p>-->
+    </div>
+</div>
+<script>
+    <?php if( $registedEvent ){ ?>
+    $('#showSuccessEvent').trigger('click');
+    setTimeout(function () {
+        $.post('/incoming.php?act=removeEvent', {
+            
+        }, function (re) {
+            
+        })
+        $.fancybox.close();
+    }, 3000)
+    <?php }else{ ?>
+    setTimeout(function () {
+        $('#showPopEvent').trigger('click');
+
+    }, <?php echo $event["timeout_popup"]*1000;?>)
+    <?php } ?>
+
+
+    function regEvent(id) {
+        <?php if( $hasPhone ){ ?>
+        email = '';
+        <?php }else{ ?>
+        email = $('#emailEvent').val();
+        if(email == ''){
+            alert('Địa chỉ email không được bỏ trống.');
+            return false;
+        }
+        <?php } ?>
+        $.post('/incoming.php?act=regEvent', {
+            id:id, email: email
+        }, function (re) {
+            if(re.success){
+                $.fancybox.close();
+                $('#successEvent div').html(re.mss);
+                $('#showSuccessEvent').trigger('click');
+            }else{
+                alert(re.mss);
+                return false;
+            }
+        })
+    }
+</script>
+<?php } ?>
+<?php if( $showExpiredEvent ){ ?>
+<a href="#expiredEvent" class="fancybox" id="showExpiredEvent" style="display:none;">Open</a>
+<div id="expiredEvent" style="display: none">
+    <div style="text-align: center;">
+        <p>Thời gian sử dụng miễn phí đã kết thúc.</p>
+        <?php if( $SESSION["uinfo"]["phone"] ){ ?>
+        <p>Bấm vào <a style="color: blue; text-decoration: underline; font-weight: bold" href="/regispack.php">ĐÂY</a> để đăng ký và sử dụng dịch vụ.</p>
+       <?php }else{ ?>
+        <p>Soạn DK E gửi 9317 để tiếp tục sử dụng (Chỉ áp dụng cho thuê bao MobiFone)</p>
+        <?php } ?>
+    </div>
+</div>
+<script>
+    $('#showExpiredEvent').trigger('click');
+</script>
+<?php } ?>

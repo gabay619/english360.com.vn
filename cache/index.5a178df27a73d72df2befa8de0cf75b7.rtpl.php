@@ -17,6 +17,9 @@
     </div>
     <div class="pagination"></div>
 </div>
+    <!--<div class="banner_noel">-->
+        <!--<a href=""><img src="/template/wap/asset/images/banner_noel.png" alt=""></a>-->
+    <!--</div>-->
 <div class="content_cate p5">
     <div class="item_cate">
         <div class="title_cate">
@@ -291,3 +294,37 @@
     </div>
 </div>
 </div>
+
+<?php if( $showRegLessionPop ){ ?>
+<a href="#regLession" class="fancybox" id="showPopregLession" style="display:none;">Open</a>
+<div id="regLession" style="display: none">
+    <div style="text-align: center" id="chkLession">
+        <p>CHỌN CHUYÊN MỤC BẠN QUAN TÂM</p>
+        <?php $counter1=-1; if( isset($allType) && is_array($allType) && sizeof($allType) ) foreach( $allType as $key1 => $value1 ){ $counter1++; ?>
+        <label style="width: 50%;display: inline-block;float: left; text-align: left"><input type="checkbox" value="<?php echo $key1;?>" /> <?php echo $value1;?></label>
+        <?php } ?>
+        <label style="width: 50%;display: inline-block;float: left; text-align: left"><input type="checkbox" value="all" id="checkAllType" onclick="$('#chkLession input').not(this).prop('checked', this.checked);" /> Tất cả</label>
+        <p style="margin-top: 10px; clear: both; text-align: center"><button class="ht_1" onclick="regLession()">Đăng ký</button></p>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#showPopregLession').trigger('click');
+    })
+    function regLession() {
+        select = [];
+        $('#chkLession input').each(function(){
+            if($(this).is(':checked')){
+                if($(this).val() != 'all')
+                    select[select.length] = $(this).val();
+            }
+        });
+        $.post('incoming.php?act=reg-lession', {
+            select:select
+        }, function(result){
+            alert(result.mss);
+            $.fancybox.close();
+        })
+    }
+</script>
+<?php } ?>

@@ -69,7 +69,15 @@
                     @endforeach
                 </ul>
             </li>
-            <li><h2><a href="/tu-dien.html" title="">Từ điển</a></h2></li>
+            <li>
+                <h2><a href="/{{CommonHelpers::getCateSlugbyType($shareParent->type)}}.html" title="">Chia sẻ</a></h2>
+                <ul class="sub_menu_header">
+                    @foreach($shareParent->getChilds() as $shareCate)
+                        <li><h2><a href="{{ThuVien::getCateUrl($shareCate->_id, $shareCate->name, $shareCate->type)}}" title="">{{$shareCate->name}}</a></h2></li>
+                    @endforeach
+                </ul>
+            </li>
+            {{--<li><h2><a href="/tu-dien.html" title="">Từ điển</a></h2></li>--}}
             <li><h2><a href="/hoi-dap.html" title="">Hỏi đáp</a></h2></li>
             <li><h2><a href="/user/package" title="">Học phí</a></h2></li>
             {{--<li><h2><a href="/hoi-dap.html" title="" class="">Giới thiệu</a></h2></li>--}}

@@ -24,7 +24,8 @@ class CommonHelpers
             Constant::TYPE_NGUPHAP => 'ngu-phap',
             Constant::TYPE_THUVIEN => 'thu-vien',
             Constant::TYPE_HOCMACHOI => 'hoc-ma-choi',
-            Constant::TYPE_HOIDAP => 'hoi-dap'
+            Constant::TYPE_HOIDAP => 'hoi-dap',
+            Constant::TYPE_SHARE => 'chia-se'
     );
 
     public static function encryptpassword($pass) {

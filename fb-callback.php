@@ -74,7 +74,7 @@ $userNode = $response->getGraphUser();
 $fb_email = $userNode->getField('email');
 $fb_name = $userNode->getField('name');
 if(empty($fb_email)){
-    $_SESSION['flass_mss'] = 'English360 không nhận được địa chỉ email Facebook của bạn.';
+    $_SESSION['flash_mss'] = 'English360 không nhận được địa chỉ email Facebook của bạn.';
     header('Location: /thong-bao.html');exit;
 }
 $checkEmail = $usercl->findOne(array(
@@ -83,7 +83,7 @@ $checkEmail = $usercl->findOne(array(
 ));
 if($checkEmail){
     if(isset($checkEmail['fbid']) && !empty($checkEmail['fbid'])){
-        $_SESSION['flass_mss'] = 'Email đã được sử dụng';
+        $_SESSION['flash_mss'] = 'Email đã được sử dụng';
         header('Location: /thong-bao.html');exit;
     }
     //Nếu có user đk cùng mail trước đó thì gộp làm 1

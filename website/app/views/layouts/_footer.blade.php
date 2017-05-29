@@ -59,9 +59,110 @@
         $(this).after(html);
         $(this).hide();
     });
-    $(document).ready(function(){
 
+    //voice
+    $(document).ready(function(){
+        if (window.hasOwnProperty('webkitSpeechRecognition')) {
+            $('a.voice').each(function () {
+                text = $(this).html();
+                html = '<div style="display: inline-block"><span class="voice result">' + text + '</span> <i></i><button class="btn btn-sm btn-primary btnMicro"><i class="fa fa-microphone"></i></button></div>';
+                $(this).after(html);
+                $(this).remove();
+            });
+        }else{
+            $('a.voice').each(function () {
+                text = $(this).html();
+                html = '<span class="voice result">' + text + '</span>';
+                $(this).after(html);
+                $(this).remove();
+            });
+        }
+        $('.voice').click(function () {
+            responsiveVoice.speak($(this).html())
+        })
     });
+
+    function checkPhrase(ph1,ph2){
+        return ph1.toLowerCase().replace(/[^a-zA-Z1-9]/g, "") == ph2.toLowerCase().replace(/[^a-zA-Z1-9]/g, "");
+    }
+//    if (window.hasOwnProperty('webkitSpeechRecognition') || window.hasOwnProperty('SpeechRecognition')){
+//        alert('not supported!');
+//    }
+
+        var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+        var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
+        var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
+        var recognition = new SpeechRecognition();
+        var speechRecognitionList = new SpeechGrammarList();
+        //    speechRecognitionList.addFromString(grammar, 1);
+        //    recognition.grammars = speechRecognitionList;
+        //recognition.continuous = false;
+        recognition.lang = 'en-US';
+        var currentAns;
+        var $currentBtn;
+
+    $(function () {
+        $(document).on('click', '.btnMicro',function () {
+            recognition.start();
+            currentAns = $(this).parent().find('.voice').html();
+//            alert(currentAns);return false;
+            $('.btnMicro').popover('destroy');
+    //            $(this).parent().find('>i').remove();
+            $currentBtn = $(this);
+            $(this).removeClass('btn-primary').addClass('btn-success')
+        });
+        $(document).on('click', function (e) {
+            //did not click a popover toggle, or icon in popover toggle, or popover
+            $('.btnMicro').popover('destroy');
+        });
+    })
+
+    function showPopover(ele,mss) {
+        ele.popover({
+            content: '<strong style="color:red">'+mss+'</strong>',
+            placement: 'bottom',
+            html: true
+        }).popover('show');
+    }
+
+    function checkAns(ans) {
+        if(checkPhrase(currentAns,ans)){
+            $currentBtn.parent().find('.voice').removeClass('false').addClass('true');
+            $currentBtn.parent().find('>i').removeClass('i_anw_false').addClass('i_anw_true');
+            $currentBtn.remove();
+        }else{
+            $currentBtn.parent().find('.voice').addClass('false');
+            showPopover($currentBtn,'<i class="i_anw_false"></i> '+ans);
+            console.log(ans.toLowerCase().replace(/[^a-zA-Z1-9]/g, "")+'-'+currentAns.toLowerCase().replace(/[^a-zA-Z1-9]/g, ""))
+        }
+    }
+
+    recognition.onresult = function(event) {
+        var last = event.results.length - 1;
+        ans = event.results[last][0].transcript;
+        console.log(ans)
+        checkAns(ans);
+    }
+
+    recognition.onspeechend = function() {
+        recognition.stop();
+        $currentBtn.removeClass('btn-success').addClass('btn-primary');
+    }
+
+    recognition.onnomatch = function(event) {
+//        $('#voiceMss').show().html('Không bắt được âm thanh');
+            alert('Không bắt được âm thanh');
+        $currentBtn.removeClass('btn-success').addClass('btn-primary');
+    }
+
+    recognition.onerror = function(event) {
+            alert('Không bắt được âm thanh!');
+//        $('#voiceMss').show().html(event.error);
+        $currentBtn.removeClass('btn-success').addClass('btn-primary');
+    //        alert(event.error);
+    }
+
+//End voice
 
     function playAudio(link){
         $('#mainaudio').attr('src',link);
@@ -231,6 +332,10 @@
     }
     .modal-footer button{
         width: 20%;
+    }
+    .voice{
+        text-decoration: underline;
+        cursor: pointer;
     }
 </style>
 @popup()
