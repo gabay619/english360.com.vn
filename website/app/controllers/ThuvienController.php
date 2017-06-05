@@ -58,7 +58,11 @@ class ThuvienController extends \BaseController {
         $thuvienId = Category::whereIn('parentid', array('0',0))->where('type', Constant::TYPE_THUVIEN)->first()->_id;
         $atId = CommonHelpers::getIdFromSlug($slug);
 		$type = CommonHelpers::getTypebyCateSlug($cateSlug);
-		$item = ThuVien::where('_id', $atId)->first();
+		if(Input::get('source','') == 'admin')
+			$item = ThuVien::where('_id', $atId)->first();
+		else
+			$item = ThuVien::where('status', Constant::STATUS_ENABLE)->where('_id', $atId)->first();
+
 		if(!$item) return 'Bài học không tồn tại.';
 
 		//Đếm số lượt xem

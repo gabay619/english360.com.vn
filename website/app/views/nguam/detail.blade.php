@@ -23,12 +23,10 @@
                         <div class="left">
                             <label class="mini_date">{{date('d/m/Y', $item->datecreate)}}</label>
                         </div>
-                        @if(!Network::is3g() || !Network::is3gmobifone())
                         <div class="right">
                             <div class="fb-like" data-href="{{Request::url()}}" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true">
                             </div>
                         </div>
-                        @endif
                     </div>
                     <div class="url_video_area center row">
                         <div id="myElement">Loading the player...</div>
@@ -97,4 +95,5 @@
         }
     </script>
     @regpopup()
+    <script src="/assets/web/js/voice.js" type="text/javascript"></script>
 @endsection

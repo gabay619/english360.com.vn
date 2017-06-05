@@ -21,6 +21,7 @@ class HistoryLog
     const LOG_XEM_BAI_HOC_GTCB = Constant::TYPE_GTCB;
     const LOG_XEM_BAI_HOC_NGU_AM = Constant::TYPE_LUYENNGUAM;
     const LOG_XEM_BAI_HOC_NGU_PHAP = Constant::TYPE_NGUPHAP;
+    const LOG_XEM_BAI_HOC_CHIA_SE = Constant::TYPE_SHARE;
     const LOG_GAME = 'game';
     const LOG_TU_DIEN ='tudien';
     const LOG_DANG_NHAP = 'login';
@@ -58,6 +59,7 @@ class HistoryLog
             self::LOG_XEM_BAI_HOC_PHIM => 'Xem bài học: Phim',
             self::LOG_XEM_BAI_HOC_VIDEO => 'Xem bài học: Video',
             self::LOG_XEM_BAI_HOC_RADIO => 'Xem bài học: Radio',
+            self::LOG_XEM_BAI_HOC_CHIA_SE => 'Xem bài học: Chia sẻ',
             self::LOG_DANG_XUAT => 'Đăng xuất',
             self::LOG_TU_DIEN => 'Tra từ điển',
             self::LOG_TEST => 'Test trình độ'

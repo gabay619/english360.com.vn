@@ -71,7 +71,10 @@ class NguPhapController extends \BaseController {
     //Chi tiết bài học ngữ pháp
     public function getDetail($slug){
         $id = CommonHelpers::getIdFromSlug($slug);
-        $item = NguPhap::where('status', Constant::STATUS_ENABLE)->where('_id', $id)->first();
+        if(Input::get('source','') == 'admin')
+            $item = NguPhap::where('_id', $id)->first();
+        else
+            $item = NguPhap::where('status', Constant::STATUS_ENABLE)->where('_id', $id)->first();
         if(!$item){
             return 'Bài học không tồn tại.';
         }

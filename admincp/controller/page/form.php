@@ -153,7 +153,47 @@ if ($tact != "page_insert") $_POST = (array)$pagecl->findOne(array("_id" => "$id
             theme_advanced_resizing: true,
             apply_source_formatting: true,
             content_css: "plugin/tinymce/tinymce.css",
-            external_image_list_url : "plugin/tinymce/myexternallist.js"
+            external_image_list_url : "plugin/tinymce/myexternallist.js",
+            advlist_bullet_styles: [{
+                title: 'Red Hand',
+                styles: {
+                    listStyleImage: "url('/assets/icon/hand.png')"
+                }
+            }, {
+                title: 'Red Star',
+                styles: {
+                    listStyleImage: "url('/assets/icon/star.png')"
+                }
+            },{
+                title: 'Red Tick',
+                styles: {
+                    listStyleImage: "url('/assets/icon/check.png')"
+                }
+            },{
+                title: 'Default',
+                styles: {
+                    listStyleType: '',
+                    listStyleImage: ""
+                }
+            }, {
+                title: 'Circle',
+                styles: {
+                    listStyleType: 'circle',
+                    listStyleImage: ""
+                }
+            }, {
+                title: 'Disc',
+                styles: {
+                    listStyleType: 'disc',
+                    listStyleImage: ""
+                }
+            }, {
+                title: 'Square',
+                styles: {
+                    listStyleType: 'square',
+                    listStyleImage: ""
+                }
+            }]
         });
     });
     function ajaxfilemanager(field_name, url, type, win) {

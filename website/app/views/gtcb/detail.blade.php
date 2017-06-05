@@ -48,10 +48,11 @@
                     {{--</div>--}}
                     {{--<h4 class="title_1">--}}
                         {{--Từ vựng--}}
+
                     {{--</h4>--}}
-                    <div class="table_detail row">
-                        {{$item->tuvung}}
-                    </div>
+                    {{--<div class="table_detail row">--}}
+                        {{--{{$item->tuvung}}--}}
+                    {{--</div>--}}
                     <div class="table_detail row" style="margin-top: 25px">
                         {{$item->contents}}
                     </div>
@@ -116,4 +117,6 @@
         }
     </script>
     @regpopup()
+
+    <script src="/assets/web/js/voice.js" type="text/javascript"></script>
 @endsection

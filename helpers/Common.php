@@ -582,7 +582,8 @@ class Common
             Constant::TYPE_NGUPHAP => 'ngu-phap',
             Constant::TYPE_THUVIEN => 'thu-vien',
             Constant::TYPE_HOCMACHOI => 'hoc-ma-choi',
-            Constant::TYPE_HOIDAP => 'hoi-dap'
+            Constant::TYPE_HOIDAP => 'hoi-dap',
+            Constant::TYPE_SHARE => 'chia-se'
         );
         return $slugArr[$type];
     }

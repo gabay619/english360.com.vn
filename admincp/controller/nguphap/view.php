@@ -96,7 +96,7 @@ $listnews = $cursor->skip($cp)->limit($limit);
         <tr>
             <td><input type="checkbox" class="checkitem" name="id[]" value="<?php echo $item['_id'] ?>" /></td>
             <td class="col-md-2"><img src="<?php echo $item['avatar'] ?>" class="img-thumbnail" style="max-width: 120px;" /></td>
-            <td><?php echo $item['name'] ?>
+            <td><a href="/ngu-phap/<?php echo Common::utf8_to_url($item['name']).'-'.$item['_id']?>.html?source=admin" target="_blank"><?php echo $item['name'] ?></a>
                 <p class="text-muted">Mã: <?php echo $item['_id'] ?></p>
             </td>
            <!-- <td>
