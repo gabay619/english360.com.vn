@@ -31,6 +31,9 @@
                     <div class="url_video_area center row">
                         <div id="myElement">Loading the player...</div>
                     </div>
+                    <div id="guideVoice" style="display: none; margin-bottom: 10px">
+                        <a href="javascript:void(0)" class="btn btn-sm btn-info"><i class="fa fa-question-circle"></i> Hướng dẫn</a>
+                    </div>
                     <div class="table_detail row">
                         {{$item->contents}}
                     </div>
@@ -95,5 +98,4 @@
         }
     </script>
     @regpopup()
-    <script src="/assets/web/js/voice.js" type="text/javascript"></script>
 @endsection

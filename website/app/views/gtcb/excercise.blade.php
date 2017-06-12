@@ -345,4 +345,6 @@
             })
         }
     </script>
+    <script src="/assets/web/js/voice.js" type="text/javascript"></script>
+
 @endsection

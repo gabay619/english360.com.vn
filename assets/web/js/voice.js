@@ -1,6 +1,18 @@
 //voice
 $(document).ready(function(){
     if (window.hasOwnProperty('webkitSpeechRecognition')) {
+        $('#guideVoice').show();
+        $('#guideVoice a').popover({
+            title: 'Hướng dẫn sử dụng Test Voice',
+            content: '<p><strong>B1:</strong> Bạn xem và nghe video mẫu.</p>' +
+                        '<p><strong>B2:</strong> Khi bạn muốn luyện nói 1 câu/từ nào trong bài, bạn nhấn biểu tượng micro ở vị trí ngay bên phải của câu/từ đó -> chọn Allow (Cho phép) -> Bắt đầu đọc (bước chọn Allow chỉ hiển thị với lần đầu tiên bạn sử dụng, với những lần sau bạn chỉ cần nhấn biểu tượng micro là có thể đọc ngay).</p>' +
+                        '<p>- Nếu bạn đọc chính xác: hệ thống sẽ báo đúng thể hiện bằng dấu <i class="i_anw_true"></i>.</p>' +
+                        '<p>- Nếu bạn đọc sai: hệ thống sẽ báo sai thể hiện bằng dấu <i class="i_anw_false"></i>, đồng thời sẽ hiển thị câu mà bạn đã đọc sai, giúp bạn biết bạn đã đọc như thế nào, và sai ở đâu.</p>' +
+                        '<p><i>Lưu ý: Sử dụng tai nghe có micro trên máy tính và sử dụng hệ điều hành Android trên điện thoại.</i></p>',
+            placement: 'right',
+            trigger: 'focus',
+            html: true
+        });
         $('a.voice').each(function () {
             text = $(this).html();
             html = '<div style="display: inline-block"><span class="voice result">' + text + '</span> <i></i><button class="btn btn-sm btn-primary btnMicro"><i class="fa fa-microphone"></i></button></div>';
@@ -11,16 +23,17 @@ $(document).ready(function(){
         if(getMobileOperatingSystem() == 'iOS'){
             showMss('Tính năng Test Voice không hỗ trợ trình duyệt bạn đang sử dụng. Vui lòng tải trình duyệt Chrome hoặc Cốc Cốc để sử dụng tính năng này.')
         }else{
-            bootbox.alert(
-                '<div style="font-size: 14px; text-align: center"><p>Tính năng Test Voice không hỗ trợ trình duyệt bạn đang sử dụng. Vui lòng tải trình duyệt Chrome hoặc Cốc Cốc để sử dụng tính năng này.</p></div>'+
-                    '<a href="https://www.google.com/intl/vi/chrome/browser/desktop/index.html" target="_blank" class="btn btn-primary">Tải Chrome</a>'+
-                    '<a href="https://coccoc.com/" target="_blank" class="btn btn-primary">Tải Cốc Cốc</a>'
-                , function(){
-                    $('.modal').modal('hide');
-                });
-            setTimeout(function(){
-                $('.modal').modal('hide');
-            }, 5000);
+            bootbox.dialog({
+                message:  '<div style="font-size: 14px; text-align: center"><p>Tính năng Test Voice không hỗ trợ trình duyệt bạn đang sử dụng. Vui lòng tải trình duyệt Chrome hoặc Cốc Cốc để sử dụng tính năng này.</p></div>'+
+                '<div class="text-center">'+
+                '<a href="https://www.google.com/intl/vi/chrome/browser/desktop/index.html" target="_blank" class="btn btn-primary"><i class="fa fa-chrome" aria-hidden="true"></i> Tải Chrome</a>'+
+                '<a style="margin-left: 10px" href="https://coccoc.com/" target="_blank" class="btn btn-success"><i class="fa fa-chrome" aria-hidden="true"></i> Tải Cốc Cốc</a>'+
+                '</div>'
+            }
+            );
+            // setTimeout(function(){
+            //     $('.modal').modal('hide');
+            // }, 5000);
         }
         $('a.voice').each(function () {
             text = $(this).html();

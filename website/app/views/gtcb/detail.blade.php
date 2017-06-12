@@ -23,15 +23,16 @@
                         <div class="left">
                             <label class="mini_date">{{date('d/m/Y', $item->datecreate)}}</label>
                         </div>
-                        @if(!Network::is3g() || !Network::is3gmobifone())
                         <div class="right">
                             <div class="fb-like" data-href="{{Request::url()}}" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true">
                             </div>
                         </div>
-                        @endif
                     </div>
                     <div class="url_video_area center row">
                         <div id="myElement">Loading the player...</div>
+                    </div>
+                    <div id="guideVoice" style="display: none; margin-bottom: 10px">
+                        <a href="javascript:void(0)" class="btn btn-sm btn-info"><i class="fa fa-question-circle"></i> Hướng dẫn</a>
                     </div>
                     {{--<div class="table_detail row table-scroll">--}}
                         {{--<table class="table_1" style="width: 100%">--}}

@@ -29,6 +29,17 @@
 
                     </div>
                     <div id="myElement">Loading the player...</div>
+                    <div id="guideVoice"  style="display: none; margin-bottom: 10px; position: relative; margin-top: 10px">
+                        <a href="javascript:$('#guideVoice').find('.popover').toggle()" class="ht" style="background: #5bc0de"><span class="fa fa-question-circle"></span> Hướng dẫn</a>
+                        <div class="popover" style="display: none; left: 90px; color: #000" >
+                            <p>HƯỚNG DẪN SỬ DỤNG TEST VOICE</p>
+                            <p><strong>B1:</strong> Bạn xem và nghe video mẫu.</p>
+                            <p><strong>B2:</strong> Khi bạn muốn luyện nói 1 câu/từ nào trong bài, bạn nhấn biểu tượng micro ở vị trí ngay bên phải của câu/từ đó -> chọn Allow (Cho phép) -> Bắt đầu đọc (bước chọn Allow chỉ hiển thị với lần đầu tiên bạn sử dụng, với những lần sau bạn chỉ cần nhấn biểu tượng micro là có thể đọc ngay).</p>
+                            <p>- Nếu bạn đọc chính xác: hệ thống sẽ báo đúng thể hiện bằng dấu <span class="kq_t"></span>.</p>
+                            <p>- Nếu bạn đọc sai: hệ thống sẽ báo sai thể hiện bằng dấu <span class="kq_f"></span>, đồng thời sẽ hiển thị câu mà bạn đã đọc sai, giúp bạn biết bạn đã đọc như thế nào, và sai ở đâu.</p>
+                            <p><i>Lưu ý: Sử dụng tai nghe có micro trên máy tính và sử dụng hệ điều hành Android trên điện thoại.</i></p>
+                        </div>
+                    </div>
                     <div class="four_function">
                         <div class="item_four_function">
                             <a class="" href="javascript:void(0)" onclick="savearticle('{$obj._id}')">Lưu bài</a>
@@ -132,5 +143,7 @@
     });
 
 </script>
+<script src='/template/wap/asset/js/voice.js'></script>
+
 {include="component/popreg"}
 

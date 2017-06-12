@@ -369,7 +369,3 @@ Widget::register('reglession', function (){
         ));
     }
 });
-
-Widget::register('voice', function (){
-    return View::make('widgets.voice');
-});
