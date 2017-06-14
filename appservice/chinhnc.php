@@ -341,7 +341,9 @@ function newQuestion(){
             'url' => Constant::BASE_URL.$_SERVER['REQUEST_URI'],
             'status' => Constant::STATUS_ENABLE,
             'phone' => isset($_SESSION['uinfo']) ? $_SESSION['uinfo']['phone'] : '',
-            'price'=> 0
+            'price'=> 0,
+            'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
     );
     $historycl->insert($newHistoryLog);
     echo json_encode($dtr);exit();
@@ -926,7 +928,9 @@ function dictionary(){
             'url' => Constant::BASE_URL.$_SERVER['REQUEST_URI'],
             'status' => Constant::STATUS_ENABLE,
             'phone' => isset($_SESSION['uinfo']) ? $_SESSION['uinfo']['phone'] : '',
-            'price'=> 0
+            'price'=> 0,
+            'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
     );
     $historycl->insert($newHistoryLog);
     echo json_encode($dtr);exit();
@@ -1048,7 +1052,9 @@ function userSetting(){
             'url' => Constant::BASE_URL.$_SERVER['REQUEST_URI'],
             'status' => Constant::STATUS_ENABLE,
             'phone' => $_SESSION['uinfo']['phone'],
-            'price'=> 0
+            'price'=> 0,
+            'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
     );
     $historycl->insert($newHistoryLog);
     echo json_encode($dtr);exit();
@@ -1397,7 +1403,9 @@ function registerPackage(){
             'url' => Constant::BASE_URL.$_SERVER['REQUEST_URI'],
             'status' => Constant::STATUS_ENABLE,
             'phone' => $_SESSION['uinfo']['phone'],
-            'price'=> $packageInfo == 0 ? 0 : Network::getPackageItem()['E']['price']
+            'price'=> $packageInfo == 0 ? 0 : Network::getPackageItem()['E']['price'],
+            'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
     );
     $historycl->insert($newHistoryLog);
     echo json_encode($dtr);exit();
@@ -1442,7 +1450,9 @@ function cancelPackage(){
         'url' => Constant::BASE_URL.$_SERVER['REQUEST_URI'],
         'status' => Constant::STATUS_ENABLE,
         'phone' => $_SESSION['uinfo']['phone'],
-        'price'=> 0
+        'price'=> 0,
+        'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
     );
     $historycl->insert($newHistoryLog);
     echo json_encode($dtr);exit();

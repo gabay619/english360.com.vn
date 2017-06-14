@@ -21,7 +21,7 @@ $(document).ready(function(){
         });
     }else{
         if(getMobileOperatingSystem() == 'iOS'){
-            showMss('Tính năng Test Voice không hỗ trợ trình duyệt bạn đang sử dụng. Vui lòng tải trình duyệt Chrome hoặc Cốc Cốc để sử dụng tính năng này.')
+            showMss('Hãy sử dụng trình duyệt Chrome trên máy tính hoặc điện thoại hệ điều hành android để luyện phát âm.')
         }else{
             bootbox.dialog({
                 message:  '<div style="font-size: 14px; text-align: center"><p>Tính năng Test Voice không hỗ trợ trình duyệt bạn đang sử dụng. Vui lòng tải trình duyệt Chrome hoặc Cốc Cốc để sử dụng tính năng này.</p></div>'+

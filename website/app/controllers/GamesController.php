@@ -71,7 +71,9 @@ class GamesController extends \BaseController {
                 'url' => Request::url(),
                 'status' => Constant::STATUS_ENABLE,
                 'phone' => Auth::user()->phone,
-                'price' => 0
+                'price' => 0,
+                'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
         );
         HisLog::insert($newHistoryLog);
 		return View::make('games.play_easy', array(
@@ -113,7 +115,9 @@ class GamesController extends \BaseController {
                 'url' => Request::url(),
                 'status' => Constant::STATUS_ENABLE,
                 'phone' => Auth::user()->phone,
-                'price' => 0
+                'price' => 0,
+                'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
         );
         HisLog::insert($newHistoryLog);
 		return View::make('games.play_hard', array(

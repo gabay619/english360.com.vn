@@ -503,4 +503,17 @@ function getSmsLink($to,$body){
     return 'sms:'.$to.$char.'body='.$body;
 }
 
+// Có thể chuyển sang app tin nhắn với cú pháp hay không? Android và iOS >7
+function canGotoSmsApp(){
+    if(stripos($_SERVER['HTTP_USER_AGENT'],"Android")) return true;
+//    if(stripos($_SERVER['HTTP_USER_AGENT'],"Windows Phone")) return true;
+    if(stripos($_SERVER['HTTP_USER_AGENT'],"iPhone")){
+        $version = preg_replace("/(.*) OS ([0-9]*)_(.*)/","$2", $_SERVER['HTTP_USER_AGENT']);
+        if($version > 7)
+            return true;
+    }
+    return false;
+}
+
+
 ?>

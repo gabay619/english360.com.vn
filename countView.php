@@ -39,7 +39,9 @@ $newHistoryLog = array(
     'status' => Constant::STATUS_ENABLE,
     'phone' => isset($_SESSION['uinfo']) ? $_SESSION['uinfo']['phone'] : '',
     'price' => 0,
-    'ref' => isset($_GET['ref']) ? $_GET['ref'] : ''
+    'ref' => isset($_GET['ref']) ? $_GET['ref'] : '',
+    'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
 );
 if(!isset($_SESSION['notsave_log']))
     $historylogCl->insert($newHistoryLog);

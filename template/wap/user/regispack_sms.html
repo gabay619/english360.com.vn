@@ -5,49 +5,47 @@
             <div class="title_cate">
                 <a href="/charge.php">NẠP QUA TIN NHẮN SMS</a>
             </div>
-            <div class="content_items taikhoan" id="selectProvider">
-                <p style="text-align: center; margin-bottom: 10px">
-                    Vui lòng chọn nhà mạng
-                </p>
-                <a href="javascript:showProvider('VTE')" class="ht">
-                    <h3>Viettel</h3>
-                </a>
-                <a href="javascript:showProvider('VMS')" class="ht" style="">
-                    <h3>MobiFone</h3>
-                </a>
-                <a href="javascript:showProvider('VNP')" class="ht" style="">
-                    <h3>Vinaphone</h3>
-                </a>
-            </div>
+            <!--<div class="content_items taikhoan" id="selectProvider">-->
+                <!--<p style="text-align: center; margin-bottom: 10px">-->
+                    <!--Vui lòng chọn nhà mạng-->
+                <!--</p>-->
+                <!--<a href="javascript:showProvider('VTE')" class="ht">-->
+                    <!--<h3>Viettel</h3>-->
+                <!--</a>-->
+                <!--<a href="javascript:showProvider('VMS')" class="ht" style="">-->
+                    <!--<h3>MobiFone</h3>-->
+                <!--</a>-->
+                <!--<a href="javascript:showProvider('VNP')" class="ht" style="">-->
+                    <!--<h3>Vinaphone</h3>-->
+                <!--</a>-->
+            <!--</div>-->
             <div class="clearfix"></div>
             <div class="content_items">
-                <div id="VTE" style="display: none;">
+                <div id="VTE">
                     <div class="center" style="border: 1px solid #ccc; margin-bottom: 15px; padding: 10px 0">
-                        <p>Quý khách vui lòng nhấn vào <strong><a style="color: blue; text-decoration: underline" href="{function="getSmsLink(9029,$mo.VTE)"}">ĐÂY</a></strong> và gửi tin nhắn</p>
-                        <p>Hoặc <button type="button" class="btn-clb btn_blue" data-clipboard-text="{$mo.VTE}"><i class="fa fa-files-o"></i> Copy cú pháp</button></p>
-                        <p style="font-style: italic">Nếu không được vui lòng soạn tin theo cú pháp:</p>
+                        <p style="font-style: italic">Quý khách vui lòng soạn tin theo cú pháp:</p>
                         <h3><strong id="moVTE">{$mo.VTE}</strong></h3>
                         <p>Gửi tới <strong>9029</strong></p>
                     </div>
                 </div>
-                <div style="display: none;" id="VMS" style="display: none;">
-                    <div class="center" style="border: 1px solid #ccc; margin-bottom: 15px; padding: 10px 0">
-                        <p>Quý khách vui lòng nhấn vào <strong><a style="color: blue; text-decoration: underline" href="{function="getSmsLink(9029,$mo.VMS)"}">ĐÂY</a></strong> và gửi tin nhắn</p>
-                        <p>Hoặc <button type="button" class="btn-clb btn_blue" data-clipboard-text="{$mo.VMS}"><i class="fa fa-files-o"></i> Copy cú pháp</button></p>
-                        <p style="font-style: italic">Nếu không được vui lòng soạn tin theo cú pháp:</p>
-                        <h3><strong id="moVMS">{$mo.VMS}</strong></h3>
-                        <p>Gửi tới <strong>9029</strong></p>
-                    </div>
-                </div>
-                <div style="display: none;" id="VNP" style="display: none;">
-                    <div class="center" style="border: 1px solid #ccc; margin-bottom: 15px; padding: 10px 0">
-                        <p>Quý khách vui lòng nhấn vào <strong><a style="color: blue; text-decoration: underline" href="{function="getSmsLink(9029,$mo.VNP)"}">ĐÂY</a></strong> và gửi tin nhắn</p>
-                        <p>Hoặc <button type="button" class="btn-clb btn_blue" data-clipboard-text="{$mo.VNP}"><i class="fa fa-files-o"></i> Copy cú pháp</button></p>
-                        <p style="font-style: italic">Nếu không được vui lòng soạn tin theo cú pháp:</p>
-                        <h3><strong id="moVNP">{$mo.VNP}</strong></h3>
-                        <p>Gửi tới <strong>9029</strong></p>
-                    </div>
-                </div>
+                <!--<div style="display: none;" id="VMS" style="display: none;">-->
+                    <!--<div class="center" style="border: 1px solid #ccc; margin-bottom: 15px; padding: 10px 0">-->
+                        <!--<p>Quý khách vui lòng nhấn vào <strong><a style="color: blue; text-decoration: underline" href="{function="getSmsLink(9029,$mo.VMS)"}">ĐÂY</a></strong> và gửi tin nhắn</p>-->
+                        <!--<p>Hoặc <button type="button" class="btn-clb btn_blue" data-clipboard-text="{$mo.VMS}"><i class="fa fa-files-o"></i> Copy cú pháp</button></p>-->
+                        <!--<p style="font-style: italic">Nếu không được vui lòng soạn tin theo cú pháp:</p>-->
+                        <!--<h3><strong id="moVMS">{$mo.VMS}</strong></h3>-->
+                        <!--<p>Gửi tới <strong>9029</strong></p>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div style="display: none;" id="VNP" style="display: none;">-->
+                    <!--<div class="center" style="border: 1px solid #ccc; margin-bottom: 15px; padding: 10px 0">-->
+                        <!--<p>Quý khách vui lòng nhấn vào <strong><a style="color: blue; text-decoration: underline" href="{function="getSmsLink(9029,$mo.VNP)"}">ĐÂY</a></strong> và gửi tin nhắn</p>-->
+                        <!--<p>Hoặc <button type="button" class="btn-clb btn_blue" data-clipboard-text="{$mo.VNP}"><i class="fa fa-files-o"></i> Copy cú pháp</button></p>-->
+                        <!--<p style="font-style: italic">Nếu không được vui lòng soạn tin theo cú pháp:</p>-->
+                        <!--<h3><strong id="moVNP">{$mo.VNP}</strong></h3>-->
+                        <!--<p>Gửi tới <strong>9029</strong></p>-->
+                    <!--</div>-->
+                <!--</div>-->
 
                 <!--<div class="four_function">-->
                     <!--<div class="item_four_function">-->

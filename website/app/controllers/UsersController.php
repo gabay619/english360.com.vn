@@ -110,7 +110,9 @@ class UsersController extends \BaseController {
                 'uid' => $user->_id,
                 'url' => Request::url(),
                 'status' => Constant::STATUS_ENABLE,
-                'price' => 0
+                'price' => 0,
+                'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
         );
         HisLog::insert($newHistoryLog);
         if(Request::ajax())
@@ -200,7 +202,9 @@ class UsersController extends \BaseController {
                         'uid' => Auth::user()->_id,
                         'url' => Request::ajax() ? Constant::BASE_URL : Request::url(),
                         'status' => Constant::STATUS_ENABLE,
-                        'price' => 0
+                        'price' => 0,
+                        'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
                 );
                 HisLog::insert($newHistoryLog);
 				if(Request::ajax())
@@ -304,7 +308,9 @@ class UsersController extends \BaseController {
                 'url' => Request::url(),
                 'status' => Constant::STATUS_ENABLE,
                 'phone' => $phone,
-                'price' => 0
+                'price' => 0,
+                'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
             );
             HisLog::insert($newHistoryLog);
         }else
@@ -358,7 +364,9 @@ class UsersController extends \BaseController {
                 'uid' => Auth::user() ? Auth::user()->_id : '',
                 'url' => Request::url(),
                 'status' => Constant::STATUS_ENABLE,
-                'price' => 0
+                'price' => 0,
+                'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
         );
         HisLog::insert($newHistoryLog);
 		Auth::logout();
@@ -446,7 +454,8 @@ class UsersController extends \BaseController {
                     'uid' => Auth::user()->_id,
                     'url' => Constant::BASE_URL.'/user/profile',
                     'status' => Constant::STATUS_ENABLE,
-                    'price' => 0
+                    'price' => 0,
+                    'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
             );
             HisLog::insert($newHistoryLog);
             return Redirect::to('/user/profile')->with('success', 'Thay đổi thông tin thành công.');

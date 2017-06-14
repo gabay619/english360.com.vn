@@ -98,7 +98,8 @@ class ThuvienController extends \BaseController {
                 'status' => Constant::STATUS_ENABLE,
                 'email' => Auth::user() ? Auth::user()->email : '',
                 'price' => 0,
-				'ref' => Input::get('ref','')
+				'ref' => Input::get('ref',''),
+                'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
         );
         HisLog::insert($newHistoryLog);
 		return View::make('thuvien.detail', array(

@@ -1,4 +1,6 @@
 <?php
+//error_reporting(E_ALL);
+//ini_set('display_errors', 1);
 //$usercl = $dbmg->user;
 //$authKey = $dbmg->auth_key;
 //$ui = $_SESSION['uinfo']['phone'];
@@ -51,9 +53,16 @@ switch ($step){
         }
         $user = $usercl->findOne(array('_id'=>$_SESSION['uinfo']['_id']));
         $balance = isset($user['balance']) ? $user['balance'] : 0;
+        //SMS
+        $contentId = 'NAP';
+        $contentId .= $selectPkg['price']/1000;
+        $mo = 'MW E360 '.$contentId.' '.$_SESSION['uinfo']['_id'].'.'.$selectPkg['code'];
+
 //        $balance = Common::getBalance($_SESSION['uinfo']['_id']);
         $tpl->assign("selectPkg", $selectPkg);
         $tpl->assign("balance", $balance);
+        $tpl->assign("mo", $mo);
+        $tpl->assign("canGotoSmsApp", canGotoSmsApp());
         $tpl->assign("pagefile", "user/regispack_2");
         break;
     case 3:
@@ -128,7 +137,8 @@ switch ($step){
                 $contentId = 'NAP';
                 $contentId .= $selectPkg['price']/1000;
                 $mo = array(
-                    'VTE' => 'MW '.$selectPkg['price'].' E360 NAP '.$_SESSION['uinfo']['_id'].'.'.$selectPkg['code'],
+//                    'VTE' => 'MW '.$selectPkg['price'].' E360 NAP '.$_SESSION['uinfo']['_id'].'.'.$selectPkg['code'],
+                    'VTE' => 'MW E360 '.$contentId.' '.$_SESSION['uinfo']['_id'].'.'.$selectPkg['code'],
                     'VMS' => 'MW E360 '.$contentId.' '.$_SESSION['uinfo']['_id'].'.'.$selectPkg['code'],
                     'VNP' => 'MW E360 '.$contentId.' '.$_SESSION['uinfo']['_id'].'.'.$selectPkg['code']
                 );

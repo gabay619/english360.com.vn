@@ -97,6 +97,7 @@ $exportUrl = 'incoming.php?act=exportHistory&'.http_build_query($param);
                     <th>Nguồn</th>
                     <th>Thời gian</th>
                     <th>Trạng thái</th>
+                    <th>UserAgent</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -114,6 +115,7 @@ $exportUrl = 'incoming.php?act=exportHistory&'.http_build_query($param);
                         <td><?php echo isset($item['ref']) ? $item['ref'] : '' ?></td>
                         <td><?php echo date('d/m/Y H:i:s', $item['datecreate']) ?></td>
                         <td><?php echo $item['status'] == Constant::STATUS_ENABLE ? 'Thành công' : 'Thất bại' ?></td>
+                        <td><?php echo isset($item['useragent']) ? $item['useragent'] : '' ?></td>
                     </tr>
                 <?php } ?>
                 </tbody>

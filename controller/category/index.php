@@ -22,6 +22,8 @@ if($obj['type']=="tudien"){
             'url' => Constant::BASE_URL.$_SERVER['REQUEST_URI'],
             'status' => Constant::STATUS_ENABLE,
             'phone' => isset($_SESSION['uinfo']) ? $_SESSION['uinfo']['phone'] : '',
+            'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
     );
     if(!isset($_SESSION['notsave_log']))
         $historycl->insert($newHistoryLog);

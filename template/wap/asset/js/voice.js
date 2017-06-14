@@ -17,7 +17,7 @@ $(document).ready(function(){
         if(getMobileOperatingSystem() == 'iOS'){
             $('body').append(
                 '<a href="#requiredBrowser" id="fbRequiredBrowser" class="fancybox" style="display:none;">Open</a>' +
-                '<div style="display: none" id="requiredBrowser">Tính năng Test Voice không hỗ trợ trình duyệt bạn đang sử dụng. Vui lòng tải trình duyệt Chrome hoặc Cốc Cốc để sử dụng tính năng này.</div>'
+                '<div style="display: none" id="requiredBrowser">Hãy sử dụng trình duyệt Chrome trên máy tính hoặc điện thoại hệ điều hành android để luyện phát âm</div>'
             );
         }else{
             $('body').append(

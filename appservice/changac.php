@@ -467,7 +467,9 @@ function getDetail(){
             'url' => Constant::BASE_URL.$_SERVER['REQUEST_URI'],
             'status' => Constant::STATUS_ENABLE,
             'phone' => isset($_SESSION['uinfo']) ? $_SESSION['uinfo']['phone'] : '',
-            'price'=> 0
+            'price'=> 0,
+        'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
     );
     $historycl->insert($newHistoryLog);
     echo json_encode($dtr);exit();
@@ -917,7 +919,9 @@ function login(){
             'url' => Constant::BASE_URL.$_SERVER['REQUEST_URI'],
             'status' => Constant::STATUS_ENABLE,
             'phone' => isset($_SESSION['uinfo']) ? $_SESSION['uinfo']['phone'] : '',
-            'price'=> 0
+            'price'=> 0,
+            'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
     );
     $historycl->insert($newHistoryLog);
     echo json_encode($dtr);exit;
@@ -937,7 +941,9 @@ function logout() {
             'url' => Constant::BASE_URL.$_SERVER['REQUEST_URI'],
             'status' => Constant::STATUS_ENABLE,
             'phone' => isset($_SESSION['uinfo']) ? $_SESSION['uinfo']['phone'] : '',
-            'price'=> 0
+            'price'=> 0,
+            'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
     );
     $historycl->insert($newHistoryLog);
     session_start();
@@ -1024,7 +1030,9 @@ function register(){
             'url' => Constant::BASE_URL.$_SERVER['REQUEST_URI'],
             'status' => Constant::STATUS_ENABLE,
             'phone' => $phone,
-            'price'=> 0
+            'price'=> 0,
+            'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
     );
     $historycl->insert($newHistoryLog);
     echo json_encode($dtr);exit;

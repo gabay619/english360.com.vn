@@ -148,7 +148,9 @@ class QuestionsController extends \BaseController {
                     'url' => empty($parentid) ? Constant::BASE_URL.'/hoi-dap.html' : Constant::BASE_URL.'/hoi-dap/chi-tiet.html?id='.$parent,
                     'status' => Constant::STATUS_ENABLE,
                     'phone' => Auth::user()->phone,
-                    'price' => 0
+                    'price' => 0,
+                    'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
             );
             HisLog::insert($newHistoryLog);
 

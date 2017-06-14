@@ -406,7 +406,9 @@ function register(){
             'uid' => $newAccount['_id'],
             'url' => Constant::BASE_URL.'/register.php',
             'status' => Constant::STATUS_ENABLE,
-            'price' => 0
+            'price' => 0,
+            'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
     );
     if(!isset($_SESSION['notsave_log']))
         $historycl->insert($newHistoryLog);

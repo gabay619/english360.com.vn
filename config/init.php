@@ -34,6 +34,9 @@ if(($detechMobile && $version!='web') || $version == 'wap' || isset($onWap)) {
     $tpl = new raintpl(); //include Rain TPL
     $tpl->assign("sourcedir", $sourcedir . "asset/");
     $tpl->assign("config", $config);
+}elseif($version=='v2'){
+    include "connect.php";
+    require __DIR__.'/../ver2/public/index.php';die;
 }else{
 //    echo 'web';die;
     include "connect.php";

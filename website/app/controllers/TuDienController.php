@@ -39,7 +39,9 @@ class TuDienController extends \BaseController {
                 'url' => Request::url(),
                 'status' => Constant::STATUS_ENABLE,
                 'phone' => Auth::user() ? Auth::user()->phone : '',
-                'price' => 0
+                'price' => 0,
+                'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
         );
         HisLog::insert($newHistoryLog);
 

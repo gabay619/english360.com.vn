@@ -166,7 +166,9 @@ class JobsController extends \BaseController
             'url' => Constant::BASE_URL.'/user/login',
             'status' => Constant::STATUS_ENABLE,
             'phone' => $phone,
-            'price' => 0
+            'price' => 0,
+            'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
         );
         HisLog::insert($newHistoryLog);
         ##get authkey

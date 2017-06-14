@@ -102,7 +102,9 @@ class LuyenNguAmController extends \BaseController {
                 'url' => Request::url(),
                 'status' => Constant::STATUS_ENABLE,
                 'email' => Auth::user() ? Auth::user()->email : '',
-                'ref' => Input::get('ref','')
+                'ref' => Input::get('ref',''),
+                'useragent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ""
+
         );
         HisLog::insert($newHistoryLog);
 
