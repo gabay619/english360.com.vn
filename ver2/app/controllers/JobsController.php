@@ -54,7 +54,7 @@ class JobsController extends \BaseController
             ))->get();
             foreach($newLession as $aLession){
                 $detailUrl = Constant::BASE_URL;
-                $detailUrl .= $key != Constant::TYPE_SONG ? ThuVien::getArticleUrlStatic($aLession->name, $aLession->_id, $key) : Song::getStaticDetailUrl($aLession->name, $aLession->_id);
+                $detailUrl .= $key != Constant::TYPE_SONG ? ThuVien::getArticleUrlStatic($aLession->name, $aLession->_id, $key, $aLession->slug) : Song::getStaticDetailUrl($aLession->name, $aLession->_id);
                 $detailUrl .= '?ref=email';
 
                 $related = $model::where(array(

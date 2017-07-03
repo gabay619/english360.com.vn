@@ -10,7 +10,7 @@
                 <div class="content_item dangky_view content_dangky">
                     <form action="" method="post">
                         <p class="text_center">
-                            <strong>Hãy đăng ký miễn phí tài khoản English360, dịch vụ miễn phí 3G/GPRS</strong>
+                            <strong>Hãy đăng ký tài khoản English360 miễn phí</strong>
                         </p>
                         <input type="text" class="input1" name="phone" placeholder="Nhập địa chỉ Email" id="Email">
                         <input type="password" class="input1" name="password" placeholder="Nhập mật khẩu" id="Password">
@@ -45,7 +45,7 @@
             password_confirmation: $("#PasswordConfirmation").val(),
             {$csrf_name}: '{$csrf_value}'
         }
-        $.post("incoming.php",formData , function(res) {
+        $.post("/incoming.php",formData , function(res) {
             if (res.status == 200) {
                 window.location.href = "/thong-bao.html";
             } else {

@@ -220,6 +220,7 @@
             dientuResult();
             $('#btnComplete').remove();
             $('#btnContinue').show();
+            soundCongratulation();
         }
 
         function validateDienchu(){

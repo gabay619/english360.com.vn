@@ -62,6 +62,17 @@ function showPopover(ele,mss) {
     ele.parent().find('.popover').show().html(mss);
 }
 
+function soundCorrect() {
+    $('#mainaudio').attr('src','/assets/sound/correct.mp3');
+    $('#mainaudio')[0].play();
+}
+
+function soundInCorrect() {
+    $('#mainaudio').attr('src','/assets/sound/incorrect.mp3');
+    $('#mainaudio')[0].play();
+}
+
+
 var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
 var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
 var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
@@ -80,10 +91,12 @@ function checkAns(ans) {
         $currentBtn.parent().find('.voice').removeClass('text-danger').addClass('text-success');
         $currentBtn.parent().find('span.result').addClass('kq_t');
         $currentBtn.remove();
+        soundCorrect()
     }else{
         $currentBtn.parent().find('.voice').addClass('text-danger');
 //            $currentBtn.parent().find('span.result').addClass('kq_f');
         showPopover($currentBtn,'<span class="kq_f"></span> '+ans);
+        soundInCorrect();
         console.log(ans.toLowerCase().replace(/[^a-zA-Z1-9]/g, "")+'-'+currentAns.toLowerCase().replace(/[^a-zA-Z1-9]/g, ""))
     }
 }

@@ -205,6 +205,7 @@
             $('#btnComplete').remove();
             $('#btnContinue').show();
             $('#textComplete').show().html('Điểm của bạn là: '+diem+'/'+tong)
+            soundCongratulation();
             console.log(diem+'/'+tong)
         }
 

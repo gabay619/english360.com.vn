@@ -14,7 +14,7 @@
                 <p>Cơ quan chủ quản: Công ty TNHH Truyền thông IQ Việt Nam</p>
                 <p>Địa chỉ: Tầng 2 tòa nhà Dinhle, 123B Trần Đăng Ninh, Dịch Vọng, Cầu Giấy, Hà Nội</p>
                 {{--<p>Giấy phép MXH số 2332/GP-BTTTT do Bộ Thông tin và Truyền thông cấp ngày 15/11/2015/08/2014</p>--}}
-                <p>Email: cskh@english360.com.vn CSKH: (04) 32474175</p>
+                <p>Email: cskh@english360.com.vn CSKH: (024) 32474175</p>
                 <p>Quản lý nội dung: Bà Lê Thị Lan Anh</p>
                 <p class="sub_link">
                     {{--<a href="/trang/gioi-thieu.html">Giới thiệu</a>--}}
@@ -89,6 +89,18 @@
     function playAudio(link){
         $('#mainaudio').attr('src',link);
         $('#mainaudio')[0].play();
+    }
+
+    function soundCorrect() {
+        playAudio('/assets/sound/correct.mp3');
+    }
+
+    function soundInCorrect() {
+        playAudio('/assets/sound/incorrect.mp3');
+    }
+
+    function soundCongratulation(){
+        playAudio('/assets/sound/congratulation.mp3');
     }
 
     $(function(){
@@ -264,5 +276,31 @@
 @popup()
 @event()
 {{--@event_welcome()--}}
+<!-- Google Code dành cho Thẻ tiếp thị lại -->
+<!--------------------------------------------------
+Không thể liên kết thẻ tiếp thị lại với thông tin nhận dạng cá nhân hay đặt thẻ tiếp thị lại trên các trang có liên quan đến danh mục nhạy cảm. Xem thêm thông tin và hướng dẫn về cách thiết lập thẻ trên: http://google.com/ads/remarketingsetup
+--------------------------------------------------->
+<script type="text/javascript">
+    var google_tag_params = {
+        edu_pid: 'REPLACE_WITH_VALUE',
+        edu_plocid: 'REPLACE_WITH_VALUE',
+        edu_pagetype: 'REPLACE_WITH_VALUE',
+        edu_totalvalue: 'REPLACE_WITH_VALUE',
+    };
+</script>
+<script type="text/javascript">
+    / <![CDATA[ /
+    var google_conversion_id = 975534012;
+    var google_custom_params = window.google_tag_params;
+    var google_remarketing_only = true;
+    / ]]> /
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+<noscript>
+    <div style="display:inline;">
+        <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/975534012/?guid=ON&amp;script=0"/>
+    </div>
+</noscript>
 </body>
 </html>

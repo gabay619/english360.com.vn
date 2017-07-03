@@ -1,6 +1,7 @@
 @extends('layouts.main')
 
 @section('content')
+
 <div class="content">
     <div class="w1170">
         <div class="content_left">
@@ -25,6 +26,7 @@
                     $posts = ThuVien::getNewPost($famousParent->_id, 7, true);
                     $firstFamousPost = isset($posts[0]) ? $posts[0] : null;
                     $secondFamousPost = isset($posts[1]) ? $posts[1] : null;
+
                     unset($posts[0]);
                     unset($posts[1])
                     ?>
@@ -32,7 +34,7 @@
                         @if($firstFamousPost)
                         <div class="block_categories_col_1">
                             <div class="item1">
-                                <a href="{{ThuVien::getArticleUrlStatic($firstFamousPost['name'], $firstFamousPost['_id'], $famousParent->type)}}">
+                                <a href="{{ThuVien::getArticleUrlStatic($firstFamousPost['name'], $firstFamousPost['_id'], $famousParent->type,$firstFamousPost['slug'])}}">
                                     <div class="img_mask img_mask_size_2">
                                         <img src="{{$firstFamousPost['avatar']}}">
                                         <label class="img_shadow"></label>
@@ -45,7 +47,7 @@
                         @if($secondFamousPost)
                         <div class="block_categories_col_2">
                             <div class="item2">
-                                <a title="" href="{{ThuVien::getArticleUrlStatic($secondFamousPost['name'], $secondFamousPost['_id'], $famousParent->type)}}">
+                                <a title="" href="{{ThuVien::getArticleUrlStatic($secondFamousPost['name'], $secondFamousPost['_id'], $famousParent->type, $secondFamousPost['slug'])}}">
                                         <span class="img_mask img_mask_item2">
                                             <img src="{{$secondFamousPost['avatar']}}">
                                         </span>
@@ -58,7 +60,7 @@
                             <div class="list_1">
                                 <ul class="ul_list_1">
                                     @foreach($posts as $post)
-                                    <li><a title="" href="{{ThuVien::getArticleUrlStatic($post['name'], $post['_id'], $famousParent->type)}}">{{$post['name']}}</a></li>
+                                    <li><a title="" href="{{ThuVien::getArticleUrlStatic($post['name'], $post['_id'], $famousParent->type, $post['slug'])}}">{{$post['name']}}</a></li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -210,7 +212,7 @@
                         @foreach($slideVideo as $aSlide)
                         <li>
                             <div class="item1">
-                                <a href="{{Thuvien::getArticleUrlStatic($aSlide['name'], $aSlide['_id'], $videoParent->type)}}">
+                                <a href="{{Thuvien::getArticleUrlStatic($aSlide['name'], $aSlide['_id'], $videoParent->type, $aSlide['slug'])}}">
                                     <div class="img_mask img_mask_size_1">
                                         <label class="play_video_btn"><i class="fa fa-fw"></i></label>
                                         <img src="{{$aSlide['avatar']}}">
@@ -228,7 +230,7 @@
                         @foreach($videos as $aVideo)
                         <li>
                             <div class="item1">
-                                <a href="{{Thuvien::getArticleUrlStatic($aVideo['name'], $aVideo['_id'], $videoParent->type)}}">
+                                <a href="{{Thuvien::getArticleUrlStatic($aVideo['name'], $aVideo['_id'], $videoParent->type, $aVideo['slug'])}}">
                                     <div class="img_mask img_mask_size_4">
                                         <img src="{{$aVideo['avatar']}}">
                                         <label class="img_shadow"></label>
@@ -259,7 +261,7 @@
                         @foreach(ThuVien::getNewPost($radioParent->_id, 8, true) as $aRadio)
                         <div class="block_categories_col_x">
                             <div class="item1">
-                                <a href="{{Thuvien::getArticleUrlStatic($aRadio['name'], $aRadio['_id'], $radioParent->type)}}">
+                                <a href="{{Thuvien::getArticleUrlStatic($aRadio['name'], $aRadio['_id'], $radioParent->type, $aRadio['slug'])}}">
                                     <div class="img_mask img_mask_size_5">
                                         <img src="{{$aRadio['avatar']}}" />
                                         <label class="img_shadow"></label>
@@ -291,7 +293,7 @@
                         @foreach(ThuVien::getNewPost($filmParent->_id, 8, true) as $aFilm)
                         <div class="block_categories_col_y">
                             <div class="item4">
-                                <a href="{{Thuvien::getArticleUrlStatic($aFilm['name'], $aFilm['_id'], $filmParent->type)}}">
+                                <a href="{{Thuvien::getArticleUrlStatic($aFilm['name'], $aFilm['_id'], $filmParent->type, $aFilm['slug'])}}">
                                     <div class="img_mask img_mask_item_4">
                                         <img src="{{$aFilm['avatar']}}" />
                                         <strong class="title_item4 title_item1_font_3">{{$aFilm['name']}}</strong>
@@ -371,7 +373,7 @@
                     @if($firstExp)
                     <div class="row_1">
                         <div class="item1">
-                            <a href="{{ThuVien::getArticleUrlStatic($firstExp['name'], $firstExp['_id'], $expParent->type)}}">
+                            <a href="{{ThuVien::getArticleUrlStatic($firstExp['name'], $firstExp['_id'], $expParent->type, $firstExp['slug'])}}">
                                 <div class="img_mask img_mask_size_3">
                                     <img src="{{$firstExp['avatar']}}">
                                     <label class="img_shadow"></label>
@@ -384,7 +386,7 @@
                     @if($secondExp)
                     <div class="row_2">
                         <div class="item3">
-                            <a title="" href="{{ThuVien::getArticleUrlStatic($secondExp['name'], $secondExp['_id'], $expParent->type)}}">
+                            <a title="" href="{{ThuVien::getArticleUrlStatic($secondExp['name'], $secondExp['_id'], $expParent->type, $secondExp['slug'])}}">
                                     <span class="img_mask img_mask_item3">
                                         <img src="{{$secondExp['avatar']}}">
                                     </span>
@@ -397,7 +399,7 @@
                         <div class="list_2">
                             <ul class="ul_list_2">
                                 @foreach($exp as $aExp)
-                                <li><a title="{{$aExp['name']}}" href="{{ThuVien::getArticleUrlStatic($aExp['name'], $aExp['_id'], $expParent->type)}}">{{$aExp['name']}}</a></li>
+                                <li><a title="{{$aExp['name']}}" href="{{ThuVien::getArticleUrlStatic($aExp['name'], $aExp['_id'], $expParent->type, $aExp['slug'])}}">{{$aExp['name']}}</a></li>
                                 @endforeach
                             </ul>
                         </div>
@@ -420,7 +422,7 @@
                     @if($firstDaily)
                     <div class="row_1">
                         <div class="item1">
-                            <a href="{{ThuVien::getArticleUrlStatic($firstDaily['name'],$firstDaily['_id'], $dailyParent->type)}}">
+                            <a href="{{ThuVien::getArticleUrlStatic($firstDaily['name'],$firstDaily['_id'], $dailyParent->type, $firstDaily['slug'])}}">
                                 <div class="img_mask img_mask_size_3">
                                     <img src="{{$firstDaily['avatar']}}">
                                     <label class="img_shadow"></label>
@@ -433,7 +435,7 @@
                     @if($secondDaily)
                     <div class="row_2">
                         <div class="item3">
-                            <a title="" href="{{ThuVien::getArticleUrlStatic($secondDaily['name'], $secondDaily['_id'], $dailyParent->type)}}">
+                            <a title="" href="{{ThuVien::getArticleUrlStatic($secondDaily['name'], $secondDaily['_id'], $dailyParent->type, $secondDaily['slug'])}}">
                                     <span class="img_mask img_mask_item3">
                                         <img src="{{$secondDaily['avatar']}}">
                                     </span>
@@ -446,7 +448,7 @@
                         <div class="list_2">
                             <ul class="ul_list_2">
                                 @foreach($daily as $aDaily)
-                                <li><a title="{{$aDaily['name']}}" href="{{ThuVien::getArticleUrlStatic($aDaily['name'], $aDaily['_id'], $dailyParent->type)}}">{{$aDaily['name']}}</a></li>
+                                <li><a title="{{$aDaily['name']}}" href="{{ThuVien::getArticleUrlStatic($aDaily['name'], $aDaily['_id'], $dailyParent->type, $aDaily['slug'])}}">{{$aDaily['name']}}</a></li>
                                 @endforeach
                             </ul>
                         </div>
@@ -469,7 +471,7 @@
                     @if($firstIdiom)
                     <div class="row_1">
                         <div class="item1">
-                            <a href="{{ThuVien::getArticleUrlStatic($firstIdiom['name'], $firstIdiom['_id'], $idiomParent->type)}}">
+                            <a href="{{ThuVien::getArticleUrlStatic($firstIdiom['name'], $firstIdiom['_id'], $idiomParent->type, $firstIdiom['slug'])}}">
                                 <div class="img_mask img_mask_size_3">
                                     <img src="{{$firstIdiom['avatar']}}">
                                     <label class="img_shadow"></label>
@@ -482,7 +484,7 @@
                     @if($secondIdiom)
                     <div class="row_2">
                         <div class="item3">
-                            <a title="" href="{{ThuVien::getArticleUrlStatic($secondIdiom['name'], $secondIdiom['_id'], $idiomParent->type)}}">
+                            <a title="" href="{{ThuVien::getArticleUrlStatic($secondIdiom['name'], $secondIdiom['_id'], $idiomParent->type, $secondIdiom['slug'])}}">
                                     <span class="img_mask img_mask_item3">
                                         <img src="{{$secondIdiom['avatar']}}">
                                     </span>
@@ -495,7 +497,7 @@
                         <div class="list_2">
                             <ul class="ul_list_2">
                                 @foreach($idiom as $aIdiom)
-                                <li><a title="{{$aIdiom['name']}}" href="{{ThuVien::getArticleUrlStatic($aIdiom['name'], $aIdiom['_id'], $idiomParent->type)}}">{{$aIdiom['name']}}</a></li>
+                                <li><a title="{{$aIdiom['name']}}" href="{{ThuVien::getArticleUrlStatic($aIdiom['name'], $aIdiom['_id'], $idiomParent->type, $aIdiom['slug'])}}">{{$aIdiom['name']}}</a></li>
                                 @endforeach
                             </ul>
                         </div>

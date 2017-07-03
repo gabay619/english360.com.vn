@@ -6,7 +6,7 @@
 <div class="footer" style="text-align: center; padding: 20px; color: #fff">
     <p>Cơ quan chủ quản: Công ty TNHH Truyền thông IQ Việt Nam</p>
     <p>Địa chỉ: Tầng 2 tòa nhà Dinhle, 123B Trần Đăng Ninh, Dịch Vọng, Cầu Giấy, Hà Nội</p>
-    <p>Email: <a href="mailto:cskh@english360.com.vn">cskh@english360.com.vn</a> - CSKH: (04) 32474175</p>
+    <p>Email: <a href="mailto:cskh@english360.com.vn">cskh@english360.com.vn</a> - CSKH: (024) 32474175</p>
 </div>
 
 </div>

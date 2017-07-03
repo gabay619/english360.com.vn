@@ -522,6 +522,7 @@
             $('.baitap').eq(baitapIndex).fadeIn();
             if(!$('.baitap').eq(parseInt(baitapIndex)+1).length){
                 $('.baitap').eq(baitapIndex).find('.baitiep').attr('href','javascript:toBegin()').html('Làm lại tất cả');
+                soundCongratulation();
             }
             $('html,body').scrollTop(0);
         }

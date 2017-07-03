@@ -56,14 +56,23 @@ class ThuvienController extends \BaseController {
 
 	public function getDetail($cateSlug,$slug){
         $thuvienId = Category::whereIn('parentid', array('0',0))->where('type', Constant::TYPE_THUVIEN)->first()->_id;
-        $atId = CommonHelpers::getIdFromSlug($slug);
-		$type = CommonHelpers::getTypebyCateSlug($cateSlug);
-		if(Input::get('source','') == 'admin')
-			$item = ThuVien::where('_id', $atId)->first();
-		else
-			$item = ThuVien::where('status', Constant::STATUS_ENABLE)->where('_id', $atId)->first();
+        $cond = array('slug' => $slug);
+        if(Input::get('source','') != 'admin')
+            $cond['status'] = Constant::STATUS_ENABLE;
+        $item = ThuVien::where($cond)->first();
+        if(!$item){
+            unset($cond['slug']);
+            $atId = CommonHelpers::getIdFromSlug($slug);
+            $cond['_id'] = $atId;
+            $item = ThuVien::where($cond)->first();
+        }
+//		if(Input::get('source','') == 'admin')
+//			$item = ThuVien::where('_id', $atId)->first();
+//		else
+//			$item = ThuVien::where('status', Constant::STATUS_ENABLE)->where('_id', $atId)->first();
 
 		if(!$item) return 'Bài học không tồn tại.';
+        $type = CommonHelpers::getTypebyCateSlug($cateSlug);
 
 		//Đếm số lượt xem
 

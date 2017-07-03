@@ -85,9 +85,11 @@ function checkAns(ans) {
         $currentBtn.parent().find('.voice').removeClass('false').addClass('true');
         $currentBtn.parent().find('>i').removeClass('i_anw_false').addClass('i_anw_true');
         $currentBtn.remove();
+        soundCorrect();
     }else{
         $currentBtn.parent().find('.voice').addClass('false');
         showPopover($currentBtn,'<i class="i_anw_false"></i> '+ans);
+        soundInCorrect();
         console.log(ans.toLowerCase().replace(/[^a-zA-Z1-9]/g, "")+'-'+currentAns.toLowerCase().replace(/[^a-zA-Z1-9]/g, ""))
     }
 }
@@ -106,12 +108,18 @@ recognition.onspeechend = function() {
 
 recognition.onnomatch = function(event) {
 //        $('#voiceMss').show().html('Không bắt được âm thanh');
-    alert('Không bắt được âm thanh');
+    alert('Không thể nhận diện phát âm của bạn.');
     $currentBtn.removeClass('btn-success').addClass('btn-primary');
 }
 
 recognition.onerror = function(event) {
-    alert('Không bắt được âm thanh!');
+    console.log(event.error)
+    if(event.error == 'not-allowed'){
+        alert('Hãy cắm tai nghe có micro vào thiết bị để luyện phát âm.');
+    }else{
+        alert('Không bắt được âm thanh');
+    }
+    // alert(event.error);
 //        $('#voiceMss').show().html(event.error);
     $currentBtn.removeClass('btn-success').addClass('btn-primary');
     //        alert(event.error);

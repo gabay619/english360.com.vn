@@ -32,7 +32,7 @@
                         @if($firstFamousPost)
                         <div class="block_categories_col_1">
                             <div class="item1">
-                                <a href="{{ThuVien::getArticleUrlStatic($firstFamousPost['name'], $firstFamousPost['_id'], $famousParent->type)}}">
+                                <a href="{{ThuVien::getArticleUrlStatic($firstFamousPost['name'], $firstFamousPost['_id'], $famousParent->type, $firstFamousPost['slug'])}}">
                                     <div class="img_mask img_mask_size_2">
                                         <img src="{{$firstFamousPost['avatar']}}">
                                         <label class="img_shadow"></label>

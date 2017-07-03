@@ -21,7 +21,7 @@
                         @foreach($slide as $aSlide)
                             <li>
                                 <div class="item1">
-                                    <a href="{{ThuVien::getArticleUrlStatic($aSlide['name'], $aSlide['_id'], $type)}}">
+                                    <a href="{{ThuVien::getArticleUrlStatic($aSlide['name'], $aSlide['_id'], $type, $aSlide['slug'])}}">
                                         <div class="img_mask img_mask_size_1">
                                             <img src="{{$aSlide['avatar']}}" />
                                             <label class="img_shadow"></label>
@@ -38,7 +38,7 @@
                         @foreach($hightlight as $item)
                             <li>
                                 <div class="item1">
-                                    <a href="{{ThuVien::getArticleUrlStatic($item['name'], $item['_id'], $type)}}">
+                                    <a href="{{ThuVien::getArticleUrlStatic($item['name'], $item['_id'], $type, $item['slug'])}}">
                                         <div class="img_mask img_mask_size_4">
                                             <img src="{{$item['avatar']}}">
                                             <label class="img_shadow"></label>

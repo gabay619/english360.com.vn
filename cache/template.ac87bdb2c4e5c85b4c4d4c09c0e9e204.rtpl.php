@@ -29,6 +29,16 @@
 </head>
 
 <body>
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-101046121-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
 <div id="fb-root"></div>
 <script>
     window.fbAsyncInit = function() {
@@ -120,7 +130,7 @@
         <div class="logo"></div>
         <p>Cơ quan chủ quản: Công ty TNHH Truyền thông IQ Việt Nam</p>
         <p>Địa chỉ: Tầng 2 tòa nhà Dinhle, 123B Trần Đăng Ninh, Dịch Vọng, Cầu Giấy, Hà Nội</p>
-        <p>Email: cskh@english360.com.vn CSKH: (04) 32474175</p>
+        <p>Email: cskh@english360.com.vn CSKH: (024) 32474175</p>
         <p>Quản lý nội dung: Bà Lê Thị Lan Anh</p>
         <p><a href="/version.php?v=web" style="text-decoration: underline">Chuyển sang phiên bản WEB</a></p>
     </div>
@@ -128,6 +138,7 @@
 </div>
 </div>
 <a id='backTop'>Back To Top</a>
+<audio style="display: none; width: 0;height: 0;" id="mainaudio" controls></audio>
 <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>-->
 <script src="/template/wap/asset/js/jquery.backTop.min.js"></script>
 <script>
@@ -195,112 +206,38 @@
             $('#txtTratu').val('');
         });
 
+        $('.Loa').click(function(e){
+            var src = $(this).attr('alt');
+            $('#mainaudio').attr('src',src);
+            $('#mainaudio')[0].play();
+        })
 
     });
-    $(document).ready(function(){
-        if (window.hasOwnProperty('webkitSpeechRecognition')) {
-            $('a.voice').each(function () {
-                text = $(this).html();
-                html = '<div style="display: inline-block;position: relative">' +
-                        '<span class="voice">' + text + '</span> ' +
-                        '<span class="result"></span>' +
-                        '<button class="ht btnMicro"><span class="fa fa-microphone"></span></button>' +
-                        '<div class="popover" style="display: none"></div>' +
-                        '</div>';
-                $(this).after(html);
-                $(this).remove();
-            });
-        }else{
-            $('a.voice').each(function () {
-                text = $(this).html();
-                html = '<span class="voice">' + text + '</span>';
-                $(this).after(html);
-                $(this).remove();
-            });
-        }
-        $('.voice').click(function () {
-            responsiveVoice.speak($(this).html())
-        })
-    });
+
 
     function checkPhrase(ph1,ph2){
         return ph1.toLowerCase().replace(/[^a-zA-Z1-9]/g, "") == ph2.toLowerCase().replace(/[^a-zA-Z1-9]/g, "");
     }
-    //    if (window.hasOwnProperty('webkitSpeechRecognition') || window.hasOwnProperty('SpeechRecognition')){
-    //        alert('not supported!');
-    //    }
 
-    var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
-    var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
-    var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
-    var recognition = new SpeechRecognition();
-    var speechRecognitionList = new SpeechGrammarList();
-    //    speechRecognitionList.addFromString(grammar, 1);
-    //    recognition.grammars = speechRecognitionList;
-    //recognition.continuous = false;
-    recognition.lang = 'en-US';
-    var currentAns;
-    var $currentBtn;
+    function getMobileOperatingSystem() {
+        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-    $(function () {
-        $(document).on('click', '.btnMicro',function () {
-            recognition.start();
-            currentAns = $(this).parent().find('.voice').html();
-//            alert(currentAns);return false;
-//            $('.btnMicro').popover('destroy');
-            //            $(this).parent().find('>i').remove();
-            $currentBtn = $(this);
-//            $(this).removeClass('btn-primary').addClass('btn-success')
-        });
-        $(document).on('click', function (e) {
-            //did not click a popover toggle, or icon in popover toggle, or popover
-            $('.popover').hide();
-        });
-    })
-
-    function showPopover(ele,mss) {
-        ele.parent().find('.popover').show().html(mss);
-    }
-
-    function checkAns(ans) {
-        if(checkPhrase(currentAns,ans)){
-            $currentBtn.parent().find('.voice').removeClass('text-danger').addClass('text-success');
-            $currentBtn.parent().find('span.result').addClass('kq_t');
-            $currentBtn.remove();
-        }else{
-            $currentBtn.parent().find('.voice').addClass('text-danger');
-//            $currentBtn.parent().find('span.result').addClass('kq_f');
-            showPopover($currentBtn,'<span class="kq_f"></span> '+ans);
-            console.log(ans.toLowerCase().replace(/[^a-zA-Z1-9]/g, "")+'-'+currentAns.toLowerCase().replace(/[^a-zA-Z1-9]/g, ""))
+        // Windows Phone must come first because its UA also contains "Android"
+        if (/windows phone/i.test(userAgent)) {
+            return "Windows Phone";
         }
-    }
 
-    recognition.onresult = function(event) {
-        var last = event.results.length - 1;
-        ans = event.results[last][0].transcript;
-        console.log(ans)
-        checkAns(ans);
-    }
+        if (/android/i.test(userAgent)) {
+            return "Android";
+        }
 
-    recognition.onspeechend = function() {
-        recognition.stop();
-        $currentBtn.removeClass('btn-success').addClass('btn-primary');
-    }
+        // iOS detection from: http://stackoverflow.com/a/9039885/177710
+        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+            return "iOS";
+        }
 
-    recognition.onnomatch = function(event) {
-//        $('#voiceMss').show().html('Không bắt được âm thanh');
-        alert('Không bắt được âm thanh');
-//        $currentBtn.removeClass('btn-success').addClass('btn-primary');
+        return "unknown";
     }
-
-    recognition.onerror = function(event) {
-        alert('Không bắt được âm thanh!');
-//        $('#voiceMss').show().html(event.error);
-//        $currentBtn.removeClass('btn-success').addClass('btn-primary');
-        //        alert(event.error);
-    }
-
-    //End voice
 </script>
 <script>
 
@@ -356,6 +293,7 @@
     .voice{
         text-decoration: underline;
         font-weight: bold;
+        color: #146eb4;
     }
     .text-success{
         color: #24C179
@@ -378,5 +316,31 @@
         z-index: 10;
     }
 </style>
+<!-- Google Code dành cho Thẻ tiếp thị lại -->
+<!--------------------------------------------------
+Không thể liên kết thẻ tiếp thị lại với thông tin nhận dạng cá nhân hay đặt thẻ tiếp thị lại trên các trang có liên quan đến danh mục nhạy cảm. Xem thêm thông tin và hướng dẫn về cách thiết lập thẻ trên: http://google.com/ads/remarketingsetup
+--------------------------------------------------->
+<script type="text/javascript">
+    var google_tag_params = {
+        edu_pid: 'REPLACE_WITH_VALUE',
+        edu_plocid: 'REPLACE_WITH_VALUE',
+        edu_pagetype: 'REPLACE_WITH_VALUE',
+        edu_totalvalue: 'REPLACE_WITH_VALUE',
+    };
+</script>.php
+<script type="text/javascript">
+    / <![CDATA[ /
+    var google_conversion_id = 975534012;
+    var google_custom_params = window.google_tag_params;
+    var google_remarketing_only = true;
+    / ]]> /
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+<noscript>
+    <div style="display:inline;">
+        <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/975534012/?guid=ON&amp;script=0"/>
+    </div>
+</noscript>
 </body>
 </html>

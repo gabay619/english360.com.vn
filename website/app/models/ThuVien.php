@@ -21,20 +21,29 @@ class ThuVien extends Eloquent
 
     public function getArticleUrl($type){
         $cateSlug = CommonHelpers::getCateSlugbyType($type);
-        $slug = CommonHelpers::utf8_to_url($this->name);
-        return '/'.$cateSlug.'/'.$slug.'-'.$this->_id.'.html';
+        if(isset($this->slug) && !empty($this->slug))
+            $slug = $this->slug;
+        else
+            $slug = CommonHelpers::utf8_to_url($this->name).'-'.$this->_id;
+        return '/'.$cateSlug.'/'.$slug.'.html';
     }
 
     public function getDetailUrl($type){
         $cateSlug = CommonHelpers::getCateSlugbyType($type);
-        $slug = CommonHelpers::utf8_to_url($this->name);
-        return '/'.$cateSlug.'/'.$slug.'-'.$this->_id.'.html';
+        if(isset($this->slug) && !empty($this->slug))
+            $slug = $this->slug;
+        else
+            $slug = CommonHelpers::utf8_to_url($this->name).'-'.$this->_id;
+        return '/'.$cateSlug.'/'.$slug.'.html';
+//        $cateSlug = CommonHelpers::getCateSlugbyType($type);
+//        $slug = CommonHelpers::utf8_to_url($this->name);
+//        return '/'.$cateSlug.'/'.$slug.'-'.$this->_id.'.html';
     }
 
-    public static function getArticleUrlStatic($name, $id, $type){
+    public static function getArticleUrlStatic($name, $id, $type, $slug=''){
         $cateSlug = CommonHelpers::getCateSlugbyType($type);
-        $slug = CommonHelpers::utf8_to_url($name);
-        return '/'.$cateSlug.'/'.$slug.'-'.$id.'.html';
+        if(empty($slug)) $slug = CommonHelpers::utf8_to_url($name).'-'.$id;
+        return '/'.$cateSlug.'/'.$slug.'.html';
     }
 
     public function categories(){

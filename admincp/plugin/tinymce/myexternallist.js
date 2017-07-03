@@ -8,5 +8,6 @@ var tinyMCEImageList = new Array(
 var tinyMCETemplateList = [
     // Name, URL, Description
     ["tracnghiem", "plugin/tinymce/templates/tracnghiem.htm", "Trắc nghiệm."],
+    ["download", "plugin/tinymce/templates/download_btn.htm", "Download"],
     //["Layout", "templates/layout1.htm", "HTML Layout."]
 ];

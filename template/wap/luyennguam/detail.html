@@ -1,4 +1,3 @@
-<audio style="display:none; width: 0;height: 0;" id="mainaudio" controls></audio>
 <div class="main">
     <!--<input type="hidden" id="medialink" value="{$obj.medialink}">-->
     <!--<input type="hidden" id="avatar" value="{$obj.avatar}">-->
@@ -109,11 +108,6 @@
 </script>
 
 <script>
-    $('.Loa').click(function(e){
-        var src = $(this).attr('alt');
-        $('#mainaudio').attr('src',src);
-        $('#mainaudio')[0].play();
-    })
     // Load comment
     var pagenow = 1;
     function savearticle(exid) {
