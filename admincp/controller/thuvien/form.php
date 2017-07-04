@@ -16,12 +16,18 @@ $catid = $_GET['catid'];
 #Post Process
 if (isset($_POST['acpt'])) {
 //    print_r($_POST['calendar_time']);die;
+    if(!empty($_POST['slug'])){
+        $checkSlug = $newscl->findOne(array(
+            'category' => $catid,
+            'slug' => $_POST['slug']
+        ));
+        if($checkSlug) $_POST['slug'] = '';
+    }
     if(count($_POST['category'])<=0) $_POST['category'] = array();
     $redirect = $_POST['redirect'];
     unset($_POST['redirect']);
     unset($_POST['acpt']);
     $_POST['namenonutf'] = convert_vi_to_en($_POST['name']);
-    if(empty($_POST['slug'])) $_POST['slug'] = Common::utf8_to_url($_POST['name']);
     if(!isset($_POST['status'])) $_POST['status'] = '0';
 
     $calendar = $_POST['calendar_date'].' '.$_POST['calendar_time'];

@@ -152,7 +152,7 @@
                         @if($firstSong)
                         <div class="block_categories_col_1">
                             <div class="item1">
-                                <a href="{{Song::getStaticDetailUrl($firstSong['name'], $firstSong['_id'])}}">
+                                <a href="{{Song::getStaticDetailUrl($firstSong['name'], $firstSong['_id'], $firstSong['slug'])}}">
                                     <div class="img_mask img_mask_size_2">
                                         <img src="{{$firstSong['avatar']}}">
                                         <label class="img_shadow"></label>
@@ -165,7 +165,7 @@
                         @if($secondSong)
                         <div class="block_categories_col_2">
                             <div class="item2">
-                                <a title="" href="{{Song::getStaticDetailUrl($secondSong['name'], $secondSong['_id'])}}">
+                                <a title="" href="{{Song::getStaticDetailUrl($secondSong['name'], $secondSong['_id'], $secondSong['slug'])}}">
                                         <span class="img_mask img_mask_item2">
                                             <img src="{{$secondSong['avatar']}}">
                                         </span>
@@ -178,7 +178,7 @@
                             <div class="list_1">
                                 <ul class="ul_list_1">
                                     @foreach($songs as $aSong)
-                                    <li><a title="" href="{{Song::getStaticDetailUrl($aSong['name'], $aSong['_id'])}}">{{$aSong['name']}}</a></li>
+                                    <li><a title="" href="{{Song::getStaticDetailUrl($aSong['name'], $aSong['_id'], $aSong['slug'])}}">{{$aSong['name']}}</a></li>
                                     @endforeach
                                 </ul>
                             </div>

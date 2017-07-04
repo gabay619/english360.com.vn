@@ -15,11 +15,14 @@ class Song extends Eloquent
     }
 
     public function getDetailUrl(){
-        return '/bai-hat/'.CommonHelpers::utf8_to_url($this->name).'-'.$this->_id.'.html';
+        $slug = empty($this->slug) ? CommonHelpers::utf8_to_url($this->name).'-'.$this->_id : $this->slug;
+        return '/bai-hat/'.$slug.'.html';
     }
 
-    public static function getStaticDetailUrl($name, $id){
-        return '/bai-hat/'.CommonHelpers::utf8_to_url($name).'-'.$id.'.html';
+    public static function getStaticDetailUrl($name, $id, $slug=''){
+        if(empty($slug))
+            $slug = CommonHelpers::utf8_to_url($name).'-'.$id;
+        return '/bai-hat/'.$slug.'.html';
     }
 
     public static function getNewPost($limit = 10, $free=false){

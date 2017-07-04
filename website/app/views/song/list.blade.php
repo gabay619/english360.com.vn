@@ -29,7 +29,7 @@
                         @foreach($slide as $aSlide)
                             <li>
                                 <div class="item1">
-                                    <a href="{{Song::getStaticDetailUrl($aSlide['name'], $aSlide['_id'])}}">
+                                    <a href="{{Song::getStaticDetailUrl($aSlide['name'], $aSlide['_id'], $aSlide['slug'])}}">
                                         <div class="img_mask img_mask_size_1">
                                             <img src="{{$aSlide['avatar']}}" />
                                             <label class="img_shadow"></label>
@@ -46,7 +46,7 @@
                         @foreach($hightlight as $item)
                             <li>
                                 <div class="item1">
-                                    <a href="{{Song::getStaticDetailUrl($item['name'], $item['_id'])}}">
+                                    <a href="{{Song::getStaticDetailUrl($item['name'], $item['_id'], $item['slug'])}}">
                                         <div class="img_mask img_mask_size_4">
                                             <img src="{{$item['avatar']}}">
                                             <label class="img_shadow"></label>

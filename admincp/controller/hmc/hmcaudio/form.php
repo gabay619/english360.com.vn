@@ -20,6 +20,7 @@ if (isset($_POST['acpt'])) {
     unset($_POST['redirect']);
     unset($_POST['acpt']);
     $_POST['namenonutf'] = convert_vi_to_en($_POST['name']);
+
     if(!isset($_POST['status'])) $_POST['status'] = '0';
 
     $calendar = $_POST['calendar_date'].' '.$_POST['calendar_time'];
@@ -67,6 +68,13 @@ $_POST['calendar'] = isset($_POST['calendar']) ? $_POST['calendar'] : time();
 
                 <div class="col-sm-10">
                     <input type="text" name="name" class="form-control" value="<?php echo $_POST['name'] ?>">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">URL tùy chỉnh</label>
+                <div class="col-sm-10">
+                    <input type="text" name="slug" class="form-control" value="<?php echo $_POST['slug'] ?>" placeholder="VD: day-la-tieu-de">
                 </div>
             </div>
 

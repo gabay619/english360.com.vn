@@ -88,11 +88,16 @@ class SongController extends BaseController
     }
 
     public function getDetail($slug){
-        $id = CommonHelpers::getIdFromSlug($slug);
-        $item = Song::where('status', '1')->where('_id', $id)->first();
+        $item = Song::where('status', Constant::STATUS_ENABLE)->where('slug', $slug)->first();
+        if(!$item){
+            $id = CommonHelpers::getIdFromSlug($slug);
+            $item = Song::where('status', Constant::STATUS_ENABLE)->where('_id', $id)->first();
+        }
+
         if(!$item){
             return 'Bài học không tồn tại.';
         }
+
         if(!isset($item->free) || $item->free!='1') {
             Session::put('return_url', Request::url());
             Session::put('count_view', Session::get('count_view')-1);
@@ -114,7 +119,7 @@ class SongController extends BaseController
         $childCate = Category::whereIn('_id', $item->category)->where('parentid', '!=', '0')->first();
 
         $allUpload = Upload::where('type', Constant::TYPE_SONG)
-            ->where('itemid', $id)
+            ->where('itemid', $item->_id)
             ->orderby('datecreate', 'desc')
             ->get();
 
