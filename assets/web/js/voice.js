@@ -1,4 +1,5 @@
 //voice
+var start_timestamp;
 $(document).ready(function(){
     if (window.hasOwnProperty('webkitSpeechRecognition')) {
         $('#guideVoice').show();
@@ -48,6 +49,7 @@ $(document).ready(function(){
 
     $(document).on('click', '.btnMicro',function () {
         recognition.start();
+        start_timestamp = event.timeStamp;
         currentAns = $(this).parent().find('.voice').html();
 //            alert(currentAns);return false;
         $('.btnMicro').popover('destroy');
@@ -65,6 +67,7 @@ var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
 var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
 var recognition = new SpeechRecognition();
 var speechRecognitionList = new SpeechGrammarList();
+
 //    speechRecognitionList.addFromString(grammar, 1);
 //    recognition.grammars = speechRecognitionList;
 //recognition.continuous = false;
@@ -114,8 +117,19 @@ recognition.onnomatch = function(event) {
 
 recognition.onerror = function(event) {
     console.log(event.error)
+    console.log(event.timeStamp - start_timestamp)
+    if(event.error == 'no-speech'){
+        alert('Không bắt được âm thanh. Hãy thử điều chỉnh các xác lập microphone trên máy tính của bạn.');
+    }
+    if (event.error == 'audio-capture') {
+        alert('Yêu cầu nhận diện microphone đã bị từ chối. Hãy đảm bảo microphone đã được cài đặt và xác lập thành công trên máy tính của bạn.');
+    }
     if(event.error == 'not-allowed'){
-        alert('Hãy cắm tai nghe có micro vào thiết bị để luyện phát âm.');
+        if(event.timeStamp - start_timestamp < 100){
+            alert('Chưa nhận diện được microphone. Hãy đảm bảo microphone đã được cài đặt và xác lập thành công trên máy tính của bạn.')
+        }else{
+            alert('Yêu cầu nhận diện microphone đã bị từ chối. Hãy đảm bảo microphone đã được cài đặt và xác lập thành công trên máy tính của bạn.')
+        }
     }else{
         alert('Không bắt được âm thanh');
     }
