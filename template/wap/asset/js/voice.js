@@ -24,8 +24,8 @@ $(document).ready(function(){
                 '<a href="#requiredBrowser" id="fbRequiredBrowser" class="fancybox" style="display:none;">Open</a>' +
                 '<div style="display: none; text-align: center" id="requiredBrowser">' +
                 '<p style="margin-bottom: 10px">Tính năng Test Voice không hỗ trợ trình duyệt bạn đang sử dụng. Vui lòng tải trình duyệt Chrome hoặc Cốc Cốc để sử dụng tính năng này.</p>' +
-                '<a style="background-color: #4267b2" href="https://www.google.com/intl/vi/chrome/browser/desktop/index.html" target="_blank" class="ht"><i class="fa fa-chrome" aria-hidden="true"></i> Tải Chrome</a>'+
-                '<a style="background-color: #5cb85c" style="margin-left: 10px" href="https://coccoc.com/" target="_blank" class="ht"><i class="fa fa-chrome" aria-hidden="true"></i> Tải Cốc Cốc</a>'+
+                '<a style="background-color: #4267b2" href="https://play.google.com/store/apps/details?id=com.android.chrome&hl=vi" target="_blank" class="ht"><i class="fa fa-chrome" aria-hidden="true"></i> Tải Chrome</a>'+
+                '<a style="background-color: #5cb85c" style="margin-left: 10px" href="https://play.google.com/store/apps/details?id=com.coccoc.trinhduyet" target="_blank" class="ht"><i class="fa fa-chrome" aria-hidden="true"></i> Tải Cốc Cốc</a>'+
                 '</div>'
             );
             // $.featherlight($('#requireBrowser'),{})

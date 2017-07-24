@@ -19,6 +19,18 @@
                     </a>
                 </div>
                 <div class="col-sm-4 text-center">
+                    <a href="?step=3&pkg={{Input::get('pkg')}}&type=chuyenkhoan">
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">CHUYỂN KHOẢN</h3>
+                            </div>
+                            <div class="panel-body">
+                                <img src="/assets/images/chuyenkhoan.png" alt="" style="width: 100%; height: 156px">
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-sm-4 text-center">
                     <a href="?step=3&pkg={{Input::get('pkg')}}&type=bank">
                         <div class="panel panel-success">
                             <div class="panel-heading">
