@@ -100,25 +100,7 @@ if ($tact != "gtcb_dt_insert") $_POST = (array)$newscl->findOne(array("_id" => "
         </div>
     </div>
 </form>
-<script>
-    $(function () {
-        $('#file_upload').uploadify({
-            'swf': 'plugin/uploadify/uploadify.swf',
-            'uploader': 'plugin/uploadify/uploadify.php',
-            'onUploadSuccess': function (file, data, response) {
-                var obj = JSON.parse(data);
-                if (obj.status == 200) {
-                    $('#avatar').val(obj.file.path);
-                    $('#previewavatar').attr('src', obj.file.path);
-                    $('#previewavatar').fadeIn();
 
-                } else {
-                    alert(obj.mss);
-                }
-            }
-        });
-    });
-</script>
 <script>
     $(document).ready(function () {
         $('#lyric').tinymce({

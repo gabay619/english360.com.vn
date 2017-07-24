@@ -4,8 +4,6 @@ $roleCl = $dbmg->role;
 $id = $_GET['id'];
 
 ?>
-<script type="text/javascript" src="plugin/uploadify/jquery.uploadify.min.js"></script>
-<link rel="stylesheet" type="text/css" href="plugin/uploadify/uploadify.css" />
 <script type="text/javascript" src="plugin/tinymce/tinymce.min.js"></script>
 <link rel="stylesheet" href="asset/css/jquery-ui.css">
 <script src="asset/js/jquery-ui.js"></script>
@@ -99,23 +97,6 @@ if ($tact != "addnew") $_POST = (array)$roleCl->findOne(array("_id" => "$id"));
             if ($(this).is(':checked')) $('.catitem:not(:disabled)').prop('checked', true);
             else $('.catitem:not(:disabled)').prop('checked', false);
         });
-        setTimeout(function(){
-        $('#file_upload').uploadify({
-            'swf': 'plugin/uploadify/uploadify.swf',
-            'uploader': 'plugin/uploadify/uploadify.php',
-            'onUploadSuccess': function (file, data, response) {
-                var obj = JSON.parse(data);
-                if (obj.status == 200) {
-                    $('#avatar').val(obj.file.path);
-                    $('#previewavatar').attr('src', obj.file.path);
-                    $('#previewavatar').fadeIn();
-
-                } else {
-                    alert(obj.mss);
-                }
-            }
-        });
-        },100);
     });
 </script>
 <script>

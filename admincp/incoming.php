@@ -23,6 +23,7 @@ switch($act){
     case 'changestatusnguphap' : changestatusnguphap();break;
     case 'changestatusgtcb' : changestatusgtcb();break;
     case 'changestatusaudio' : changestatusaudio();break;
+    case 'changestatusslide' : changestatusslide();break;
     case 'getlession': getlession();break;
     case 'savetohotlession' : savetohotlession();break;
     case 'savetofreelession' : savetofreelession();break;
@@ -48,6 +49,7 @@ switch($act){
 	case 'sendMail': sendMail(); break;
     case 'uploadExcel': uploadExcel(); break;
     case 'uploadLession': uploadLession(); break;
+    case 'uploadMedia': uploadMedia(); break;
     case 'uploadTest': uploadTest(); break;
     case 'sendSMS': sendSMS(); break;
     case 'recheckCard': recheckCard(); break;
@@ -375,6 +377,39 @@ function changestatusaudio(){
         } else {
             $dtr['status'] = 404;
             $dtr['mss'] = "Không có bài đăng này";
+        }
+    } else {
+        $dtr['status'] = 401;
+        $dtr['mss'] = "Bạn cần đăng nhập để thực hiện chức năng này";
+    }
+    echo json_encode($dtr);
+}
+
+function changestatusslide(){
+    global $dbmg;
+    $videoCl = $dbmg->slide;
+    if ($_SESSION['uinfoadmin']['_id']) {
+        $atid = $_POST['atid'];
+        $videoObj = $videoCl->findOne(array("_id"=> $atid), array("usercreate"));
+        if ($videoObj) {
+            if (!acceptpermiss("slide_update")) {
+                $dtr['status'] = 403;
+                $dtr['mss'] = "Bạn không có quyền thực hiện chức năng này";
+            } else{
+                $updateInfor = array("status"=>strval($_POST['status']));
+                if ($_POST['isUpdateTime'] === "true") {
+                    $updateInfor['datecreate'] = time();
+                }
+                $videoCl->update(array("_id"=> $atid), array('$set'=> $updateInfor));
+                $dtr['status'] = 200;
+                $dtr['mss'] = "Thay đổi thành công";
+                if (strval($_POST['status']) === "0") $dtr['statusString'] = "Ẩn";
+                else $dtr['statusString'] = "Hiện";
+                $dtr['isUpdateTime'] = $_POST['isUpdateTime'];
+            }
+        } else {
+            $dtr['status'] = 404;
+            $dtr['mss'] = "Không có slide này";
         }
     } else {
         $dtr['status'] = 401;
@@ -813,6 +848,65 @@ function uploadLession(){
         }
     }else{
         $ret= array('status'=>500,'mss'=>'File không tồn tại');
+    }
+    echo json_encode($ret);exit;
+}
+
+function uploadMedia(){
+//    print_r($_FILES);die;
+    if(isset($_FILES["Filedata"])){
+        $ret = array();
+        $error = $_FILES["Filedata"]["error"];
+//        $objPHPExcel = PHPExcel_IOFactory::load($_SERVER['DOCUMENT_ROOT']."/uploads/listphone.xlsx");
+//        print_r($objPHPExcel);die;
+
+        if(!is_array($_FILES["Filedata"]["name"])) //single file
+        {
+            $file_location = $_SERVER['DOCUMENT_ROOT'];
+            /*$excel_file = $_FILES["myfile"]["tmp_name"];*/
+            $targetFolder = "/uploads/" . date("d-m-Y") . '/';
+            if (!file_exists($file_location.$targetFolder)) mkdir($file_location.$targetFolder, 0777, true);
+            $file_name =  str_replace(" ","_",strtotime("now")."_".$_FILES['Filedata']['name']);
+//            $file = $file_location . $targetFolder . $file_name;
+            $file = str_replace("//","/",$file_location . $targetFolder) . $file_name;
+
+//            $file = $file_location.$filePart;
+//                $excel_file = $_FILES["Filedata"]["tmp_name"];
+
+            try {
+                $rs = move_uploaded_file($_FILES["Filedata"]["tmp_name"],$file);
+//                    var_dump($rs);die;
+//                    print_r(file_exists($excel_file));die;
+//                $objPHPExcel = PHPExcel_IOFactory::load($excel_file);
+                if($rs){
+                    $file_path = $targetFolder.$file_name;
+                    $ret['status'] = 200;
+                    $ret['mss'] = "Upload thành công";
+                    $ret['file'] = array(
+                        "index"=>(string)strtotime("now").rand(0,99999),
+                        "filename"=>"$file_name",
+                        "src"=>"$file_path",
+                        "path"=>"$file_path",
+                    );
+                }else{
+                    throw new Exception('Không thể upload file');
+                }
+
+            } catch (Exception $e) {
+                $ret= array('status'=>500,'mss'=>$e->getMessage(),'err'=>$_FILES["Filedata"]["error"],'file'=>$file);
+
+            }
+//                print_r($excel_file);die;
+//                $objPHPExcel = PHPExcel_IOFactory::load($excel_file);
+//            $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+
+//                print_r($sheetData);die;
+//                unlink($excel_file);
+
+//            $ret= array('status'=>200,'mss'=>'Import thành công', 'data' => $sheetData);
+        }
+    }else{
+        $ret= array('status'=>500,'mss'=>'File không tồn tại','file'=>$_FILES);
     }
     echo json_encode($ret);exit;
 }

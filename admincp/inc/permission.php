@@ -99,6 +99,28 @@ $module[] = array("name"=>"Giao tiếp cơ bản","key"=>"gtcb","controller"=>"c
         array("name"=>"Xóa bài luyện nghe","key"=>"gtcb_listen_del")
     )
 );
+
+
+$module[] = array("name"=>"Giao tiếp hàng ngày","key"=>"gthn","controller"=>"controller/giaotiephangngay/index.php","permission"=>
+    array(
+        array("name"=>"Xem danh sách bài giảng","key"=>"gthn_view"),
+        array("name"=>"Sửa bài giảng","key"=>"gthn_update"),
+        array("name"=>"Xóa bài giảng","key"=>"gthn_delete"),
+        array("name"=>"Thêm bài giảng","key"=>"gthn_insert"),
+        array("name"=>"Cập nhật trạng thái bài giảng","key"=>"gthn_status"),
+    )
+);
+
+$module[] = array("name"=>"Giao tiếp cho người đi làm","key"=>"gtcv","controller"=>"controller/giaotiepcongviec/index.php","permission"=>
+    array(
+        array("name"=>"Xem danh sách bài giảng","key"=>"gtcv_view"),
+        array("name"=>"Sửa bài giảng","key"=>"gtcv_update"),
+        array("name"=>"Xóa bài giảng","key"=>"gtcv_delete"),
+        array("name"=>"Thêm bài giảng","key"=>"gtcv_insert"),
+        array("name"=>"Cập nhật trạng thái bài giảng","key"=>"gtcv_status"),
+    )
+);
+
 $module[] = array("name"=>"Thư viện","key"=>"thuvien","controller"=>"controller/thuvien/index.php","permission"=>
     array(
         array("name"=>"Xem danh sách bài viết","key"=>"thuvien_view"),
@@ -221,10 +243,12 @@ $module[] = array("name"=>"Người dùng","key"=>"user_manage","controller"=>"c
         array("name"=>"Sửa người dùng","key"=>"user_update"),
         array("name"=>"Xóa người dùng","key"=>"user_delete"),
         array("name"=>"Thêm người dùng","key"=>"user_insert"),
+        array("name"=>"Trạng thái user","key"=>"user_status"),
         array("name"=>"Lựa chọn nhóm quyền","key"=>"user_rolegroup_insert"),
         array("name"=>"Cài đặt quyền riêng","key"=>"user_rolegroup_permission"),
         array("name"=>"Gửi thông báo","key"=>"user_sendnotify"),
         array("name"=>"Gửi thư","key"=>"user_sendmail"),
+        array("name"=>"Sửa số dư","key"=>"user_blance"),
     )
 );
 
@@ -308,6 +332,15 @@ $module[] = array("name"=>"Phân quyền","key"=>"role_manage","controller"=>"co
         array("name"=>"Xóa nhóm quyền","key"=>"rolegroup_delete"),
         array("name"=>"Thêm nhóm quyền","key"=>"rolegroup_insert"),
         array("name"=>"Chỉnh sửa permission","key"=>"rolegroup_permission"),
+    )
+);
+
+$module[] = array("name"=>"Hiển thị slide","key"=>"slide","controller"=>"controller/slide/index.php","permission"=>
+    array(
+        array("name"=>"Xem danh sách slide","key"=>"slide_view"),
+        array("name"=>"Sửa slide","key"=>"slide_update"),
+        array("name"=>"Thêm slide","key"=>"slide_insert"),
+        array("name"=>"Xóa slide","key"=>"slide_delete"),
     )
 );
 $module[] = array("name"=>"Hiển thị bài viết nổi bật trên slideshow","key"=>"show_slideshow","controller"=>"controller/show/slideshow.php");

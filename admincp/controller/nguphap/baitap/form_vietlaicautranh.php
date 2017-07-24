@@ -3,8 +3,6 @@ $title = "Thông tin bài tập viết lại câu theo tranh - ngữ pháp";
 $newscl = $dbmg->nguphap_baitap;
 $id = $_GET['id'];
 ?>
-<script type="text/javascript" src="plugin/uploadify/jquery.uploadify.min.js?v=<?php echo strtotime("now") ?>"></script>
-<link rel="stylesheet" type="text/css" href="plugin/uploadify/uploadify.css" />
 <script type="text/javascript" src="plugin/tinymce/jquery.tinymce.js"></script>
 <title><?php echo $title ?></title>
 <h5 class="text-center"><?php echo $title ?></h5>
@@ -97,25 +95,6 @@ if ($tact != "np_vlct_insert") $_POST = (array)$newscl->findOne(array("_id" => "
     <button class="btn btn-info" onclick="$(this).parent().find('img').toggle()">Hướng dẫn</button>
     <img src="/admincp/asset/images/nguphap/nguphap_vietlaicau.png" alt="" style="display: none; border: 1px dashed #ccc" >
 </div>
-<script>
-    $(function () {
-        $('#file_upload').uploadify({
-            'swf': 'plugin/uploadify/uploadify.swf',
-            'uploader': 'plugin/uploadify/uploadify.php',
-            'onUploadSuccess': function (file, data, response) {
-                var obj = JSON.parse(data);
-                if (obj.status == 200) {
-                    $('#avatar').val(obj.file.path);
-                    $('#previewavatar').attr('src', obj.file.path);
-                    $('#previewavatar').fadeIn();
-
-                } else {
-                    alert(obj.mss);
-                }
-            }
-        });
-    });
-</script>
 <script>
     $(document).ready(function () {
         $('#ex').tinymce({

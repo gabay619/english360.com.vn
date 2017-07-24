@@ -25,8 +25,12 @@ parse_str($_SERVER['QUERY_STRING'], $param);
 unset($param['act']);
 $exportUrl = 'incoming.php?act=exportHssv&'.http_build_query($param);
 ?>
-<script type="text/javascript" src="plugin/uploadify/jquery.uploadify.min.js?v=<?php echo strtotime("now") ?>"></script>
-<link rel="stylesheet" type="text/css" href="plugin/uploadify/uploadify.css" />
+<!--<script type="text/javascript" src="plugin/uploadify/jquery.uploadify.min.js?v=--><?php //echo strtotime("now") ?><!--"></script>-->
+<!--<link rel="stylesheet" type="text/css" href="plugin/uploadify/uploadify.css" />-->
+<script src="/assets/lib/jquery-upload/js/vendor/jquery.ui.widget.js"></script>
+<script src="/assets/lib/jquery-upload/js/jquery.iframe-transport.js"></script>
+<script src="/assets/lib/jquery-upload/js/jquery.fileupload.js"></script>
+<link rel="stylesheet" href="/assets/lib/jquery-upload/css/jquery.fileupload.css">
     <title><?php echo $title ?></title>
     <h5 class="text-center"><?php echo $title ?></h5>
     <div class="clearfix"></div>
@@ -37,7 +41,13 @@ $exportUrl = 'incoming.php?act=exportHssv&'.http_build_query($param);
         </div>
         <?php if(acceptpermiss("import_hssv")) { ?>
         <div class="col-xs-2 text-left">
-            <input type="file" name="file_upload" id="file_upload" />
+            <span class="btn btn-success fileinput-button" style="margin-bottom: 5px">
+                <i class="glyphicon glyphicon-plus"></i>
+                <span>Chọn file...</span>
+        <!-- The file input field used as target for the file upload widget -->
+                <input id="file_upload" type="file" name="Filedata" data-url="incoming.php?act=uploadMedia" />
+            </span>
+<!--            <input type="file" name="file_upload" id="file_upload" />-->
         </div>
         <div class="col-xs-1">
             <button onclick="importHssv()" class="btn btn-sm btn-success">Import Excel</button>
@@ -115,22 +125,53 @@ $exportUrl = 'incoming.php?act=exportHssv&'.http_build_query($param);
     }
 
     $(function () {
-        setTimeout(function() {
-            $('#file_upload').uploadify({
-                'swf': 'plugin/uploadify/uploadify.swf',
-                'uploader': 'incoming.php?act=uploadHssv',
-                'onUploadSuccess': function (file, data, response) {
-                    var obj = JSON.parse(data);
-                    if (obj.status == 200) {
-                        $('#avatar').val(obj.file.path);
-                        $('#previewavatar').attr('src', obj.file.path);
-                        $('#previewavatar').fadeIn();
 
-                    } else {
-                        alert(obj.mss);
-                    }
+        $('#file_upload').fileupload({
+            dataType: 'json',
+            maxFileSize: 2000000000,
+
+            done: function (e, data) {
+                obj = data.result;
+                console.log(obj)
+                if (obj.status == 200) {
+                    $(this).parent().parent().find('.progress').remove();
+                    $('#avatar').val(obj.file.path);
+                    $('#previewavatar').attr('src', obj.file.path);
+                    $('#previewavatar').fadeIn();
+                } else {
+                    alert(obj.mss);
                 }
-            });
-        },100)
+            }
+        }).on('fileuploadadd', function (e, data) {
+            html = '<div class="progress">'+
+                '<div class="progress-bar progress-bar-success"></div>'+
+                '</div>';
+            $(this).parent().parent().append(html);
+        }).on('fileuploadprogressall', function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            console.log(progress);
+            $(this).parent().parent().find('.progress .progress-bar').css(
+                'width',
+                progress + '%'
+            );
+        });
+
+//        setTimeout(function() {
+//            $('#file_upload').uploadify({
+//                'swf': 'plugin/uploadify/uploadify.swf',
+//                'uploader': 'incoming.php?act=uploadHssv',
+//                'onUploadSuccess': function (file, data, response) {
+//                    var obj = JSON.parse(data);
+//                    if (obj.status == 200) {
+//                        $('#avatar').val(obj.file.path);
+//                        $('#previewavatar').attr('src', obj.file.path);
+//                        $('#previewavatar').fadeIn();
+//
+//                    } else {
+//                        alert(obj.mss);
+//                    }
+//                }
+//            });
+//        },100)
     })
 </script>

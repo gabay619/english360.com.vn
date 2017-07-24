@@ -83,8 +83,8 @@ if (isset($_POST['acpt'])) {
     if ($tact == "user_insert") {
         $userObject = (object) $userCl->findOne(array("username"=>$_POST['username']));
         if (!$userObject->_id) {
-            if (!empty($_POST['phone']))
-                $userObject = (object) $userCl->findOne(array("phone"=>$_POST['phone']));
+            if (!empty($_POST['email']))
+                $userObject = (object) $userCl->findOne(array("email"=>$_POST['email']));
             if (!$userObject->_id) {
                 $_POST['_id'] = strval(time());
                 $_POST['datecreate'] = time();
@@ -95,7 +95,7 @@ if (isset($_POST['acpt'])) {
                 $result = $userCl->insert($_POST);
             } else {
                 $status = "error";
-                $errorMesssage = "Đã có người dùng với số điện thoại này";
+                $errorMesssage = "Đã có người dùng với email này";
             }
         } else {
             $status = "error";
@@ -103,6 +103,8 @@ if (isset($_POST['acpt'])) {
         }
     }
     else {
+//            var_dump($_POST['status']=='0');die;
+
         $result = $userCl->update(array("_id" => "$id"), array('$set' => $_POST), array("upsert" => false));
     }
     if (!isset($status)) {
@@ -172,6 +174,22 @@ if ($tact != "user_insert") $_POST = (array)$userCl->findOne(array("_id" => "$id
         </div>
     </div>
 
+    <?php
+    if(acceptpermiss("user_status")){
+        ?>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Trạng thái </label>
+            <div class="col-sm-10">
+                <label>
+                    <input type="radio" <?php echo $_POST['status'] == '0' ? 'checked' : ''; ?> value="0" name="status" />&nbsp;Chưa kích hoạt
+                </label> |
+                <label>
+                    <input type="radio" <?php echo $_POST['status'] == '1' ? 'checked' : ''; ?> value="1" name="status" /> &nbsp;Đã kích hoạt
+                </label>
+            </div>
+        </div>
+    <?php } ?>
+
     <div class="form-group">
         <label class="col-sm-2 control-label">Thời hạn khóa học</label>
 
@@ -179,7 +197,17 @@ if ($tact != "user_insert") $_POST = (array)$userCl->findOne(array("_id" => "$id
             <input type="text" name="pkg_expired" class="form-control datepicker" value="<?php echo isset($_POST['pkg_expired']) ? date('d/m/Y', $_POST['pkg_expired']) : '' ?>">
         </div>
     </div>
+    <?php
+    if(acceptpermiss("user_blance")){
+    ?>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Số dư</label>
 
+        <div class="col-sm-10">
+            <input type="text" name="balance" class="form-control" value="<?php echo isset($_POST['balance']) ? $_POST['balance'] : '0' ?>">
+        </div>
+    </div>
+    <?php } ?>
 
 <!--    <div class="form-group">
         <label class="col-sm-2 control-label">Mở rộng</label>

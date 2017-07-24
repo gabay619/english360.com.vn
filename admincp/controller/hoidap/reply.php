@@ -84,38 +84,6 @@ if ($tact != "addnew") $_POST = (array)$newscl->findOne(array("_id" => "$id"));
             if ($(this).is(':checked')) $('.catitem:not(:disabled)').prop('checked', true);
             else $('.catitem:not(:disabled)').prop('checked', false);
         });
-        setTimeout(function(){
-            $('#file_upload').uploadify({
-                'swf': 'plugin/uploadify/uploadify.swf',
-                'uploader': 'plugin/uploadify/uploadify.php',
-                'onUploadSuccess': function (file, data, response) {
-                    var obj = JSON.parse(data);
-                    if (obj.status == 200) {
-                        $('#avatar').val(obj.file.path);
-                        $('#previewavatar').attr('src', obj.file.path);
-                        $('#previewavatar').fadeIn();
-
-                    } else {
-                        alert(obj.mss);
-                    }
-                }
-            });
-            $('#file_upload2').uploadify({
-                'swf'      : 'plugin/uploadify/uploadify.swf',
-                'uploader' : 'plugin/uploadify/uploadify.php',
-                'onUploadSuccess': function (file, data, response) {
-                    var obj = JSON.parse(data);
-                    if (obj.status == 200) {
-                        $('#slideavatar').val(obj.file.path);
-                        $('#previewavatarsl').attr('src',obj.file.path);
-                        $('#previewavatarsl').fadeIn();
-
-                    } else {
-                        alert(obj.mss);
-                    }
-                }
-            });
-        },100);
     });
 </script>
 <script>

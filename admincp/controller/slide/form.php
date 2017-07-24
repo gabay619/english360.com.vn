@@ -1,6 +1,6 @@
 <?php
-$title = "Thông tin bài luyện nghe - giao tiếp cơ bản";
-$newscl = $dbmg->gtcb_luyennghe;
+$title = "Thông tin Slide";
+$slidecl = $dbmg->slide;
 $id = $_GET['id'];
 ?>
 <!--<script type="text/javascript" src="plugin/uploadify/jquery.uploadify.min.js?v=--><?php //echo strtotime("now") ?><!--"></script>-->
@@ -12,41 +12,35 @@ $id = $_GET['id'];
 <script type="text/javascript" src="plugin/tinymce/jquery.tinymce.js"></script>
 <title><?php echo $title ?></title>
 <h5 class="text-center"><?php echo $title ?></h5>
-<div class="text-left"><a href="<?php echo cpagerparm("tact,id") ?>tact=gtcb_listen_view">Trở về danh sách bài luyện nghe</a></div>
-<?php include("component/message.php"); ?>
+<div class="text-left"><a href="<?php echo cpagerparm("tact,id") ?>">Thoát</a></div>
+<?php include("component/flash_mss.php"); ?>
 <?php
 #Post Process
 if (isset($_POST['acpt'])) {
     $redirect = $_POST['redirect'];
     unset($_POST['redirect']);
     unset($_POST['acpt']);
-    $_POST['namenonutf'] = convert_vi_to_en($_POST['name']);
-    if ($tact == "gtcb_listen_insert") {
-        $_POST['_id'] = (string)strtotime("now");
-        $_POST['datecreate'] = (string)strtotime("now");
-        $uinfo = $_SESSION['uinfo'];if(!isset($uinfo)) $uinfo["_id"] = "0";
-        $_POST['usercreate'] = $uinfo["_id"];
-        $result = $newscl->insert($_POST);
+    if ($tact == "slide_insert") {
+        $_POST['_id'] = strval(time());
+        $result = $slidecl->insert($_POST);
     }
-    else  $result = $newscl->update(array("_id" => "$id"), array('$set' => $_POST), array("upsert" => false));
+    else  $result = $slidecl->update(array("_id" => "$id"), array('$set' => $_POST), array("upsert" => false));
 
-    if ($redirect != 1) header("Location: " . cpagerparm("status,id") . "status=success");
-    else header("Location: " . cpagerparm("status") . "status=success");
+    $_SESSION['status'] = 'success';
+    if ($redirect != 1) header("Location: " . cpagerparm("status,id,tact"));
+    else header("Location: " . cpagerparm("status"));
     exit();
+
 }
+
 ##Get Data
-if ($tact != "gtcb_listen_insert") $_POST = (array)$newscl->findOne(array("_id" => "$id"));
+if ($tact != "slide_insert") $_POST = (array)$slidecl->findOne(array("_id" => "$id"));
 ?>
 <form class="form-horizontal" role="form" action="" method="post">
-    <ul class="nav nav-tabs" role="tablist" id="myTab">
-        <li class="active"><a href="#info" role="tab" data-toggle="tab">Thông tin bài luyện nghe</a></li>
-    </ul>
-
     <div class="tab-content">
         <div class="tab-pane active" id="info">
             <p>&nbsp;</p>
             <input type="hidden" name="acpt" value="1" />
-            <input type="hidden" name="gtcbid" value="<?php echo $_GET['gtcbid'] ?>" />
             <div class="form-group">
                 <label class="col-sm-2 control-label">Tiêu đề</label>
                 <div class="col-sm-10">
@@ -54,55 +48,44 @@ if ($tact != "gtcb_listen_insert") $_POST = (array)$newscl->findOne(array("_id" 
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">Dạng bài</label>
+                <label class="col-sm-2 control-label">Mô tả ngắn</label>
                 <div class="col-sm-10">
-                    <label>
-                        <input type="radio" class="" <?php echo $_POST['type'] === '0' ? 'checked' : ''; ?> value="0" name="type" />&nbsp;Luyện nói
-                    </label> |
-                    <label>
-                        <input type="radio" <?php echo ($_POST['type'] ===null) || $_POST['type'] === '1' ? 'checked' : ''; ?> class="" value="1" name="type" /> &nbsp;Luyện nghe
-                    </label>
+                    <input type="text" name="captions" class="form-control" value="<?php echo htmlentities($_POST['captions']) ?>" placeholder="Một vài dòng mô tả">
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">Vị trí</label>
+                <label class="col-sm-2 control-label">URL</label>
                 <div class="col-sm-10">
-                    <input type="text" name="sort" class="form-control" value="<?php echo $_POST['sort'] ?>" placeholder="Vị trí bài luyện nghe">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label">Link Video</label>
-                <div class="col-sm-10">
-                    <input type="text" name="medialink" id="medialink" class="form-control" value="<?php echo $_POST['medialink'] ?>" placeholder="Nhập link video">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label"></label>
-                <div class="col-sm-10">
-                    <span class="btn btn-success fileinput-button" style="margin-bottom: 5px">
-                        <i class="glyphicon glyphicon-plus"></i>
-                        <span>Chọn file...</span>
-                        <!-- The file input field used as target for the file upload widget -->
-                        <input id="file_upload2" type="file" name="Filedata" data-url="incoming.php?act=uploadMedia" />
-                    </span>
-<!--                    <input type="file" name="file_upload2" id="file_upload2" />-->
+                    <input type="text" name="url" class="form-control" value="<?php echo $_POST['url'] ?>">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">Trạng thái</label>
                 <div class="col-sm-10">
                     <label>
-                        <input type="radio" class="col-sm-1" <?php echo !empty($_POST['status']) && $_POST['status'] == '0' ? 'checked' : ''; ?> value="0" name="status" />&nbsp;Ẩn
+                        <input type="radio" <?php echo isset($_POST['status']) && $_POST['status'] == '0' ? 'checked' : ''; ?> value="0" name="status" />&nbsp;Ẩn
                     </label> |
                     <label>
-                        <input type="radio" <?php echo empty($_POST['status']) || $_POST['status'] == '1' ? 'checked' : ''; ?> class="col-sm-1" value="1" name="status" /> &nbsp;Hiện
+                        <input type="radio" <?php echo !isset($_POST['status']) || $_POST['status'] == '1' ? 'checked' : ''; ?> value="1" name="status" /> &nbsp;Hiện
                     </label>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">Nội dung</label>
+                <input type="hidden" name="avatar" id="avatar" value="<?php echo $_POST['avatar'] ?>" />
+                <label class="col-sm-2 control-label">Ảnh</label>
+
                 <div class="col-sm-10">
-                    <textarea id="lyric" rows="10" class="form-control" name="contents" placeholder="Câu trả lời dạng {dapan}"><?php echo $_POST['contents'] ?></textarea>
+<!--                    <input type="file" name="file_upload" id="file_upload" />-->
+                    <span class="btn btn-success fileinput-button" style="margin-bottom: 5px">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        <span>Chọn file...</span>
+                        <!-- The file input field used as target for the file upload widget -->
+                        <input id="file_upload" type="file" name="Filedata" data-url="incoming.php?act=uploadMedia" />
+                    </span>
+                    <p>
+                        <img src="<?php echo $_POST['avatar'] ?>" id="previewavatar" style="max-width: 350px;display:<?php echo strlen($_POST['avatar']) > 0 ? "block" : "none"; ?>" />
+                    </p>
+                    <p class="help-block">Chọn ảnh PNG, JPG, JPEG</p>
                 </div>
             </div>
         </div>
@@ -112,20 +95,16 @@ if ($tact != "gtcb_listen_insert") $_POST = (array)$newscl->findOne(array("_id" 
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" class="btn btn-default">Chấp nhận</button>
-            hoặc <a href="<?php echo cpagerparm("tact,id") ?>tact=gtcb_listen_view">Thoát</a> |
+            hoặc <a href="<?php echo cpagerparm("tact,id") ?>">Thoát</a> |
             <label><input type="checkbox" checked="checked" value="1" name="redirect" />&nbsp; Không chuyển hướng sau
-                                                                                        khi nhập xong</label>
+                khi nhập xong</label>
         </div>
     </div>
 </form>
 <script>
-    $(function () {
-        $('#checkallcat').click(function () {
-            if ($(this).is(':checked')) $('.catitem:not(:disabled)').prop('checked', true);
-            else $('.catitem:not(:disabled)').prop('checked', false);
-        });
+    $(document).ready(function () {
 
-        $('#file_upload2').fileupload({
+        $('#file_upload').fileupload({
             dataType: 'json',
             maxFileSize: 2000000000,
 
@@ -134,8 +113,9 @@ if ($tact != "gtcb_listen_insert") $_POST = (array)$newscl->findOne(array("_id" 
                 console.log(obj)
                 if (obj.status == 200) {
                     $(this).parent().parent().find('.progress').remove();
-                    $('#medialink').val(obj.file.path);
-
+                    $('#avatar').val(obj.file.path);
+                    $('#previewavatar').attr('src', obj.file.path);
+                    $('#previewavatar').fadeIn();
                 } else {
                     alert(obj.mss);
                 }
@@ -154,7 +134,7 @@ if ($tact != "gtcb_listen_insert") $_POST = (array)$newscl->findOne(array("_id" 
             );
         });
 
-//        setTimeout(function(){
+//        setTimeout(function() {
 //            $('#file_upload').uploadify({
 //                'swf': 'plugin/uploadify/uploadify.swf',
 //                'uploader': 'plugin/uploadify/uploadify.php',
@@ -170,25 +150,9 @@ if ($tact != "gtcb_listen_insert") $_POST = (array)$newscl->findOne(array("_id" 
 //                    }
 //                }
 //            });
-//            $('#file_upload2').uploadify({
-//                'swf': 'plugin/uploadify/uploadify.swf',
-//                'uploader': 'plugin/uploadify/uploadify.php',
-//                'fileTypeExts': '*.mp3;',
-//                'onUploadSuccess': function (file, data, response) {
-//                    var obj = JSON.parse(data);
-//                    if (obj.status == 200) {
-//                        $('#medialink').val(obj.file.path);
-//                    } else {
-//                        alert(obj.mss);
-//                    }
-//                }
-//            });
-//        },100);
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        $('#lyric, #lyric1').tinymce({
+//        })
+
+        $('#content').tinymce({
             script_url: 'plugin/tinymce/tiny_mce.js',
             elements: "ajaxfilemanager",
             theme: "advanced",

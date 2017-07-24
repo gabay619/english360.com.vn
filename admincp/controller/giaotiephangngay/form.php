@@ -1,9 +1,11 @@
 <?php
-$title = "Thông tin bài viết";
-$newscl = $dbmg->thuvien;
-
+//error_reporting(E_ALL);
+//ini_set('display_errors', 1);
+$title = "Thông tin bài giảng - giao tiếp hàng ngày";
+$newscl = $dbmg->gthn;
+$categorycl = $dbmg->category;
+$gthnParentCate = $categorycl->findOne(array('type'=>Constant::TYPE_GT_HANGNGAY, 'parentid'=>'0'));
 $id = $_GET['id'];
-$catid = $_GET['catid'];
 ?>
 <!--<script type="text/javascript" src="plugin/uploadify/jquery.uploadify.min.js?v=--><?php //echo strtotime("now") ?><!--"></script>-->
 <!--<link rel="stylesheet" type="text/css" href="plugin/uploadify/uploadify.css" />-->
@@ -14,15 +16,13 @@ $catid = $_GET['catid'];
 <script type="text/javascript" src="plugin/tinymce/jquery.tinymce.js"></script>
 <title><?php echo $title ?></title>
 <h5 class="text-center"><?php echo $title ?></h5>
-<div class="text-left"><a href="<?php echo cpagerparm("tact,id").'tact=thuvien_view' ?>">Thoát</a></div>
+<div class="text-left"><a href="<?php echo cpagerparm("tact,id") ?>">Thoát</a></div>
 <?php include("component/message.php"); ?>
 <?php
 #Post Process
 if (isset($_POST['acpt'])) {
-//    print_r($_POST['calendar_time']);die;
     if(!empty($_POST['slug'])){
         $checkSlug = $newscl->findOne(array(
-            'category' => $catid,
             'slug' => $_POST['slug']
         ));
         if($checkSlug) $_POST['slug'] = '';
@@ -33,17 +33,12 @@ if (isset($_POST['acpt'])) {
     unset($_POST['acpt']);
     $_POST['namenonutf'] = convert_vi_to_en($_POST['name']);
     if(!isset($_POST['status'])) $_POST['status'] = '0';
-
-    $calendar = $_POST['calendar_date'].' '.$_POST['calendar_time'];
-    $convertCalendar = DateTime::createFromFormat('d/m/Y H:i', $calendar)->format('Y-m-d H:i');
-    $_POST['calendar'] = (int)strtotime($convertCalendar);
-    if($_POST['calendar'] > time()) $_POST['datecreate'] = $_POST['calendar'];
-    unset($_POST['calendar_date'],$_POST['calendar_time']);
-    if ($tact == "thuvien_insert") {
+    if ($tact == "gthn_insert") {
         $_POST['_id'] = strval(time());
-        $_POST['datecreate'] = $_POST['calendar'];
+        $_POST['datecreate'] = time();
         $uinfo = $_SESSION['uinfo'];if(!isset($uinfo)) $uinfo["_id"] = "0";
         $_POST['usercreate'] = $uinfo["_id"];
+        $_POST['save'] = "0";
         $result = $newscl->insert($_POST);
     }
     else  $result = $newscl->update(array("_id" => "$id"), array('$set' => $_POST), array("upsert" => false));
@@ -51,22 +46,16 @@ if (isset($_POST['acpt'])) {
     if ($redirect != 1) header("Location: " . cpagerparm("status,id,tact") . "status=success");
     else header("Location: " . cpagerparm("status") . "status=success");
     exit();
-
 }
-
 ##Get Data
-if ($tact != "thuvien_insert") $_POST = (array)$newscl->findOne(array("_id" => "$id"));
-        else{
-            $_POST['category'] = (array)$catid;
-            if(isset($_GET['pid']))
-                $_POST['category'][] = $_GET['pid'];
-
-        }
-$_POST['calendar'] = isset($_POST['calendar']) ? $_POST['calendar'] : time();
+if ($tact != "gthn_insert") $_POST = (array)$newscl->findOne(array("_id" => "$id"));
+else{
+    $_POST['category'][] = $gthnParentCate['_id'];
+}
 ?>
 <form class="form-horizontal" role="form" action="" method="post">
     <ul class="nav nav-tabs" role="tablist" id="myTab">
-        <li class="active"><a href="#info" role="tab" data-toggle="tab">Thông tin bài viết</a></li>
+        <li class="active"><a href="#info" role="tab" data-toggle="tab">Thông tin bài giảng</a></li>
         <li><a href="#category" role="tab" data-toggle="tab">Chuyên mục</a></li>
     </ul>
 
@@ -102,16 +91,7 @@ $_POST['calendar'] = isset($_POST['calendar']) ? $_POST['calendar'] : time();
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">Đặt lịch</label>
-                <div class="col-sm-2">
-                    <input type="text" name="calendar_date" class="form-control datepicker" value="<?php echo date('d/m/Y', $_POST['calendar'])?>">
-                </div>
-                <div class="col-sm-2">
-                    <input type="text" name="calendar_time" class="form-control timepicker" value="<?php echo date('H:i', $_POST['calendar'])?>">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label">Link Video/Audio</label>
+                <label class="col-sm-2 control-label">Link Video</label>
                 <div class="col-sm-10">
                     <input type="text" name="medialink" id="medialink" class="form-control" value="<?php echo $_POST['medialink'] ?>" placeholder="Nhập link video">
                 </div>
@@ -128,43 +108,32 @@ $_POST['calendar'] = isset($_POST['calendar']) ? $_POST['calendar'] : time();
 <!--                    <input type="file" name="file_upload2" id="file_upload2" />-->
                 </div>
             </div>
-           <!-- <div class="form-group">
-                <label class="col-sm-2 control-label">Bài dịch</label>
+            <!--<div class="form-group">
+                <label class="col-sm-2 control-label">File phụ đề</label>
                 <div class="col-sm-10">
-                    <input type="text" name="sublink" class="form-control" value="<?php /*echo $_POST['sublink'] */?>" placeholder="">
+                    <input type="text" name="sublink" class="form-control" value="<?php /*echo $_POST['sublink'] */?>" placeholder="Nhập link file phụ đề">
                 </div>
             </div>-->
+<!--            <div class="form-group">-->
+<!--                <label class="col-sm-2 control-label">Level</label>-->
+<!--                <div class="col-sm-10">-->
+<!--                    <input type="text" name="level" class="form-control" value="--><?php //echo $_POST['level'] ?><!--">-->
+<!--                </div>-->
+<!--            </div>-->
+            <?php
+            if(acceptpermiss("gthn_status")){
+            ?>
             <div class="form-group">
-                <label class="col-sm-2 control-label">Level</label>
+                <label class="col-sm-2 control-label">Status</label>
                 <div class="col-sm-10">
-                    <input type="text" name="level" class="form-control" value="<?php echo $_POST['level'] ?>">
+                    <label>
+                        <input type="radio" <?php echo !empty($_POST['status']) && $_POST['status'] == '0' ? 'checked' : ''; ?> value="0" name="status" />&nbsp;Ẩn
+                    </label> |
+                    <label>
+                        <input type="radio" <?php echo empty($_POST['status']) || $_POST['status'] == '1' ? 'checked' : ''; ?> value="1" name="status" /> &nbsp;Hiện
+                    </label>
                 </div>
             </div>
-            <?php
-            if(acceptpermiss("thuvien_status")){
-                ?>
-              <!--  <div class="form-group">
-                    <label class="col-sm-2 control-label">Trạng thái</label>
-                    <div class="col-sm-10">
-                        <label>
-                            <input type="radio" class="col-sm-1" <?php /*echo !empty($_POST['status']) && $_POST['status'] == '0' ? 'checked' : ''; */?> value="0" name="status" />&nbsp;Ẩn
-                        </label> |
-                        <label>
-                            <input type="radio" <?php /*echo empty($_POST['status']) || $_POST['status'] == '1' ? 'checked' : ''; */?> class="col-sm-1" value="1" name="status" /> &nbsp;Hiện
-                        </label>
-                    </div>
-                </div>-->
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Status</label>
-                    <div class="col-sm-10">
-                        <label>
-                            <input type="radio" <?php echo !empty($_POST['status']) && $_POST['status'] == '0' ? 'checked' : ''; ?> value="0" name="status" />&nbsp;Ẩn
-                        </label> |
-                        <label>
-                            <input type="radio" <?php echo empty($_POST['status']) || $_POST['status'] == '1' ? 'checked' : ''; ?> value="1" name="status" /> &nbsp;Hiện
-                        </label>
-                    </div>
-                </div>
             <?php } ?>
             <div class="form-group">
                 <label class="col-sm-2 control-label">Miễn phí</label>
@@ -197,6 +166,7 @@ $_POST['calendar'] = isset($_POST['calendar']) ? $_POST['calendar'] : time();
                     <p class="help-block">Chọn ảnh PNG, JPG, JPEG, GIF (Nên dùng tỉ lệ 6x4)</p>
                 </div>
             </div>
+
             <div class="form-group">
                 <label class="col-sm-2 control-label">Link phụ đề tiếng Anh</label>
                 <div class="col-sm-10">
@@ -254,7 +224,7 @@ $_POST['calendar'] = isset($_POST['calendar']) ? $_POST['calendar'] : time();
             <div class="form-group">
                 <label class="col-sm-2 control-label">Nội dung video/audio (E-V)</label>
 
-                <div class="col-sm-5" style="padding: 0;">
+                <div class="col-sm-5">
                     <textarea rows="10" id="lyric-eng" name="content[eng]" class="form-control" placeholder="Nhập nội dung bài viết"><?php echo $_POST['content']['eng'] ?></textarea>
                 </div>
                 <div class="col-sm-5">
@@ -269,9 +239,8 @@ $_POST['calendar'] = isset($_POST['calendar']) ? $_POST['calendar'] : time();
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">Nội dung chi tiết</label>
-
                 <div class="col-sm-10">
-                    <textarea id="lession" rows="10" class="form-control" name="lession" placeholder="Nhập nội dung bài viết"><?php echo $_POST['lession'] ?></textarea>
+                    <textarea id="lyric" rows="10" class="form-control" name="contents" placeholder="Nhập nội dung bài viết"><?php echo $_POST['contents'] ?></textarea>
                 </div>
             </div>
 
@@ -280,19 +249,13 @@ $_POST['calendar'] = isset($_POST['calendar']) ? $_POST['calendar'] : time();
             <label><input type="checkbox" id="checkallcat" class="con-sm-1" />&nbsp; Chọn tất cả</label>
             <?php
 
-            $categorycl = $dbmg->category;
-            $thuvienId = $categorycl->findOne(['type'=>Constant::TYPE_THUVIEN, 'parentid'=>"0"])['_id'];
-            $currentCategory = $categorycl->findOne(['_id'=> $catid]);
-//            echo $currentCategory['type'];die;
             $listselectedcat = $_POST['category'];
-//            var_dump($listselectedcat);die;
             #Đệ quy Category
             function dequy($parentid, $type) {
                 global $categorycl, $listselectedcat;
                 echo "<ul>";
                 //$listcat = iterator_to_array($categorycl->find(array("parentid" => "$parentid", "type" => "$type"), array("_id", "name"))->sort(array("_id" => -1)), false);
-                $listcat = iterator_to_array($categorycl->find(array("parentid" => "$parentid", 'type'=>$type), array("_id", "name","type"))->sort(array("_id" => -1)), false);
-//                var_dump($listcat);die;
+                $listcat = iterator_to_array($categorycl->find(array("parentid" => "$parentid", "type"=>Constant::TYPE_GT_HANGNGAY), array("_id", "name","type"))->sort(array("_id" => -1)), false);
                 foreach ($listcat as $cat) {
                     $id = $cat['_id'];
                     $attr = in_array($id, $listselectedcat) ? "checked" : "";
@@ -305,18 +268,17 @@ $_POST['calendar'] = isset($_POST['calendar']) ? $_POST['calendar'] : time();
                 echo "</ul>";
             }
 
-            dequy($thuvienId, $currentCategory['type']);
+            dequy("0", Constant::TYPE_GT_HANGNGAY);
 
             ?>
         </div>
-
     </div>
 
 
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" class="btn btn-default">Chấp nhận</button>
-            hoặc <a href="<?php echo cpagerparm("tact,id").'tact=thuvien_view' ?>">Thoát</a> |
+            hoặc <a href="<?php echo cpagerparm("tact,id") ?>">Thoát</a> |
             <label><input type="checkbox" checked="checked" value="1" name="redirect" />&nbsp; Không chuyển hướng sau
                                                                                         khi nhập xong</label>
         </div>
@@ -324,8 +286,6 @@ $_POST['calendar'] = isset($_POST['calendar']) ? $_POST['calendar'] : time();
 </form>
 <script>
     $(function () {
-
-
         $('#checkallcat').click(function () {
             if ($(this).is(':checked')) $('.catitem:not(:disabled)').prop('checked', true);
             else $('.catitem:not(:disabled)').prop('checked', false);
@@ -495,7 +455,7 @@ $_POST['calendar'] = isset($_POST['calendar']) ? $_POST['calendar'] : time();
 //            $('#file_upload2').uploadify({
 //                'swf': 'plugin/uploadify/uploadify.swf',
 //                'uploader': 'plugin/uploadify/uploadify.php',
-////                'fileTypeExts': '*.mp3,*.mp4;',
+//                'fileTypeExts': '*.mp4;',
 //                'onUploadSuccess': function (file, data, response) {
 //                    var obj = JSON.parse(data);
 //                    if (obj.status == 200) {
@@ -506,44 +466,45 @@ $_POST['calendar'] = isset($_POST['calendar']) ? $_POST['calendar'] : time();
 //                }
 //            });
 //            $('#file_upload3').uploadify({
-//                'swf': 'plugin/uploadify/uploadify.swf',
-//                'uploader': 'plugin/uploadify/uploadify.php',
-////                'fileTypeExts': '*.mp3,*.mp4;',
+//                'swf'      : 'plugin/uploadify/uploadify.swf',
+//                'uploader' : 'plugin/uploadify/uploadify.php',
 //                'onUploadSuccess': function (file, data, response) {
 //                    var obj = JSON.parse(data);
 //                    if (obj.status == 200) {
 //                        $('#engsub').val(obj.file.path);
+//
 //                    } else {
 //                        alert(obj.mss);
 //                    }
 //                }
 //            });
 //            $('#file_upload4').uploadify({
-//                'swf': 'plugin/uploadify/uploadify.swf',
-//                'uploader': 'plugin/uploadify/uploadify.php',
-////                'fileTypeExts': '*.mp3,*.mp4;',
+//                'swf'      : 'plugin/uploadify/uploadify.swf',
+//                'uploader' : 'plugin/uploadify/uploadify.php',
 //                'onUploadSuccess': function (file, data, response) {
 //                    var obj = JSON.parse(data);
 //                    if (obj.status == 200) {
 //                        $('#vietsub').val(obj.file.path);
+//
 //                    } else {
 //                        alert(obj.mss);
 //                    }
 //                }
 //            });
 //            $('#file_upload5').uploadify({
-//                'swf': 'plugin/uploadify/uploadify.swf',
-//                'uploader': 'plugin/uploadify/uploadify.php',
-////                'fileTypeExts': '*.mp3,*.mp4;',
+//                'swf'      : 'plugin/uploadify/uploadify.swf',
+//                'uploader' : 'plugin/uploadify/uploadify.php',
 //                'onUploadSuccess': function (file, data, response) {
 //                    var obj = JSON.parse(data);
 //                    if (obj.status == 200) {
 //                        $('#engvietsub').val(obj.file.path);
+//
 //                    } else {
 //                        alert(obj.mss);
 //                    }
 //                }
 //            });
+//
 //        },100);
 
         $('input[name=keyword]').tagsinput({
@@ -560,17 +521,17 @@ $_POST['calendar'] = isset($_POST['calendar']) ? $_POST['calendar'] : time();
             }
         });
         $('input[name=keyword]').on('itemAdded', function (event){
-               $.post('incoming.php?act=createTag', {
-                   tag: event.item
-               }, function (re) {
-                   
-               })
+            $.post('incoming.php?act=createTag', {
+                tag: event.item
+            }, function (re) {
+
+            })
         } )
     });
 </script>
 <script>
     $(document).ready(function () {
-        $('#lyric-eng, #lyric-vie, #lyric1, #lession').tinymce({
+        $('#lyric, #lyric1,#lyric2, #lyric-eng, #lyric-vie').tinymce({
             script_url: 'plugin/tinymce/tiny_mce.js',
             elements: "ajaxfilemanager",
             theme: "advanced",
@@ -663,3 +624,8 @@ $_POST['calendar'] = isset($_POST['calendar']) ? $_POST['calendar'] : time();
         });
     }
 </script>
+
+
+
+
+

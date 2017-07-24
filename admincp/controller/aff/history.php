@@ -36,7 +36,7 @@ $enddate = date('d/m/Y');
 //    array('$project' => array('total' => 1, 'data'=>array('$slice'=>array('$data',$cp,$limit))  )),
 //));
 $sort = array('datecreate'=>-1);
-$rowcount = $usercl->count($cond);
+$rowcount = $aff_txncl->count($cond);
 $list = $aff_txncl->find($cond)->sort($sort)->limit($limit)->skip($cp);
 
 //$rowcount = isset($list['result'][0]['total']) ? $list['result'][0]['total'] : 0;
@@ -56,6 +56,7 @@ $list = $aff_txncl->find($cond)->sort($sort)->limit($limit)->skip($cp);
                 <!--                <input type="text" placeholder="Từ ngày:" name="start" class="form-control datepicker" value="--><?php //echo $startdate ?><!--">-->
                 <!--                <input type="text" placeholder="Đến ngày:" name="end" class="form-control datepicker" value="--><?php //echo $enddate ?><!--">-->
                 <input type="submit" class="btn btn-primary" value="Tìm">
+                <a href="javascript:addTrans()" class="btn btn-info">Thêm giao dịch</a>
             </div>
         </form>
 
@@ -91,4 +92,9 @@ $list = $aff_txncl->find($cond)->sort($sort)->limit($limit)->skip($cp);
     <?php endforeach; ?>
     </tbody>
 </table>
+<script>
+    function addTrans(){
+
+    }
+</script>
 <?php include("component/paging.php") ?>

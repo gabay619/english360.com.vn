@@ -120,23 +120,6 @@ if ($tact != "lna_dc_insert") $_POST = (array)$newscl->findOne(array("_id" => "$
     </div>
 </form>
 <script>
-    $(function () {
-        $('#file_upload').uploadify({
-            'swf': 'plugin/uploadify/uploadify.swf',
-            'uploader': 'plugin/uploadify/uploadify.php',
-            'onUploadSuccess': function (file, data, response) {
-                var obj = JSON.parse(data);
-                if (obj.status == 200) {
-                    $('#medialink').val(obj.file.path);
-
-                } else {
-                    alert(obj.mss);
-                }
-            }
-        });
-    });
-</script>
-<script>
     $(document).ready(function () {
         $('#lyric').tinymce({
             script_url: 'plugin/tinymce/tiny_mce.js',

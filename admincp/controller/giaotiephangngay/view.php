@@ -1,7 +1,7 @@
 <?php
-$title = "Quản lý bài học ngữ pháp";
+$title = "Quản lý bài giảng - Giao tiếp hàng ngày";
 $categorycl = $dbmg->category;
-$newscl = $dbmg->nguphap;
+$newscl = $dbmg->giaotiephangngay;
 $usercl = $dbmg->user;
 #condition
 $limit = 25;
@@ -50,7 +50,7 @@ $listnews = $cursor->skip($cp)->limit($limit);
 <?php include "component/message.php"; ?>
 <div class="row">
 <div class="col-xs-3" style="margin-bottom: 15px">
-<?php if(acceptpermiss("nguphap_insert")) { ?><a href="<?php echo cpagerparm("tact,id,status") ?>tact=nguphap_insert">Thêm mới</a><?php }?>
+<?php if(acceptpermiss("gthn_insert")) { ?><a href="<?php echo cpagerparm("tact,id,status") ?>tact=gthn_insert">Thêm mới bài lý thuyết</a><?php }?>
 </div>
 <div class="col-xs-12">
 <form action="" method="get" class="form-inline">
@@ -66,12 +66,9 @@ $listnews = $cursor->skip($cp)->limit($limit);
             <option value="0" <?php if($_GET['free']==='0') echo 'selected' ?>>Không</option>
         </select>
         <input type="submit" class="btn btn-primary" value="Tìm">
-    </div>
+      </div>
 </form>
-
 </div>
-</div>
-
 <form action="<?php echo cpagerparm("tact,id,status") ?>tact=delete" method="post">
 <table class="table table-hover">
     <thead>
@@ -80,9 +77,9 @@ $listnews = $cursor->skip($cp)->limit($limit);
         <th>Ảnh</th>
         <th>Tiêu đề</th>
         <!--<th>Chuyên mục</th>-->
-        <th style="width: 100px">Người tạo</th>
         <th>Ngày tạo</th>
-        <th>Duyệt</th>
+        <th style="width: 100px">Người tạo</th>
+            <th>Duyệt</th>
         <th>Miễn phí</th>
         <th>Đánh giá</th>
         <th>Thao tác</th>
@@ -96,10 +93,11 @@ $listnews = $cursor->skip($cp)->limit($limit);
         <tr>
             <td><input type="checkbox" class="checkitem" name="id[]" value="<?php echo $item['_id'] ?>" /></td>
             <td class="col-md-2"><img src="<?php echo $item['avatar'] ?>" class="img-thumbnail" style="max-width: 120px;" /></td>
-            <td><a href="/ngu-phap/<?php echo empty($item['slug']) ? Common::utf8_to_url($item['name']).'-'.$item['_id'] : $item['slug']?>.html?source=admin" target="_blank"><?php echo $item['name'] ?></a>
+            <td><?php echo $item['name'] ?>
+
                 <p class="text-muted">Mã: <?php echo $item['_id'] ?></p>
             </td>
-           <!-- <td>
+            <!--<td>
                 <ul>
                     <?php
 /*                    if(count($item['category'])<=0) $item['category'] = array();
@@ -108,10 +106,10 @@ $listnews = $cursor->skip($cp)->limit($limit);
                     */?>
                 </ul>
             </td>-->
+            <td><?php echo date("d-m-Y H:i:s", $item['_id']) ?></td>
             <td><?php echo $user['username'] ?>
                 <p class="text-muted user_update"><?php echo $userup['username'] ?></p>
             </td>
-            <td><?php echo date("d-m-Y H:i:s", $item['_id']) ?></td>
             <td>
                 <a href="javascript:void(0)" onclick="tooggleChangeStatus(this)"><span id="item_status_<?php echo $item['_id'] ?>"><?php echo $item['status'] === "0" ?  "Ẩn": "Hiện"; ?></span></a>
                 <div class="box_change_status" style="display: none" id="box_change_<?php echo $item['_id'] ?>">
@@ -131,19 +129,8 @@ $listnews = $cursor->skip($cp)->limit($limit);
                 <span class="text-danger"><?php echo isset($item['review']['no']) && is_array($item['review']['no']) ? count($item['review']['no']) : 0 ?></span>
             </td>
             <td>
-                <?php if(acceptpermiss("nguphap_test_view")) { ?><a href="<?php echo cpagerparm("tact,status,id,p") ?>tact=np_ct_view&npid=<?php echo $item['_id'] ?>">BT chọn từ</a> |<?php } ?>
-                <?php if(acceptpermiss("nguphap_test_view")) { ?><a href="<?php echo cpagerparm("tact,status,id,p") ?>tact=np_dt_view&npid=<?php echo $item['_id'] ?>">BT điền từ</a> |<?php } ?>
-                <?php if(acceptpermiss("nguphap_test_view")) { ?><a href="<?php echo cpagerparm("tact,status,id,p") ?>tact=np_dct_view&npid=<?php echo $item['_id'] ?>">BT điền cụm từ</a> |<?php } ?>
-                <?php if(acceptpermiss("nguphap_test_view")) { ?><a href="<?php echo cpagerparm("tact,status,id,p") ?>tact=np_dnt_view&npid=<?php echo $item['_id'] ?>">BT điền nhiều từ</a> |<?php } ?>
-                <?php if(acceptpermiss("nguphap_test_view")) { ?><a href="<?php echo cpagerparm("tact,status,id,p") ?>tact=np_vlc_view&npid=<?php echo $item['_id'] ?>">BT viết lại câu</a> |<?php } ?>
-                <?php if(acceptpermiss("nguphap_test_view")) { ?><a href="<?php echo cpagerparm("tact,status,id,p") ?>tact=np_ds_view&npid=<?php echo $item['_id'] ?>">BT Đúng/Sai</a> |<?php } ?>
-                <?php if(acceptpermiss("nguphap_test_view")) { ?><a href="<?php echo cpagerparm("tact,status,id,p") ?>tact=np_vlct_view&npid=<?php echo $item['_id'] ?>">BT viết lại câu theo tranh</a> |<?php } ?>
-                <?php if(acceptpermiss("nguphap_test_view")) { ?><a href="<?php echo cpagerparm("tact,status,id,p") ?>tact=np_tn_view&npid=<?php echo $item['_id'] ?>">BT trắc nghiệm</a> |<?php } ?>
-                <?php if(acceptpermiss("nguphap_test_view")) { ?><a href="<?php echo cpagerparm("tact,status,id,p") ?>tact=np_tnt_view&npid=<?php echo $item['_id'] ?>">BT trắc nghiệm theo tranh</a> |<?php } ?>
-                <?php if(acceptpermiss("nguphap_test_view")) { ?><a href="<?php echo cpagerparm("tact,status,id,p") ?>tact=np_dtt_view&npid=<?php echo $item['_id'] ?>">BT điền từ theo tranh</a> |<?php } ?>
-                <?php if(acceptpermiss("nguphap_test_view")) { ?><a href="<?php echo cpagerparm("tact,status,id,p") ?>tact=np_gc_view&npid=<?php echo $item['_id'] ?>">BT ghép câu</a> |<?php } ?>
-                <?php if(acceptpermiss("nguphap_update")) { ?><a href="<?php echo cpagerparm("tact,status,id,p") ?>tact=nguphap_update&id=<?php echo $item['_id'] ?>">Sửa</a> |<?php }?>
-                <?php if(acceptpermiss("nguphap_delete")) { ?><a onclick="return confirm('Bạn chắc chắn chứ?')" href="<?php echo cpagerparm("tact,status,id") ?>tact=nguphap_delete&id=<?php echo $item['_id'] ?>">Xóa</a><?php }?>
+                <?php if(acceptpermiss("gthn_update")) { ?><a href="<?php echo cpagerparm("tact,status,id") ?>tact=gthn_update&id=<?php echo $item['_id'] ?>">Sửa</a> |<?php }?>
+                <?php if(acceptpermiss("gthn_delete")) { ?><a onclick="return confirm('Bạn chắc chắn chứ?')" href="<?php echo cpagerparm("tact,status,id") ?>tact=gthn_delete&id=<?php echo $item['_id'] ?>">Xóa</a><?php }?>
             </td>
         </tr>
     <?php } ?>
@@ -153,7 +140,7 @@ $listnews = $cursor->skip($cp)->limit($limit);
     <script>
         function changeStatus (atid, status) {
             var isUpdateTime = confirm("Bạn có muốn cập nhật lại thời gian không");
-            $.post('incoming.php',{act: 'changestatusnguphap', atid: atid, status: status, isUpdateTime: isUpdateTime}, function(res) {
+            $.post('incoming.php',{act: 'changestatusgthn', atid: atid, status: status, isUpdateTime: isUpdateTime}, function(res) {
                 if (res.status == 200) {
                     $("#box_change_"+atid).hide();
                     $("#item_status_"+atid).html(res.statusString);
@@ -165,7 +152,7 @@ $listnews = $cursor->skip($cp)->limit($limit);
             $(obj).siblings().toggle();
         }
         function changeFree (atid, status) {
-            $.post('incoming.php',{act: 'changefree', atid: atid, status: status, type: '<?php echo Constant::TYPE_NGUPHAP ?>'}, function(res) {
+            $.post('incoming.php',{act: 'changefree', atid: atid, status: status, type: '<?php echo Constant::TYPE_gthn ?>'}, function(res) {
                 if (res.status == 200) {
                     $("#box_change_free_"+atid).hide();
                     $("#item_free_"+atid).html(res.statusString);
