@@ -27,6 +27,9 @@ class Common
         $categorytype[] = array("name" => "Học mà chơi", "key" => Constant::TYPE_HOCMACHOI);
         $categorytype[] = array("name" => "Hỏi đáp", "key" => Constant::TYPE_HOIDAP);
         $categorytype[] = array("name" => "Chia sẻ", "key" => Constant::TYPE_SHARE);
+        $categorytype[] = array("name" => "Giao tiếp hàng ngày", "key" => Constant::TYPE_GT_HANGNGAY);
+        $categorytype[] = array("name" => "Giao tiếp cho người đi làm", "key" => Constant::TYPE_GT_DILAM);
+        $categorytype[] = array("name" => "Chia sẻ", "key" => Constant::TYPE_SHARE);
         return $categorytype;
     }
 
@@ -927,7 +930,8 @@ class Common
             Constant::CARD_METHOD_NAME => 'Thẻ cào',
             Constant::BANK_METHOD_NAME => 'ATM nội địa',
             Constant::SMS_METHOD_NAME => 'Tin nhắn SMS',
-            Constant::OTP_METHOD_NAME => 'OTP'
+            Constant::OTP_METHOD_NAME => 'OTP',
+            Constant::CHUYENKHOAN_METHOD_NAME => 'Chuyển khoản',
         );
         return isset($arr[$code]) ? $arr[$code] : '';
     }

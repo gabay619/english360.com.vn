@@ -64,6 +64,9 @@ switch($act){
     case 'lockPub':lockPub(); break;
     case 'unlockPub':unlockPub(); break;
     case 'approvePub':approvePub(); break;
+    case 'checkPublisher':checkPublisher(); break;
+    case 'addTrans':addTrans(); break;
+    case 'deleteTrans':deleteTrans(); break;
 }
 function sport_getteam(){
     global $dbmg;
@@ -1300,6 +1303,114 @@ function approvePub(){
     $id = $_POST['id'];
     $usercl->update(array('_id'=>"$id"), array('$set'=>array('aff_status'=>Constant::STATUS_ENABLE)));
     $dtr['success'] = true;
+    echo json_encode($dtr);exit;
+}
+
+function checkPublisher(){
+    global $dbmg;
+    $usercl = $dbmg->user;
+    $dtr['success'] = false;
+    if(!acceptpermiss("aff_pub")){
+        $dtr['mss'] = 'Bạn không có quyền thực hiện thao tác này';
+        echo json_encode($dtr);exit;
+    }
+    $email = $_POST['email'];
+    $user = $usercl->findOne(array('email' => $email));
+    if(!$user){
+        $dtr['mss'] = 'Người dùng không tồn tại.';
+        echo json_encode($dtr);exit;
+    }
+    if(!isset($user['aff']['uid'])){
+        $dtr['mss'] = 'Không có publisher.';
+        echo json_encode($dtr);exit;
+    }
+
+    $publisher = $usercl->findOne(array('_id'=>$user['aff']['uid'], 'status' => Constant::STATUS_ENABLE));
+    if(!$publisher){
+        $dtr['mss'] = 'Publisher không hoạt động.';
+        echo json_encode($dtr);exit;
+    }
+    $dtr['success'] = true;
+    $dtr['email'] = $publisher['email'];
+    echo json_encode($dtr);exit;
+}
+
+function deleteTrans(){
+    global $dbmg;
+    $usercl = $dbmg->user;
+    $aff_txncl = $dbmg->aff_txn;
+    $dtr['success'] = false;
+    if(!acceptpermiss("aff_pub")){
+        $dtr['mss'] = 'Bạn không có quyền thực hiện thao tác này';
+        echo json_encode($dtr);exit;
+    }
+    $id = $_POST['id'];
+    $txn = $aff_txncl->findOne(array('_id'=>$id));
+    if(!$txn){
+        $dtr['mss'] = 'Giao dịch không tồn tại.';
+        echo json_encode($dtr);exit;
+    }
+    $publisher = $usercl->findOne(array('_id'=>$txn['uid'], 'status' => Constant::STATUS_ENABLE));
+    if(!$publisher){
+        $dtr['mss'] = 'Publisher không hoạt động.';
+        echo json_encode($dtr);exit;
+    }
+
+    $aff_discount = $txn['discount'];
+    //Tru tien cua pub
+    $pubBalance = $publisher['account_balance'] - $aff_discount;
+    $usercl->update(array('_id'=>$publisher['_id']),array('$set'=>array('account_balance'=>$pubBalance)));
+    $aff_txncl->remove(array('_id'=>$id));
+    $dtr['success'] = true;
+    $dtr['mss'] = 'Thành công!';
+    echo json_encode($dtr);exit;
+}
+
+function addTrans(){
+    global $dbmg;
+    $usercl = $dbmg->user;
+    $aff_txncl = $dbmg->aff_txn;
+    $dtr['success'] = false;
+    if(!acceptpermiss("aff_pub")){
+        $dtr['mss'] = 'Bạn không có quyền thực hiện thao tác này';
+        echo json_encode($dtr);exit;
+    }
+    $email = $_POST['email'];
+    $amount = $_POST['amount'];
+    $user = $usercl->findOne(array('email' => $email));
+    if(!$user){
+        $dtr['mss'] = 'Người dùng không tồn tại.';
+        echo json_encode($dtr);exit;
+    }
+    if(!isset($user['aff']['uid'])){
+        $dtr['mss'] = 'Không có publisher.';
+        echo json_encode($dtr);exit;
+    }
+
+    $publisher = $usercl->findOne(array('_id'=>$user['aff']['uid'], 'status' => Constant::STATUS_ENABLE));
+    if(!$publisher){
+        $dtr['mss'] = 'Publisher không hoạt động.';
+        echo json_encode($dtr);exit;
+    }
+
+    $aff_rate = isset($publisher['aff_discount']) ? $publisher['aff_discount'] : Constant::AFF_RATE_CK;
+    $aff_discount = $aff_rate*$amount;
+    $aff_txncl->insert(array(
+        '_id' => strval(time()),
+        'datecreate' => time(),
+        'txn_id' => '',
+        'uid' => $publisher['_id'],
+        'ref_id' => $user['_id'],
+        'method' => Constant::CHUYENKHOAN_METHOD_NAME,
+        'discount' => $aff_discount,
+        'rate' => $aff_rate,
+        'amount' => $amount
+    ));
+    //Cong tien cho pub
+    $pubBalance = $publisher['account_balance'] + $aff_discount;
+    $usercl->update(array('_id'=>$publisher['_id']),array('$set'=>array('account_balance'=>$pubBalance)));
+    $dtr['success'] = true;
+    $dtr['mss'] = 'Thành công!';
     echo json_encode($dtr);exit;
 }
 

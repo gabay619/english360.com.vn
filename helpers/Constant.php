@@ -35,6 +35,8 @@ class Constant
     const TYPE_HOCMACHOI = 'hocmachoi';
     const TYPE_HOIDAP = 'hoidap';
     const TYPE_SHARE = 'share';
+    const TYPE_GT_HANGNGAY = 'giaotiephangngay';
+    const TYPE_GT_DILAM = 'giaotiepdilam';
     const TYPE_COMMENT = 'comment';
     const TYPE_NOTIFY = 'notify';
     const TYPE_INFO = 'info';
@@ -114,6 +116,7 @@ class Constant
     const TXN_OTP_ERROR = 8;
     const OTP_TO_CASH =1;
     const OTP_METHOD_NAME = 'otp';
+    const CHUYENKHOAN_METHOD_NAME = 'chuyenkhoan';
 
     //Aff
     const AFF_SECRET_KEY = 'rAlFu8v6KxcBTYgJm7Tq';
@@ -123,6 +126,7 @@ class Constant
     const AFF_RATE_BANK = 0.3;
     const AFF_RATE_SMS = 0.3;
     const AFF_RATE_OTP = 0.3;
+    const AFF_RATE_CK = 0.3;
 
     //Withdraw
     const WITHDRAW_STATUS_NEW = 1;

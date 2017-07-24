@@ -56,7 +56,9 @@ $list = $aff_txncl->find($cond)->sort($sort)->limit($limit)->skip($cp);
                 <!--                <input type="text" placeholder="Từ ngày:" name="start" class="form-control datepicker" value="--><?php //echo $startdate ?><!--">-->
                 <!--                <input type="text" placeholder="Đến ngày:" name="end" class="form-control datepicker" value="--><?php //echo $enddate ?><!--">-->
                 <input type="submit" class="btn btn-primary" value="Tìm">
-                <a href="javascript:addTrans()" class="btn btn-info">Thêm giao dịch</a>
+                <?php     if(acceptpermiss("aff_pub")): ?>
+                <a href="javascript:addTrans()" class="btn btn-info">Thêm giao dịch chuyển khoản</a>
+                <?php endif; ?>
             </div>
         </form>
 
@@ -71,7 +73,7 @@ $list = $aff_txncl->find($cond)->sort($sort)->limit($limit)->skip($cp);
         <th>Chiết khấu</th>
         <th>Loại</th>
         <th>Thời gian</th>
-<!--        <th>Thao tác</th>-->
+        <th>Thao tác</th>
     </tr>
     </thead>
     <tbody>
@@ -88,13 +90,93 @@ $list = $aff_txncl->find($cond)->sort($sort)->limit($limit)->skip($cp);
             <td><?php echo number_format($item['discount']); ?></td>
             <td><?php echo Common::getPaymentMethod($item['method']); ?></td>
             <td><?php echo date('d/m/Y H:i',$item['datecreate']); ?></td>
+            <td>
+                <?php if(acceptpermiss("aff_pub") && $item['method'] == Constant::CHUYENKHOAN_METHOD_NAME): ?>
+                <button class="btn btn-sm btn-danger" onclick="deleteTrans('<?php echo $item['_id'] ?>')">Xóa</button>
+                <?php endif; ?>
+            </td>
         </tr>
     <?php endforeach; ?>
     </tbody>
 </table>
+<div class="modal fade" id="addTransModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Thêm giao dịch</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <p id="modalAjaxMss" class="text-danger" style="display: none"></p>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Email khách hàng:</label>
+                        <input type="text" class="form-control" id="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Publisher:</label>
+                        <input type="text" class="form-control" id="publisher" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">Số tiền:</label>
+                        <input type="text" class="form-control" id="amount">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="saveTrans()">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     function addTrans(){
+        $('#addTransModal').modal('show');
+    }
+    
+    function saveTrans() {
+        user_email = $('#email').val();
+        amount = $('#amount').val();
+        $.post('incoming.php?act=addTrans', {
+            email: user_email, amount: amount
+        }, function(re){
+            if(re.success){
+                location.reload();
+            }else{
+                $('#modalAjaxMss').show().html(re.mss);
+            }
+        })
 
     }
+
+    function deleteTrans(id) {
+        if(confirm('Bạn muốn xóa giao dịch này?')){
+            $.post('incoming.php?act=deleteTrans', {
+                id:id
+            }, function (re) {
+                if(re.success){
+                    location.reload();
+                }else
+                    alert(re.mss);
+            })
+        }
+    }
+
+    $(function () {
+        $('#email').change(function () {
+            user_email = $(this).val();
+            $.post('incoming.php?act=checkPublisher', {
+                email:user_email
+            }, function (re) {
+                if(re.success){
+                    $('#publisher').val(re.email);
+                }else{
+                    $('#publisher').val('');
+                    $('#modalAjaxMss').show().html(re.mss);
+                }
+            })
+        })
+    })
 </script>
 <?php include("component/paging.php") ?>
