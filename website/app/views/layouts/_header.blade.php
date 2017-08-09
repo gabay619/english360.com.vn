@@ -126,7 +126,9 @@
                                 {{--<a href="/txn/charge" class="btn btn-primary btn-sm" style="padding: 0px 5px;float: right;">Nạp {{Constant::CASH_NAME}}</a>--}}
                             </div>
                             <div class="block user_control_link">
-                                <a href="/user/package" title="">Đăng ký khóa học</a>
+                                <a href="/user/package" title="">
+
+                                </a>
                                 <a href="/user/reg-lession" title="">Đăng ký bài học</a>
                                 <a href="/user/profile" title="">Cài đặt riêng tư</a>
                                 <a href="/user/save-lession" title="">Bài học đã lưu</a>

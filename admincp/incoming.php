@@ -47,6 +47,7 @@ switch($act){
 	case 'exportLog3g': exportLog3g(); break;
 	case 'exportWithdraw': exportWithdraw(); break;
 	case 'sendMail': sendMail(); break;
+	case 'sendNoti': sendNoti(); break;
     case 'uploadExcel': uploadExcel(); break;
     case 'uploadLession': uploadLession(); break;
     case 'uploadMedia': uploadMedia(); break;
@@ -2474,6 +2475,25 @@ function sendMail(){
 //        }
 //
 //    }
+    echo json_encode(array('success'=>true, 'mss'=>'Thành công'));exit;
+}
+
+function sendNoti(){
+    global $dbmg;
+    $noticl = $dbmg->notify;
+    $idArr = explode(',',$_POST['id']);
+    $content = $_POST['content'];
+    foreach ($idArr as $k=>$uid){
+        $noticl->insert(array(
+            '_id' => strval(time()).$k,
+            'uid' => $uid,
+            'status' => Constant::STATUS_ENABLE,
+            'usercreate' => $_SESSION['uinfoadmin']['_id'],
+            'datecreate' => time(),
+            'type' => Constant::TYPE_NOTIFY,
+            'mss' => $_SESSION['uinfoadmin']['displayname'].': '.$content
+        ));
+    }
     echo json_encode(array('success'=>true, 'mss'=>'Thành công'));exit;
 }
 

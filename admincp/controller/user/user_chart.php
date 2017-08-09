@@ -6,7 +6,7 @@ $limit = 25;
 $p = $_GET['p'];if($p<=1) $p=1;$cp = ($p-1)*$limit; $stpage = $p;
 $q = $_GET['q'];
 $cond = array();
-if(isset($q)){
+if(isset($q) && !empty($q)){
     $cond = array(
         '$or'=>array(
             array('namenonutf'=>new MongoRegex("/$q/iu")),
@@ -147,7 +147,7 @@ if($_GET['type'] == 'd'){
             </div>
             <div style="margin-top: 10px">
                 <form class="form-inline" role="form" action="" method="get">
-                    <?php foreach($_GET as $key=>$val) if(!in_array($key,array("q","status","id","p"))) {?> <input type="hidden" name="<?php echo $key ?>" value="<?php echo $val ?>" /> <?php } ?>
+                    <?php foreach($_GET as $key=>$val) if(!in_array($key,array("q","status","from","to","chanel","regLession"))) {?> <input type="hidden" name="<?php echo $key ?>" value="<?php echo $val ?>" /> <?php } ?>
                     <div class="form-group" style="margin-bottom: 10px">
                         <label for="">Kiểu thống kê: </label>
                         <label for="type_d" style="font-weight: normal"><input type="radio" name="type" value="d" id="type_d" <?php echo $_GET['type'] == 'd' ? 'checked' : ''?>> Theo ngày</label>

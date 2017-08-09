@@ -11,13 +11,13 @@ class NguPhap extends Eloquent
     protected $collection = 'nguphap';
 
     public function getDetailUrl(){
-        $slug = CommonHelpers::utf8_to_url($this->name);
-        return '/ngu-phap/'.$slug.'-'.$this->_id.'.html';
+        $slug = empty($this->slug) ? CommonHelpers::utf8_to_url($this->name).'-'.$this->_id : $this->slug;
+        return '/ngu-phap/'.$slug.'.html';
     }
 
-    public static function getStaticDetailUrl($name, $id){
-        $slug = CommonHelpers::utf8_to_url($name);
-        return '/ngu-phap/'.$slug.'-'.$id.'.html';
+    public static function getStaticDetailUrl($name, $id, $slug = ''){
+        $slug = empty($slug) ? CommonHelpers::utf8_to_url($name).'-'.$id : $slug;
+        return '/ngu-phap/'.$slug.'.html';
     }
 
     public static function getCateUrl(Category $cate){

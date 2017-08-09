@@ -146,6 +146,9 @@ switch ($step){
                 $tpl->assign("selectPkg", $selectPkg);
                 $tpl->assign("pagefile", "user/regispack_sms");
                 break;
+            case 'chuyenkhoan':
+                $tpl->assign("pagefile", "user/regispack_chuyenkhoan");
+                break;
             default:
                 $_SESSION['flash_mss'] = 'Phương thức thanh toán không hỗ trợ';
                 header('Location: /thong-bao.html');exit;

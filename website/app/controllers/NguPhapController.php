@@ -70,14 +70,24 @@ class NguPhapController extends \BaseController {
 
     //Chi tiết bài học ngữ pháp
     public function getDetail($slug){
-        $id = CommonHelpers::getIdFromSlug($slug);
-        if(Input::get('source','') == 'admin')
-            $item = NguPhap::where('_id', $id)->first();
-        else
-            $item = NguPhap::where('status', Constant::STATUS_ENABLE)->where('_id', $id)->first();
-        if(!$item){
-            return 'Bài học không tồn tại.';
+        $cond = array('slug' => $slug);
+        if(Input::get('source','') != 'admin'){
+            $cond['status'] = Constant::STATUS_ENABLE;
         }
+        $item = NguPhap::where($cond)->first();
+        if(!$item){
+            unset($cond['slug']);
+            $id = CommonHelpers::getIdFromSlug($slug);
+            $cond['_id'] = $id;
+            $item = NguPhap::where($cond)->first();
+        }
+//        if(Input::get('source','') == 'admin')
+//            $item = NguPhap::where('_id', $id)->first();
+//        else
+//            $item = NguPhap::where('status', Constant::STATUS_ENABLE)->where('_id', $id)->first();
+//        if(!$item){
+//            return 'Bài học không tồn tại.';
+//        }
         //Đếm số lượt xem
         if(!isset($item->free) || $item->free!='1') {
             Session::put('return_url', Request::url());
@@ -92,7 +102,6 @@ class NguPhapController extends \BaseController {
                 }
             }
         }
-
         //Log
         $newHistoryLog = array(
             '_id' => strval(time().rand(10,99)),

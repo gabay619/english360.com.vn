@@ -17,7 +17,7 @@ $detech = new Mobile_Detect();
 $detechMobile = $detech->isMobile() && !$detech->isTablet();
 $version = isset($_SESSION['version']) ? $_SESSION['version'] : ($detechMobile ? 'wap' : 'web');
 //var_dump($version);die;
-if(($detechMobile && $version!='web') || $version == 'wap' || isset($onWap)) {
+if(($detechMobile && $version!='web' && $version != 'v2') || $version == 'wap' || isset($onWap)) {
 //    if($_SESSION['templogin'] != 1 && strpos($_SERVER['REQUEST_URI'], 'wapportal') === false){
 //        header("Location: http://english360.vn/templogin.php");die;
 //    }

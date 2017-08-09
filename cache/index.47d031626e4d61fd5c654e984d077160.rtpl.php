@@ -1,1 +1,0 @@
-<?php if(!class_exists('raintpl')){exit;}?><?php $tpl = new RainTPL;$tpl_dir_temp = self::$tpl_dir;$tpl->assign( $this->var );$tpl->draw( dirname("component/template") . ( substr("component/template",-1,1) != "/" ? "/" : "" ) . basename("component/template") );?>

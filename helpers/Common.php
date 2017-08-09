@@ -762,7 +762,10 @@ class Common
                 Constant::TYPE_FILM => 'Phim',
                 Constant::TYPE_DAILY => 'Tiếng Anh hàng ngày',
                 Constant::TYPE_IDIOM => 'Thành ngữ',
-                Constant::TYPE_EXP => 'Kinh nghiệm'
+                Constant::TYPE_EXP => 'Kinh nghiệm',
+                Constant::TYPE_GT_HANGNGAY => 'Giao tiếp hàng ngày',
+                Constant::TYPE_GT_DILAM => 'Giao tiếp cho người đi làm',
+                Constant::TYPE_NGUPHAP => 'Ngữ pháp'
         );
     }
 

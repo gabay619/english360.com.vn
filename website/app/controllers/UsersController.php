@@ -598,6 +598,11 @@ class UsersController extends \BaseController {
                         'selectPkg' => $selectPkg
                     ));
                     break;
+                case 'chuyenkhoan':
+                    return View::make('users.package_chuyenkhoan',array(
+                        'selectPkg' => $selectPkg
+                    ));
+                    break;
                 default:
                     return Redirect::to('/user/package?step=4')->with('error', 'Phương thức thanh toán không hỗ trợ.');
                     break;
